@@ -1,0 +1,13 @@
+.pageBullets {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: calc(100vh - 60%);
+  right: 0;
+  padding-right: 1.5rem;
+  z-index: 3;
+  
+  div {
+    cursor: pointer;
+  }
+}
