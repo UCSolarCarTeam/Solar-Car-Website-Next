@@ -5,6 +5,12 @@ import { memo } from "react";
 
 import styles from "@/components/Footer/index.module.scss";
 
+import Facebook from "../svgs/Facebook";
+import Instagram from "../svgs/Instagram";
+import Linkedin from "../svgs/Linkedin";
+import Twitter from "../svgs/Twitter";
+import Youtube from "../svgs/Youtube";
+
 const dmSans = DM_Sans({
   display: "swap",
   subsets: ["latin"],
@@ -26,7 +32,14 @@ const Footer = () => {
               width={308}
             />
           </div>
-          <span>Follow us on our social media</span>
+          <span>Follow us on our Social Media</span>
+          <div className={styles.iconGrid}>
+            <Facebook />
+            <Twitter />
+            <Instagram />
+            <Linkedin />
+            <Youtube />
+          </div>
         </div>
         <div className={styles.gridContainer}>
           <div>Contact Information</div>
