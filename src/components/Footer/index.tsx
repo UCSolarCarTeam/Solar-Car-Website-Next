@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import { DM_Sans } from "next/font/google";
 import Image from "next/image";
+import Link from "next/link";
 import { memo } from "react";
 
 import styles from "@/components/Footer/index.module.scss";
@@ -32,32 +33,84 @@ const Footer = () => {
               width={308}
             />
           </div>
-          <span>Follow us on our Social Media</span>
+          <span className={cx(dmSans.className)}>
+            Follow us on our Social Media
+          </span>
           <div className={styles.iconGrid}>
-            <Facebook />
-            <Twitter />
-            <Instagram />
-            <Linkedin />
-            <Youtube />
+            <a href="https://www.facebook.com/UofCSolarTeam/" target="_blank">
+              <Facebook />
+            </a>
+            <a href="https://x.com/uofcsolarcar?lang=en" target="_blank">
+              <Twitter />
+            </a>
+            <a href="https://www.instagram.com/uofc_solarcar/" target="_blank">
+              <Instagram />
+            </a>
+            <a
+              href="https://www.linkedin.com/company/university-of-calgary-solar-car-team/"
+              target="_blank"
+            >
+              <Linkedin />
+            </a>
+            <a
+              href="https://www.youtube.com/user/calgarysolarcar"
+              target="_blank"
+            >
+              <Youtube />
+            </a>
           </div>
         </div>
         <div className={styles.gridContainer}>
           <div>Contact Information</div>
-          <span>communications@calgarysolarcar.ca</span>
-          <span>sponsorship@calgarysolarcar.ca</span>
-          <span>ENC 36, Schulich School of Engineering</span>
-          <span>2500 University Dr NW</span>
-          <span>Calgary, AB T2N 1N4</span>
+          <span>
+            <a href="mailto:communications@calgarysolarcar.ca">
+              communications@calgarysolarcar.ca
+            </a>
+          </span>
+          <span>
+            <a href="mailto:sponsorship@calgarysolarcar.ca">
+              sponsorship@calgarysolarcar.ca
+            </a>
+          </span>
+          <span>
+            <a href="https://maps.app.goo.gl/2B7nE2h3h8qwWxrk9">
+              ENC 36, Schulich School of Engineering
+            </a>
+          </span>
+          <span>
+            <a href="https://maps.app.goo.gl/2B7nE2h3h8qwWxrk9">
+              2500 University Dr NW
+            </a>
+          </span>
+          <span>
+            <a href="https://maps.app.goo.gl/2B7nE2h3h8qwWxrk9">
+              Calgary, AB T2N 1N4
+            </a>
+          </span>
         </div>
         <div className={styles.gridContainer}>
           <div>Resources</div>
-          <div>Homepage</div>
-          <div>Cars</div>
-          <div>Team</div>
-          <div>Support Us</div>
-          <div>Sponsors</div>
-          <div>Contact Us</div>
-          <div>Team Portal</div>
+          <div>
+            <a href="#top">Homepage</a>
+          </div>
+          <div>
+            <Link href="/cars">Cars</Link>
+          </div>
+          <div>
+            <Link href="/team">Team</Link>
+          </div>
+          <div>
+            <Link href="/support-us">Support Us</Link>
+          </div>
+          <div>
+            <Link href="/sponsors">Sponsors</Link>
+          </div>
+          <div>
+            <Link href="/contact-us">Contact Us</Link>
+          </div>
+          <div>
+            <Link href="">Team Portal</Link>
+          </div>
         </div>
       </div>
       <div className={styles.seperator} style={{ width: "80%" }} />

@@ -6,7 +6,8 @@
 .logo {
   > span {
     font-weight: bold;
-    text-align: center;
+    text-align: left;
+    font-size: 20px;
   }
   row-gap: 0 !important;
 }
@@ -26,10 +27,11 @@
   flex-direction: column;
   row-gap: 10px;
 
-  :first-child {
+  >:first-child {
     font-weight: bold;
     margin-bottom: 10px;
     font-size: large;
+    font-size: 20px;
   }
 }
 
@@ -83,6 +85,6 @@
 .iconGrid {
   display: flex;
   flex-direction: row;
-  gap: 35px;
+  gap: 33px;
   margin: 10px;
 }
