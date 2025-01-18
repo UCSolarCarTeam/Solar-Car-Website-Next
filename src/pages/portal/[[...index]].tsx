@@ -1,12 +1,11 @@
 import Link from "next/link";
 import { memo } from "react";
 
-import TeamTable from "@/components/portal/TeamTable";
-import UsersTable from "@/components/portal/UsersTable";
+import PortalPageHeader from "@/components/Portal/PortalPageHeader";
+import TeamTable from "@/components/Portal/TeamTable";
+import UsersTable from "@/components/Portal/UsersTable";
 import styles from "@/pages/portal/index.module.scss";
 import { SignIn, SignedIn, useUser } from "@clerk/nextjs";
-
-import PortalPageHeader from "../../components/portal/PortalPageHeader";
 
 const Portal = () => {
   const { isLoaded, isSignedIn, user } = useUser();
