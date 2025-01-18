@@ -1,6 +1,6 @@
 import { memo } from "react";
 
-import styles from "@/pages/portal/index.module.scss";
+import styles from "@/components/portalPage/index.module.scss";
 import { UserButton, useUser } from "@clerk/nextjs";
 
 const PortalPageHeader = () => {

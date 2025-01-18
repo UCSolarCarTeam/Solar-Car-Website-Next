@@ -9,8 +9,10 @@ import superjson from "superjson";
 import { env } from "@/env";
 import { type AppRouter } from "@/server/api/root";
 import { createClient } from "@supabase/supabase-js";
-import { httpBatchLink, loggerLink } from "@trpc/client";
+import { DehydratedState } from "@tanstack/react-query";
+import { createTRPCClient, httpBatchLink, loggerLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
+import { createServerSideHelpers } from "@trpc/react-query/server";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 
 // Supabase client
@@ -19,10 +21,10 @@ export const supabase = createClient(
   env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
 );
 
-const getBaseUrl = () => {
+export const getBaseUrl = (ssr = false) => {
   if (typeof window !== "undefined") return ""; // browser should use relative url
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
-  return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
+  return `http://${ssr ? "127.0.0.1" : "localhost"}:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
 };
 
 /** A set of type-safe react-query hooks for your tRPC API. */
@@ -60,6 +62,25 @@ export const api = createTRPCNext<AppRouter>({
   ssr: false,
   transformer: superjson,
 });
+
+/**
+ * SSR Helpers
+ */
+const SsrProxyClient = createTRPCClient<AppRouter>({
+  links: [
+    httpBatchLink({
+      transformer: superjson,
+      url: `${getBaseUrl(true)}/api/trpc`,
+    }),
+  ],
+});
+export const SsrHelpers = createServerSideHelpers({
+  client: SsrProxyClient,
+});
+
+export type SsrTrpcHelper = {
+  trpcState: DehydratedState;
+};
 
 /**
  * Inference helper for inputs.

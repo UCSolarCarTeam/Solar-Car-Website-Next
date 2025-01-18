@@ -3,7 +3,6 @@ import { useMemo } from "react";
 import { memo } from "react";
 import Select from "react-select";
 
-import styles from "@/pages/portal/index.module.scss";
 import { type UserRole } from "@/server/api/routers/portal";
 import { type RouterOutputs, api } from "@/utils/api";
 import { useUser } from "@clerk/nextjs";
@@ -13,6 +12,8 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+
+import styles from "./index.module.scss";
 
 type User = RouterOutputs["portal"]["getClerkUsers"][number];
 
@@ -63,7 +64,6 @@ const UsersTable = () => {
               user?.publicMetadata.role !== "admin" ||
               info.row.original.id === user?.id
             }
-            isMulti
             onChange={(option) => {
               if (option) {
                 mutateUserRole.mutate({

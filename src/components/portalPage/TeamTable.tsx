@@ -1,17 +1,9 @@
 import Image from "next/image";
-import {
-  type Dispatch,
-  type SetStateAction,
-  memo,
-  useMemo,
-  useState,
-} from "react";
+import { memo, useMemo } from "react";
 
-import EditCell from "@/components/EditableComponents/EditCell";
-import EditableTableCell from "@/components/EditableComponents/EditableTableCell";
+import EditTeamCell from "@/components/EditTeamCell";
 import { type RouterOutputs, api } from "@/utils/api";
 import {
-  type RowData,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
@@ -22,22 +14,8 @@ import styles from "./index.module.scss";
 
 export type TeamMember = RouterOutputs["portal"]["getDBUsers"][number];
 
-declare module "@tanstack/react-table" {
-  interface TableMeta<TData extends RowData> {
-    updateData: (rowIndex: number, columnId: string, value: unknown) => void;
-    rowsBeingEdited: Record<string, boolean>;
-    setRowsBeingEdited: Dispatch<SetStateAction<Record<string, boolean>>>;
-  }
-  interface ColumnMeta<TData extends RowData, TValue> {
-    type: string;
-  }
-}
-
 const TeamTable = () => {
   const users = api.portal.getDBUsers.useQuery();
-  const [rowsBeingEdited, setRowsBeingEdited] = useState<
-    Record<string, boolean>
-  >({});
 
   const columnHelper = useMemo(() => createColumnHelper<TeamMember>(), []);
   const columns = useMemo(
@@ -55,59 +33,38 @@ const TeamTable = () => {
         header: () => "Profile Picture",
       }),
       columnHelper.accessor("firstName", {
-        cell: EditableTableCell,
+        cell: (info) => info.getValue(),
         header: "First Name",
-        meta: {
-          type: "text",
-        },
       }),
       columnHelper.accessor("lastName", {
-        cell: EditableTableCell,
+        cell: (info) => info.getValue(),
         header: "Last Name",
-        meta: {
-          type: "text",
-        },
       }),
-      columnHelper.accessor("teamRole", {
-        cell: EditableTableCell,
+      columnHelper.accessor("fieldOfStudy", {
+        cell: (info) => info.getValue(),
         header: "Field of Study",
-        meta: {
-          type: "text",
-        },
       }),
       columnHelper.accessor("teamRole", {
-        cell: EditableTableCell,
+        cell: (info) => info.getValue(),
         header: "Team Role",
-        meta: {
-          type: "text",
-        },
       }),
       columnHelper.accessor("schoolYear", {
-        cell: EditableTableCell,
+        cell: (info) => info.getValue(),
         header: "School Year",
-        meta: {
-          type: "text",
-        },
       }),
       columnHelper.accessor("yearJoined", {
-        cell: EditableTableCell,
         header: "Year Joined",
-        meta: {
-          type: "text",
-        },
       }),
       columnHelper.accessor("description", {
-        cell: EditableTableCell,
+        cell: (info) => info.getValue(),
         header: "Description",
-        meta: {
-          type: "text",
-        },
       }),
       columnHelper.display({
-        cell: EditCell,
+        cell: (info) => <EditTeamCell currentRow={info.row.original} />,
         id: "edit",
       }),
     ],
+
     [columnHelper],
   );
 
@@ -115,23 +72,6 @@ const TeamTable = () => {
     columns,
     data: users.data ?? [],
     getCoreRowModel: getCoreRowModel(),
-    meta: {
-      rowsBeingEdited,
-      setRowsBeingEdited,
-      updateData: (rowIndex: number, columnId: string, value: unknown) => {
-        // setData((old) =>
-        //   old.map((row, index) => {
-        //     if (index === rowIndex) {
-        //       return {
-        //         ...old[rowIndex],
-        //         [columnId]: value,
-        //       };
-        //     }
-        //     return row;
-        //   })
-        // );
-      },
-    },
   });
 
   return (

@@ -1,31 +1,31 @@
-import { type GetServerSideProps } from "next";
+import Link from "next/link";
 import { memo } from "react";
 
-import TeamTable from "@/pages/portal/TeamTable";
-import UsersTable from "@/pages/portal/UsersTable";
+import TeamTable from "@/components/portalPage/TeamTable";
+import UsersTable from "@/components/portalPage/UsersTable";
 import styles from "@/pages/portal/index.module.scss";
-import { supabase } from "@/utils/api";
 import { SignIn, SignedIn, useUser } from "@clerk/nextjs";
 
-import PortalPageHeader from "./PortalPageHeader";
+import PortalPageHeader from "../../components/portalPage/PortalPageHeader";
 
-interface PortalProps {
-  files: string[] | undefined;
-}
+const Portal = () => {
+  const { isLoaded, isSignedIn, user } = useUser();
 
-export const getServerSideProps: GetServerSideProps<PortalProps> = async () => {
-  const { data } = await supabase.storage.from("exampleBucket").list();
-  const signedUrls = data?.map((file) => {
-    const { data } = supabase.storage
-      .from("exampleBucket")
-      .getPublicUrl(file.name);
-    return data.publicUrl;
-  });
-  return { props: { files: signedUrls } };
-};
+  if (!isLoaded) {
+    return null;
+  }
 
-const Portal = (props: PortalProps) => {
-  const { isSignedIn } = useUser();
+  if (
+    !user?.publicMetadata?.role ||
+    user.publicMetadata.role === "unverified"
+  ) {
+    return (
+      <div className={styles.unverifiedPage}>
+        <div>You are not verified</div>
+        <Link href="/">Go back home</Link>
+      </div>
+    );
+  }
 
   return (
     <>

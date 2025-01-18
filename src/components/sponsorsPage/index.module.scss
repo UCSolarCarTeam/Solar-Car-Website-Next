@@ -1,0 +1,63 @@
+.container {
+  width: 100vw;
+  color: white;
+  text-shadow: 0 0.5px 10px black;
+
+  > img {
+    z-index: -1;
+  }
+}
+
+.descriptionTitle {
+  text-align: center;
+  font-size: 1.75em;
+  -webkit-text-stroke-width: 1px;
+}
+
+.pageHeading {
+  width: 100%;
+  text-align: center;
+  font-size: 5em;
+  color: white;
+  padding-top: 0.5em;
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 1024px) {
+  .descriptionContainer {
+    width: 100%;
+  }
+  .pageHeading {
+    font-size: 1.75em;
+    padding-top: 2em;
+    letter-spacing: 0;
+  }
+  .descriptionTitle {
+    font-size: 1.25em;
+  }
+}
+
+.leadSponsorLogo {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  > img {
+    filter: drop-shadow(1px 1px 6px #000000);
+  }
+}
+
+.otherSponsors {
+  background-color: #121212;
+  margin-top: 15%;
+  padding: 0 1rem;
+  border-radius: 50px 50px 0 0;
+}
+
+.seperator {
+  border-bottom: 1px solid white;
+  width: 90%;
+  height: 1px;
+  padding-top: 32px;
+  display: flex;
+  margin: auto;
+}

@@ -2,20 +2,20 @@ import Head from "next/head";
 import { memo } from "react";
 
 import Footer from "@/components/Footer";
-import SupportUsPage from "@/components/supportUsPage";
+import ContactPage from "@/components/contactPage";
 
-const SupportUs = () => {
+const Contact = () => {
   return (
     <>
       <Head>
-        <title>Calgary Solar Car - Support Us</title>
+        <title>Calgary Solar Car - Contact Us</title>
       </Head>
       <main style={{ height: "100vh" }}>
-        <SupportUsPage />
+        <ContactPage />
       </main>
       <Footer />
     </>
   );
 };
 
-export default memo(SupportUs);
+export default memo(Contact);

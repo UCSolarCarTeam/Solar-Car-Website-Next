@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { memo } from "react";
 
-import Footer from "@/components/Footer";
 import CarsPage from "@/components/carsPage";
 
 const Cars = () => {
@@ -10,10 +9,9 @@ const Cars = () => {
       <Head>
         <title>Calgary Solar Car - Cars</title>
       </Head>
-      <main>
+      <main style={{ height: "auto" }}>
         <CarsPage />
       </main>
-      <Footer />
     </>
   );
 };

@@ -12,12 +12,18 @@ import { ZodError } from "zod";
 import { db } from "@/server/db";
 import { createClerkClient } from "@clerk/backend";
 import { getAuth } from "@clerk/nextjs/server";
+import { createClient } from "@supabase/supabase-js";
 import { TRPCError, initTRPC } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 
 const clerkClient = createClerkClient({
   secretKey: process.env.CLERK_SECRET_KEY,
 });
+
+const supabaseClient = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "",
+);
 
 /**
  * 1. CONTEXT
@@ -31,6 +37,7 @@ type CreateContextOptions = {
   user: ReturnType<typeof getAuth>;
   db: typeof db;
   clerkClient: typeof clerkClient;
+  supabaseClient: typeof supabaseClient;
 };
 
 /**
@@ -53,7 +60,7 @@ type CreateContextOptions = {
 export const createTRPCContext = (
   _opts: CreateNextContextOptions,
 ): CreateContextOptions => {
-  return { clerkClient, db, user: getAuth(_opts.req) };
+  return { clerkClient, db, supabaseClient, user: getAuth(_opts.req) };
 };
 
 /**

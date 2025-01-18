@@ -29,3 +29,22 @@
     font-size: 1.25rem;
   }
 }
+
+.teamMembers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0px 50px;
+}
+
+.teamMemberImage {
+  position: relative;
+  width: 250px;
+  height: 200px;
+}
+
+.teamMember {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+

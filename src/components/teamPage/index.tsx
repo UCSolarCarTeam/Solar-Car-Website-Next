@@ -1,9 +1,15 @@
+import Image from "next/image";
 import { memo } from "react";
 
 import Navbar from "@/components/Navbar";
-import styles from "@/components/teamPage/index.module.scss";
+import { type TeamPageProps } from "@/pages/team";
+import { type RouterOutputs } from "@/utils/api";
 
-const TeamPage = () => {
+import styles from "./index.module.scss";
+
+export type TeamMember = RouterOutputs["portal"]["getTeamMembers"][number];
+
+const TeamPage = (props: TeamPageProps) => {
   return (
     <>
       <Navbar />
@@ -17,6 +23,35 @@ const TeamPage = () => {
           faculty to develop sustainable energy solutions. We are currently
           working on our sixth car and have completed 7 races with previous
           vehicles.`}
+        </div>
+        <div className={styles.teamMembers}>
+          {props.teamMembers.map((teamMember) => {
+            return (
+              <div
+                className={styles.teamMember}
+                key={teamMember.profilePictureUrl}
+              >
+                <div className={styles.teamMemberImage}>
+                  <Image
+                    alt="Headshot"
+                    fill
+                    src={
+                      teamMember.profilePictureUrl ??
+                      "/DefaultProfilePicture.png"
+                    }
+                  />
+                </div>
+                <div>
+                  <div>
+                    {[teamMember.firstName, teamMember.lastName].join(" ")}
+                  </div>
+                  <div>{teamMember.teamRole}</div>
+                  <div>{teamMember.fieldOfStudy}</div>
+                  <div>{teamMember.description}</div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </>
