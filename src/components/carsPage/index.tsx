@@ -96,7 +96,8 @@ const CarsPage = () => {
           if (
             entry.target.id === "__next" ||
             entry.target.id === "__next-build-watcher" ||
-            entry.target.id === "locatorjs-wrapper"
+            entry.target.id === "locatorjs-wrapper" ||
+            entry.target.id === "clerk-components"
           ) {
             setCurrentElement("Helios");
           } else {

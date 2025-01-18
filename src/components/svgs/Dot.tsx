@@ -31,6 +31,7 @@ const Dot = ({
         height="30px"
         style={{
           fill: isActive ? "white" : "rgba(165, 165, 165, 0.8)",
+          filter: "drop-shadow(1px 1px 6px #000000)",
           transition: "all 0.3s ease",
         }}
         viewBox="0 0 100 100"

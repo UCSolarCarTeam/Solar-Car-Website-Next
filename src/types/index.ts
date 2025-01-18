@@ -3,4 +3,5 @@ export interface SVGIconProps {
   height?: number;
   width?: number;
   fill?: string;
+  onClick?: () => void;
 }
