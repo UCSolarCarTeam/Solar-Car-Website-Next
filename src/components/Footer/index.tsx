@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import { DM_Sans } from "next/font/google";
 import Image from "next/image";
+import Link from "next/link";
 import { memo } from "react";
 
 import styles from "@/components/Footer/index.module.scss";
@@ -51,23 +52,13 @@ const Footer = () => {
         </div>
         <div className={styles.gridContainer}>
           <div>Resources</div>
-          <div href="#">Homepage</div>
-          <div>
-            <a href="cars">Cars</a>
-          </div>
-          <div>
-            <a href="team">Team</a>
-          </div>
-          <div>
-            <a href="support-us">Support Us</a>
-          </div>
-          <div>
-            <a href="sponsors">Sponsors</a>
-          </div>
-          <div>
-            <a href="contact-us">Contact Us</a>
-          </div>
-          <div>Team Portal</div>
+          <Link href="/">Homepage</Link>
+          <Link href="/cars">Cars</Link>
+          <Link href="/team">Team</Link>
+          <Link href="/support-us">Support Us</Link>
+          <Link href="/sponsors">Sponsors</Link>
+          <Link href="/contact">Contact Us</Link>
+          <Link href="/portal">Team Portal</Link>
         </div>
       </div>
       <div className={styles.seperator} style={{ width: "80%" }} />

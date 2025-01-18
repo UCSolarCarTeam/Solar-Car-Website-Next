@@ -3,7 +3,7 @@ import Image from "next/image";
 import { memo } from "react";
 
 import Navbar from "@/components/Navbar";
-import styles from "@/components/carsPage/index.module.scss";
+import styles from "@/pages/cars/index.module.scss";
 
 const cx = classNames.bind(styles);
 

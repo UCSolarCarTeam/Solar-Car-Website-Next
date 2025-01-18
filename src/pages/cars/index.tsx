@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { memo } from "react";
 
-import CarsPage from "@/components/carsPage";
+import CarsPage from "@/pages/cars/CarsPage";
 
 const Cars = () => {
   return (

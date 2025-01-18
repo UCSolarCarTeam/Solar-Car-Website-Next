@@ -2,14 +2,14 @@ import Image from "next/image";
 import { memo } from "react";
 
 import Navbar from "@/components/Navbar";
-import styles from "@/components/supportUsPage/index.module.scss";
+import styles from "@/pages/support-us/index.module.scss";
 
-const ContactPage = () => {
+const SupportUsPage = () => {
   return (
     <>
       <Navbar />
       <div className={styles.container}>
-        <div className={styles.pageHeading}>Contact Us</div>
+        <div className={styles.pageHeading}>Support Our Team</div>
         <div className={styles.descriptionContainer}>
           <div>
             {`The University of Calgary Solar Car Team builds and operates our car
@@ -22,7 +22,7 @@ const ContactPage = () => {
           alt="backsplash"
           fill
           priority
-          src="/assets/contact/backsplash.png"
+          src="/assets/support-us/backsplash.jpeg"
           style={{ objectFit: "cover" }}
         />
       </div>
@@ -30,4 +30,4 @@ const ContactPage = () => {
   );
 };
 
-export default memo(ContactPage);
+export default memo(SupportUsPage);

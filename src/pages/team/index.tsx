@@ -3,7 +3,7 @@ import { type GetServerSideProps } from "next/types";
 import { memo } from "react";
 
 import Footer from "@/components/Footer";
-import TeamPage from "@/components/teamPage";
+import TeamPage from "@/pages/team/TeamPage";
 import { type RouterOutputs, type SsrTrpcHelper } from "@/utils/api";
 import { SsrHelpers } from "@/utils/api";
 

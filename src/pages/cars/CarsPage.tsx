@@ -1,8 +1,8 @@
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
-import PageBullets from "@/components/Pagebullets";
-import CarScreenView from "@/components/carsPage/CarScreenView";
-import styles from "@/components/carsPage/index.module.scss";
+import PageBullets from "@/components/PageBullets";
+import CarScreenView from "@/pages/cars/CarScreenView";
+import styles from "@/pages/cars/index.module.scss";
 
 const CarsPage = () => {
   const pageIds = useMemo(

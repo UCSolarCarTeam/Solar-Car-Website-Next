@@ -2,7 +2,7 @@ import Head from "next/head";
 import { memo } from "react";
 
 import Footer from "@/components/Footer";
-import ContactPage from "@/components/contactPage";
+import ContactPage from "@/pages/contact/ContactPage";
 
 const Contact = () => {
   return (

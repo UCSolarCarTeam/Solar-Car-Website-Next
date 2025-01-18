@@ -9,7 +9,7 @@ import superjson from "superjson";
 import { env } from "@/env";
 import { type AppRouter } from "@/server/api/root";
 import { createClient } from "@supabase/supabase-js";
-import { DehydratedState } from "@tanstack/react-query";
+import { type DehydratedState } from "@tanstack/react-query";
 import { createTRPCClient, httpBatchLink, loggerLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
 import { createServerSideHelpers } from "@trpc/react-query/server";

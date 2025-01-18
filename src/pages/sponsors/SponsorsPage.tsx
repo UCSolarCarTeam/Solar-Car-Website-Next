@@ -2,7 +2,7 @@ import Image from "next/image";
 import { memo } from "react";
 
 import Navbar from "@/components/Navbar";
-import styles from "@/components/sponsorsPage/index.module.scss";
+import styles from "@/pages/sponsors/index.module.scss";
 
 const SponsorsPage = () => {
   return (

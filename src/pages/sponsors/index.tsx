@@ -2,7 +2,7 @@ import Head from "next/head";
 import { memo } from "react";
 
 import Footer from "@/components/Footer";
-import SponsorsPage from "@/components/sponsorsPage";
+import SponsorsPage from "@/pages/sponsors/SponsorsPage";
 
 const Sponsors = () => {
   return (
