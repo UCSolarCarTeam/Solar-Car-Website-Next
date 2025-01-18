@@ -21,6 +21,10 @@ const config = {
         hostname: "img.clerk.com",
         protocol: "https",
       },
+      {
+        hostname: "iskksotubtjejqlblkyf.supabase.co",
+        protocol: "https",
+      },
     ],
   },
   reactStrictMode: true,

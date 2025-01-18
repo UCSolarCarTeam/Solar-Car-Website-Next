@@ -19,7 +19,7 @@ model User {
     fieldOfStudy      String?
     teamRole          String?
     schoolYear        String?
-    yearJoined        Int?
+    yearJoined        String?
     profilePictureUrl String?
     description       String?
 }
