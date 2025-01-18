@@ -51,12 +51,22 @@ const Footer = () => {
         </div>
         <div className={styles.gridContainer}>
           <div>Resources</div>
-          <div>Homepage</div>
-          <div>Cars</div>
-          <div>Team</div>
-          <div>Support Us</div>
-          <div>Sponsors</div>
-          <div>Contact Us</div>
+          <div href="#">Homepage</div>
+          <div>
+            <a href="cars">Cars</a>
+          </div>
+          <div>
+            <a href="team">Team</a>
+          </div>
+          <div>
+            <a href="support-us">Support Us</a>
+          </div>
+          <div>
+            <a href="sponsors">Sponsors</a>
+          </div>
+          <div>
+            <a href="contact-us">Contact Us</a>
+          </div>
           <div>Team Portal</div>
         </div>
       </div>
