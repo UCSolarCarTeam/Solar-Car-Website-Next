@@ -58,7 +58,6 @@ export default async function handler(
         }
         return res.status(200).json({ response: "ok" });
       } catch (err) {
-        console.error("Error verifying webhook:", err);
         return res.status(400).json({ err });
       }
     }

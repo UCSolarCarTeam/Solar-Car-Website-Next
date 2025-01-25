@@ -97,7 +97,6 @@ export const portalRouter = createTRPCRouter({
 
         return true;
       } catch (error) {
-        console.error(error);
         return false;
       }
     }),

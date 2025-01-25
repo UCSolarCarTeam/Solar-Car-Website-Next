@@ -25,6 +25,10 @@ const config = {
         hostname: "iskksotubtjejqlblkyf.supabase.co",
         protocol: "https",
       },
+      {
+        hostname: "mtjksnocgbfjissfildk.supabase.co",
+        protocol: "https",
+      },
     ],
   },
   reactStrictMode: true,
