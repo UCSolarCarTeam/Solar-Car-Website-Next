@@ -19,7 +19,12 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         <link href="/favicon.ico" rel="icon" />
       </Head>
       <div className={saira.className}>
-        <ClerkProvider>
+        <ClerkProvider
+          signInForceRedirectUrl="/portal"
+          signInUrl="/portal/sign-in"
+          signUpForceRedirectUrl="/portal"
+          signUpUrl="/portal/sign-in"
+        >
           <Component {...pageProps} />
         </ClerkProvider>
       </div>

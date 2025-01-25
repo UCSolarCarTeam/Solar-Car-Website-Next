@@ -17,10 +17,9 @@ import styles from "./index.module.scss";
 
 type User = RouterOutputs["portal"]["getClerkUsers"][number];
 
-const UsersTable = () => {
+const UsersTable = (props: { users: User[] }) => {
   const { user } = useUser();
   const utils = api.useUtils();
-  const users = api.portal.getClerkUsers.useQuery();
   const mutateUserRole = api.portal.updateUserRole.useMutation({
     onSuccess: async () => {
       await utils.portal.getClerkUsers.invalidate();
@@ -96,13 +95,13 @@ const UsersTable = () => {
 
   const table = useReactTable({
     columns,
-    data: users.data ?? [],
+    data: props.users ?? [],
     getCoreRowModel: getCoreRowModel(),
   });
 
   return (
-    <>
-      Users
+    <div>
+      Portal Users
       <table className={styles.usersTable}>
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -132,7 +131,7 @@ const UsersTable = () => {
           ))}
         </tbody>
       </table>
-    </>
+    </div>
   );
 };
 

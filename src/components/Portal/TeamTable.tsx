@@ -3,6 +3,7 @@ import { memo, useMemo } from "react";
 
 import EditTeamCell from "@/components/EditTeamCell";
 import { type RouterOutputs, api } from "@/utils/api";
+import { AllTeamRoles } from "@prisma/client";
 import {
   createColumnHelper,
   flexRender,
@@ -14,9 +15,7 @@ import styles from "./index.module.scss";
 
 export type TeamMember = RouterOutputs["portal"]["getDBUsers"][number];
 
-const TeamTable = () => {
-  const users = api.portal.getDBUsers.useQuery();
-
+const TeamTable = (props: { users: TeamMember[] }) => {
   const columnHelper = useMemo(() => createColumnHelper<TeamMember>(), []);
   const columns = useMemo(
     () => [
@@ -27,6 +26,7 @@ const TeamTable = () => {
               alt="profile image"
               fill
               src={info.getValue() ?? "/DefaultProfilePicture.png"}
+              style={{ objectFit: "cover" }}
             />
           );
         },
@@ -40,25 +40,39 @@ const TeamTable = () => {
         cell: (info) => info.getValue(),
         header: "Last Name",
       }),
-      columnHelper.accessor("fieldOfStudy", {
+      columnHelper.accessor("ucid", {
         cell: (info) => info.getValue(),
-        header: "Field of Study",
+        header: "UCID",
       }),
-      columnHelper.accessor("teamRole", {
+      columnHelper.accessor("schoolEmail", {
         cell: (info) => info.getValue(),
+        header: "School Email",
+      }),
+      columnHelper.accessor("phoneNumber", {
+        cell: (info) => info.getValue(),
+        header: "Phone Number",
+      }),
+      // columnHelper.accessor("fieldOfStudy", {
+      //   cell: (info) => info.getValue(),
+      //   header: "Field of Study",
+      // }),
+      columnHelper.accessor("teamRole", {
+        cell: (info) => {
+          return (info.getValue() ?? "").replace(/([a-z])([A-Z])/g, "$1 $2");
+        },
         header: "Team Role",
       }),
-      columnHelper.accessor("schoolYear", {
-        cell: (info) => info.getValue(),
-        header: "School Year",
-      }),
-      columnHelper.accessor("yearJoined", {
-        header: "Year Joined",
-      }),
-      columnHelper.accessor("description", {
-        cell: (info) => info.getValue(),
-        header: "Description",
-      }),
+      // columnHelper.accessor("schoolYear", {
+      //   cell: (info) => info.getValue(),
+      //   header: "School Year",
+      // }),
+      // columnHelper.accessor("yearJoined", {
+      //   header: "Year Joined",
+      // }),
+      // columnHelper.accessor("description", {
+      //   cell: (info) => info.getValue(),
+      //   header: "Description",
+      // }),
       columnHelper.display({
         cell: (info) => <EditTeamCell currentRow={info.row.original} />,
         id: "edit",
@@ -70,13 +84,13 @@ const TeamTable = () => {
 
   const table = useReactTable({
     columns,
-    data: users.data ?? [],
+    data: props.users ?? [],
     getCoreRowModel: getCoreRowModel(),
   });
 
   return (
-    <>
-      Team
+    <div>
+      Team Members
       <table className={styles.usersTable}>
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -106,7 +120,7 @@ const TeamTable = () => {
           ))}
         </tbody>
       </table>
-    </>
+    </div>
   );
 };
 

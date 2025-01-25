@@ -6,6 +6,9 @@ import {
   createTRPCRouter,
   publicProcedure,
 } from "@/server/api/trpc";
+import { UpperTeamRoles } from "@/types";
+import { AllTeamRoles } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
 
 export type UserRole = "admin" | "mechanical" | "business" | "member";
 const UserRoleSchema = z.enum(["admin", "mechanical", "business", "member"]);
@@ -52,12 +55,32 @@ export const portalRouter = createTRPCRouter({
         lastName: z.string().nullable(),
         profilePictureUrl: z.string().nullable(),
         schoolYear: z.string().nullable(),
-        teamRole: z.string().nullable(),
+        teamRole: z.nativeEnum(AllTeamRoles).nullable(),
         yearJoined: z.string().nullable(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       try {
+        if (!ctx.user.userId) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "User not authenticated.",
+          });
+        }
+
+        const user = await ctx.clerkClient.users.getUser(ctx.user.userId);
+        const isUpperTeamRole = Object.values(UpperTeamRoles).includes(
+          input.teamRole as UpperTeamRoles,
+        );
+
+        if (isUpperTeamRole && user.publicMetadata?.role !== "admin") {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "You must be an admin to assign this role.",
+          });
+        }
+
+        // Update the user regardless of whether the role is an UpperTeamRole or not
         await ctx.db.user.update({
           data: {
             description: input.description,
@@ -71,11 +94,12 @@ export const portalRouter = createTRPCRouter({
           },
           where: { id: input.id },
         });
+
+        return true;
       } catch (error) {
         console.error(error);
         return false;
       }
-      return true;
     }),
 
   updateUserRole: adminMiddleware

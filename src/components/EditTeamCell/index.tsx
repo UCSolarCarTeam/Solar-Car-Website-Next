@@ -1,10 +1,21 @@
 import Image from "next/image";
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 import styles from "@/components/EditTeamCell/index.module.scss";
 import CloseButton from "@/components/svgs/CloseButton";
+import {
+  AccountingTeam,
+  CommunicationsTeam,
+  ElectricalTeam,
+  MechanicalTeam,
+  MultiTeam,
+  SoftwareTeam,
+  SponsorshipTeam,
+  UpperTeamRoles,
+} from "@/types";
 import { api } from "@/utils/api";
 import { useUser } from "@clerk/nextjs";
+import { type AllTeamRoles } from "@prisma/client";
 
 interface EditTeamCellProps {
   currentRow: {
@@ -14,7 +25,7 @@ interface EditTeamCellProps {
     firstName: string | null;
     lastName: string | null;
     fieldOfStudy: string | null;
-    teamRole: string | null;
+    teamRole: AllTeamRoles | null;
     schoolYear: string | null;
     yearJoined: string | null;
     profilePictureUrl: string | null;
@@ -39,6 +50,20 @@ const EditTeamPopup = ({ currentRow, togglePopup }: EditTeamPopupProps) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
 
+  const rowDataType = useMemo(() => {
+    return {
+      description: "string",
+      fieldOfStudy: "string",
+      firstName: "string",
+      lastName: "string",
+      phoneNumber: "string",
+      schoolEmail: "string",
+      schoolYear: "string",
+      ucid: "number",
+      yearJoined: "string",
+    };
+  }, []);
+
   const rowDataToRender = useMemo(() => {
     return Object.entries(newRowData)
       .filter(
@@ -48,9 +73,14 @@ const EditTeamPopup = ({ currentRow, togglePopup }: EditTeamPopupProps) => {
         (acc, [key, value]) => {
           acc[key] = {
             id: key,
-            label: key
-              .replace(/([a-z])([A-Z])/g, "$1 $2")
-              .replace(/^./, (match) => match.toUpperCase()),
+            label:
+              key === "ucid"
+                ? "UCID"
+                : key === "description"
+                  ? "About Me"
+                  : key
+                      .replace(/([a-z])([A-Z])/g, "$1 $2")
+                      .replace(/^./, (match) => match.toUpperCase()),
             value: value,
           };
           return acc;
@@ -73,7 +103,12 @@ const EditTeamPopup = ({ currentRow, togglePopup }: EditTeamPopupProps) => {
     }
   };
 
-  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onInputChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+      | React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     const { id, value } = e.target;
     setTouched(true);
     setNewRowData((prev) => ({ ...prev, [id]: value }));
@@ -162,18 +197,91 @@ const EditTeamPopup = ({ currentRow, togglePopup }: EditTeamPopupProps) => {
                   <label className={styles.textFieldLabel} htmlFor={row.id}>
                     {row.label}
                   </label>
-                  <input
-                    className={styles.textFieldInput}
-                    id={row.id}
-                    name={row.label}
-                    onChange={onInputChange}
-                    type={
-                      ["schoolYear", "yearJoined"].includes(row.id)
-                        ? "number"
-                        : "text"
-                    }
-                    value={row.value ?? ""}
-                  />
+                  {row.id === "description" ? (
+                    <textarea
+                      className={styles.textFieldInput}
+                      id={row.id}
+                      name={row.label}
+                      onChange={onInputChange}
+                      value={row.value ?? ""}
+                    ></textarea>
+                  ) : row.id === "teamRole" ? (
+                    <select
+                      className={styles.teamRoleSelect}
+                      id={row.id}
+                      name={row.label}
+                      onChange={onInputChange}
+                    >
+                      <option value="">Please select</option>
+                      <optgroup label="Lead Roles">
+                        {Object.entries(UpperTeamRoles).map(([key, label]) => (
+                          <option key={key} value={key}>
+                            {label}
+                          </option>
+                        ))}
+                      </optgroup>
+                      <optgroup label="Accounting">
+                        {Object.entries(AccountingTeam).map(([key, label]) => (
+                          <option key={key} value={key}>
+                            {label}
+                          </option>
+                        ))}
+                      </optgroup>
+                      <optgroup label="Communications">
+                        {Object.entries(CommunicationsTeam).map(
+                          ([key, label]) => (
+                            <option key={key} value={key}>
+                              {label}
+                            </option>
+                          ),
+                        )}
+                      </optgroup>
+                      <optgroup label="Sponsorship">
+                        {Object.entries(SponsorshipTeam).map(([key, label]) => (
+                          <option key={key} value={key}>
+                            {label}
+                          </option>
+                        ))}
+                      </optgroup>
+                      <optgroup label="Software">
+                        {Object.entries(SoftwareTeam).map(([key, label]) => (
+                          <option key={key} value={key}>
+                            {label}
+                          </option>
+                        ))}
+                      </optgroup>
+                      <optgroup label="Electrical">
+                        {Object.entries(ElectricalTeam).map(([key, label]) => (
+                          <option key={key} value={key}>
+                            {label}
+                          </option>
+                        ))}
+                      </optgroup>
+                      <optgroup label="Mechanical">
+                        {Object.entries(MechanicalTeam).map(([key, label]) => (
+                          <option key={key} value={key}>
+                            {label}
+                          </option>
+                        ))}
+                      </optgroup>
+                      <optgroup label="Multi-Team">
+                        {Object.entries(MultiTeam).map(([key, label]) => (
+                          <option key={key} value={key}>
+                            {label}
+                          </option>
+                        ))}
+                      </optgroup>
+                    </select>
+                  ) : (
+                    <input
+                      className={styles.textFieldInput}
+                      id={row.id}
+                      name={row.label}
+                      onChange={onInputChange}
+                      type={rowDataType[row.id as keyof typeof rowDataType]}
+                      value={row.value ?? ""}
+                    />
+                  )}
                 </div>
               ))}
             </div>

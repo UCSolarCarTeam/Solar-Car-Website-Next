@@ -58,7 +58,7 @@ const Footer = () => {
           <Link href="/support-us">Support Us</Link>
           <Link href="/sponsors">Sponsors</Link>
           <Link href="/contact">Contact Us</Link>
-          <Link href="/portal">Team Portal</Link>
+          <Link href="/portal/sign-in">Team Portal</Link>
         </div>
       </div>
       <div className={styles.seperator} style={{ width: "80%" }} />

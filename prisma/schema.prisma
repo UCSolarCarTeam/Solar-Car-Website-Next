@@ -12,14 +12,76 @@ datasource db {
 }
 
 model User {
-    id                Int     @id @default(autoincrement())
-    clerkUserId       String  @unique
+    id                Int           @id @default(autoincrement())
+    clerkUserId       String        @unique
     firstName         String?
     lastName          String?
+    ucid              Int?          @unique
+    schoolEmail       String?       @unique
+    phoneNumber       String?
     fieldOfStudy      String?
-    teamRole          String?
+    teamRole          AllTeamRoles?
     schoolYear        String?
     yearJoined        String?
     profilePictureUrl String?
     description       String?
+}
+
+enum AllTeamRoles {
+    TeamCaptain            @map("Team Captain")
+    EngineeringTeamManager @map("Engineering Team Manager")
+    BusinessTeamManager    @map("Business Team Manager")
+    // software team
+    SoftwareTeamLead       @map("Software Team Lead")
+    EmbeddedTeamLead       @map("Embedded Team Lead")
+    TelemetryTeamLead      @map("Telemetry Team Lead")
+    ViscommTeamLead        @map("Viscomm Team Lead")
+    EmbeddedTeam           @map("Embedded Team")
+    TelemetryTeam          @map("Telemetry Team")
+    ViscommTeam            @map("Viscomm Team")
+
+    // accounting team
+    AccountingCoManager        @map("Accounting Co-Manager")
+    AssistantAccountingManager @map("Assistant Accounting Manager")
+    AccountingAnalyst          @map("Accounting Analyst")
+    AccountingAssociate        @map("Accounting Associate")
+
+    // communications team
+    CommunicationsManager       @map("Communications Manager")
+    EventAssociate              @map("Event Associate")
+    MarketingAssociate          @map("Marketing Associate")
+    Videographer                @map("Videographer")
+    MarketingAndEventsAssociate @map("Marketing \\& Events Associate")
+
+    // sponsorship
+    SponsorshipManager          @map("Sponsorship Manager")
+    SponsorshipAssistantManager @map("Sponsorship Assistant Manager")
+    MonetaryLead                @map("Monetary Lead")
+    InKindLead                  @map("In-Kind Lead")
+    SponsorshipAssociate        @map("Sponsorship Associate")
+
+    // electrical team
+    ElectricalCoManager @map("Electrical Co-Manager")
+    ArraysLead          @map("Arrays Lead")
+    EnergyStorageLead   @map("Energy Storage Lead")
+    HighVoltageLead     @map("High Voltage Lead")
+    LowVoltageLead      @map("Low Voltage Lead")
+    ArraysTeam          @map("Arrays Team")
+    EnergyStorageTeam   @map("Energy Storage Team")
+    HighVoltageTeam     @map("High Voltage Team")
+    LowVoltageTeam      @map("Low Voltage Team")
+    ElectricalTeamTeam  @map("Electrical Team")
+
+    // mechanical team
+    MechanicalManager         @map("Mechanical Manager")
+    SuspensionAndSteeringLead @map("Suspension \\& Steering Lead")
+    StructuresLead            @map("Structures Lead")
+    ElectricalIntegrationLead @map("Electrical Integration Lead")
+    SuspensionAndSteeringTeam @map("Suspension \\& Steering Team")
+    StructuresTeam            @map("Structures Team")
+    ElectricalIntegrationTeam @map("Electrical Integration Team")
+    BodyAndChassisTeam        @map("Body \\& Chassis Team")
+
+    // multi team
+    MultiTeam @map("Multi Team")
 }
