@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
-import PageBullets from "@/components/PageBullets";
+import Pagebullets from "@/components/Pagebullets";
 import CarScreenView from "@/pages/cars/CarScreenView";
 import styles from "@/pages/cars/index.module.scss";
 
@@ -128,7 +128,7 @@ const CarsPage = () => {
 
   return (
     <div className={styles.snapContainer}>
-      <PageBullets
+      <Pagebullets
         currentId={currentElement}
         handleDotClick={handleDotClick}
         pageIds={Object.keys(pageIds)}
