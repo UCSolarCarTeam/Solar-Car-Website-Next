@@ -21,6 +21,7 @@ const SupportUsPage = () => {
         <Image
           alt="backsplash"
           fill
+          loading="eager"
           priority
           src="/assets/support-us/backsplash.jpeg"
           style={{ objectFit: "cover" }}

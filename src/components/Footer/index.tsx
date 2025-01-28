@@ -28,6 +28,7 @@ const Footer = () => {
             <Image
               alt="Logo"
               height={53}
+              loading="eager"
               priority
               src="/assets/logo-nav.png"
               width={308}

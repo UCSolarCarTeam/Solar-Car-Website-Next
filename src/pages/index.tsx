@@ -32,6 +32,7 @@ const Home = () => {
           <Image
             alt="backsplash"
             fill
+            loading="eager"
             priority
             src="/assets/home/backsplash.jpeg"
             style={{ objectFit: "cover" }}

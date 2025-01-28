@@ -35,6 +35,7 @@ const CarPage = ({
         <Image
           alt="backsplash"
           fill
+          loading="eager"
           priority
           src={image}
           style={{ objectFit: "cover" }}

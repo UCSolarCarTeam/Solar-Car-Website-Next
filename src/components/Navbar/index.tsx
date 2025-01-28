@@ -58,6 +58,7 @@ const Navbar = () => {
           <Image
             alt="Logo"
             height={64}
+            loading="eager"
             onClick={() => {
               if (width !== undefined && width > 1024) {
                 void router.push("/");

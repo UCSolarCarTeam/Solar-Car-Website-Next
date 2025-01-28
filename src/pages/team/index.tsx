@@ -60,6 +60,7 @@ const Team = (props: TeamPageProps) => {
                       <Image
                         alt="Headshot"
                         fill
+                        loading="eager"
                         src={
                           teamMember.profilePictureUrl ??
                           "/DefaultProfilePicture.png"

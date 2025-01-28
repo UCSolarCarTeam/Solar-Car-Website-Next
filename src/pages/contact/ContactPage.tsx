@@ -21,6 +21,7 @@ const ContactPage = () => {
         <Image
           alt="backsplash"
           fill
+          loading="eager"
           priority
           src="/assets/contact/backsplash.png"
           style={{ objectFit: "cover" }}

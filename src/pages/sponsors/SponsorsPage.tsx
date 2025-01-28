@@ -18,6 +18,7 @@ const SponsorsPage = () => {
           <Image
             alt="lead sponsor"
             height={180}
+            loading="eager"
             priority
             src="/assets/sponsors/logo-schulich.svg"
             width={1000}
@@ -48,6 +49,7 @@ const SponsorsPage = () => {
         <Image
           alt="backsplash"
           fill
+          loading="eager"
           priority
           src="/assets/sponsors/backsplash.jpeg"
           style={{ objectFit: "cover" }}
