@@ -37,6 +37,7 @@ type EditTeamPopupProps = {
 } & EditTeamCellProps;
 
 const EditTeamPopup = ({ currentRow, togglePopup }: EditTeamPopupProps) => {
+  const { user } = useUser();
   const utils = api.useUtils();
   const mutateUserContent = api.portal.updateDBUser.useMutation({
     onSuccess: async () => {
@@ -63,6 +64,44 @@ const EditTeamPopup = ({ currentRow, togglePopup }: EditTeamPopupProps) => {
       yearJoined: "string",
     };
   }, []);
+
+  const teamRoleOptions = useMemo(
+    () => [
+      {
+        label: "Lead Roles",
+        options: UpperTeamRoles,
+      },
+      {
+        label: "Accounting",
+        options: AccountingTeam,
+      },
+      {
+        label: "Communications",
+        options: CommunicationsTeam,
+      },
+      {
+        label: "Sponsorship",
+        options: SponsorshipTeam,
+      },
+      {
+        label: "Software",
+        options: SoftwareTeam,
+      },
+      {
+        label: "Electrical",
+        options: ElectricalTeam,
+      },
+      {
+        label: "Mechanical",
+        options: MechanicalTeam,
+      },
+      {
+        label: "Multi-Team",
+        options: MultiTeam,
+      },
+    ],
+    [],
+  );
 
   const rowDataToRender = useMemo(() => {
     return Object.entries(newRowData)
@@ -97,7 +136,6 @@ const EditTeamPopup = ({ currentRow, togglePopup }: EditTeamPopupProps) => {
   }, [newRowData]);
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    // Check if the click was directly on the popup overlay (not on the content)
     if (e.target === e.currentTarget) {
       togglePopup();
     }
@@ -188,7 +226,7 @@ const EditTeamPopup = ({ currentRow, togglePopup }: EditTeamPopupProps) => {
                 style={{ objectFit: "cover" }}
               />
             </div>
-            <input onChange={handleFileUpload} type="file" />
+            <input accept="image/*" onChange={handleFileUpload} type="file" />
           </div>
           {newRowData && (
             <div className={styles.popupForm}>
@@ -203,6 +241,7 @@ const EditTeamPopup = ({ currentRow, togglePopup }: EditTeamPopupProps) => {
                       id={row.id}
                       name={row.label}
                       onChange={onInputChange}
+                      rows={5}
                       value={row.value ?? ""}
                     ></textarea>
                   ) : row.id === "teamRole" ? (
@@ -213,64 +252,26 @@ const EditTeamPopup = ({ currentRow, togglePopup }: EditTeamPopupProps) => {
                       onChange={onInputChange}
                     >
                       <option value="">Please select</option>
-                      <optgroup label="Lead Roles">
-                        {Object.entries(UpperTeamRoles).map(([key, label]) => (
-                          <option key={key} value={key}>
-                            {label}
-                          </option>
-                        ))}
-                      </optgroup>
-                      <optgroup label="Accounting">
-                        {Object.entries(AccountingTeam).map(([key, label]) => (
-                          <option key={key} value={key}>
-                            {label}
-                          </option>
-                        ))}
-                      </optgroup>
-                      <optgroup label="Communications">
-                        {Object.entries(CommunicationsTeam).map(
-                          ([key, label]) => (
+                      {user?.publicMetadata?.role === "admin" && (
+                        <optgroup label="Lead Roles">
+                          {Object.entries(UpperTeamRoles).map(
+                            ([key, label]) => (
+                              <option key={key} value={key}>
+                                {label}
+                              </option>
+                            ),
+                          )}
+                        </optgroup>
+                      )}
+                      {teamRoleOptions.map(({ label, options }) => (
+                        <optgroup key={label} label={label}>
+                          {Object.entries(options).map(([key, label]) => (
                             <option key={key} value={key}>
                               {label}
                             </option>
-                          ),
-                        )}
-                      </optgroup>
-                      <optgroup label="Sponsorship">
-                        {Object.entries(SponsorshipTeam).map(([key, label]) => (
-                          <option key={key} value={key}>
-                            {label}
-                          </option>
-                        ))}
-                      </optgroup>
-                      <optgroup label="Software">
-                        {Object.entries(SoftwareTeam).map(([key, label]) => (
-                          <option key={key} value={key}>
-                            {label}
-                          </option>
-                        ))}
-                      </optgroup>
-                      <optgroup label="Electrical">
-                        {Object.entries(ElectricalTeam).map(([key, label]) => (
-                          <option key={key} value={key}>
-                            {label}
-                          </option>
-                        ))}
-                      </optgroup>
-                      <optgroup label="Mechanical">
-                        {Object.entries(MechanicalTeam).map(([key, label]) => (
-                          <option key={key} value={key}>
-                            {label}
-                          </option>
-                        ))}
-                      </optgroup>
-                      <optgroup label="Multi-Team">
-                        {Object.entries(MultiTeam).map(([key, label]) => (
-                          <option key={key} value={key}>
-                            {label}
-                          </option>
-                        ))}
-                      </optgroup>
+                          ))}
+                        </optgroup>
+                      ))}
                     </select>
                   ) : (
                     <input
@@ -341,9 +342,9 @@ const EditTeamCell = ({ currentRow }: EditTeamCellProps) => {
         )}
       </div>
     );
-  } else {
-    return <></>;
   }
+
+  return null;
 };
 
 export default memo(EditTeamCell);
