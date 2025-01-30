@@ -1,4 +1,5 @@
 import Image from "next/image";
+import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { memo, useMemo } from "react";
 
 import EditTeamCell from "@/components/EditUserCell";
@@ -26,7 +27,7 @@ const TeamTable = (props: { users: TeamMember[] }) => {
               fill
               loading="eager"
               priority
-              src={info.getValue() ?? "/DefaultProfilePicture.png"}
+              src={info.getValue() ?? defaultProfilePicture}
               style={{ objectFit: "cover" }}
             />
           );

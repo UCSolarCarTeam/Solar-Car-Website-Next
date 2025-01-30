@@ -24,7 +24,10 @@ const PortalPage = () => {
   ) {
     return (
       <div className={styles.unverifiedPage}>
-        <div>You are not verified</div>
+        <div>
+          You are not verified. Please contact the Telemetry Team or your Team
+          Lead.
+        </div>
         <Link href="/">Go back home</Link>
       </div>
     );

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { useMemo } from "react";
 import { memo } from "react";
 import Select from "react-select";
@@ -36,7 +37,7 @@ const UsersTable = (props: { users: User[] }) => {
             height={48}
             loading="eager"
             priority
-            src={info.getValue()!}
+            src={info.getValue() ?? defaultProfilePicture}
             width={48}
           />
         ),

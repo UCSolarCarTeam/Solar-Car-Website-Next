@@ -1,4 +1,5 @@
 import Image from "next/image";
+import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { memo, useCallback, useMemo, useState } from "react";
 
 import { type EditUserCellProps } from "@/components/EditUserCell";
@@ -201,9 +202,7 @@ const EditUserPopup = ({ currentRow, togglePopup }: EditUserPopupProps) => {
               <Image
                 alt="profile image"
                 fill
-                src={
-                  newRowData.profilePictureUrl ?? "/DefaultProfilePicture.png"
-                }
+                src={newRowData.profilePictureUrl ?? defaultProfilePicture}
                 style={{ objectFit: "cover" }}
               />
             </div>

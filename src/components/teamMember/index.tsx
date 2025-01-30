@@ -1,4 +1,5 @@
 import Image from "next/image";
+import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { memo } from "react";
 
 import styles from "@/pages/team/index.module.scss";
@@ -17,7 +18,7 @@ const TeamMember = ({ user }: TeamMemberProps) => {
           alt="Headshot"
           fill
           loading="eager"
-          src={user.profilePictureUrl ?? "/DefaultProfilePicture.png"}
+          src={user.profilePictureUrl ?? defaultProfilePicture}
         />
       </div>
       <div>
