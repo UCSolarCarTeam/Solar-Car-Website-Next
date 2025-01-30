@@ -1,10 +1,9 @@
 import Image from "next/image";
+import backsplash from "public/assets/support-us/backsplash.jpeg";
 import { memo } from "react";
 
 import Navbar from "@/components/Navbar";
 import styles from "@/pages/support-us/index.module.scss";
-
-import backsplash from "/assets/support-us/backsplash.jpeg";
 
 const SupportUsPage = () => {
   return (

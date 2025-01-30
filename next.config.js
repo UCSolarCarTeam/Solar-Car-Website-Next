@@ -16,6 +16,12 @@ const config = {
     locales: ["en"],
   },
   images: {
+    localPatterns: [
+      {
+        pathname: "/assets/**",
+        search: "",
+      },
+    ],
     remotePatterns: [
       {
         hostname: "img.clerk.com",

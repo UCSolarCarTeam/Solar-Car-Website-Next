@@ -1,15 +1,14 @@
+import backsplash1 from "public/assets/cars/backsplash1.jpeg";
+import backsplash2 from "public/assets/cars/backsplash2.jpeg";
+import backsplash3 from "public/assets/cars/backsplash3.jpeg";
+import backsplash4 from "public/assets/cars/backsplash4.jpeg";
+import backsplash5 from "public/assets/cars/backsplash5.jpeg";
+import backsplash6 from "public/assets/cars/backsplash6.jpeg";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 import Pagebullets from "@/components/Pagebullets";
 import CarScreenView from "@/pages/cars/CarScreenView";
 import styles from "@/pages/cars/index.module.scss";
-
-import backsplash1 from "/assets/cars/backsplash1.jpeg";
-import backsplash2 from "/assets/cars/backsplash2.jpeg";
-import backsplash3 from "/assets/cars/backsplash3.jpeg";
-import backsplash4 from "/assets/cars/backsplash4.jpeg";
-import backsplash5 from "/assets/cars/backsplash5.jpeg";
-import backsplash6 from "/assets/cars/backsplash6.jpeg";
 
 const CarsPage = () => {
   const pageIds = useMemo(

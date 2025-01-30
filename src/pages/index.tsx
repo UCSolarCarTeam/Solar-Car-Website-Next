@@ -1,12 +1,11 @@
 import Head from "next/head";
 import Image from "next/image";
+import backsplash from "public/assets/home/backsplash.jpeg";
 import { memo } from "react";
 
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import styles from "@/pages/index.module.scss";
-
-import backsplash from "/assets/home/backsplash.jpeg";
 
 const Home = () => {
   return (

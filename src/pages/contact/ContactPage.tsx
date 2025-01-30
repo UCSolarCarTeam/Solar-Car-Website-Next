@@ -1,10 +1,9 @@
 import Image from "next/image";
+import backsplash from "public/assets/contact/backsplash.png";
 import { memo } from "react";
 
 import Navbar from "@/components/Navbar";
 import styles from "@/pages/contact/index.module.scss";
-
-import backsplash from "/assets/contact/backsplash.png";
 
 const ContactPage = () => {
   return (

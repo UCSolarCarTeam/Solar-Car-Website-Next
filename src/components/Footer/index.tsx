@@ -2,6 +2,7 @@ import classNames from "classnames";
 import { DM_Sans } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
+import Logo from "public/assets/logo-nav.png";
 import { memo } from "react";
 
 import styles from "@/components/Footer/index.module.scss";
@@ -11,7 +12,6 @@ import Instagram from "../svgs/Instagram";
 import Linkedin from "../svgs/Linkedin";
 import Twitter from "../svgs/Twitter";
 import Youtube from "../svgs/Youtube";
-import Logo from "/assets/logo-nav.png";
 
 const dmSans = DM_Sans({
   display: "swap",

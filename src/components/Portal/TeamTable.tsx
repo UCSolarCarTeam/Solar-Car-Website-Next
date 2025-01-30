@@ -2,8 +2,7 @@ import Image from "next/image";
 import { memo, useMemo } from "react";
 
 import EditTeamCell from "@/components/EditUserCell";
-import { type RouterOutputs, api } from "@/utils/api";
-import { AllTeamRoles } from "@prisma/client";
+import { type RouterOutputs } from "@/utils/api";
 import {
   createColumnHelper,
   flexRender,
@@ -25,9 +24,9 @@ const TeamTable = (props: { users: TeamMember[] }) => {
             <Image
               alt="profile image"
               fill
-              src={info.getValue() ?? "/DefaultProfilePicture.png"}
               loading="eager"
               priority
+              src={info.getValue() ?? "/DefaultProfilePicture.png"}
               style={{ objectFit: "cover" }}
             />
           );

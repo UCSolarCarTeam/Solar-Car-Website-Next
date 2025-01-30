@@ -2,6 +2,7 @@ import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Logo from "public/assets/logo-nav.png";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 import styles from "@/components/Navbar/index.module.scss";
@@ -9,7 +10,6 @@ import Chevron from "@/components/svgs/Chevron";
 import useViewport from "@/hooks/useViewport";
 
 import CloseButton from "../svgs/CloseButton";
-import Logo from "/assets/logo-nav.png";
 
 const cx = classNames.bind(styles);
 

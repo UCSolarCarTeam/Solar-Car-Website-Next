@@ -1,11 +1,10 @@
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
+import backsplash from "public/assets/sponsors/backsplash.jpeg";
+import schulichLogo from "public/assets/sponsors/logo-schulich.svg";
 import { memo } from "react";
 
 import Navbar from "@/components/Navbar";
 import styles from "@/pages/sponsors/index.module.scss";
-
-import backsplash from "/assets/sponsors/backsplash.jpeg";
-import schulichLogo from "/assets/sponsors/logo-schulich.svg";
 
 const SponsorsPage = () => {
   return (
@@ -24,7 +23,7 @@ const SponsorsPage = () => {
             loading="eager"
             placeholder="blur"
             priority
-            src={schulichLogo}
+            src={schulichLogo as StaticImageData}
             width={1000}
           />
         </div>
