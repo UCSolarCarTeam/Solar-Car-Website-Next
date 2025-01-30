@@ -230,6 +230,7 @@ const EditUserPopup = ({ currentRow, togglePopup }: EditUserPopupProps) => {
                       id={row.id}
                       name={row.label}
                       onChange={onInputChange}
+                      value={row.value ?? ""}
                     >
                       <option value="">Please select</option>
                       {user?.publicMetadata?.role === "admin" && (
