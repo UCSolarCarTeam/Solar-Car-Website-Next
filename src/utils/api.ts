@@ -23,7 +23,7 @@ export const supabase = createClient(
 
 export const getBaseUrl = (ssr = false) => {
   if (typeof window !== "undefined") return ""; // browser should use relative url
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
+  if (process.env.VERCEL_ENV) return `https://${process.env.STATIC_VERCEL_URL}`; // SSR should use vercel url
   return `http://${ssr ? "127.0.0.1" : "localhost"}:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
 };
 
@@ -68,6 +68,9 @@ export const api = createTRPCNext<AppRouter>({
  */
 const SsrProxyClient = createTRPCClient<AppRouter>({
   links: [
+    loggerLink({
+      enabled: () => true,
+    }),
     httpBatchLink({
       transformer: superjson,
       url: `${getBaseUrl(true)}/api/trpc`,

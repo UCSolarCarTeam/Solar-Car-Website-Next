@@ -5,7 +5,7 @@ import { memo } from "react";
 
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import { type RouterOutputs, type SsrTrpcHelper } from "@/utils/api";
+import { type RouterOutputs, type SsrTrpcHelper, api } from "@/utils/api";
 import { SsrHelpers } from "@/utils/api";
 
 import styles from "./index.module.scss";
@@ -49,7 +49,7 @@ const Team = (props: TeamPageProps) => {
           vehicles.`}
           </div>
           <div className={styles.teamMembers}>
-            {props.teamMembers.length &&
+            {props.teamMembers.length > 0 &&
               props.teamMembers.map((teamMember) => {
                 return (
                   <div
