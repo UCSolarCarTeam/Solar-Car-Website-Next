@@ -1,7 +1,8 @@
 import Image from "next/image";
-import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 
-import styles from "@/components/EditTeamCell/index.module.scss";
+import { type EditUserCellProps } from "@/components/EditUserCell";
+import styles from "@/components/EditUserCell/index.module.scss";
 import CloseButton from "@/components/svgs/CloseButton";
 import {
   AccountingTeam,
@@ -15,28 +16,12 @@ import {
 } from "@/types";
 import { api } from "@/utils/api";
 import { useUser } from "@clerk/nextjs";
-import { type AllTeamRoles } from "@prisma/client";
 
-interface EditTeamCellProps {
-  currentRow: {
-    description: string | null;
-    id: number;
-    clerkUserId: string;
-    firstName: string | null;
-    lastName: string | null;
-    fieldOfStudy: string | null;
-    teamRole: AllTeamRoles | null;
-    schoolYear: string | null;
-    yearJoined: string | null;
-    profilePictureUrl: string | null;
-  };
-}
-
-type EditTeamPopupProps = {
+type EditUserPopupProps = {
   togglePopup: () => void;
-} & EditTeamCellProps;
+} & EditUserCellProps;
 
-const EditTeamPopup = ({ currentRow, togglePopup }: EditTeamPopupProps) => {
+const EditUserPopup = ({ currentRow, togglePopup }: EditUserPopupProps) => {
   const { user } = useUser();
   const utils = api.useUtils();
   const mutateUserContent = api.portal.updateDBUser.useMutation({
@@ -51,7 +36,7 @@ const EditTeamPopup = ({ currentRow, togglePopup }: EditTeamPopupProps) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
 
-  const rowDataType = useMemo(() => {
+  const rowMetadata = useMemo(() => {
     return {
       description: "string",
       fieldOfStudy: "string",
@@ -67,10 +52,6 @@ const EditTeamPopup = ({ currentRow, togglePopup }: EditTeamPopupProps) => {
 
   const teamRoleOptions = useMemo(
     () => [
-      {
-        label: "Lead Roles",
-        options: UpperTeamRoles,
-      },
       {
         label: "Accounting",
         options: AccountingTeam,
@@ -253,7 +234,7 @@ const EditTeamPopup = ({ currentRow, togglePopup }: EditTeamPopupProps) => {
                     >
                       <option value="">Please select</option>
                       {user?.publicMetadata?.role === "admin" && (
-                        <optgroup label="Lead Roles">
+                        <optgroup key={"Lead Roles"} label="Lead Roles">
                           {Object.entries(UpperTeamRoles).map(
                             ([key, label]) => (
                               <option key={key} value={key}>
@@ -279,7 +260,7 @@ const EditTeamPopup = ({ currentRow, togglePopup }: EditTeamPopupProps) => {
                       id={row.id}
                       name={row.label}
                       onChange={onInputChange}
-                      type={rowDataType[row.id as keyof typeof rowDataType]}
+                      type={rowMetadata[row.id as keyof typeof rowMetadata]}
                       value={row.value ?? ""}
                     />
                   )}
@@ -307,44 +288,4 @@ const EditTeamPopup = ({ currentRow, togglePopup }: EditTeamPopupProps) => {
   );
 };
 
-const EditTeamCell = ({ currentRow }: EditTeamCellProps) => {
-  const { user } = useUser();
-  const [popupOpen, setPopupOpen] = useState(false);
-
-  const togglePopup = useCallback(() => {
-    setPopupOpen((prev) => !prev);
-  }, []);
-
-  useEffect(() => {
-    const closePopup = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setPopupOpen(false);
-      }
-    };
-
-    window.addEventListener("keydown", closePopup);
-
-    return () => {
-      window.removeEventListener("keydown", closePopup);
-    };
-  }, []);
-
-  if (
-    user?.publicMetadata?.role === "admin" ||
-    user?.publicMetadata?.role === "business" ||
-    currentRow.clerkUserId === user?.id
-  ) {
-    return (
-      <div className={styles.editTeamCell}>
-        <span onClick={() => setPopupOpen((prev) => !prev)}>Edit</span>
-        {popupOpen && (
-          <EditTeamPopup currentRow={currentRow} togglePopup={togglePopup} />
-        )}
-      </div>
-    );
-  }
-
-  return null;
-};
-
-export default memo(EditTeamCell);
+export default memo(EditUserPopup);

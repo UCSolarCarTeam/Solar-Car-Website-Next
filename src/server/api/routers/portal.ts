@@ -6,8 +6,17 @@ import {
   createTRPCRouter,
   publicProcedure,
 } from "@/server/api/trpc";
-import { UpperTeamRoles } from "@/types";
-import { AllTeamRoles } from "@prisma/client";
+import {
+  AccountingTeam,
+  CommunicationsTeam,
+  ElectricalTeam,
+  MechanicalTeam,
+  MultiTeam,
+  SoftwareTeam,
+  SponsorshipTeam,
+  UpperTeamRoles,
+} from "@/types";
+import { AllTeamRoles, type User } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 
 export type UserRole = "admin" | "mechanical" | "business" | "member";
@@ -28,21 +37,86 @@ export const portalRouter = createTRPCRouter({
       username: user.username,
     }));
   }),
+
   getDBUsers: authedProcedure.query(async ({ ctx }) => {
-    const users = await ctx.db.user.findMany();
+    const users = await ctx.db.user.findMany({ orderBy: { id: "desc" } });
     return users;
   }),
 
   getTeamMembers: publicProcedure.query(async ({ ctx }) => {
     const dbUsers = await ctx.db.user.findMany();
-    const teamMembers = dbUsers.map((user) => {
-      const { clerkUserId, id, ...rest } = user;
-      return rest;
-    });
-    return teamMembers.filter(
-      (teamMember) =>
-        teamMember.firstName !== null || teamMember.firstName === "",
-    );
+    const teamMembers = dbUsers
+      .filter((teamMember) => teamMember.teamRole !== null)
+      .filter(
+        (teamMember) =>
+          teamMember.firstName !== null || teamMember.firstName === "",
+      );
+
+    const filterByRole = (
+      teamMembers: User[],
+      roles:
+        | typeof AccountingTeam
+        | typeof CommunicationsTeam
+        | typeof ElectricalTeam
+        | typeof MechanicalTeam
+        | typeof MultiTeam
+        | typeof SoftwareTeam
+        | typeof SponsorshipTeam,
+    ) => {
+      return teamMembers.filter((teamMember) =>
+        // we can assume that we filtered out null teamRoles already
+        Object.keys(roles).includes(teamMember.teamRole!),
+      );
+    };
+
+    const teamCaptain =
+      teamMembers.find(
+        (teamMember) => teamMember.teamRole === AllTeamRoles.TeamCaptain,
+      ) ?? null;
+    const engineeringTeamManager =
+      teamMembers.find(
+        (teamMember) =>
+          teamMember.teamRole === AllTeamRoles.EngineeringTeamManager,
+      ) ?? null;
+    const businessTeamManager =
+      teamMembers.find(
+        (teamMember) =>
+          teamMember.teamRole === AllTeamRoles.BusinessTeamManager,
+      ) ?? null;
+
+    const leadRoles = teamMembers
+      .filter(
+        (teamMember) =>
+          teamMember.teamRole !== null && teamMember.teamRole in UpperTeamRoles,
+      )
+      .filter(
+        (teamMember) =>
+          teamMember !== teamCaptain &&
+          teamMember !== engineeringTeamManager &&
+          teamMember !== businessTeamManager,
+      );
+
+    const accountingTeam = filterByRole(teamMembers, AccountingTeam);
+    const commmunicationsTeam = filterByRole(teamMembers, CommunicationsTeam);
+    const sponsorshipTeam = filterByRole(teamMembers, SponsorshipTeam);
+    const softwareTeam = filterByRole(teamMembers, SoftwareTeam);
+    const electricalTeam = filterByRole(teamMembers, ElectricalTeam);
+    const mechanicalTeam = filterByRole(teamMembers, MechanicalTeam);
+    const multiTeam = filterByRole(teamMembers, MultiTeam);
+
+    return {
+      accountingTeam,
+      businessTeamManager,
+      commmunicationsTeam,
+      electricalTeam,
+      engineeringTeamManager,
+      leadRoles,
+      mechanicalTeam,
+      multiTeam,
+      softwareTeam,
+      sponsorshipTeam,
+      teamCaptain,
+    };
   }),
 
   updateDBUser: authedProcedure

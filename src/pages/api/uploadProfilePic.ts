@@ -1,5 +1,6 @@
 import { type NextApiRequest, type NextApiResponse } from "next/types";
 
+import { env } from "@/env";
 import { supabase } from "@/utils/api";
 
 interface UploadFilePicBody {
@@ -26,7 +27,7 @@ export default async function UploadProfilePic(
       }
 
       const { data: fileUpload, error } = await supabase.storage
-        .from("profilePictures")
+        .from(env.PROFILE_PICTURE_BUCKET)
         .upload(fileName, buffer, {
           contentType: fileType,
           upsert: true,
@@ -34,7 +35,7 @@ export default async function UploadProfilePic(
 
       if (!error) {
         const { data: url } = supabase.storage
-          .from("profilePictures")
+          .from(env.PROFILE_PICTURE_BUCKET)
           .getPublicUrl(fileUpload.path);
 
         return res.status(200).json(url);

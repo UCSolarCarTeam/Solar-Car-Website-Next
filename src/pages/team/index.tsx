@@ -1,29 +1,28 @@
 import Head from "next/head";
-import Image from "next/image";
 import { type GetServerSideProps } from "next/types";
 import { memo } from "react";
 
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import { type RouterOutputs, type SsrTrpcHelper, api } from "@/utils/api";
+import TeamMember from "@/components/teamMember";
+import styles from "@/pages/team/index.module.scss";
+import { type RouterOutputs, type SsrTrpcHelper } from "@/utils/api";
 import { SsrHelpers } from "@/utils/api";
 
-import styles from "./index.module.scss";
-
-type TeamMember = RouterOutputs["portal"]["getTeamMembers"][number];
+type TeamHierarchy = RouterOutputs["portal"]["getTeamMembers"];
 
 export type TeamPageProps = {
-  teamMembers: TeamMember[];
+  teamHierarchy: TeamHierarchy;
 } & SsrTrpcHelper;
 
 export const getServerSideProps: GetServerSideProps<
   TeamPageProps
 > = async () => {
-  const teamMembers = await SsrHelpers.portal.getTeamMembers.fetch();
+  const teamHierarchy = await SsrHelpers.portal.getTeamMembers.fetch();
 
   return {
     props: {
-      teamMembers: teamMembers ?? [],
+      teamHierarchy: teamHierarchy ?? {},
       trpcState: SsrHelpers.dehydrate(),
     },
   };
@@ -49,40 +48,57 @@ const Team = (props: TeamPageProps) => {
           vehicles.`}
           </div>
           <div className={styles.teamMembers}>
-            {props.teamMembers.length > 0 &&
-              props.teamMembers.map((teamMember) => {
-                return (
-                  <div
-                    className={styles.teamMember}
-                    key={teamMember.profilePictureUrl}
-                  >
-                    <div className={styles.teamMemberImage}>
-                      <Image
-                        alt="Headshot"
-                        fill
-                        loading="eager"
-                        src={
-                          teamMember.profilePictureUrl ??
-                          "/DefaultProfilePicture.png"
-                        }
-                      />
-                    </div>
-                    <div>
-                      <div>
-                        {[teamMember.firstName, teamMember.lastName].join(" ")}
-                      </div>
-                      <div>
-                        {(teamMember.teamRole ?? "").replace(
-                          /([a-z])([A-Z])/g,
-                          "$1 $2",
-                        )}
-                      </div>
-                      <div>{teamMember.fieldOfStudy}</div>
-                      <div>{teamMember.description}</div>
-                    </div>
-                  </div>
-                );
-              })}
+            <TeamMember user={props.teamHierarchy.engineeringTeamManager} />
+            <TeamMember user={props.teamHierarchy.teamCaptain} />
+            <TeamMember user={props.teamHierarchy.businessTeamManager} />
+            <div>
+              Team Leads
+              {props.teamHierarchy.leadRoles.map((teamMember) => (
+                <TeamMember key={teamMember.clerkUserId} user={teamMember} />
+              ))}
+            </div>
+            <div>
+              Accounting Team
+              {props.teamHierarchy.accountingTeam.map((teamMember) => (
+                <TeamMember key={teamMember.clerkUserId} user={teamMember} />
+              ))}
+            </div>
+            <div>
+              Communications Team
+              {props.teamHierarchy.commmunicationsTeam.map((teamMember) => (
+                <TeamMember key={teamMember.clerkUserId} user={teamMember} />
+              ))}
+            </div>
+            <div>
+              Sponsorship Team
+              {props.teamHierarchy.sponsorshipTeam.map((teamMember) => (
+                <TeamMember key={teamMember.clerkUserId} user={teamMember} />
+              ))}
+            </div>
+            <div>
+              Software Team
+              {props.teamHierarchy.softwareTeam.map((teamMember) => (
+                <TeamMember key={teamMember.clerkUserId} user={teamMember} />
+              ))}
+            </div>
+            <div>
+              Electrical Team
+              {props.teamHierarchy.electricalTeam.map((teamMember) => (
+                <TeamMember key={teamMember.clerkUserId} user={teamMember} />
+              ))}
+            </div>
+            <div>
+              Mechanical Team
+              {props.teamHierarchy.mechanicalTeam.map((teamMember) => (
+                <TeamMember key={teamMember.clerkUserId} user={teamMember} />
+              ))}
+            </div>
+            <div>
+              Multi Team
+              {props.teamHierarchy.multiTeam.map((teamMember) => (
+                <TeamMember key={teamMember.clerkUserId} user={teamMember} />
+              ))}
+            </div>
           </div>
         </div>
       </main>

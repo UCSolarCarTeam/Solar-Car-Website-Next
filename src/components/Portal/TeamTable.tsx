@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { memo, useMemo } from "react";
 
-import EditTeamCell from "@/components/EditTeamCell";
+import EditTeamCell from "@/components/EditUserCell";
 import { type RouterOutputs, api } from "@/utils/api";
 import { AllTeamRoles } from "@prisma/client";
 import {
