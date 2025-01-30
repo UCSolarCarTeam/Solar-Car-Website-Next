@@ -17,6 +17,9 @@ export interface EditUserCellProps {
     schoolYear: string | null;
     yearJoined: string | null;
     profilePictureUrl: string | null;
+    phoneNumber: string | null;
+    schoolEmail: string | null;
+    ucid: number | null;
   };
 }
 
