@@ -4,6 +4,13 @@ import Pagebullets from "@/components/Pagebullets";
 import CarScreenView from "@/pages/cars/CarScreenView";
 import styles from "@/pages/cars/index.module.scss";
 
+import backsplash1 from "/assets/cars/backsplash1.jpeg";
+import backsplash2 from "/assets/cars/backsplash2.jpeg";
+import backsplash3 from "/assets/cars/backsplash3.jpeg";
+import backsplash4 from "/assets/cars/backsplash4.jpeg";
+import backsplash5 from "/assets/cars/backsplash5.jpeg";
+import backsplash6 from "/assets/cars/backsplash6.jpeg";
+
 const CarsPage = () => {
   const pageIds = useMemo(
     () => ({
@@ -17,7 +24,7 @@ const CarsPage = () => {
         for excellence at the Formula Sun Grand Prix in the summer of 2025,
         showcasing the incredible potential of solar-powered vehicles. Be sure
         to stay updated with any new developments!`,
-        image: "/assets/cars/backsplash1.jpeg",
+        image: backsplash1,
         title: "Schulich Helios",
       },
       // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
@@ -27,7 +34,7 @@ const CarsPage = () => {
         improve battery cooling as well as increase aerodynamics. The Elysia
         raced in the 2019 American Solar Challenge where it took first place
         in the Multi Occupant Vehicle Class.`,
-        image: "/assets/cars/backsplash2.jpeg",
+        image: backsplash2,
         title: "Schulich Elysia",
       },
       // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
@@ -39,7 +46,7 @@ const CarsPage = () => {
       with a fastest lap of 5:33.886 to finish 9th. Officially retired in
       2015, the Delta continues to inspire through educational
       demonstrations.`,
-        image: "/assets/cars/backsplash3.jpeg",
+        image: backsplash3,
         title: "Schulich Delta",
       },
       // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
@@ -51,7 +58,7 @@ const CarsPage = () => {
         33:35.26, placing as the top Canadian team in both races. In 2011,
         Axiom competed in the World Solar Challenge from Darwin to Adelaide,
         covering 1,840 km and finishing 18th before being retired.`,
-        image: "/assets/cars/backsplash4.jpeg",
+        image: backsplash4,
         title: "Schulich Axiom",
       },
       // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
@@ -63,7 +70,7 @@ const CarsPage = () => {
         Car Team—completing the race in 75:42.53. As the team’s second car, it
         introduced gallium arsenide solar cells, replacing the silicon cells
         used in its predecessor.`,
-        image: "/assets/cars/backsplash5.jpeg",
+        image: backsplash5,
         title: "Schulich 1",
       },
       // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
@@ -73,7 +80,7 @@ const CarsPage = () => {
         improve battery cooling as well as increase aerodynamics. The Elysia
         raced in the 2019 American Solar Challenge where it took first place
         in the Multi Occupant Vehicle Class.`,
-        image: "/assets/cars/backsplash6.jpeg",
+        image: backsplash6,
         title: "Schulich Solean",
       },
     }),

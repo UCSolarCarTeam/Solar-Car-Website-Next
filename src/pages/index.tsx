@@ -6,6 +6,8 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import styles from "@/pages/index.module.scss";
 
+import backsplash from "/assets/home/backsplash.jpeg";
+
 const Home = () => {
   return (
     <>
@@ -32,8 +34,9 @@ const Home = () => {
             alt="backsplash"
             fill
             loading="eager"
+            placeholder="blur"
             priority
-            src="/assets/home/backsplash.jpeg"
+            src={backsplash}
             style={{ objectFit: "cover" }}
           />
         </div>

@@ -11,6 +11,7 @@ import Instagram from "../svgs/Instagram";
 import Linkedin from "../svgs/Linkedin";
 import Twitter from "../svgs/Twitter";
 import Youtube from "../svgs/Youtube";
+import Logo from "/assets/logo-nav.png";
 
 const dmSans = DM_Sans({
   display: "swap",
@@ -29,8 +30,9 @@ const Footer = () => {
               alt="Logo"
               height={53}
               loading="eager"
+              placeholder="blur"
               priority
-              src="/assets/logo-nav.png"
+              src={Logo}
               width={308}
             />
           </div>

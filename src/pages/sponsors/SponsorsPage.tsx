@@ -4,6 +4,9 @@ import { memo } from "react";
 import Navbar from "@/components/Navbar";
 import styles from "@/pages/sponsors/index.module.scss";
 
+import backsplash from "/assets/sponsors/backsplash.jpeg";
+import schulichLogo from "/assets/sponsors/logo-schulich.svg";
+
 const SponsorsPage = () => {
   return (
     <>
@@ -19,8 +22,9 @@ const SponsorsPage = () => {
             alt="lead sponsor"
             height={180}
             loading="eager"
+            placeholder="blur"
             priority
-            src="/assets/sponsors/logo-schulich.svg"
+            src={schulichLogo}
             width={1000}
           />
         </div>
@@ -50,8 +54,9 @@ const SponsorsPage = () => {
           alt="backsplash"
           fill
           loading="eager"
+          placeholder="blur"
           priority
-          src="/assets/sponsors/backsplash.jpeg"
+          src={backsplash}
           style={{ objectFit: "cover" }}
         />
       </div>

@@ -34,6 +34,8 @@ const UsersTable = (props: { users: User[] }) => {
           <Image
             alt="profile image"
             height={48}
+            loading="eager"
+            priority
             src={info.getValue()!}
             width={48}
           />

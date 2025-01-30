@@ -4,6 +4,8 @@ import { memo } from "react";
 import Navbar from "@/components/Navbar";
 import styles from "@/pages/support-us/index.module.scss";
 
+import backsplash from "/assets/support-us/backsplash.jpeg";
+
 const SupportUsPage = () => {
   return (
     <>
@@ -22,8 +24,9 @@ const SupportUsPage = () => {
           alt="backsplash"
           fill
           loading="eager"
+          placeholder="blur"
           priority
-          src="/assets/support-us/backsplash.jpeg"
+          src={backsplash}
           style={{ objectFit: "cover" }}
         />
       </div>

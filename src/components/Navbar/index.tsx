@@ -9,6 +9,7 @@ import Chevron from "@/components/svgs/Chevron";
 import useViewport from "@/hooks/useViewport";
 
 import CloseButton from "../svgs/CloseButton";
+import Logo from "/assets/logo-nav.png";
 
 const cx = classNames.bind(styles);
 
@@ -66,8 +67,9 @@ const Navbar = () => {
                 toggleHambugerMenu();
               }
             }}
+            placeholder="blur"
             priority
-            src="/assets/logo-nav.png"
+            src={Logo}
             width={370}
           />
         </div>

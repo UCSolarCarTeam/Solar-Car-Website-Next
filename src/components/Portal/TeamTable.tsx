@@ -26,6 +26,8 @@ const TeamTable = (props: { users: TeamMember[] }) => {
               alt="profile image"
               fill
               src={info.getValue() ?? "/DefaultProfilePicture.png"}
+              loading="eager"
+              priority
               style={{ objectFit: "cover" }}
             />
           );

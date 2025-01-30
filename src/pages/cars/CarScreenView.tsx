@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import { memo } from "react";
 
 import Navbar from "@/components/Navbar";
@@ -11,7 +11,7 @@ interface CarPageProps {
   content: string;
   className: string | undefined;
   id: string;
-  image: string;
+  image: StaticImageData;
   navbarEnabled: boolean;
   title: string;
 }
@@ -36,6 +36,7 @@ const CarPage = ({
           alt="backsplash"
           fill
           loading="eager"
+          placeholder="blur"
           priority
           src={image}
           style={{ objectFit: "cover" }}

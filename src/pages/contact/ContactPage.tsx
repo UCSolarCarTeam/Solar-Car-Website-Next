@@ -4,6 +4,8 @@ import { memo } from "react";
 import Navbar from "@/components/Navbar";
 import styles from "@/pages/contact/index.module.scss";
 
+import backsplash from "/assets/contact/backsplash.png";
+
 const ContactPage = () => {
   return (
     <>
@@ -22,8 +24,9 @@ const ContactPage = () => {
           alt="backsplash"
           fill
           loading="eager"
+          placeholder="blur"
           priority
-          src="/assets/contact/backsplash.png"
+          src={backsplash}
           style={{ objectFit: "cover" }}
         />
       </div>
