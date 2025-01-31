@@ -29,6 +29,20 @@ export const getServerSideProps: GetServerSideProps<
 };
 
 const Team = (props: TeamPageProps) => {
+  const {
+    accountingTeam,
+    businessTeamManager,
+    commmunicationsTeam,
+    electricalTeam,
+    engineeringTeamManager,
+    leadRoles,
+    mechanicalTeam,
+    multiTeam,
+    softwareTeam,
+    sponsorshipTeam,
+    teamCaptain,
+  } = props.teamHierarchy;
+
   return (
     <>
       <Head>
@@ -49,15 +63,15 @@ const Team = (props: TeamPageProps) => {
           </div>
           <div className={styles.teamMembersContainer}>
             <div className={styles.teamManagers}>
-              <TeamMember user={props.teamHierarchy.engineeringTeamManager} />
-              <TeamMember user={props.teamHierarchy.teamCaptain} />
-              <TeamMember user={props.teamHierarchy.businessTeamManager} />
+              <TeamMember user={engineeringTeamManager} />
+              <TeamMember user={teamCaptain} />
+              <TeamMember user={businessTeamManager} />
             </div>
-            {props.teamHierarchy.leadRoles.length > 0 && (
+            {leadRoles.length > 0 && (
               <div className={styles.teamRoleContainer}>
                 <div className={styles.title}>Team Leads</div>
                 <div className={styles.teamMembers}>
-                  {props.teamHierarchy.leadRoles.map((teamMember) => (
+                  {leadRoles.map((teamMember) => (
                     <TeamMember
                       key={teamMember.clerkUserId}
                       user={teamMember}
@@ -66,11 +80,11 @@ const Team = (props: TeamPageProps) => {
                 </div>
               </div>
             )}
-            {props.teamHierarchy.accountingTeam.length > 0 && (
+            {accountingTeam.length > 0 && (
               <div className={styles.teamRoleContainer}>
                 <div className={styles.title}>Accounting Team</div>
                 <div className={styles.teamMembers}>
-                  {props.teamHierarchy.accountingTeam.map((teamMember) => (
+                  {accountingTeam.map((teamMember) => (
                     <TeamMember
                       key={teamMember.clerkUserId}
                       user={teamMember}
@@ -79,11 +93,11 @@ const Team = (props: TeamPageProps) => {
                 </div>
               </div>
             )}
-            {props.teamHierarchy.commmunicationsTeam.length > 0 && (
+            {commmunicationsTeam.length > 0 && (
               <div className={styles.teamRoleContainer}>
                 <div className={styles.title}>Communications Team</div>
                 <div className={styles.teamMembers}>
-                  {props.teamHierarchy.commmunicationsTeam.map((teamMember) => (
+                  {commmunicationsTeam.map((teamMember) => (
                     <TeamMember
                       key={teamMember.clerkUserId}
                       user={teamMember}
@@ -92,11 +106,11 @@ const Team = (props: TeamPageProps) => {
                 </div>
               </div>
             )}
-            {props.teamHierarchy.sponsorshipTeam.length > 0 && (
+            {sponsorshipTeam.length > 0 && (
               <div className={styles.teamRoleContainer}>
                 <div className={styles.title}>Sponsorship Team</div>
                 <div className={styles.teamMembers}>
-                  {props.teamHierarchy.sponsorshipTeam.map((teamMember) => (
+                  {sponsorshipTeam.map((teamMember) => (
                     <TeamMember
                       key={teamMember.clerkUserId}
                       user={teamMember}
@@ -105,11 +119,11 @@ const Team = (props: TeamPageProps) => {
                 </div>
               </div>
             )}
-            {props.teamHierarchy.softwareTeam.length > 0 && (
+            {softwareTeam.length > 0 && (
               <div className={styles.teamRoleContainer}>
                 <div className={styles.title}>Software Team</div>
                 <div className={styles.teamMembers}>
-                  {props.teamHierarchy.softwareTeam.map((teamMember) => (
+                  {softwareTeam.map((teamMember) => (
                     <TeamMember
                       key={teamMember.clerkUserId}
                       user={teamMember}
@@ -118,11 +132,11 @@ const Team = (props: TeamPageProps) => {
                 </div>
               </div>
             )}
-            {props.teamHierarchy.electricalTeam.length > 0 && (
+            {electricalTeam.length > 0 && (
               <div className={styles.teamRoleContainer}>
                 <div className={styles.title}>Electrical Team</div>
                 <div className={styles.teamMembers}>
-                  {props.teamHierarchy.electricalTeam.map((teamMember) => (
+                  {electricalTeam.map((teamMember) => (
                     <TeamMember
                       key={teamMember.clerkUserId}
                       user={teamMember}
@@ -131,11 +145,11 @@ const Team = (props: TeamPageProps) => {
                 </div>
               </div>
             )}
-            {props.teamHierarchy.mechanicalTeam.length > 0 && (
+            {mechanicalTeam.length > 0 && (
               <div className={styles.teamRoleContainer}>
                 <div className={styles.title}>Mechanical Team</div>
                 <div className={styles.teamMembers}>
-                  {props.teamHierarchy.mechanicalTeam.map((teamMember) => (
+                  {mechanicalTeam.map((teamMember) => (
                     <TeamMember
                       key={teamMember.clerkUserId}
                       user={teamMember}
@@ -144,11 +158,11 @@ const Team = (props: TeamPageProps) => {
                 </div>
               </div>
             )}
-            {props.teamHierarchy.multiTeam.length > 0 && (
+            {multiTeam.length > 0 && (
               <div className={styles.teamRoleContainer}>
                 <div className={styles.title}>Multi Team</div>
                 <div className={styles.teamMembers}>
-                  {props.teamHierarchy.multiTeam.map((teamMember) => (
+                  {multiTeam.map((teamMember) => (
                     <TeamMember
                       key={teamMember.clerkUserId}
                       user={teamMember}
