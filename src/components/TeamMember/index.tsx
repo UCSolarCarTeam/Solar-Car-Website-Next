@@ -26,7 +26,9 @@ const TeamMember = ({ user }: TeamMemberProps) => {
         <div className={styles.name}>
           {[user.firstName, user.lastName].join(" ")}
         </div>
-        <div className={styles.teamRole}>{(user.teamRole ?? "").replace(/([a-z])([A-Z])/g, "$1 $2")}</div>
+        <div className={styles.teamRole}>
+          {(user.teamRole ?? "").replace(/([a-z])([A-Z])/g, "$1 $2")}
+        </div>
         <div className={styles.fieldOfStudy}>{user.fieldOfStudy}</div>
         <div>{user.description}</div>
       </div>
