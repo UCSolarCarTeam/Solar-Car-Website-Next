@@ -47,8 +47,12 @@ const Footer = () => {
         </div>
         <div className={styles.gridContainer}>
           <div>Contact Information</div>
-          <span>communications@calgarysolarcar.ca</span>
-          <span>sponsorship@calgarysolarcar.ca</span>
+          <Link href="mailto:communications@calgarysolarcar.ca">
+            communications@calgarysolarcar.ca
+          </Link>
+          <Link href="mailto:sponsorship@calgarysolarcar.ca">
+            sponsorship@calgarysolarcar.ca
+          </Link>
           <span>ENC 36, Schulich School of Engineering</span>
           <span>2500 University Dr NW</span>
           <span>Calgary, AB T2N 1N4</span>
