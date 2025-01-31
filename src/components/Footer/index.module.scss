@@ -26,7 +26,7 @@
   flex-direction: column;
   row-gap: 10px;
 
-  >:first-child {
+  > :first-child {
     font-weight: bold;
     margin-bottom: 10px;
     font-size: large;
@@ -42,7 +42,7 @@
   }
   .gridContainer {
     align-items: center;
-    :first-child {
+    > :first-child {
       margin-top: 12px;
     }
   }
@@ -56,9 +56,8 @@
     grid-column: span 2 / span 2;
   }
   .gridContainer {
-    >:first-child {
+    > :first-child {
       margin-top: 12px;
-
     }
   }
 }
