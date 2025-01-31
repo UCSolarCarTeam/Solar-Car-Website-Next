@@ -19,12 +19,13 @@ const TeamMember = ({ user }: TeamMemberProps) => {
           fill
           loading="eager"
           src={user.profilePictureUrl ?? defaultProfilePicture}
+          style={{ objectFit: "cover" }}
         />
       </div>
       <div>
         <div>{[user.firstName, user.lastName].join(" ")}</div>
         <div>{(user.teamRole ?? "").replace(/([a-z])([A-Z])/g, "$1 $2")}</div>
-        <div>{user.fieldOfStudy}</div>
+        <div>{"Faculty: " + user.fieldOfStudy}</div>
         <div>{user.description}</div>
       </div>
     </div>

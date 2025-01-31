@@ -29,19 +29,42 @@
   }
 }
 
+.teamMembersContainer {
+  display: flex;
+  flex-direction: column;
+  padding-top: 2rem;
+}
+
+.teamManagers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.teamRoleContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.5rem;
+}
+
 .teamMembers {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0px 50px;
+  gap: 1rem;
 }
 
 @media (max-width: 768px) {
+  .teamManagers {
+    grid-template-columns: 1fr;
+  }
   .teamMembers {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 480px) {
+  .teamManagers {
+    grid-template-columns: 1fr;
+  }
   .teamMembers {
     grid-template-columns: 1fr;
   }

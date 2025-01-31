@@ -4,7 +4,7 @@ import { memo } from "react";
 
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import TeamMember from "@/components/teamMember";
+import TeamMember from "@/components/asdf";
 import styles from "@/pages/team/index.module.scss";
 import { type RouterOutputs, type SsrTrpcHelper } from "@/utils/api";
 import { SsrHelpers } from "@/utils/api";
@@ -47,58 +47,116 @@ const Team = (props: TeamPageProps) => {
           working on our sixth car and have completed 7 races with previous
           vehicles.`}
           </div>
-          <div className={styles.teamMembers}>
-            <TeamMember user={props.teamHierarchy.engineeringTeamManager} />
-            <TeamMember user={props.teamHierarchy.teamCaptain} />
-            <TeamMember user={props.teamHierarchy.businessTeamManager} />
-            <div>
-              Team Leads
-              {props.teamHierarchy.leadRoles.map((teamMember) => (
-                <TeamMember key={teamMember.clerkUserId} user={teamMember} />
-              ))}
+          <div className={styles.teamMembersContainer}>
+            <div className={styles.teamManagers}>
+              <TeamMember user={props.teamHierarchy.engineeringTeamManager} />
+              <TeamMember user={props.teamHierarchy.teamCaptain} />
+              <TeamMember user={props.teamHierarchy.businessTeamManager} />
             </div>
-            <div>
-              Accounting Team
-              {props.teamHierarchy.accountingTeam.map((teamMember) => (
-                <TeamMember key={teamMember.clerkUserId} user={teamMember} />
-              ))}
-            </div>
-            <div>
-              Communications Team
-              {props.teamHierarchy.commmunicationsTeam.map((teamMember) => (
-                <TeamMember key={teamMember.clerkUserId} user={teamMember} />
-              ))}
-            </div>
-            <div>
-              Sponsorship Team
-              {props.teamHierarchy.sponsorshipTeam.map((teamMember) => (
-                <TeamMember key={teamMember.clerkUserId} user={teamMember} />
-              ))}
-            </div>
-            <div>
-              Software Team
-              {props.teamHierarchy.softwareTeam.map((teamMember) => (
-                <TeamMember key={teamMember.clerkUserId} user={teamMember} />
-              ))}
-            </div>
-            <div>
-              Electrical Team
-              {props.teamHierarchy.electricalTeam.map((teamMember) => (
-                <TeamMember key={teamMember.clerkUserId} user={teamMember} />
-              ))}
-            </div>
-            <div>
-              Mechanical Team
-              {props.teamHierarchy.mechanicalTeam.map((teamMember) => (
-                <TeamMember key={teamMember.clerkUserId} user={teamMember} />
-              ))}
-            </div>
-            <div>
-              Multi Team
-              {props.teamHierarchy.multiTeam.map((teamMember) => (
-                <TeamMember key={teamMember.clerkUserId} user={teamMember} />
-              ))}
-            </div>
+            {props.teamHierarchy.leadRoles.length > 0 && (
+              <div className={styles.teamRoleContainer}>
+                <div className={styles.title}>Team Leads</div>
+                <div className={styles.teamMembers}>
+                  {props.teamHierarchy.leadRoles.map((teamMember) => (
+                    <TeamMember
+                      key={teamMember.clerkUserId}
+                      user={teamMember}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+            {props.teamHierarchy.accountingTeam.length > 0 && (
+              <div className={styles.teamRoleContainer}>
+                <div className={styles.title}>Accounting Team</div>
+                <div className={styles.teamMembers}>
+                  {props.teamHierarchy.accountingTeam.map((teamMember) => (
+                    <TeamMember
+                      key={teamMember.clerkUserId}
+                      user={teamMember}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+            {props.teamHierarchy.commmunicationsTeam.length > 0 && (
+              <div className={styles.teamRoleContainer}>
+                <div className={styles.title}>Communications Team</div>
+                <div className={styles.teamMembers}>
+                  {props.teamHierarchy.commmunicationsTeam.map((teamMember) => (
+                    <TeamMember
+                      key={teamMember.clerkUserId}
+                      user={teamMember}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+            {props.teamHierarchy.sponsorshipTeam.length > 0 && (
+              <div className={styles.teamRoleContainer}>
+                <div className={styles.title}>Sponsorship Team</div>
+                <div className={styles.teamMembers}>
+                  {props.teamHierarchy.sponsorshipTeam.map((teamMember) => (
+                    <TeamMember
+                      key={teamMember.clerkUserId}
+                      user={teamMember}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+            {props.teamHierarchy.softwareTeam.length > 0 && (
+              <div className={styles.teamRoleContainer}>
+                <div className={styles.title}>Software Team</div>
+                <div className={styles.teamMembers}>
+                  {props.teamHierarchy.softwareTeam.map((teamMember) => (
+                    <TeamMember
+                      key={teamMember.clerkUserId}
+                      user={teamMember}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+            {props.teamHierarchy.electricalTeam.length > 0 && (
+              <div className={styles.teamRoleContainer}>
+                <div className={styles.title}>Electrical Team</div>
+                <div className={styles.teamMembers}>
+                  {props.teamHierarchy.electricalTeam.map((teamMember) => (
+                    <TeamMember
+                      key={teamMember.clerkUserId}
+                      user={teamMember}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+            {props.teamHierarchy.mechanicalTeam.length > 0 && (
+              <div className={styles.teamRoleContainer}>
+                <div className={styles.title}>Mechanical Team</div>
+                <div className={styles.teamMembers}>
+                  {props.teamHierarchy.mechanicalTeam.map((teamMember) => (
+                    <TeamMember
+                      key={teamMember.clerkUserId}
+                      user={teamMember}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+            {props.teamHierarchy.multiTeam.length > 0 && (
+              <div className={styles.teamRoleContainer}>
+                <div className={styles.title}>Multi Team</div>
+                <div className={styles.teamMembers}>
+                  {props.teamHierarchy.multiTeam.map((teamMember) => (
+                    <TeamMember
+                      key={teamMember.clerkUserId}
+                      user={teamMember}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </main>
