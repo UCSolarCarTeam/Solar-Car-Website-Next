@@ -2,7 +2,7 @@ import Image from "next/image";
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { memo } from "react";
 
-import styles from "@/pages/team/index.module.scss";
+import styles from "@/components/TeamMember/index.module.scss";
 import { type User } from "@prisma/client";
 
 type TeamMemberProps = {
@@ -23,9 +23,11 @@ const TeamMember = ({ user }: TeamMemberProps) => {
         />
       </div>
       <div>
-        <div>{[user.firstName, user.lastName].join(" ")}</div>
-        <div>{(user.teamRole ?? "").replace(/([a-z])([A-Z])/g, "$1 $2")}</div>
-        <div>{"Faculty: " + user.fieldOfStudy}</div>
+        <div className={styles.name}>
+          {[user.firstName, user.lastName].join(" ")}
+        </div>
+        <div className={styles.teamRole}>{(user.teamRole ?? "").replace(/([a-z])([A-Z])/g, "$1 $2")}</div>
+        <div className={styles.fieldOfStudy}>{user.fieldOfStudy}</div>
         <div>{user.description}</div>
       </div>
     </div>

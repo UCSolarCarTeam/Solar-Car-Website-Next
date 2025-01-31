@@ -4,7 +4,7 @@ import { memo } from "react";
 
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import TeamMember from "@/components/asdf";
+import TeamMember from "@/components/TeamMember";
 import styles from "@/pages/team/index.module.scss";
 import { type RouterOutputs, type SsrTrpcHelper } from "@/utils/api";
 import { SsrHelpers } from "@/utils/api";

@@ -9,6 +9,8 @@
 
 .title {
   font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 12px;
 }
 
 .description {
@@ -38,6 +40,7 @@
 .teamManagers {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
 }
 
 .teamRoleContainer {
@@ -68,16 +71,4 @@
   .teamMembers {
     grid-template-columns: 1fr;
   }
-}
-
-.teamMemberImage {
-  position: relative;
-  width: 250px;
-  height: 200px;
-}
-
-.teamMember {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
