@@ -131,6 +131,10 @@ const EditUserPopup = ({ currentRow, togglePopup }: EditUserPopupProps) => {
   ) => {
     const { id, value } = e.target;
     setTouched(true);
+    if (id === "ucid") {
+      setNewRowData((prev) => ({ ...prev, ucid: Number(value) }));
+      return;
+    }
     setNewRowData((prev) => ({ ...prev, [id]: value }));
   };
 
@@ -261,7 +265,7 @@ const EditUserPopup = ({ currentRow, togglePopup }: EditUserPopupProps) => {
                       name={row.label}
                       onChange={onInputChange}
                       type={rowMetadata[row.id as keyof typeof rowMetadata]}
-                      value={row.value ?? ""}
+                      value={row.value ?? undefined}
                     />
                   )}
                 </div>

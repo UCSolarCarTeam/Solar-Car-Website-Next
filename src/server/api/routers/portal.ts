@@ -169,7 +169,7 @@ export const portalRouter = createTRPCRouter({
             schoolEmail: input.schoolEmail,
             schoolYear: input.schoolYear,
             teamRole: input.teamRole,
-            ucid: input.ucid,
+            ucid: Number(input.ucid),
             yearJoined: input.yearJoined,
           },
           where: { id: input.id },
