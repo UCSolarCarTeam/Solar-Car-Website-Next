@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { memo } from "react";
 
 import styles from "@/components/Portal/index.module.scss";
@@ -7,7 +8,7 @@ const PortalPageHeader = () => {
   const { user } = useUser();
   return (
     <header className={styles.portalPageHeaderLayout}>
-      <div>Solar Car Portal</div>
+      <Link href="/">Solar Car Portal</Link>
       <div className={styles.profilePicture}>
         {user?.username}
         <UserButton />
