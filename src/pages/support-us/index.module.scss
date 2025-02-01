@@ -1,5 +1,7 @@
 .container {
   height: 100vh;
+  display: flex;
+  flex-direction: column;
 
   > img {
     z-index: -1;
@@ -39,6 +41,27 @@
   height: 100vh;
 }
 
+.supportButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto;
+  margin-bottom: 128px;
+
+  a {
+    background: #ec221f;
+    padding: 1rem;
+    border: solid 1px #c00f0c;
+    border-radius: 10px;
+    color: white;
+    -webkit-text-stroke-width: 0.5px;
+    -webkit-text-stroke-color: black;
+    text-shadow: 1px 1px 5px black;
+    font-size: 1.2em;
+    font-weight: 600;
+  }
+}
+
 @media (max-width: 1024px) {
   .descriptionContainer {
     width: 100%;
@@ -48,6 +71,9 @@
     letter-spacing: 0;
     padding-top: 1rem;
     font-size: 3rem;
+  }
+  .supportButton {
+    margin-bottom: 160px;
   }
 }
 

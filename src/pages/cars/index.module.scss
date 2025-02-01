@@ -16,6 +16,7 @@
 }
 
 .descriptionContainer {
+  cursor: pointer;
   position: absolute;
   bottom: 0;
   padding: 40px;
@@ -29,9 +30,27 @@
 }
 
 .descriptionTitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
   font-size: 1.75em;
   -webkit-text-stroke-width: 1px;
+  gap: 16px;
+}
+
+.descriptionContent {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition:
+    max-height 0.5s ease-in-out,
+    opacity 0.5s ease-in-out;
+}
+
+.descriptionContent.show {
+  max-height: 500px; /* Adjust this value based on your content's height */
+  opacity: 1;
 }
 
 .pageHeading {
