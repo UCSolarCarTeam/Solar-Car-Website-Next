@@ -35,6 +35,10 @@
   text-shadow: 0 0.5px 10px black;
 }
 
+.main {
+  height: 100vh;
+}
+
 @media (max-width: 1024px) {
   .descriptionContainer {
     width: 100%;
@@ -44,5 +48,17 @@
     letter-spacing: 0;
     padding-top: 1rem;
     font-size: 3rem;
+  }
+}
+
+@supports (height: 100dvh) {
+  .container {
+    height: 100dvh;
+  }
+}
+
+@supports (height: 100dvh) {
+  .main {
+    height: 100dvh;
   }
 }

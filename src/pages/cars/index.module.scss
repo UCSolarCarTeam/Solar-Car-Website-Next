@@ -62,5 +62,14 @@
 
 .snapItem {
   scroll-snap-align: start;
-  height: 100vh; /* Each page occupies the full viewport height */
+  height: 100vh;
+}
+
+@supports (height: 100dvh) {
+  .snapContainer {
+    height: 100dvh;
+  }
+  .snapItem {
+    height: 100dvh;
+  }
 }

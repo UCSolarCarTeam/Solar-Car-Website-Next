@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
+import backsplash from "public/assets/contact/backsplash.png";
 import { memo } from "react";
 
 import Footer from "@/components/Footer";
@@ -12,7 +13,7 @@ const Contact = () => {
       <Head>
         <title>Calgary Solar Car - Contact Us</title>
       </Head>
-      <main style={{ height: "100vh" }}>
+      <main className={styles.main}>
         <>
           <Navbar />
           <div className={styles.container}>
@@ -66,8 +67,11 @@ const Contact = () => {
             <Image
               alt="backsplash"
               fill
+              id="backsplashImage"
+              loading="eager"
+              placeholder="blur"
               priority
-              src="/assets/contact/backsplash.png"
+              src={backsplash}
               style={{ objectFit: "cover" }}
             />
           </div>

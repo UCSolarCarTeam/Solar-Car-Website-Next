@@ -58,7 +58,7 @@
 
 .hamburgerMenu.open {
   opacity: 1;
-  height: 100vh; /* Full height when opened */
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.9); /* Fade to black */
   font-size: 2.5em;
 
@@ -94,5 +94,11 @@
     text-decoration-line: underline;
     text-decoration-color: red;
     text-decoration-thickness: 3px;
+  }
+}
+
+@supports (height: 100dvh) {
+  .hamburgerMenu.open {
+    height: 100dvh;
   }
 }

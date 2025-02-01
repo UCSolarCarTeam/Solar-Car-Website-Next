@@ -14,7 +14,7 @@ const Home = () => {
         <title>Calgary Solar Car</title>
         <link href="/favicon.ico" rel="icon" />
       </Head>
-      <main style={{ height: "100vh" }}>
+      <main className={styles.main}>
         <Navbar />
         <div className={styles.container}>
           <div className={styles.pageHeading}>EDUCATE. INNOVATE. INSPIRE.</div>

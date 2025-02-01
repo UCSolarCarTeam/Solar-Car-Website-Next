@@ -6,8 +6,14 @@
   right: 0;
   padding-right: 1.5rem;
   z-index: 3;
-  
+
   div {
     cursor: pointer;
+  }
+}
+
+@supports (top: calc(100dvh - 60%)) {
+  .pageBullets {
+    top: calc(100dvh - 60%);
   }
 }

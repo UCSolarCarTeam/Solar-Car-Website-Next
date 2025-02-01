@@ -36,6 +36,16 @@
   text-shadow: 0 0.5px 10px black;
 }
 
+.main {
+  height: 100vh;
+}
+
+@supports (height: 100dvh) {
+  .main {
+    height: 100dvh;
+  }
+}
+
 @media (max-width: 1024px) {
   .descriptionContainer {
     width: 100%;
