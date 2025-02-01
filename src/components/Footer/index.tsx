@@ -38,11 +38,21 @@ const Footer = () => {
           </div>
           <span>Follow us on our Social Media</span>
           <div className={styles.iconGrid}>
-            <Facebook />
-            <Twitter />
-            <Instagram />
-            <Linkedin />
-            <Youtube />
+            <Link href="https://www.facebook.com/UofCSolarTeam">
+              <Facebook />
+            </Link>
+            <Link href="https://x.com/uofcsolarcar">
+              <Twitter />
+            </Link>
+            <Link href="https://www.instagram.com/uofc_solarcar">
+              <Instagram />
+            </Link>
+            <Link href="https://www.linkedin.com/company/university-of-calgary-solar-car-team">
+              <Linkedin />
+            </Link>
+            <Link href="https://www.youtube.com/user/calgarysolarcar">
+              <Youtube />
+            </Link>
           </div>
         </div>
         <div className={styles.gridContainer}>
