@@ -153,7 +153,7 @@ const CarsPage = () => {
           image={value.image}
           key={id}
           navbarEnabled={index === 0}
-          position={value.position}
+          position={value.position as "left" | "right"}
           title={value.title}
         />
       ))}
