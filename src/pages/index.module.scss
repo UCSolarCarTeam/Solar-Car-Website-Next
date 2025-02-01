@@ -31,7 +31,7 @@
   text-align: center;
   font-size: 5em;
   color: white;
-  padding-top: 2.5em;
+  padding-top: 1.5em;
   letter-spacing: 0.1em;
   text-shadow: 0 0.5px 10px black;
 }
@@ -43,7 +43,17 @@
   }
   .pageHeading {
     letter-spacing: 0;
-    padding-top: 1rem;
-    font-size: 2rem;
+    padding-top: 1em;
+    font-size: 3rem;
   }
+}
+
+@media (max-width: 768px) {
+  .pageHeading {
+    font-size: 3em;
+  }
+}
+
+.backsplashImage {
+  height: 100vh !important;
 }

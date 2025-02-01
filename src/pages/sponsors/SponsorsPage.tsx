@@ -49,6 +49,7 @@ const SponsorsPage = () => {
         </div>
         <Image
           alt="backsplash"
+          className={styles.backsplashImage}
           fill
           loading="eager"
           placeholder="blur"

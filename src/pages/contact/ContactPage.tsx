@@ -13,6 +13,7 @@ const ContactPage = () => {
         <div className={styles.pageHeading}>Contact Us</div>
         <Image
           alt="backsplash"
+          className={styles.backsplashImage}
           fill
           loading="eager"
           placeholder="blur"
