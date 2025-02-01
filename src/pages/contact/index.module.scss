@@ -64,6 +64,10 @@
   .descriptionContainer {
     width: 100%;
     font-size: 1.1rem;
+
+    > div {
+      width: 60%;
+    }
   }
   .pageHeading {
     letter-spacing: 0;
