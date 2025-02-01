@@ -1,8 +1,10 @@
 import Head from "next/head";
+import Image from "next/image";
 import { memo } from "react";
 
 import Footer from "@/components/Footer";
-import ContactPage from "@/pages/contact/ContactPage";
+import Navbar from "@/components/Navbar";
+import styles from "@/pages/contact/index.module.scss";
 
 const Contact = () => {
   return (
@@ -11,7 +13,65 @@ const Contact = () => {
         <title>Calgary Solar Car - Contact Us</title>
       </Head>
       <main style={{ height: "100vh" }}>
-        <ContactPage />
+        <>
+          <Navbar />
+          <div className={styles.container}>
+            <div className={styles.pageHeading}>Contact Us</div>
+            <div className={styles.descriptionContainer}>
+              <div>
+                <form id="contact-form" method="POST">
+                  <div>
+                    <label htmlFor="name">Name</label>
+                    <input
+                      className={styles.formInput}
+                      id="name"
+                      placeholder="Value"
+                      type="text"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="surname">Surname</label>
+                    <input
+                      className={styles.formInput}
+                      id="surname"
+                      placeholder="Value"
+                      type="text"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="inputEmail">Email address</label>
+                    <input
+                      className={styles.formInput}
+                      id="inputEmail"
+                      placeholder="Value"
+                      type="email"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="message">Message</label>
+                    <textarea
+                      className={styles.formInput}
+                      id="message"
+                      placeholder="Value"
+                    ></textarea>
+                  </div>
+                  <div>
+                    <button className={styles.submitButton} type="submit">
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <Image
+              alt="backsplash"
+              fill
+              priority
+              src="/assets/contact/backsplash.png"
+              style={{ objectFit: "cover" }}
+            />
+          </div>
+        </>
       </main>
       <Footer />
     </>
