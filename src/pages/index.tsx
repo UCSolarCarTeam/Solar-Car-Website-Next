@@ -24,9 +24,8 @@ const Home = () => {
               Schulich Elysia started it’s design phase in 2016 and this
               catamaran style cruise car was completed in 2019. This design was
               implemented to improve battery cooling as well as increase
-              aerodynamics. The Elysia raced in the 2019 American Solar
-              Challenge where it took first place in the Multi Occupant Vehicle
-              Class.
+              aerodynamics. Elysia raced in the 2019 American Solar Challenge
+              where it took first place in the Multi Occupant Vehicle Class.
             </div>
           </div>
           <Image
