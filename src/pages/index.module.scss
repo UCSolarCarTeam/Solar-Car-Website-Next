@@ -49,29 +49,32 @@
 @media (max-width: 1024px) {
   .descriptionContainer {
     width: 100%;
-    font-size: 1em;
+    font-size: 1.2em;
   }
   .pageHeading {
     letter-spacing: 0;
-    padding-top: 1em;
-    font-size: 3rem;
+    padding-top: 0.8em;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   .pageHeading {
     font-size: 3em;
+  }
+  .descriptionContainer {
+    font-size: 0.9em;
   }
 }
 
 @media screen and (max-height: 768px) {
   .pageHeading {
-    padding-top: 1em;
+    padding-top: 0.8em;
+    font-size: 3.6em;
   }
   .descriptionTitle {
     font-size: 1.5em;
   }
   .descriptionContainer {
-    font-size: 1.1em;
+    font-size: 0.9em;
   }
 }

@@ -65,11 +65,18 @@
   height: 100vh;
 }
 
+.backsplashImage {
+  height: 100vh !important;
+}
+
 @supports (height: 100dvh) {
   .snapContainer {
     height: 100dvh;
   }
   .snapItem {
     height: 100dvh;
+  }
+  .backsplashImage {
+    height: 100dvh !important;
   }
 }
