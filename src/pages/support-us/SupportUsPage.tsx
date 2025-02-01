@@ -22,6 +22,7 @@ const SupportUsPage = () => {
         <Image
           alt="backsplash"
           className={styles.backsplashImage}
+          fill
           loading="eager"
           placeholder="blur"
           priority
