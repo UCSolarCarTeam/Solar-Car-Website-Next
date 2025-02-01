@@ -30,15 +30,20 @@ const CarScreenView = ({
   title,
 }: CarScreenViewProps) => {
   const { width } = useViewport();
-  const [showContent, setShowContent] = useState(true);
+
+  const [showContent, setShowContent] = useState<boolean | null>(null);
 
   useEffect(() => {
-    if (width && width <= 648) {
-      setShowContent(false);
-    } else {
+    if (width && width > 648) {
       setShowContent(true);
+    } else if (width && width <= 648) {
+      setShowContent(false);
     }
   }, [width]);
+
+  if (!width || showContent === null) {
+    return null;
+  }
 
   return (
     <>
