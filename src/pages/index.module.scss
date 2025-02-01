@@ -54,6 +54,18 @@
   }
 }
 
+@media screen and (max-height: 768px) {
+  .pageHeading {
+    padding-top: 1em;
+  }
+  .descriptionTitle {
+    font-size: 1.5em;
+  }
+  .descriptionContainer {
+    font-size: 1.1em;
+  }
+}
+
 .backsplashImage {
   height: 100vh !important;
 }

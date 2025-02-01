@@ -14,6 +14,7 @@ interface CarPageProps {
   image: StaticImageData;
   navbarEnabled: boolean;
   title: string;
+  position: "left" | "right";
 }
 
 const CarPage = ({
@@ -22,13 +23,21 @@ const CarPage = ({
   id,
   image,
   navbarEnabled,
+  position,
   title,
 }: CarPageProps) => {
   return (
     <>
       <div className={cx(styles.container, className)} id={id}>
         {navbarEnabled && <Navbar />}
-        <div className={styles.descriptionContainer}>
+        <div
+          className={cx(
+            position === "right"
+              ? styles.descriptionRight
+              : styles.descriptionLeft,
+            styles.descriptionContainer,
+          )}
+        >
           <div className={styles.descriptionTitle}>{title}</div>
           <div>{content}</div>
         </div>

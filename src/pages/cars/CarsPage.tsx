@@ -24,6 +24,7 @@ const CarsPage = () => {
           showcasing the incredible potential of solar-powered vehicles. Be sure
           to stay updated with any new developments!`,
         image: backsplash1,
+        position: "left",
         title: "Schulich Helios",
       },
       // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
@@ -34,6 +35,7 @@ const CarsPage = () => {
           raced in the 2019 American Solar Challenge where it took first place
           in the Multi Occupant Vehicle Class.`,
         image: backsplash2,
+        position: "left",
         title: "Schulich Elysia",
       },
       // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
@@ -46,6 +48,7 @@ const CarsPage = () => {
           2015, the Delta continues to inspire through educational
           demonstrations.`,
         image: backsplash3,
+        position: "left",
         title: "Schulich Delta",
       },
       // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
@@ -58,6 +61,7 @@ const CarsPage = () => {
           Axiom competed in the World Solar Challenge from Darwin to Adelaide,
           covering 1,840 km and finishing 18th before being retired.`,
         image: backsplash4,
+        position: "left",
         title: "Schulich Axiom",
       },
       // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
@@ -70,6 +74,7 @@ const CarsPage = () => {
           introduced gallium arsenide solar cells, replacing the silicon cells
           used in its predecessor.`,
         image: backsplash5,
+        position: "right",
         title: "Schulich 1",
       },
       // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
@@ -80,6 +85,7 @@ const CarsPage = () => {
           Challenge, placing 1st in its class and 10th overall. It was retired in 2006 
           to make way for Schulich I.`,
         image: backsplash6,
+        position: "right",
         title: "Schulich Solean",
       },
     }),
@@ -147,6 +153,7 @@ const CarsPage = () => {
           image={value.image}
           key={id}
           navbarEnabled={index === 0}
+          position={value.position}
           title={value.title}
         />
       ))}
