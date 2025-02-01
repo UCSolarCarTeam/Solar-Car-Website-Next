@@ -42,7 +42,7 @@ const CarScreenView = ({
   }, [width]);
 
   if (!width || showContent === null) {
-    return null;
+    return <div id={id}></div>;
   }
 
   return (
