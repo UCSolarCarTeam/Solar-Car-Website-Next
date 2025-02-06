@@ -8,6 +8,8 @@ import PlusIcon from "@/components/svgs/PlusIcon";
 import useViewport from "@/hooks/useViewport";
 import styles from "@/pages/cars/index.module.scss";
 
+import Footer from "../Footer";
+
 const cx = classNames.bind(styles);
 
 interface CarScreenViewProps {
@@ -16,6 +18,7 @@ interface CarScreenViewProps {
   id: string;
   image: StaticImageData;
   navbarEnabled: boolean;
+  footerEnabled: boolean;
   title: string;
   position: "left" | "right";
 }
@@ -23,6 +26,7 @@ interface CarScreenViewProps {
 const CarScreenView = ({
   className,
   content,
+  footerEnabled,
   id,
   image,
   navbarEnabled,
@@ -88,6 +92,7 @@ const CarScreenView = ({
           style={{ objectFit: "cover" }}
         />
       </div>
+      {footerEnabled && <Footer />}
     </>
   );
 };

@@ -155,6 +155,7 @@ const Cars = () => {
             <CarScreenView
               className={styles.snapItem}
               content={value.content}
+              footerEnabled={index === Object.keys(pageIds).length - 1}
               id={id}
               image={value.image}
               key={id}
