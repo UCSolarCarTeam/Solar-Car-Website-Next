@@ -22,11 +22,11 @@ const Contact = () => {
               <div>
                 <form id="contact-form" method="POST">
                   <div>
-                    <label htmlFor="name">Name</label>
+                    <label htmlFor="name">First Name</label>
                     <input
                       className={styles.formInput}
                       id="name"
-                      placeholder="Value"
+                      placeholder="First Name"
                       type="text"
                     />
                   </div>
@@ -35,16 +35,16 @@ const Contact = () => {
                     <input
                       className={styles.formInput}
                       id="surname"
-                      placeholder="Value"
+                      placeholder="Surname"
                       type="text"
                     />
                   </div>
                   <div>
-                    <label htmlFor="inputEmail">Email address</label>
+                    <label htmlFor="inputEmail">Email Address</label>
                     <input
                       className={styles.formInput}
                       id="inputEmail"
-                      placeholder="Value"
+                      placeholder="Email Address"
                       type="email"
                     />
                   </div>
@@ -53,7 +53,7 @@ const Contact = () => {
                     <textarea
                       className={styles.formInput}
                       id="message"
-                      placeholder="Value"
+                      placeholder="Message"
                     ></textarea>
                   </div>
                   <div>
