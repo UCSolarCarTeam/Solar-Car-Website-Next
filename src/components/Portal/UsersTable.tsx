@@ -105,7 +105,7 @@ const UsersTable = (props: { users: User[] }) => {
   return (
     <div>
       Portal Users
-      <table className={styles.usersTable}>
+      <table className={styles.table}>
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>

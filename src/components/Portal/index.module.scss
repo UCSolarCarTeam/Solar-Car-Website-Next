@@ -2,7 +2,7 @@
   position: sticky;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100dvw;
   height: 60px;
   display: flex;
   background-color: var(--primary-helios);
@@ -19,7 +19,7 @@
   gap: 10px;
 }
 
-.usersTable {
+.table {
   color: black;
   border-collapse: collapse;
   margin: 25px 0;
