@@ -93,7 +93,7 @@ const TeamTable = (props: { users: TeamMember[] }) => {
   return (
     <div>
       Team Members
-      <table className={styles.usersTable}>
+      <table className={styles.table}>
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>

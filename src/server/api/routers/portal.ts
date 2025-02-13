@@ -24,6 +24,7 @@ const UserRoleSchema = z.enum(["admin", "mechanical", "business", "member"]);
 
 export const portalRouter = createTRPCRouter({
   getClerkUsers: authedProcedure.query(async ({ ctx }) => {
+    try {
     const users = await ctx.clerkClient.users.getUserList();
 
     return users.data.map((user) => ({
@@ -36,14 +37,40 @@ export const portalRouter = createTRPCRouter({
       role: user.publicMetadata?.role,
       username: user.username,
     }));
+    } catch (error) {
+      throw new TRPCError({
+        cause: error,
+        code: "INTERNAL_SERVER_ERROR",
+      });
+    }
   }),
 
   getDBUsers: authedProcedure.query(async ({ ctx }) => {
+    try {
     const users = await ctx.db.user.findMany({ orderBy: { id: "desc" } });
     return users;
+    } catch (error) {
+      throw new TRPCError({
+        cause: error,
+        code: "INTERNAL_SERVER_ERROR",
+      });
+    }
+  }),
+
+  getSponsorsList: authedProcedure.query(async ({ ctx }) => {
+    try {
+      const sponsors = await ctx.db.sponsor.findMany();
+      return sponsors;
+    } catch (error) {
+      throw new TRPCError({
+        cause: error,
+        code: "INTERNAL_SERVER_ERROR",
+      });
+    }
   }),
 
   getTeamMembers: publicProcedure.query(async ({ ctx }) => {
+    try {
     const dbUsers = await ctx.db.user.findMany();
     const teamMembers = dbUsers
       .filter((teamMember) => teamMember.teamRole !== null)
@@ -87,7 +114,8 @@ export const portalRouter = createTRPCRouter({
     const leadRoles = teamMembers
       .filter(
         (teamMember) =>
-          teamMember.teamRole !== null && teamMember.teamRole in UpperTeamRoles,
+            teamMember.teamRole !== null &&
+            teamMember.teamRole in UpperTeamRoles,
       )
       .filter(
         (teamMember) =>
@@ -117,6 +145,12 @@ export const portalRouter = createTRPCRouter({
       sponsorshipTeam,
       teamCaptain,
     };
+    } catch (error) {
+      throw new TRPCError({
+        cause: error,
+        code: "INTERNAL_SERVER_ERROR",
+      });
+    }
   }),
 
   updateDBUser: authedProcedure
@@ -177,7 +211,48 @@ export const portalRouter = createTRPCRouter({
 
         return true;
       } catch (error) {
-        return false;
+        throw new TRPCError({
+          cause: error,
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
+
+  updateSponsor: adminMiddleware
+    .input(
+      z.object({
+        description: z.string().nullable(),
+        id: z.number(),
+        logoUrl: z.string().nullable(),
+        name: z.string().nullable(),
+        websiteUrl: z.string().nullable(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        // only update the fields that are non null
+        const updateData = {
+          description: input.description,
+          logoUrl: input.logoUrl,
+          name: input.name,
+          websiteUrl: input.websiteUrl,
+        };
+        const filteredUpdateData = Object.fromEntries(
+          Object.entries(updateData).filter(([_, value]) => value !== null),
+        );
+
+        await ctx.db.sponsor.update({
+          data: filteredUpdateData,
+          where: {
+            id: input.id,
+          },
+        });
+        return true;
+      } catch (error) {
+        throw new TRPCError({
+          cause: error,
+          code: "INTERNAL_SERVER_ERROR",
+        });
       }
     }),
 
@@ -189,6 +264,7 @@ export const portalRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      try {
       if (input.userId) {
         await ctx.clerkClient.users.updateUserMetadata(input.userId, {
           publicMetadata: {
@@ -197,5 +273,11 @@ export const portalRouter = createTRPCRouter({
         });
       }
       return true;
+      } catch (error) {
+        throw new TRPCError({
+          cause: error,
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
     }),
 });
