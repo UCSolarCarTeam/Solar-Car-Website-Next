@@ -27,6 +27,14 @@ model User {
     description       String?
 }
 
+model Sponsor {
+    id          Int     @id @default(autoincrement())
+    name        String
+    logoUrl     String
+    websiteUrl  String
+    description String?
+}
+
 enum AllTeamRoles {
     TeamCaptain            @map("Team Captain")
     EngineeringTeamManager @map("Engineering Team Manager")

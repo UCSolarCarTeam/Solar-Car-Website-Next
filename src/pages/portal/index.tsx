@@ -3,6 +3,7 @@ import Link from "next/link";
 import { memo } from "react";
 
 import PortalPageHeader from "@/components/Portal/PortalPageHeader";
+import SponsorsTable from "@/components/Portal/SponsorsTable";
 import TeamTable from "@/components/Portal/TeamTable";
 import UsersTable from "@/components/Portal/UsersTable";
 import styles from "@/pages/portal/index.module.scss";
@@ -14,6 +15,7 @@ const Portal = () => {
 
   const clerkUsers = api.portal.getClerkUsers.useQuery();
   const dbUsers = api.portal.getDBUsers.useQuery();
+  const sponsors = api.portal.getSponsorsList.useQuery();
 
   if (!isLoaded || clerkUsers.isFetching || dbUsers.isFetching) {
     return null;
@@ -45,6 +47,7 @@ const Portal = () => {
           <div className={styles.portalContent}>
             <UsersTable users={clerkUsers.data ?? []} />
             <TeamTable users={dbUsers.data ?? []} />
+            <SponsorsTable sponsors={sponsors.data ?? []} />
           </div>
         </SignedIn>
         <SignedOut>

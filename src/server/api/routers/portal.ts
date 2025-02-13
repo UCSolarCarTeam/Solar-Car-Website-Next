@@ -23,20 +23,66 @@ export type UserRole = "admin" | "mechanical" | "business" | "member";
 const UserRoleSchema = z.enum(["admin", "mechanical", "business", "member"]);
 
 export const portalRouter = createTRPCRouter({
+  createSponsor: adminMiddleware
+    .input(
+      z.object({
+        description: z.string().nullable(),
+        logoUrl: z.string(),
+        name: z.string(),
+        websiteUrl: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.db.sponsor.create({
+          data: {
+            description: input.description,
+            logoUrl: input.logoUrl,
+            name: input.name,
+            websiteUrl: input.websiteUrl,
+          },
+        });
+        return true;
+      } catch (error) {
+        throw new TRPCError({
+          cause: error,
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
+
+  deleteSponsor: adminMiddleware
+    .input(z.number())
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.db.sponsor.delete({
+          where: {
+            id: input,
+          },
+        });
+        return true;
+      } catch (error) {
+        throw new TRPCError({
+          cause: error,
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
+
   getClerkUsers: authedProcedure.query(async ({ ctx }) => {
     try {
-    const users = await ctx.clerkClient.users.getUserList();
+      const users = await ctx.clerkClient.users.getUserList();
 
-    return users.data.map((user) => ({
-      email: user.emailAddresses[0]?.emailAddress,
-      firstName: user.firstName,
-      id: user.id,
-      imageUrl: user.hasImage ? user.imageUrl : undefined,
-      lastName: user.lastName,
-      publicMetadata: user.publicMetadata,
-      role: user.publicMetadata?.role,
-      username: user.username,
-    }));
+      return users.data.map((user) => ({
+        email: user.emailAddresses[0]?.emailAddress,
+        firstName: user.firstName,
+        id: user.id,
+        imageUrl: user.hasImage ? user.imageUrl : undefined,
+        lastName: user.lastName,
+        publicMetadata: user.publicMetadata,
+        role: user.publicMetadata?.role,
+        username: user.username,
+      }));
     } catch (error) {
       throw new TRPCError({
         cause: error,
@@ -47,8 +93,8 @@ export const portalRouter = createTRPCRouter({
 
   getDBUsers: authedProcedure.query(async ({ ctx }) => {
     try {
-    const users = await ctx.db.user.findMany({ orderBy: { id: "desc" } });
-    return users;
+      const users = await ctx.db.user.findMany({ orderBy: { id: "desc" } });
+      return users;
     } catch (error) {
       throw new TRPCError({
         cause: error,
@@ -71,80 +117,80 @@ export const portalRouter = createTRPCRouter({
 
   getTeamMembers: publicProcedure.query(async ({ ctx }) => {
     try {
-    const dbUsers = await ctx.db.user.findMany();
-    const teamMembers = dbUsers
-      .filter((teamMember) => teamMember.teamRole !== null)
-      .filter(
-        (teamMember) =>
-          teamMember.firstName !== null || teamMember.firstName === "",
-      );
+      const dbUsers = await ctx.db.user.findMany();
+      const teamMembers = dbUsers
+        .filter((teamMember) => teamMember.teamRole !== null)
+        .filter(
+          (teamMember) =>
+            teamMember.firstName !== null || teamMember.firstName === "",
+        );
 
-    const filterByRole = (
-      teamMembers: User[],
-      roles:
-        | typeof AccountingTeam
-        | typeof CommunicationsTeam
-        | typeof ElectricalTeam
-        | typeof MechanicalTeam
-        | typeof MultiTeam
-        | typeof SoftwareTeam
-        | typeof SponsorshipTeam,
-    ) => {
-      return teamMembers.filter((teamMember) =>
-        // we can assume that we filtered out null teamRoles already
-        Object.keys(roles).includes(teamMember.teamRole!),
-      );
-    };
+      const filterByRole = (
+        teamMembers: User[],
+        roles:
+          | typeof AccountingTeam
+          | typeof CommunicationsTeam
+          | typeof ElectricalTeam
+          | typeof MechanicalTeam
+          | typeof MultiTeam
+          | typeof SoftwareTeam
+          | typeof SponsorshipTeam,
+      ) => {
+        return teamMembers.filter((teamMember) =>
+          // we can assume that we filtered out null teamRoles already
+          Object.keys(roles).includes(teamMember.teamRole!),
+        );
+      };
 
-    const teamCaptain =
-      teamMembers.find(
-        (teamMember) => teamMember.teamRole === AllTeamRoles.TeamCaptain,
-      ) ?? null;
-    const engineeringTeamManager =
-      teamMembers.find(
-        (teamMember) =>
-          teamMember.teamRole === AllTeamRoles.EngineeringTeamManager,
-      ) ?? null;
-    const businessTeamManager =
-      teamMembers.find(
-        (teamMember) =>
-          teamMember.teamRole === AllTeamRoles.BusinessTeamManager,
-      ) ?? null;
+      const teamCaptain =
+        teamMembers.find(
+          (teamMember) => teamMember.teamRole === AllTeamRoles.TeamCaptain,
+        ) ?? null;
+      const engineeringTeamManager =
+        teamMembers.find(
+          (teamMember) =>
+            teamMember.teamRole === AllTeamRoles.EngineeringTeamManager,
+        ) ?? null;
+      const businessTeamManager =
+        teamMembers.find(
+          (teamMember) =>
+            teamMember.teamRole === AllTeamRoles.BusinessTeamManager,
+        ) ?? null;
 
-    const leadRoles = teamMembers
-      .filter(
-        (teamMember) =>
+      const leadRoles = teamMembers
+        .filter(
+          (teamMember) =>
             teamMember.teamRole !== null &&
             teamMember.teamRole in UpperTeamRoles,
-      )
-      .filter(
-        (teamMember) =>
-          teamMember !== teamCaptain &&
-          teamMember !== engineeringTeamManager &&
-          teamMember !== businessTeamManager,
-      );
+        )
+        .filter(
+          (teamMember) =>
+            teamMember !== teamCaptain &&
+            teamMember !== engineeringTeamManager &&
+            teamMember !== businessTeamManager,
+        );
 
-    const accountingTeam = filterByRole(teamMembers, AccountingTeam);
-    const commmunicationsTeam = filterByRole(teamMembers, CommunicationsTeam);
-    const sponsorshipTeam = filterByRole(teamMembers, SponsorshipTeam);
-    const softwareTeam = filterByRole(teamMembers, SoftwareTeam);
-    const electricalTeam = filterByRole(teamMembers, ElectricalTeam);
-    const mechanicalTeam = filterByRole(teamMembers, MechanicalTeam);
-    const multiTeam = filterByRole(teamMembers, MultiTeam);
+      const accountingTeam = filterByRole(teamMembers, AccountingTeam);
+      const commmunicationsTeam = filterByRole(teamMembers, CommunicationsTeam);
+      const sponsorshipTeam = filterByRole(teamMembers, SponsorshipTeam);
+      const softwareTeam = filterByRole(teamMembers, SoftwareTeam);
+      const electricalTeam = filterByRole(teamMembers, ElectricalTeam);
+      const mechanicalTeam = filterByRole(teamMembers, MechanicalTeam);
+      const multiTeam = filterByRole(teamMembers, MultiTeam);
 
-    return {
-      accountingTeam,
-      businessTeamManager,
-      commmunicationsTeam,
-      electricalTeam,
-      engineeringTeamManager,
-      leadRoles,
-      mechanicalTeam,
-      multiTeam,
-      softwareTeam,
-      sponsorshipTeam,
-      teamCaptain,
-    };
+      return {
+        accountingTeam,
+        businessTeamManager,
+        commmunicationsTeam,
+        electricalTeam,
+        engineeringTeamManager,
+        leadRoles,
+        mechanicalTeam,
+        multiTeam,
+        softwareTeam,
+        sponsorshipTeam,
+        teamCaptain,
+      };
     } catch (error) {
       throw new TRPCError({
         cause: error,
@@ -265,14 +311,14 @@ export const portalRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       try {
-      if (input.userId) {
-        await ctx.clerkClient.users.updateUserMetadata(input.userId, {
-          publicMetadata: {
-            role: input.role,
-          },
-        });
-      }
-      return true;
+        if (input.userId) {
+          await ctx.clerkClient.users.updateUserMetadata(input.userId, {
+            publicMetadata: {
+              role: input.role,
+            },
+          });
+        }
+        return true;
       } catch (error) {
         throw new TRPCError({
           cause: error,
