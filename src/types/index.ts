@@ -4,6 +4,7 @@ export interface SVGIconProps {
   width?: number;
   fill?: string;
   onClick?: () => void;
+  size?: "sm" | "md" | "lg";
 }
 
 export enum UpperTeamRoles {

@@ -10,16 +10,15 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
+import EditSponsorPopup from "../EditSponsorCell";
+import EditSponsorCell from "../EditSponsorCell";
+
 export type Sponsor = RouterOutputs["portal"]["getSponsorsList"][number];
 
 const SponsorsTable = (props: { sponsors: Sponsor[] }) => {
   const columnHelper = useMemo(() => createColumnHelper<Sponsor>(), []);
   const columns = useMemo(
     () => [
-      columnHelper.accessor("logoUrl", {
-        cell: (info) => <Image alt="sponsor logo" src={info.getValue()} />,
-        header: "Logo",
-      }),
       columnHelper.accessor("name", {
         cell: (info) => info.getValue(),
         header: "Name",
@@ -32,6 +31,16 @@ const SponsorsTable = (props: { sponsors: Sponsor[] }) => {
         cell: (info) => info.getValue(),
         header: "Website",
       }),
+      columnHelper.accessor("logoUrl", {
+        cell: (info) => <Image alt="sponsor logo" src={info.getValue()} />,
+        header: "Logo",
+      }),
+      columnHelper.display({
+        cell: (info) => (
+          <EditSponsorCell currentRow={info.row.original} newSponsor={false} />
+        ),
+        id: "edit",
+      }),
     ],
     [columnHelper],
   );
@@ -43,7 +52,22 @@ const SponsorsTable = (props: { sponsors: Sponsor[] }) => {
 
   return (
     <div>
-      Sponsors
+      <div className={styles.tableHeader}>
+        Sponsors
+        <EditSponsorPopup
+          currentRow={{
+            name: "",
+            // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
+            description: "",
+            websiteUrl: "",
+            // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
+            logoUrl: "",
+            // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
+            id: -1,
+          }}
+          newSponsor
+        />
+      </div>
       <table className={styles.table}>
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (

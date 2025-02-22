@@ -1,12 +1,16 @@
 import { memo } from "react";
 
-const MinusIcon = () => {
+import { type SVGIconProps } from "@/types";
+
+const PlusIcon = ({ fill, onClick, size }: SVGIconProps) => {
   return (
     <svg
-      fill="#ffffff"
-      height="36px"
+      fill={fill ?? "#ffffff"}
+      height={size === "sm" ? "12px" : size === "md" ? "24px" : "36px"}
+      onClick={onClick}
+      style={{ cursor: onClick ? "pointer" : "default" }}
       viewBox="0 0 330 330"
-      width="36px"
+      width={size === "sm" ? "12px" : size === "md" ? "24px" : "36px"}
       xmlSpace="preserve"
     >
       <g stroke-width="0" />
@@ -23,4 +27,4 @@ const MinusIcon = () => {
   );
 };
 
-export default memo(MinusIcon);
+export default memo(PlusIcon);

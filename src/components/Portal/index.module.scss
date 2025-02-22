@@ -9,7 +9,7 @@
   align-items: center;
   padding: 0 24px;
   justify-content: space-between;
-  z-index: 999;
+  z-index: 100;
 }
 
 .profilePicture {
@@ -54,4 +54,10 @@
   tbody tr:last-of-type {
     border-bottom: 2px solid var(--primary-helios);
   }
+}
+
+.tableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

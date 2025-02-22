@@ -117,11 +117,14 @@ const EditUserPopup = ({ currentRow, togglePopup }: EditUserPopupProps) => {
       );
   }, [newRowData]);
 
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
-      togglePopup();
-    }
-  };
+  const handleOverlayClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (e.target === e.currentTarget) {
+        togglePopup();
+      }
+    },
+    [togglePopup],
+  );
 
   const onInputChange = (
     e:

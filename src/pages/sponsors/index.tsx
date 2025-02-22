@@ -6,8 +6,54 @@ import { memo } from "react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import styles from "@/pages/sponsors/index.module.scss";
+import { type Sponsor } from "@prisma/client";
 
 const Sponsors = () => {
+  const hardcodedSponsors = [
+    {
+      id: 0,
+      logoUrl:
+        "https://iskksotubtjejqlblkyf.supabase.co/storage/v1/object/public/solarcar_sponsorship_pictures//43aeac43aeac10d3475631af1a1fb0eca09c2c_T5Logo.jpeg",
+      name: "Trolley 5",
+      websiteUrl: "https://trolley5.com/",
+    },
+    {
+      id: 1,
+      logoUrl:
+        "https://iskksotubtjejqlblkyf.supabase.co/storage/v1/object/public/solarcar_sponsorship_pictures//Bronze_Ansys.png",
+      name: "Ansys",
+      websiteUrl: "https://www.ansys.com/",
+    },
+    {
+      id: 2,
+      logoUrl:
+        "https://iskksotubtjejqlblkyf.supabase.co/storage/v1/object/public/solarcar_sponsorship_pictures//Gold_Altium.png",
+      name: "Altium",
+      websiteUrl: "https://www.altium.com/",
+    },
+    {
+      id: 3,
+      logoUrl:
+        "https://iskksotubtjejqlblkyf.supabase.co/storage/v1/object/public/solarcar_sponsorship_pictures//Kaizen.png",
+      name: "Kaizen",
+      websiteUrl: "https://kaizen.com/",
+    },
+    {
+      id: 4,
+      logoUrl:
+        "https://iskksotubtjejqlblkyf.supabase.co/storage/v1/object/public/solarcar_sponsorship_pictures//RM_LOGO_CLR.jpg",
+      name: "Rocky Mountain Motorsports",
+      websiteUrl: "https://rockymotorsports.com/",
+    },
+    {
+      id: 5,
+      logoUrl:
+        "https://iskksotubtjejqlblkyf.supabase.co/storage/v1/object/public/solarcar_sponsorship_pictures//Silver%20Tektelic%20logo.png",
+      name: "Tektelic",
+      websiteUrl: "https://tektelic.com/",
+    },
+  ] as Sponsor[];
+
   return (
     <>
       <Head>
