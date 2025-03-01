@@ -1,8 +1,11 @@
 import Image from "next/image";
+import Link from "next/link";
 import { memo, useMemo } from "react";
 
 import styles from "@/components/Portal/index.module.scss";
 import { type RouterOutputs } from "@/utils/api";
+import { useUser } from "@clerk/nextjs";
+import { SponsorLevel } from "@prisma/client";
 import {
   createColumnHelper,
   flexRender,
@@ -12,13 +15,28 @@ import {
 
 import EditSponsorPopup from "../EditSponsorCell";
 import EditSponsorCell from "../EditSponsorCell";
+import DeleteSponsor from "../EditSponsorCell/DeleteSponsor";
 
 export type Sponsor = RouterOutputs["portal"]["getSponsorsList"][number];
 
 const SponsorsTable = (props: { sponsors: Sponsor[] }) => {
+  const { user } = useUser();
   const columnHelper = useMemo(() => createColumnHelper<Sponsor>(), []);
   const columns = useMemo(
     () => [
+      columnHelper.accessor("logoUrl", {
+        cell: (info) => (
+          <Image
+            alt="sponsor logo"
+            fill
+            loading="eager"
+            priority
+            src={info.getValue()}
+            style={{ objectFit: "cover" }}
+          />
+        ),
+        header: "Logo",
+      }),
       columnHelper.accessor("name", {
         cell: (info) => info.getValue(),
         header: "Name",
@@ -28,12 +46,16 @@ const SponsorsTable = (props: { sponsors: Sponsor[] }) => {
         header: "Description",
       }),
       columnHelper.accessor("websiteUrl", {
-        cell: (info) => info.getValue(),
+        cell: (info) => (
+          <Link href={info.getValue()} prefetch={false}>
+            {info.getValue()}
+          </Link>
+        ),
         header: "Website",
       }),
-      columnHelper.accessor("logoUrl", {
-        cell: (info) => <Image alt="sponsor logo" src={info.getValue()} />,
-        header: "Logo",
+      columnHelper.accessor("sponsorLevel", {
+        cell: (info) => info.getValue(),
+        header: "Sponsor Level",
       }),
       columnHelper.display({
         cell: (info) => (
@@ -41,13 +63,31 @@ const SponsorsTable = (props: { sponsors: Sponsor[] }) => {
         ),
         id: "edit",
       }),
+      columnHelper.display({
+        cell: (info) => <DeleteSponsor currentRow={info.row.original} />,
+        id: "delete",
+      }),
     ],
     [columnHelper],
   );
+
+  const shouldShowModifyColumns = useMemo(
+    () =>
+      user?.publicMetadata?.role === "admin" ||
+      user?.publicMetadata?.role === "business",
+    [user?.publicMetadata?.role],
+  );
+
   const table = useReactTable({
     columns,
     data: props.sponsors ?? [],
     getCoreRowModel: getCoreRowModel(),
+    initialState: {
+      columnVisibility: {
+        delete: shouldShowModifyColumns,
+        edit: shouldShowModifyColumns,
+      },
+    },
   });
 
   return (
@@ -60,6 +100,8 @@ const SponsorsTable = (props: { sponsors: Sponsor[] }) => {
             // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
             description: "",
             websiteUrl: "",
+            // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
+            sponsorLevel: SponsorLevel.Gold,
             // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
             logoUrl: "",
             // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys

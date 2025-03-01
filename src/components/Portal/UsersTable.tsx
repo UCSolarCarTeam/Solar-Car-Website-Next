@@ -34,11 +34,11 @@ const UsersTable = (props: { users: User[] }) => {
         cell: (info) => (
           <Image
             alt="profile image"
-            height={48}
+            height={64}
             loading="eager"
             priority
             src={info.getValue() ?? defaultProfilePicture}
-            width={48}
+            width={64}
           />
         ),
         header: () => null,

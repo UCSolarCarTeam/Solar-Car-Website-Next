@@ -61,3 +61,16 @@
   display: flex;
   margin: auto;
 }
+
+.sponsorContainer {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.sponsor {
+  height: 125px;
+  position: relative;
+  width: 100%;
+}

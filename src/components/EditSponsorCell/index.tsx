@@ -1,6 +1,9 @@
 import { memo, useCallback, useEffect, useState } from "react";
 
+import styles from "@/components/EditSponsorCell/index.module.scss";
 import PlusIcon from "@/components/svgs/PlusIcon";
+import { useUser } from "@clerk/nextjs";
+import { type SponsorLevel } from "@prisma/client";
 
 import EditSponsorPopup from "./EditSponsorPopup";
 
@@ -9,6 +12,7 @@ export interface EditSponsorCellProps {
     id: number;
     name: string;
     description: string | null;
+    sponsorLevel: SponsorLevel;
     websiteUrl: string;
     logoUrl: string;
   };
@@ -17,6 +21,7 @@ export interface EditSponsorCellProps {
 
 const EditSponsorCell = ({ currentRow, newSponsor }: EditSponsorCellProps) => {
   const [popupOpen, setPopupOpen] = useState(false);
+  const { user } = useUser();
   const togglePopup = useCallback(() => {
     setPopupOpen((prev) => !prev);
   }, []);
@@ -34,6 +39,15 @@ const EditSponsorCell = ({ currentRow, newSponsor }: EditSponsorCellProps) => {
     };
   }, []);
 
+  if (
+    !(
+      user?.publicMetadata?.role === "admin" ||
+      user?.publicMetadata?.role === "business"
+    )
+  ) {
+    return null;
+  }
+
   if (newSponsor) {
     return (
       <>
@@ -49,16 +63,18 @@ const EditSponsorCell = ({ currentRow, newSponsor }: EditSponsorCellProps) => {
     );
   }
 
-  if (popupOpen)
-    return (
-      <EditSponsorPopup
-        currentRow={currentRow}
-        newSponsor={false}
-        togglePopup={togglePopup}
-      />
-    );
-
-  return null;
+  return (
+    <div className={styles.editSponsorCell}>
+      <span onClick={() => setPopupOpen((prev) => !prev)}>Edit</span>
+      {popupOpen && (
+        <EditSponsorPopup
+          currentRow={currentRow}
+          newSponsor={false}
+          togglePopup={togglePopup}
+        />
+      )}
+    </div>
+  );
 };
 
 export default memo(EditSponsorCell);

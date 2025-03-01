@@ -9,7 +9,7 @@ import styles from "@/pages/team/index.module.scss";
 import { type RouterOutputs, type SsrTrpcHelper } from "@/utils/api";
 import { SsrHelpers } from "@/utils/api";
 
-type TeamHierarchy = RouterOutputs["portal"]["getTeamMembers"];
+type TeamHierarchy = RouterOutputs["fe"]["getTeamMembers"];
 
 export type TeamPageProps = {
   teamHierarchy: TeamHierarchy;
@@ -18,7 +18,7 @@ export type TeamPageProps = {
 export const getServerSideProps: GetServerSideProps<
   TeamPageProps
 > = async () => {
-  const teamHierarchy = await SsrHelpers.portal.getTeamMembers.fetch();
+  const teamHierarchy = await SsrHelpers.fe.getTeamMembers.fetch();
 
   return {
     props: {

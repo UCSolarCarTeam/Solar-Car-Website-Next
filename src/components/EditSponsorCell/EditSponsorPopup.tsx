@@ -6,6 +6,7 @@ import { type EditSponsorCellProps } from "@/components/EditSponsorCell";
 import styles from "@/components/EditSponsorCell/index.module.scss";
 import CloseButton from "@/components/svgs/CloseButton";
 import { api } from "@/utils/api";
+import { SponsorLevel } from "@prisma/client";
 
 type EditSponsorPopupProps = {
   togglePopup: () => void;
@@ -43,7 +44,10 @@ const EditSponsorPopup = ({
 
   const [touched, setTouched] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [newRowData, setNewRowData] = useState(currentRow);
+  const [newRowData, setNewRowData] = useState({
+    ...currentRow,
+    sponsorLevel: (newSponsor ? "" : currentRow.sponsorLevel) as SponsorLevel,
+  });
   const [saving, setSaving] = useState(false);
 
   const rowDataToRender = useMemo(() => {
@@ -74,7 +78,11 @@ const EditSponsorPopup = ({
       );
   }, [newRowData]);
 
-  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onInputChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     const { id, value } = e.target;
     setTouched(true);
     setNewRowData((prev) => ({ ...prev, [id]: value }));
@@ -83,9 +91,65 @@ const EditSponsorPopup = ({
   const handleSave = useCallback(async () => {
     if (touched) {
       setSaving(true);
-      return;
+      if (imageFile) {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          const fileContent = e.target?.result;
+          try {
+            const response = await fetch("/api/uploadSponsorPic", {
+              body: JSON.stringify({
+                fileContent,
+                fileName: imageFile.name,
+                fileType: imageFile.type,
+              }),
+              headers: {
+                "Content-Type": "application/json",
+              },
+              method: "POST",
+            });
+            const { publicUrl } = (await response.json()) as {
+              publicUrl: string;
+            };
+            if (newSponsor) {
+              createSponsor.mutate({
+                ...newRowData,
+                logoUrl: publicUrl,
+              });
+            } else {
+              mutateSponsor.mutate({
+                ...newRowData,
+                logoUrl: publicUrl,
+              });
+            }
+          } catch (error) {
+            togglePopup();
+          }
+        };
+
+        reader.readAsDataURL(imageFile);
+      } else {
+        if (newSponsor) {
+          createSponsor.mutate({
+            ...newRowData,
+          });
+        } else {
+          mutateSponsor.mutate({
+            ...newRowData,
+          });
+        }
+      }
+    } else {
+      togglePopup();
     }
-  }, [touched]);
+  }, [
+    createSponsor,
+    imageFile,
+    mutateSponsor,
+    newRowData,
+    newSponsor,
+    togglePopup,
+    touched,
+  ]);
 
   const handleFileUpload = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -133,6 +197,21 @@ const EditSponsorPopup = ({
                         type="file"
                       />
                     </div>
+                  ) : row.id === "sponsorLevel" ? (
+                    <select
+                      id={row.id}
+                      name={row.label}
+                      onChange={onInputChange}
+                      required
+                      value={row.value ?? ""}
+                    >
+                      <option value="">Please select</option>
+                      {Object.entries(SponsorLevel).map(([key, label]) => (
+                        <option key={key} value={label}>
+                          {label}
+                        </option>
+                      ))}
+                    </select>
                   ) : (
                     <input
                       className={styles.textFieldInput}

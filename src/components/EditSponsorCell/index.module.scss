@@ -131,6 +131,16 @@
   align-items: center;
 }
 
+.editSponsorCell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  & > span {
+    cursor: pointer;
+  }
+}
+
 @media (max-width: 1024px) {
   .popupLayout {
     display: flex;

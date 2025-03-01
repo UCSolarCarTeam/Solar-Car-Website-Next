@@ -4,6 +4,7 @@ import { memo, useMemo } from "react";
 
 import EditTeamCell from "@/components/EditUserCell";
 import { type RouterOutputs } from "@/utils/api";
+import { useUser } from "@clerk/nextjs";
 import {
   createColumnHelper,
   flexRender,
@@ -11,11 +12,13 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
+import DeleteUser from "../EditUserCell/DeleteUser";
 import styles from "./index.module.scss";
 
 export type TeamMember = RouterOutputs["portal"]["getDBUsers"][number];
 
 const TeamTable = (props: { users: TeamMember[] }) => {
+  const { user } = useUser();
   const columnHelper = useMemo(() => createColumnHelper<TeamMember>(), []);
   const columns = useMemo(
     () => [
@@ -79,15 +82,32 @@ const TeamTable = (props: { users: TeamMember[] }) => {
         cell: (info) => <EditTeamCell currentRow={info.row.original} />,
         id: "edit",
       }),
+      columnHelper.display({
+        cell: (info) => <DeleteUser currentRow={info.row.original} />,
+        id: "delete",
+      }),
     ],
 
     [columnHelper],
+  );
+
+  const shouldShowModifyColumns = useMemo(
+    () =>
+      user?.publicMetadata?.role === "admin" ||
+      user?.publicMetadata?.role === "business",
+    [user?.publicMetadata?.role],
   );
 
   const table = useReactTable({
     columns,
     data: props.users ?? [],
     getCoreRowModel: getCoreRowModel(),
+    initialState: {
+      columnVisibility: {
+        delete: shouldShowModifyColumns,
+        edit: shouldShowModifyColumns,
+      },
+    },
   });
 
   return (

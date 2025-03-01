@@ -28,11 +28,19 @@ model User {
 }
 
 model Sponsor {
-    id          Int     @id @default(autoincrement())
-    name        String
-    logoUrl     String
-    websiteUrl  String
-    description String?
+    id           Int          @id @default(autoincrement())
+    name         String
+    description  String?
+    websiteUrl   String
+    sponsorLevel SponsorLevel
+    logoUrl      String
+}
+
+enum SponsorLevel {
+    Gold    @map("Gold")
+    Silver  @map("Silver")
+    Bronze  @map("Bronze")
+    Friends @map("Friends")
 }
 
 enum AllTeamRoles {
