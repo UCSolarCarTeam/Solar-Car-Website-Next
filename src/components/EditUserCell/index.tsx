@@ -5,6 +5,8 @@ import styles from "@/components/EditUserCell/index.module.scss";
 import { useUser } from "@clerk/nextjs";
 import { type AllTeamRoles } from "@prisma/client";
 
+import BasicButton from "../Buttons/BasicButton";
+
 export interface EditUserCellProps {
   currentRow: {
     description: string | null;
@@ -52,7 +54,9 @@ const EditUserCell = ({ currentRow }: EditUserCellProps) => {
   ) {
     return (
       <div className={styles.editTeamCell}>
-        <span onClick={() => setPopupOpen((prev) => !prev)}>Edit</span>
+        <BasicButton onClick={() => setPopupOpen((prev) => !prev)}>
+          Edit
+        </BasicButton>
         {popupOpen && (
           <EditUserPopup currentRow={currentRow} togglePopup={togglePopup} />
         )}

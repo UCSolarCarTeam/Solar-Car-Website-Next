@@ -2,11 +2,13 @@ import Image from "next/image";
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { memo, useCallback, useMemo, useState } from "react";
 
+import CloseButton from "@/components/Buttons/CloseButton";
 import { type EditSponsorCellProps } from "@/components/EditSponsorCell";
 import styles from "@/components/EditSponsorCell/index.module.scss";
-import CloseButton from "@/components/svgs/CloseButton";
 import { api } from "@/utils/api";
 import { SponsorLevel } from "@prisma/client";
+
+import BasicButton from "../Buttons/BasicButton";
 
 type EditSponsorPopupProps = {
   togglePopup: () => void;
@@ -199,6 +201,7 @@ const EditSponsorPopup = ({
                     </div>
                   ) : row.id === "sponsorLevel" ? (
                     <select
+                      className={styles.sponsorSelect}
                       id={row.id}
                       name={row.label}
                       onChange={onInputChange}
@@ -232,12 +235,13 @@ const EditSponsorPopup = ({
             <p>Saving...</p>
           ) : (
             <>
-              <button className={styles.button} onClick={togglePopup}>
-                Cancel
-              </button>
-              <button className={styles.button} onClick={handleSave}>
+              <BasicButton onClick={togglePopup}>Cancel</BasicButton>
+              <BasicButton
+                onClick={handleSave}
+                style={{ backgroundColor: "#53A551" }}
+              >
                 Save
-              </button>
+              </BasicButton>
             </>
           )}
         </div>

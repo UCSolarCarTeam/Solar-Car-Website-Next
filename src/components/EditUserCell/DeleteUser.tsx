@@ -5,6 +5,8 @@ import { api } from "@/utils/api";
 import { useUser } from "@clerk/nextjs";
 import { type AllTeamRoles } from "@prisma/client";
 
+import BasicButton from "../Buttons/BasicButton";
+
 export interface DeleteUserProps {
   currentRow: {
     description: string | null;
@@ -37,9 +39,12 @@ const DeleteUser = ({ currentRow }: DeleteUserProps) => {
   ) {
     return (
       <div className={styles.editSponsorCell}>
-        <span onClick={() => deleteSponsorMutation.mutate(currentRow.id)}>
+        <BasicButton
+          onClick={() => deleteSponsorMutation.mutate(currentRow.id)}
+          style={{ backgroundColor: "#DC676C" }}
+        >
           Delete
-        </span>
+        </BasicButton>
       </div>
     );
   }

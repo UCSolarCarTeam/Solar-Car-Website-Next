@@ -5,6 +5,7 @@ import PlusIcon from "@/components/svgs/PlusIcon";
 import { useUser } from "@clerk/nextjs";
 import { type SponsorLevel } from "@prisma/client";
 
+import BasicButton from "../Buttons/BasicButton";
 import EditSponsorPopup from "./EditSponsorPopup";
 
 export interface EditSponsorCellProps {
@@ -65,7 +66,9 @@ const EditSponsorCell = ({ currentRow, newSponsor }: EditSponsorCellProps) => {
 
   return (
     <div className={styles.editSponsorCell}>
-      <span onClick={() => setPopupOpen((prev) => !prev)}>Edit</span>
+      <BasicButton onClick={() => setPopupOpen((prev) => !prev)}>
+        Edit
+      </BasicButton>
       {popupOpen && (
         <EditSponsorPopup
           currentRow={currentRow}

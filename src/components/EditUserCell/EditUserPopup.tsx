@@ -2,9 +2,9 @@ import Image from "next/image";
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { memo, useCallback, useMemo, useState } from "react";
 
+import CloseButton from "@/components/Buttons/CloseButton";
 import { type EditUserCellProps } from "@/components/EditUserCell";
 import styles from "@/components/EditUserCell/index.module.scss";
-import CloseButton from "@/components/svgs/CloseButton";
 import {
   AccountingTeam,
   CommunicationsTeam,
@@ -17,6 +17,8 @@ import {
 } from "@/types";
 import { api } from "@/utils/api";
 import { useUser } from "@clerk/nextjs";
+
+import BasicButton from "../Buttons/BasicButton";
 
 type EditUserPopupProps = {
   togglePopup: () => void;
@@ -281,12 +283,13 @@ const EditUserPopup = ({ currentRow, togglePopup }: EditUserPopupProps) => {
             <p>Saving...</p>
           ) : (
             <>
-              <button className={styles.button} onClick={togglePopup}>
-                Cancel
-              </button>
-              <button className={styles.button} onClick={handleSave}>
+              <BasicButton onClick={togglePopup}>Cancel</BasicButton>
+              <BasicButton
+                onClick={handleSave}
+                style={{ backgroundColor: "#53A551" }}
+              >
                 Save
-              </button>
+              </BasicButton>
             </>
           )}
         </div>

@@ -9,7 +9,7 @@ import styles from "@/components/Navbar/index.module.scss";
 import Chevron from "@/components/svgs/Chevron";
 import useViewport from "@/hooks/useViewport";
 
-import CloseButton from "../svgs/CloseButton";
+import CloseButton from "../Buttons/CloseButton";
 
 const cx = classNames.bind(styles);
 

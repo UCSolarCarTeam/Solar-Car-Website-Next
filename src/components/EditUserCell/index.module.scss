@@ -1,4 +1,8 @@
 .editTeamCell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   & > span {
     cursor: pointer;
   }
@@ -100,33 +104,6 @@
   display: flex;
   gap: 1rem;
   margin-top: 1rem;
-}
-
-.button {
-  cursor: pointer;
-  display: inline-block;
-  padding: 0.75rem 3rem; // equivalent to px-12 py-3
-  border: 1px solid #4338ca; // indigo-600
-  background-color: #4338ca;
-  color: white;
-  font-size: 0.875rem; // text-sm
-  font-weight: 500; // font-medium
-  border-radius: 0.25rem; // rounded
-  transition: all 0.3s ease;
-
-  &:hover {
-    background-color: transparent;
-    color: #4338ca;
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(67, 56, 202, 0.5);
-  }
-
-  &:active {
-    color: #4338ca;
-  }
 }
 
 .popupLayout {

@@ -4,6 +4,8 @@ import styles from "@/components/EditSponsorCell/index.module.scss";
 import { api } from "@/utils/api";
 import { useUser } from "@clerk/nextjs";
 
+import BasicButton from "../Buttons/BasicButton";
+
 export interface DeleteSponsorProps {
   currentRow: {
     id: number;
@@ -28,9 +30,12 @@ const DeleteSponsor = ({ currentRow }: DeleteSponsorProps) => {
   ) {
     return (
       <div className={styles.editSponsorCell}>
-        <span onClick={() => deleteSponsorMutation.mutate(currentRow.id)}>
+        <BasicButton
+          onClick={() => deleteSponsorMutation.mutate(currentRow.id)}
+          style={{ backgroundColor: "#DC676C" }}
+        >
           Delete
-        </span>
+        </BasicButton>
       </div>
     );
   }

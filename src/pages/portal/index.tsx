@@ -43,11 +43,13 @@ const Portal = () => {
       </Head>
       <main style={{ height: "auto" }}>
         <SignedIn>
-          <PortalPageHeader />
-          <div className={styles.portalContent}>
-            <UsersTable users={clerkUsers.data ?? []} />
-            <TeamTable users={dbUsers.data ?? []} />
-            <SponsorsTable sponsors={sponsors.data ?? []} />
+          <div>
+            <PortalPageHeader />
+            <div className={styles.portalContent}>
+              <UsersTable users={clerkUsers.data ?? []} />
+              <TeamTable users={dbUsers.data ?? []} />
+              <SponsorsTable sponsors={sponsors.data ?? []} />
+            </div>
           </div>
         </SignedIn>
         <SignedOut>
