@@ -1,19 +1,27 @@
 import Head from "next/head";
 import Image from "next/image";
 import backsplash from "public/assets/home/backsplash.jpeg";
-import { memo } from "react";
+import { memo, useCallback, useState } from "react";
 
 import Footer from "@/components/Footer";
+import Loader from "@/components/Loader";
 import Navbar from "@/components/Navbar";
 import styles from "@/pages/index.module.scss";
 
 const Home = () => {
+  const [isImageLoading, setIsImageLoading] = useState(true);
+
+  const handleImageLoad = useCallback(() => {
+    setIsImageLoading(false);
+  }, []);
+
   return (
     <>
       <Head>
         <title>Calgary Solar Car</title>
         <link href="/favicon.ico" rel="icon" />
       </Head>
+      {isImageLoading && <Loader isImageLoading={isImageLoading} />}
       <main className={styles.main}>
         <Navbar />
         <div className={styles.container}>
@@ -33,6 +41,7 @@ const Home = () => {
             fill
             id="backsplashImage"
             loading="eager"
+            onLoadingComplete={handleImageLoad}
             placeholder="blur"
             priority
             src={backsplash}

@@ -6,7 +6,7 @@ import {
   createTRPCRouter,
 } from "@/server/api/trpc";
 import { UpperTeamRoles } from "@/types";
-import { AllTeamRoles, SponsorLevel, type User } from "@prisma/client";
+import { AllTeamRoles, SponsorLevel } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 
 export type UserRole = "admin" | "mechanical" | "business" | "member";

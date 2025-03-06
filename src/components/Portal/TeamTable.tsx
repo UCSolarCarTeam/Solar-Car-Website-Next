@@ -4,7 +4,7 @@ import { memo, useMemo } from "react";
 
 import EditTeamCell from "@/components/EditUserCell";
 import { type RouterOutputs } from "@/utils/api";
-import { useUser } from "@clerk/nextjs";
+import { type UserResource } from "@clerk/types";
 import {
   createColumnHelper,
   flexRender,
@@ -17,8 +17,10 @@ import styles from "./index.module.scss";
 
 export type TeamMember = RouterOutputs["portal"]["getDBUsers"][number];
 
-const TeamTable = (props: { users: TeamMember[] }) => {
-  const { user } = useUser();
+const TeamTable = (props: {
+  users: TeamMember[];
+  currentUser: UserResource | undefined | null;
+}) => {
   const columnHelper = useMemo(() => createColumnHelper<TeamMember>(), []);
   const columns = useMemo(
     () => [
@@ -79,23 +81,33 @@ const TeamTable = (props: { users: TeamMember[] }) => {
       //   header: "Description",
       // }),
       columnHelper.display({
-        cell: (info) => <EditTeamCell currentRow={info.row.original} />,
+        cell: (info) => (
+          <EditTeamCell
+            currentRow={info.row.original}
+            currentUser={props.currentUser}
+          />
+        ),
         id: "edit",
       }),
       columnHelper.display({
-        cell: (info) => <DeleteUser currentRow={info.row.original} />,
+        cell: (info) => (
+          <DeleteUser
+            currentRow={info.row.original}
+            currentUser={props.currentUser}
+          />
+        ),
         id: "delete",
       }),
     ],
 
-    [columnHelper],
+    [columnHelper, props.currentUser],
   );
 
   const shouldShowModifyColumns = useMemo(
     () =>
-      user?.publicMetadata?.role === "admin" ||
-      user?.publicMetadata?.role === "business",
-    [user?.publicMetadata?.role],
+      props.currentUser?.publicMetadata?.role === "admin" ||
+      props.currentUser?.publicMetadata?.role === "business",
+    [props.currentUser?.publicMetadata?.role],
   );
 
   const table = useReactTable({

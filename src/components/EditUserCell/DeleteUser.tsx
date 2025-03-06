@@ -2,12 +2,13 @@ import { memo } from "react";
 
 import styles from "@/components/EditSponsorCell/index.module.scss";
 import { api } from "@/utils/api";
-import { useUser } from "@clerk/nextjs";
+import { type UserResource } from "@clerk/types";
 import { type AllTeamRoles } from "@prisma/client";
 
 import BasicButton from "../Buttons/BasicButton";
 
 export interface DeleteUserProps {
+  currentUser: UserResource | undefined | null;
   currentRow: {
     description: string | null;
     id: number;
@@ -25,8 +26,7 @@ export interface DeleteUserProps {
   };
 }
 
-const DeleteUser = ({ currentRow }: DeleteUserProps) => {
-  const { user } = useUser();
+const DeleteUser = ({ currentRow, currentUser }: DeleteUserProps) => {
   const utils = api.useUtils();
   const deleteSponsorMutation = api.portal.deleteSponsor.useMutation({
     onSuccess: async () => {
@@ -34,8 +34,8 @@ const DeleteUser = ({ currentRow }: DeleteUserProps) => {
     },
   });
   if (
-    user?.publicMetadata?.role === "admin" ||
-    user?.publicMetadata?.role === "business"
+    currentUser?.publicMetadata?.role === "admin" ||
+    currentUser?.publicMetadata?.role === "business"
   ) {
     return (
       <div className={styles.editSponsorCell}>

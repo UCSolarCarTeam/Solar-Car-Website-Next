@@ -4,7 +4,7 @@ import { memo, useMemo } from "react";
 
 import styles from "@/components/Portal/index.module.scss";
 import { type RouterOutputs } from "@/utils/api";
-import { useUser } from "@clerk/nextjs";
+import { type UserResource } from "@clerk/types";
 import { SponsorLevel } from "@prisma/client";
 import {
   createColumnHelper,
@@ -19,8 +19,10 @@ import DeleteSponsor from "../EditSponsorCell/DeleteSponsor";
 
 export type Sponsor = RouterOutputs["portal"]["getSponsorsList"][number];
 
-const SponsorsTable = (props: { sponsors: Sponsor[] }) => {
-  const { user } = useUser();
+const SponsorsTable = (props: {
+  sponsors: Sponsor[];
+  currentUser: UserResource | undefined | null;
+}) => {
   const columnHelper = useMemo(() => createColumnHelper<Sponsor>(), []);
   const columns = useMemo(
     () => [
@@ -59,23 +61,32 @@ const SponsorsTable = (props: { sponsors: Sponsor[] }) => {
       }),
       columnHelper.display({
         cell: (info) => (
-          <EditSponsorCell currentRow={info.row.original} newSponsor={false} />
+          <EditSponsorCell
+            currentRow={info.row.original}
+            currentUser={props.currentUser}
+            newSponsor={false}
+          />
         ),
         id: "edit",
       }),
       columnHelper.display({
-        cell: (info) => <DeleteSponsor currentRow={info.row.original} />,
+        cell: (info) => (
+          <DeleteSponsor
+            currentRow={info.row.original}
+            currentUser={props.currentUser}
+          />
+        ),
         id: "delete",
       }),
     ],
-    [columnHelper],
+    [columnHelper, props.currentUser],
   );
 
   const shouldShowModifyColumns = useMemo(
     () =>
-      user?.publicMetadata?.role === "admin" ||
-      user?.publicMetadata?.role === "business",
-    [user?.publicMetadata?.role],
+      props.currentUser?.publicMetadata?.role === "admin" ||
+      props.currentUser?.publicMetadata?.role === "business",
+    [props.currentUser?.publicMetadata?.role],
   );
 
   const table = useReactTable({
@@ -107,6 +118,7 @@ const SponsorsTable = (props: { sponsors: Sponsor[] }) => {
             // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
             id: -1,
           }}
+          currentUser={props.currentUser}
           newSponsor
         />
       </div>

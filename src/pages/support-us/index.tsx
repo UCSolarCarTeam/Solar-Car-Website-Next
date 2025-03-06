@@ -2,18 +2,26 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import backsplash from "public/assets/support-us/backsplash.jpeg";
-import { memo } from "react";
+import { memo, useCallback, useState } from "react";
 
 import Footer from "@/components/Footer";
+import Loader from "@/components/Loader";
 import Navbar from "@/components/Navbar";
 import styles from "@/pages/support-us/index.module.scss";
 
 const SupportUs = () => {
+  const [isImageLoading, setIsImageLoading] = useState(true);
+
+  const handleImageLoad = useCallback(() => {
+    setIsImageLoading(false);
+  }, []);
+
   return (
     <>
       <Head>
         <title>Calgary Solar Car - Support Us</title>
       </Head>
+      {isImageLoading && <Loader isImageLoading={isImageLoading} />}
       <main className={styles.main}>
         <Navbar />
         <div className={styles.container}>
@@ -36,6 +44,7 @@ const SupportUs = () => {
             fill
             id="backsplashImage"
             loading="eager"
+            onLoadingComplete={handleImageLoad}
             placeholder="blur"
             priority
             src={backsplash}

@@ -2,15 +2,19 @@ import Link from "next/link";
 import { memo } from "react";
 
 import styles from "@/components/Portal/index.module.scss";
-import { UserButton, useUser } from "@clerk/nextjs";
+import { UserButton } from "@clerk/nextjs";
+import { type UserResource } from "@clerk/types";
 
-const PortalPageHeader = () => {
-  const { user } = useUser();
+interface PortalPageHeaderProps {
+  currentUser: UserResource | undefined | null;
+}
+
+const PortalPageHeader = ({ currentUser }: PortalPageHeaderProps) => {
   return (
     <header className={styles.portalPageHeaderLayout}>
       <Link href="/">Solar Car Portal</Link>
       <div className={styles.profilePicture}>
-        {user?.username}
+        {currentUser?.username}
         <UserButton />
       </div>
     </header>

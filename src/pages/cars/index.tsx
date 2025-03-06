@@ -8,6 +8,7 @@ import backsplash6 from "public/assets/cars/backsplash6.jpeg";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 import CarScreenView from "@/components/Cars/CarScreenView";
+import Loader from "@/components/Loader";
 import Pagebullets from "@/components/Pagebullets";
 import styles from "@/pages/cars/index.module.scss";
 
@@ -139,11 +140,18 @@ const Cars = () => {
     };
   }, []);
 
+  const [isImageLoading, setIsImageLoading] = useState(true);
+
+  const handleImageLoad = useCallback(() => {
+    setIsImageLoading(false);
+  }, []);
+
   return (
     <>
       <Head>
         <title>Calgary Solar Car - Cars</title>
       </Head>
+      {isImageLoading && <Loader isImageLoading={isImageLoading} />}
       <main style={{ height: "auto" }}>
         <div className={styles.snapContainer}>
           <Pagebullets
@@ -156,6 +164,7 @@ const Cars = () => {
               className={styles.snapItem}
               content={value.content}
               footerEnabled={index === Object.keys(pageIds).length - 1}
+              handleImageLoad={index === 0 ? handleImageLoad : undefined}
               id={id}
               image={value.image}
               key={id}

@@ -1,18 +1,26 @@
 import Head from "next/head";
 import Image from "next/image";
 import backsplash from "public/assets/contact/backsplash.png";
-import { memo } from "react";
+import { memo, useCallback, useState } from "react";
 
 import Footer from "@/components/Footer";
+import Loader from "@/components/Loader";
 import Navbar from "@/components/Navbar";
 import styles from "@/pages/contact/index.module.scss";
 
 const Contact = () => {
+  const [isImageLoading, setIsImageLoading] = useState(true);
+
+  const handleImageLoad = useCallback(() => {
+    setIsImageLoading(false);
+  }, []);
+
   return (
     <>
       <Head>
         <title>Calgary Solar Car - Contact Us</title>
       </Head>
+      {isImageLoading && <Loader isImageLoading={isImageLoading} />}
       <main className={styles.main}>
         <>
           <Navbar />
@@ -69,6 +77,7 @@ const Contact = () => {
               fill
               id="backsplashImage"
               loading="eager"
+              onLoadingComplete={handleImageLoad}
               placeholder="blur"
               priority
               src={backsplash}

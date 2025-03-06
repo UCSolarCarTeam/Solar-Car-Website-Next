@@ -13,9 +13,9 @@ const PlusIcon = ({ fill, onClick, size }: SVGIconProps) => {
       width={size === "sm" ? "12px" : size === "md" ? "24px" : "36px"}
       xmlSpace="preserve"
     >
-      <g stroke-width="0" />
+      <g strokeWidth="0" />
 
-      <g stroke-linecap="round" stroke-linejoin="round" />
+      <g strokeLinecap="round" strokeLinejoin="round" />
 
       <g>
         <g>

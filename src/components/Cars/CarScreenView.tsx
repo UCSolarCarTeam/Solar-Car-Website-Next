@@ -13,20 +13,22 @@ import Footer from "../Footer";
 const cx = classNames.bind(styles);
 
 interface CarScreenViewProps {
-  content: string;
   className: string | undefined;
+  content: string;
+  footerEnabled: boolean;
+  handleImageLoad: (() => void) | undefined;
   id: string;
   image: StaticImageData;
   navbarEnabled: boolean;
-  footerEnabled: boolean;
-  title: string;
   position: "left" | "right";
+  title: string;
 }
 
 const CarScreenView = ({
   className,
   content,
   footerEnabled,
+  handleImageLoad,
   id,
   image,
   navbarEnabled,
@@ -86,6 +88,7 @@ const CarScreenView = ({
           className={styles.backSplashImage}
           fill
           loading="eager"
+          onLoadingComplete={handleImageLoad}
           placeholder="blur"
           priority
           src={image}

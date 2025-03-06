@@ -2,12 +2,13 @@ import React, { memo, useCallback, useEffect, useState } from "react";
 
 import EditUserPopup from "@/components/EditUserCell/EditUserPopup";
 import styles from "@/components/EditUserCell/index.module.scss";
-import { useUser } from "@clerk/nextjs";
+import { type UserResource } from "@clerk/types";
 import { type AllTeamRoles } from "@prisma/client";
 
 import BasicButton from "../Buttons/BasicButton";
 
 export interface EditUserCellProps {
+  currentUser: UserResource | undefined | null;
   currentRow: {
     description: string | null;
     id: number;
@@ -25,8 +26,7 @@ export interface EditUserCellProps {
   };
 }
 
-const EditUserCell = ({ currentRow }: EditUserCellProps) => {
-  const { user } = useUser();
+const EditUserCell = ({ currentRow, currentUser }: EditUserCellProps) => {
   const [popupOpen, setPopupOpen] = useState(false);
 
   const togglePopup = useCallback(() => {
@@ -48,9 +48,9 @@ const EditUserCell = ({ currentRow }: EditUserCellProps) => {
   }, []);
 
   if (
-    user?.publicMetadata?.role === "admin" ||
-    user?.publicMetadata?.role === "business" ||
-    currentRow.clerkUserId === user?.id
+    currentUser?.publicMetadata?.role === "admin" ||
+    currentUser?.publicMetadata?.role === "business" ||
+    currentRow.clerkUserId === currentUser?.id
   ) {
     return (
       <div className={styles.editTeamCell}>
@@ -58,7 +58,11 @@ const EditUserCell = ({ currentRow }: EditUserCellProps) => {
           Edit
         </BasicButton>
         {popupOpen && (
-          <EditUserPopup currentRow={currentRow} togglePopup={togglePopup} />
+          <EditUserPopup
+            currentRow={currentRow}
+            currentUser={currentUser}
+            togglePopup={togglePopup}
+          />
         )}
       </div>
     );

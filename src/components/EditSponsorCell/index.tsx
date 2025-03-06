@@ -2,13 +2,14 @@ import { memo, useCallback, useEffect, useState } from "react";
 
 import styles from "@/components/EditSponsorCell/index.module.scss";
 import PlusIcon from "@/components/svgs/PlusIcon";
-import { useUser } from "@clerk/nextjs";
+import { type UserResource } from "@clerk/types";
 import { type SponsorLevel } from "@prisma/client";
 
 import BasicButton from "../Buttons/BasicButton";
 import EditSponsorPopup from "./EditSponsorPopup";
 
 export interface EditSponsorCellProps {
+  currentUser: UserResource | undefined | null;
   currentRow: {
     id: number;
     name: string;
@@ -20,9 +21,12 @@ export interface EditSponsorCellProps {
   newSponsor: boolean;
 }
 
-const EditSponsorCell = ({ currentRow, newSponsor }: EditSponsorCellProps) => {
+const EditSponsorCell = ({
+  currentRow,
+  currentUser,
+  newSponsor,
+}: EditSponsorCellProps) => {
   const [popupOpen, setPopupOpen] = useState(false);
-  const { user } = useUser();
   const togglePopup = useCallback(() => {
     setPopupOpen((prev) => !prev);
   }, []);
@@ -42,8 +46,8 @@ const EditSponsorCell = ({ currentRow, newSponsor }: EditSponsorCellProps) => {
 
   if (
     !(
-      user?.publicMetadata?.role === "admin" ||
-      user?.publicMetadata?.role === "business"
+      currentUser?.publicMetadata?.role === "admin" ||
+      currentUser?.publicMetadata?.role === "business"
     )
   ) {
     return null;
@@ -56,6 +60,7 @@ const EditSponsorCell = ({ currentRow, newSponsor }: EditSponsorCellProps) => {
         {popupOpen && (
           <EditSponsorPopup
             currentRow={currentRow}
+            currentUser={currentUser}
             newSponsor
             togglePopup={togglePopup}
           />
@@ -72,6 +77,7 @@ const EditSponsorCell = ({ currentRow, newSponsor }: EditSponsorCellProps) => {
       {popupOpen && (
         <EditSponsorPopup
           currentRow={currentRow}
+          currentUser={currentUser}
           newSponsor={false}
           togglePopup={togglePopup}
         />

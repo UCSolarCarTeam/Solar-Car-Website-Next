@@ -6,14 +6,14 @@ const MinusIcon = () => {
       fill="#ffffff"
       height="36px"
       stroke="#000000"
-      stroke-width="0.0033"
+      strokeWidth="0.0033"
       viewBox="0 0 330.00 330.00"
       width="36px"
       xmlSpace="preserve"
     >
-      <g stroke-width="0" />
+      <g strokeWidth="0" />
 
-      <g stroke-linecap="round" stroke-linejoin="round" />
+      <g strokeLinecap="round" strokeLinejoin="round" />
 
       <g>
         <g>

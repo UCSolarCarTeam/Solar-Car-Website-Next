@@ -2,11 +2,12 @@ import { memo } from "react";
 
 import styles from "@/components/EditSponsorCell/index.module.scss";
 import { api } from "@/utils/api";
-import { useUser } from "@clerk/nextjs";
+import { type UserResource } from "@clerk/types";
 
 import BasicButton from "../Buttons/BasicButton";
 
 export interface DeleteSponsorProps {
+  currentUser: UserResource | undefined | null;
   currentRow: {
     id: number;
     name: string;
@@ -16,17 +17,17 @@ export interface DeleteSponsorProps {
   };
 }
 
-const DeleteSponsor = ({ currentRow }: DeleteSponsorProps) => {
-  const { user } = useUser();
+const DeleteSponsor = ({ currentRow, currentUser }: DeleteSponsorProps) => {
   const utils = api.useUtils();
   const deleteSponsorMutation = api.portal.deleteSponsor.useMutation({
     onSuccess: async () => {
       await utils.portal.getSponsorsList.invalidate();
     },
   });
+
   if (
-    user?.publicMetadata?.role === "admin" ||
-    user?.publicMetadata?.role === "business"
+    currentUser?.publicMetadata?.role === "admin" ||
+    currentUser?.publicMetadata?.role === "business"
   ) {
     return (
       <div className={styles.editSponsorCell}>

@@ -6,7 +6,7 @@ import Select from "react-select";
 
 import { type UserRole } from "@/server/api/routers/portal";
 import { type RouterOutputs, api } from "@/utils/api";
-import { useUser } from "@clerk/nextjs";
+import { type UserResource } from "@clerk/types";
 import {
   createColumnHelper,
   flexRender,
@@ -18,8 +18,10 @@ import styles from "./index.module.scss";
 
 type User = RouterOutputs["portal"]["getClerkUsers"][number];
 
-const UsersTable = (props: { users: User[] }) => {
-  const { user } = useUser();
+const UsersTable = (props: {
+  users: User[];
+  currentUser: UserResource | undefined | null;
+}) => {
   const utils = api.useUtils();
   const mutateUserRole = api.portal.updateUserRole.useMutation({
     onSuccess: async () => {
@@ -63,8 +65,8 @@ const UsersTable = (props: { users: User[] }) => {
         cell: (info) => (
           <Select
             isDisabled={
-              user?.publicMetadata.role !== "admin" ||
-              info.row.original.id === user?.id
+              props.currentUser?.publicMetadata.role !== "admin" ||
+              info.row.original.id === props.currentUser?.id
             }
             onChange={(option) => {
               if (option) {
@@ -93,7 +95,12 @@ const UsersTable = (props: { users: User[] }) => {
         header: "Role",
       }),
     ],
-    [columnHelper, mutateUserRole, user?.id, user?.publicMetadata.role],
+    [
+      columnHelper,
+      mutateUserRole,
+      props.currentUser?.id,
+      props.currentUser?.publicMetadata.role,
+    ],
   );
 
   const table = useReactTable({
