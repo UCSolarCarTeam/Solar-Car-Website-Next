@@ -50,7 +50,8 @@ export default async function handler(
             },
           });
         } else if (eventType === "user.deleted") {
-          await db.user.delete({
+          // doing delete many because it wont throw an error if the user is not found or already deleted
+          await db.user.deleteMany({
             where: {
               clerkUserId: evt.data.id,
             },
