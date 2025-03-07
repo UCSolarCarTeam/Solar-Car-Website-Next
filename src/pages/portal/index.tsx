@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
-import { memo } from "react";
+import { memo, useEffect } from "react";
 
 import PortalPageHeader from "@/components/Portal/PortalPageHeader";
 import SponsorsTable from "@/components/Portal/SponsorsTable";
@@ -16,6 +16,10 @@ const Portal = () => {
   const clerkUsers = api.portal.getClerkUsers.useQuery();
   const dbUsers = api.portal.getDBUsers.useQuery();
   const sponsors = api.portal.getSponsorsList.useQuery();
+
+  useEffect(() => {
+    document.documentElement.style.backgroundColor = "white";
+  }, []);
 
   if (!isLoaded || clerkUsers.isFetching || dbUsers.isFetching) {
     return null;
