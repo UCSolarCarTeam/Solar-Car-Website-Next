@@ -10,11 +10,10 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "@/server/db";
-import { createClerkClient } from "@clerk/backend";
-import { getAuth } from "@clerk/nextjs/server";
+import { type User, createClerkClient } from "@clerk/backend";
+import { currentUser } from "@clerk/nextjs/server";
 import { createClient } from "@supabase/supabase-js";
 import { TRPCError, initTRPC } from "@trpc/server";
-import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 
 const clerkClient = createClerkClient({
   secretKey: process.env.CLERK_SECRET_KEY,
@@ -34,7 +33,7 @@ const supabaseClient = createClient(
  */
 
 type CreateContextOptions = {
-  user: ReturnType<typeof getAuth>;
+  user: User | null;
   db: typeof db;
   clerkClient: typeof clerkClient;
   supabaseClient: typeof supabaseClient;
@@ -57,10 +56,11 @@ type CreateContextOptions = {
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = (
-  _opts: CreateNextContextOptions,
-): CreateContextOptions => {
-  return { clerkClient, db, supabaseClient, user: getAuth(_opts.req) };
+export const createTRPCContext = async (opts: {
+  headers: Headers;
+}): Promise<CreateContextOptions> => {
+  const user = await currentUser();
+  return { clerkClient, db, supabaseClient, user, ...opts };
 };
 
 /**
@@ -130,7 +130,7 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
 });
 
 const isAuthedMiddleware = t.middleware(({ ctx, next }) => {
-  if (!ctx.user.userId) {
+  if (!ctx.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
   return next({
@@ -139,8 +139,8 @@ const isAuthedMiddleware = t.middleware(({ ctx, next }) => {
 });
 
 const isAdminMiddleware = t.middleware(async ({ ctx, next }) => {
-  if (ctx.user.userId) {
-    const user = await ctx.clerkClient.users.getUser(ctx.user.userId);
+  if (ctx.user) {
+    const user = await ctx.clerkClient.users.getUser(ctx.user?.id);
     if (user.publicMetadata?.role !== "admin") {
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }

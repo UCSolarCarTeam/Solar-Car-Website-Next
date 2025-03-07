@@ -7,7 +7,7 @@ import {
   SoftwareTeam,
   SponsorshipTeam,
   UpperTeamRoles,
-} from "@/types";
+} from "@/app/_types";
 import { AllTeamRoles, type User } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 

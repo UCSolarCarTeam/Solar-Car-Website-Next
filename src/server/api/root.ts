@@ -1,7 +1,6 @@
+import { feRouter } from "@/server/api/routers/fe";
 import { portalRouter } from "@/server/api/routers/portal";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
-
-import { feRouter } from "./routers/fe";
 
 /**
  * This is the primary router for your server.

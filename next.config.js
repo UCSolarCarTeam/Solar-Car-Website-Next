@@ -11,10 +11,10 @@ const config = {
    *
    * @see https://github.com/vercel/next.js/issues/41980
    */
-  i18n: {
-    defaultLocale: "en",
-    locales: ["en"],
-  },
+  // i18n: {
+  //   defaultLocale: "en",
+  //   locales: ["en"],
+  // },
   images: {
     localPatterns: [
       {
@@ -37,8 +37,8 @@ const config = {
       },
     ],
   },
-  reactStrictMode: true,
-  transpilePackages: ["geist"],
+  // reactStrictMode: true,
+  // transpilePackages: ["geist"],
 };
 
 export default config;
