@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { memo, useMemo } from "react";
 
 import Footer from "@/app/_components/Footer";
@@ -46,15 +47,20 @@ const Recruitment = () => {
                   <div className={styles.applicationDescription}>
                     {application.description}
                   </div>
-                  <BasicButton
-                    style={{
-                      backgroundColor: "var(--primary-red)",
-                      marginTop: "auto",
-                      textTransform: "uppercase",
-                    }}
+                  <Link
+                    href={application.link}
+                    style={{ marginTop: "auto" }}
+                    target="_blank"
                   >
-                    Apply now
-                  </BasicButton>
+                    <BasicButton
+                      style={{
+                        backgroundColor: "var(--primary-red)",
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      Apply now
+                    </BasicButton>
+                  </Link>
                 </div>
               ))}
             </div>
