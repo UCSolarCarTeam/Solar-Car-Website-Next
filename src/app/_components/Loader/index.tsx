@@ -2,10 +2,10 @@ import { memo } from "react";
 import { BarLoader } from "react-spinners";
 
 export interface LoaderProps {
-  isImageLoading: boolean;
+  isLoading: boolean;
 }
 
-const Loader = ({ isImageLoading }: LoaderProps) => {
+const Loader = ({ isLoading }: LoaderProps) => {
   return (
     <div
       style={{
@@ -24,7 +24,7 @@ const Loader = ({ isImageLoading }: LoaderProps) => {
       <BarLoader
         color="#e6e6e6"
         height="6px"
-        loading={isImageLoading}
+        loading={isLoading}
         width="148px"
       />
     </div>

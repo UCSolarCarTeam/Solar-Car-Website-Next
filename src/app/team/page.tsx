@@ -1,13 +1,13 @@
-import { memo } from "react";
+"use server";
 
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 import TeamMember from "@/app/_components/TeamMember";
 import styles from "@/app/team/index.module.scss";
-import { trpc } from "@/trpc/react";
+import { HydrateClient, trpc } from "@/trpc/server";
 
 const Team = async () => {
-  const teamHierarchy = trpc.fe.getTeamMembers.useQuery();
+  const teamHierarchy = await trpc.fe.getTeamMembers();
   const {
     accountingTeam,
     businessTeamManager,
@@ -20,10 +20,10 @@ const Team = async () => {
     softwareTeam,
     sponsorshipTeam,
     teamCaptain,
-  } = teamHierarchy.data ?? {};
+  } = teamHierarchy ?? {};
 
   return (
-    <>
+    <HydrateClient>
       <main style={{ height: "auto" }}>
         <Navbar />
         <div className={styles.container}>
@@ -151,8 +151,8 @@ const Team = async () => {
         </div>
       </main>
       <Footer />
-    </>
+    </HydrateClient>
   );
 };
 
-export default memo(Team);
+export default Team;

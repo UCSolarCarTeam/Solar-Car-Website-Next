@@ -18,7 +18,7 @@ const Home = () => {
 
   return (
     <>
-      {isImageLoading && <Loader isImageLoading={isImageLoading} />}
+      {isImageLoading && <Loader isLoading={isImageLoading} />}
       <main className={styles.main}>
         <Navbar />
         <div className={styles.container}>
@@ -38,7 +38,7 @@ const Home = () => {
             fill
             id="backsplashImage"
             loading="eager"
-            onLoadingComplete={handleImageLoad}
+            onLoad={handleImageLoad}
             placeholder="blur"
             priority
             src={backsplash}

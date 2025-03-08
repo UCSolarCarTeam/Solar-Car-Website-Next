@@ -22,7 +22,7 @@ const Contact = () => {
       <Head>
         <title>Calgary Solar Car - Contact Us</title>
       </Head>
-      {isImageLoading && <Loader isImageLoading={isImageLoading} />}
+      {isImageLoading && <Loader isLoading={isImageLoading} />}
       <main className={styles.main}>
         <>
           <Navbar />
@@ -79,7 +79,7 @@ const Contact = () => {
               fill
               id="backsplashImage"
               loading="eager"
-              onLoadingComplete={handleImageLoad}
+              onLoad={handleImageLoad}
               placeholder="blur"
               priority
               src={backsplash}

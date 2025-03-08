@@ -88,7 +88,7 @@ const CarScreenView = ({
           className={styles.backSplashImage}
           fill
           loading="eager"
-          onLoadingComplete={handleImageLoad}
+          onLoad={handleImageLoad}
           placeholder="blur"
           priority
           src={image}

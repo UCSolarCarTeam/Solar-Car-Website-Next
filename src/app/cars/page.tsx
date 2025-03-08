@@ -153,7 +153,7 @@ const Cars = () => {
       <Head>
         <title>Calgary Solar Car - Cars</title>
       </Head>
-      {isImageLoading && <Loader isImageLoading={isImageLoading} />}
+      {isImageLoading && <Loader isLoading={isImageLoading} />}
       <main style={{ height: "auto" }}>
         <div className={styles.snapContainer}>
           <Pagebullets

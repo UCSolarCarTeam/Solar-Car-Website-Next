@@ -19,7 +19,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
-    "@prisma/client": "6",
+    "@prisma/client": "^6.4.1",
     "@smakss/react-scroll-direction": "^4.2.0",
     "@supabase/storage-js": "^2.7.1",
     "@supabase/supabase-js": "^2.45.4",
@@ -63,7 +63,7 @@
     "eslint-plugin-sort-destructure-keys": "^2.0.0",
     "eslint-plugin-sort-keys": "^2.3.5",
     "prettier": "^3.3.3",
-    "prisma": "6",
+    "prisma": "^6.4.1",
     "sass": "^1.79.4",
     "typescript": "^5.5.3"
   },

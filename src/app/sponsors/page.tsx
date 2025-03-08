@@ -1,17 +1,15 @@
-"use client";
+"use server";
 
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import backsplash from "public/assets/sponsors/backsplash.jpeg";
-import { memo, useCallback, useState } from "react";
 
 import Footer from "@/app/_components/Footer";
-import Loader from "@/app/_components/Loader";
 import Navbar from "@/app/_components/Navbar";
 import styles from "@/app/sponsors/index.module.scss";
 import { type RouterOutputs } from "@/trpc/react";
-import { trpc } from "@/trpc/react";
+import { HydrateClient, trpc } from "@/trpc/server";
 import { SponsorLevel } from "@prisma/client";
 
 type Sponsor = RouterOutputs["fe"]["getSponsors"][0];
@@ -45,20 +43,14 @@ const SponsorLevelImages = ({
   );
 };
 
-const Sponsors = () => {
-  const { data: sponsors } = trpc.fe.getSponsors.useQuery();
-  const [isImageLoading, setIsImageLoading] = useState(true);
-
-  const handleImageLoad = useCallback(() => {
-    setIsImageLoading(false);
-  }, []);
+const Sponsors = async () => {
+  const sponsors = await trpc.fe.getSponsors();
 
   return (
-    <>
+    <HydrateClient>
       <Head>
         <title>Calgary Solar Car - Sponsors</title>
       </Head>
-      {isImageLoading && <Loader isImageLoading={isImageLoading} />}
       <main>
         <Navbar />
         <div className={styles.container}>
@@ -128,7 +120,6 @@ const Sponsors = () => {
             fill
             id="backsplashImage"
             loading="eager"
-            onLoadingComplete={handleImageLoad}
             placeholder="blur"
             priority
             src={backsplash}
@@ -137,8 +128,8 @@ const Sponsors = () => {
         </div>
       </main>
       <Footer />
-    </>
+    </HydrateClient>
   );
 };
 
-export default memo(Sponsors);
+export default Sponsors;

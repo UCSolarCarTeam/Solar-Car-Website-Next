@@ -23,7 +23,7 @@ const SupportUs = () => {
       <Head>
         <title>Calgary Solar Car - Support Us</title>
       </Head>
-      {isImageLoading && <Loader isImageLoading={isImageLoading} />}
+      {isImageLoading && <Loader isLoading={isImageLoading} />}
       <main className={styles.main}>
         <Navbar />
         <div className={styles.container}>
@@ -46,7 +46,7 @@ const SupportUs = () => {
             fill
             id="backsplashImage"
             loading="eager"
-            onLoadingComplete={handleImageLoad}
+            onLoad={handleImageLoad}
             placeholder="blur"
             priority
             src={backsplash}
