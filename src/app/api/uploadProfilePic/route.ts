@@ -1,49 +1,49 @@
-// import { type NextApiRequest, type NextApiResponse } from "next/types";
+import { NextResponse } from "next/server";
 
-// import { supabase } from "@/app/_utils/api";
-// import { env } from "@/env";
+import { env } from "@/env";
+import { supabase } from "@/server/supabase";
 
-// export interface UploadFilePicBody {
-//   fileName: string;
-//   fileType: string;
-//   fileContent: string;
-// }
+import { type UploadFilePicBody } from "../uploadSponsorPic/route";
 
-// export default async function UploadProfilePic(
-//   req: NextApiRequest,
-//   res: NextApiResponse,
-// ) {
-//   if (req.method !== "POST") {
-//     return res.status(405).end();
-//   }
-//   try {
-//     const { fileContent, fileName, fileType } = req.body as UploadFilePicBody;
-//     const base64Data = fileContent.split(",")[1];
-//     if (base64Data) {
-//       const buffer = Buffer.from(base64Data, "base64");
+export async function POST(req: Request) {
+  try {
+    const { fileContent, fileName, fileType } =
+      (await req.json()) as UploadFilePicBody;
+    const base64Data = fileContent.split(",")[1];
+    if (base64Data) {
+      const buffer = Buffer.from(base64Data, "base64");
 
-//       if (!buffer) {
-//         throw new Error("Error converting base64 data to buffer.");
-//       }
+      if (!buffer) {
+        throw new Error("Error converting base64 data to buffer.");
+      }
 
-//       const { data: fileUpload, error } = await supabase.storage
-//         .from(env.PROFILE_PICTURE_BUCKET)
-//         .upload(fileName, buffer, {
-//           contentType: fileType,
-//           upsert: true,
-//         });
+      const { data: fileUpload, error } = await supabase.storage
+        .from(env.PROFILE_PICTURE_BUCKET)
+        .upload(fileName, buffer, {
+          contentType: fileType,
+          upsert: true,
+        });
 
-//       if (!error) {
-//         const { data: url } = supabase.storage
-//           .from(env.PROFILE_PICTURE_BUCKET)
-//           .getPublicUrl(fileUpload.path);
+      if (!error) {
+        const { data: url } = supabase.storage
+          .from(env.PROFILE_PICTURE_BUCKET)
+          .getPublicUrl(fileUpload.path);
 
-//         return res.status(200).json(url);
-//       }
+        return NextResponse.json({
+          publicUrl: url.publicUrl,
+          status: 200,
+        });
+      }
 
-//       return res.status(500).json({ error });
-//     }
-//   } catch (error) {
-//     return res.status(500).json({ error });
-//   }
-// }
+      return NextResponse.json({
+        error,
+        status: 500,
+      });
+    }
+  } catch (error) {
+    return NextResponse.json({
+      error,
+      status: 500,
+    });
+  }
+}

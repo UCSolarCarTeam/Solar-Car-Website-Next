@@ -31,7 +31,7 @@ const SponsorLevelImages = ({
         .map((sponsor) => (
           <div className={styles.sponsorContainer} key={sponsorLevel}>
             <div className={styles.sponsor} key={sponsor.name}>
-              <Link href={sponsor.websiteUrl} prefetch={false}>
+              <Link href={sponsor.websiteUrl} prefetch={false} target="_blank">
                 <Image
                   alt={sponsor.name}
                   fill
