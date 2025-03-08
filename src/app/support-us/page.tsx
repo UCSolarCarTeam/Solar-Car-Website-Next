@@ -20,9 +20,6 @@ const SupportUs = () => {
 
   return (
     <>
-      <Head>
-        <title>Calgary Solar Car - Support Us</title>
-      </Head>
       {isImageLoading && <Loader isLoading={isImageLoading} />}
       <main className={styles.main}>
         <Navbar />

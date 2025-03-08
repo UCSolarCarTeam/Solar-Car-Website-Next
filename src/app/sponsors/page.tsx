@@ -1,8 +1,10 @@
+"use client";
+
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import backsplash from "public/assets/sponsors/backsplash.jpeg";
-import { useCallback, useState } from "react";
+import { memo, useCallback, useState } from "react";
 
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
@@ -55,9 +57,6 @@ const Sponsors = () => {
 
   return (
     <>
-      <Head>
-        <title>Calgary Solar Car - Sponsors</title>
-      </Head>
       {isImageLoading && <Loader isLoading={isImageLoading} />}
       <main>
         <Navbar />
@@ -141,4 +140,4 @@ const Sponsors = () => {
   );
 };
 
-export default Sponsors;
+export default memo(Sponsors);

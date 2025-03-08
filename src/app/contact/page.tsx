@@ -19,9 +19,6 @@ const Contact = () => {
 
   return (
     <>
-      <Head>
-        <title>Calgary Solar Car - Contact Us</title>
-      </Head>
       {isImageLoading && <Loader isLoading={isImageLoading} />}
       <main className={styles.main}>
         <>

@@ -44,9 +44,6 @@ const Portal = () => {
 
   return (
     <>
-      <Head>
-        <title>Calgary Solar Car - Portal</title>
-      </Head>
       <main style={{ height: "auto" }}>
         <SignedIn>
           <div>

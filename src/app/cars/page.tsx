@@ -1,6 +1,5 @@
 "use client";
 
-import Head from "next/head";
 import backsplash1 from "public/assets/cars/backsplash1.jpeg";
 import backsplash2 from "public/assets/cars/backsplash2.jpeg";
 import backsplash3 from "public/assets/cars/backsplash3.jpeg";
@@ -150,9 +149,6 @@ const Cars = () => {
 
   return (
     <>
-      <Head>
-        <title>Calgary Solar Car - Cars</title>
-      </Head>
       {isImageLoading && <Loader isLoading={isImageLoading} />}
       <main style={{ height: "auto" }}>
         <div className={styles.snapContainer}>
