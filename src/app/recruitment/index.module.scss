@@ -1,0 +1,122 @@
+.main {
+  height: 100vh;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+
+  padding: 0rem 12rem;
+
+  > img {
+    z-index: -1;
+  }
+
+  color: white;
+}
+
+.pageHeading {
+  width: 100%;
+  text-align: center;
+  font-size: 5em;
+  color: white;
+  padding: 1em 0;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0.5px 10px black;
+  font-weight: 450;
+}
+
+.application {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.applicationContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+
+  .applicationTitle {
+    font-size: 1.8em;
+    font-weight: 600;
+  }
+
+  .applicationDescription {
+    font-size: 1.1em;
+    font-weight: 400;
+  }
+
+  &:nth-last-child(odd) > :last-child {
+    grid-column: 1 / -1; /* Span across all columns */
+    max-width: calc(50% - 12px); /* Constrain width to one column's width */
+    justify-self: center; /* Center the element */
+  }
+}
+
+@media (max-width: 1024px) {
+  .main {
+    height: 100%;
+  }
+  .container {
+    padding: 0rem 2rem;
+  }
+  .applicationContainer {
+    grid-template-columns: repeat(1, 1fr);
+    &:nth-last-child(odd) > :last-child {
+      grid-column: span 1;
+      max-width: 100%;
+      justify-self: stretch;
+    }
+  }
+  .pageHeading {
+    letter-spacing: 0;
+    padding-top: 0.8em;
+  }
+}
+
+@media (max-width: 640px) {
+  .main {
+    height: 100%;
+  }
+  .container {
+    padding: 0rem 2rem;
+  }
+  .applicationContainer {
+    grid-template-columns: repeat(1, 1fr);
+    &:nth-last-child(odd) > :last-child {
+      grid-column: span 1;
+      max-width: 100%;
+      justify-self: stretch;
+    }
+  }
+  .pageHeading {
+    font-size: 2.7em;
+  }
+}
+
+@media screen and (max-height: 768px) {
+  .main {
+    height: 100%;
+  }
+  .container {
+    padding: 0rem 2rem;
+  }
+  .applicationContainer {
+    grid-template-columns: repeat(1, 1fr);
+    &:nth-last-child(odd) > :last-child {
+      grid-column: span 1;
+      max-width: 100%;
+      justify-self: stretch;
+    }
+  }
+  .pageHeading {
+    padding-top: 0.5em;
+    font-size: 3.6em;
+  }
+}

@@ -26,6 +26,7 @@ const Navbar = () => {
   const links = useMemo(
     () => [
       { href: "/", label: "Home" },
+      { href: "/recruitment", label: "Recruitment" },
       { href: "/cars", label: "Cars" },
       { href: "/team", label: "Team" },
       { href: "/support-us", label: "Support Us" },
