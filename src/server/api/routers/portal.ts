@@ -1,11 +1,11 @@
 import { z } from "zod";
 
+import { UpperTeamRoles } from "@/app/_types";
 import {
   adminMiddleware,
   authedProcedure,
   createTRPCRouter,
 } from "@/server/api/trpc";
-import { UpperTeamRoles } from "@/types";
 import { AllTeamRoles, SponsorLevel } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 
@@ -126,14 +126,14 @@ export const portalRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       try {
-        if (!ctx.user.userId) {
+        if (!ctx.user?.id) {
           throw new TRPCError({
             code: "UNAUTHORIZED",
             message: "User not authenticated.",
           });
         }
 
-        const user = await ctx.clerkClient.users.getUser(ctx.user.userId);
+        const user = await ctx.clerkClient.users.getUser(ctx.user?.id);
         const isUpperTeamRole = Object.values(UpperTeamRoles).includes(
           input.teamRole as UpperTeamRoles,
         );
