@@ -38,6 +38,7 @@
 
 .main {
   height: 100vh;
+  overflow-x: hidden;
 }
 
 @supports (height: 100dvh) {
