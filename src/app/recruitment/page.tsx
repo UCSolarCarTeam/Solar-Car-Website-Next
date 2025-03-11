@@ -12,7 +12,7 @@ const Recruitment = () => {
     () => [
       {
         description:
-          "The University of Calgary Solar Car Team is a student-run organization that designs, builds, and races a Solar Car in competitions throughout North America. After a 2-year hiatus from racing in competition, we are aiming to race at the 2025 Formula Sun Grand Prix this summer. We are designing a new car, Schulich Helios, and Sponsorship's role is to raise funding, procure parts, and to maintain our current sponsor relationships. We are looking for 4-5 Sponsorship Associates to help us reach our goal of racing in Summer 2025.",
+          "We are designing a new car, Schulich Helios, and Sponsorship's role is to raise funding, procure parts, and to maintain our current sponsor relationships. We are looking for 4-5 Sponsorship Associates to help us reach our goal of racing in the 2025 Formula Sun Grand Prix this summer.",
         link: "https://forms.office.com/Pages/ResponsePage.aspx?id=7KAJxuOlMUaWhhkigL2RUfHgMcdYrQFJs3mnRL_BDrVUN0FDMExRSkFKRFY3VkkxQjhLTElDUDJSSS4u",
         title: "Sponsorship Team",
       },

@@ -1,5 +1,5 @@
 .main {
-  height: 100vh;
+  min-height: 100dvh;
 }
 
 .container {
@@ -60,9 +60,6 @@
 }
 
 @media (max-width: 1024px) {
-  .main {
-    height: 100%;
-  }
   .container {
     padding: 0rem 2rem;
   }
@@ -81,9 +78,6 @@
 }
 
 @media (max-width: 640px) {
-  .main {
-    height: 100%;
-  }
   .container {
     padding: 0rem 2rem;
   }
@@ -101,9 +95,6 @@
 }
 
 @media screen and (max-height: 768px) {
-  .main {
-    height: 100%;
-  }
   .container {
     padding: 0rem 2rem;
   }
