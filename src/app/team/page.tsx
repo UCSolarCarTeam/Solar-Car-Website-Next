@@ -33,7 +33,7 @@ const Team = async () => {
 
   return (
     <HydrateClient>
-      <main style={{ height: "auto" }}>
+      <main style={{ height: "100vh" }}>
         <Navbar />
         <div className={styles.container}>
           <div className={styles.title}>Our Team</div>
