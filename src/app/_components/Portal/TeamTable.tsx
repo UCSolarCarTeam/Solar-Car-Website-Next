@@ -103,7 +103,7 @@ const TeamTable = (props: {
     [columnHelper, props.currentUser],
   );
 
-  const shouldShowModifyColumns = useMemo(
+  const shouldShowDeleteColumn = useMemo(
     () =>
       props.currentUser?.publicMetadata?.role === "admin" ||
       props.currentUser?.publicMetadata?.role === "business",
@@ -116,8 +116,7 @@ const TeamTable = (props: {
     getCoreRowModel: getCoreRowModel(),
     initialState: {
       columnVisibility: {
-        delete: shouldShowModifyColumns,
-        edit: shouldShowModifyColumns,
+        delete: shouldShowDeleteColumn,
       },
     },
   });

@@ -48,9 +48,9 @@ const EditUserCell = ({ currentRow, currentUser }: EditUserCellProps) => {
   }, []);
 
   if (
+    currentRow.clerkUserId === currentUser?.id ||
     currentUser?.publicMetadata?.role === "admin" ||
-    currentUser?.publicMetadata?.role === "business" ||
-    currentRow.clerkUserId === currentUser?.id
+    currentUser?.publicMetadata?.role === "business"
   ) {
     return (
       <div className={styles.editTeamCell}>

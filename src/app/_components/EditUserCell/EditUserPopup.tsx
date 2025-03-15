@@ -5,6 +5,7 @@ import { memo, useCallback, useMemo, useState } from "react";
 import CloseButton from "@/app/_components/Buttons/CloseButton";
 import { type EditUserCellProps } from "@/app/_components/EditUserCell";
 import styles from "@/app/_components/EditUserCell/index.module.scss";
+import { compress } from "@/app/_lib/compress";
 import {
   AccountingTeam,
   CommunicationsTeam,
@@ -25,9 +26,14 @@ type EditUserPopupProps = {
 } & EditUserCellProps;
 
 const EditUserPopup = ({ currentRow, togglePopup }: EditUserPopupProps) => {
+  const [error, setError] = useState(false);
   const { user } = useUser();
   const utils = trpc.useUtils();
   const mutateUserContent = trpc.portal.updateDBUser.useMutation({
+    onError: () => {
+      setSaving(false);
+      setError(true);
+    },
     onSuccess: async () => {
       await utils.portal.getDBUsers.invalidate();
       setSaving(false);
@@ -176,7 +182,8 @@ const EditUserPopup = ({ currentRow, togglePopup }: EditUserPopupProps) => {
           }
         };
 
-        reader.readAsDataURL(imageFile);
+        const compressedFile = await compress(imageFile);
+        reader.readAsDataURL(compressedFile);
       } else {
         mutateUserContent.mutate(newRowData);
       }
@@ -282,6 +289,14 @@ const EditUserPopup = ({ currentRow, togglePopup }: EditUserPopupProps) => {
         <div className={styles.buttonContainer}>
           {saving ? (
             <p>Saving...</p>
+          ) : error ? (
+            <div>
+              <div>
+                There was an error saving your changes. Please contact Telemetry
+                team for assistance.
+              </div>
+              <BasicButton onClick={togglePopup}>Close</BasicButton>
+            </div>
           ) : (
             <>
               <BasicButton onClick={togglePopup}>Cancel</BasicButton>

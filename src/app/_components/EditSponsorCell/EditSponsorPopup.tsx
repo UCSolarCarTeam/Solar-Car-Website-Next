@@ -5,6 +5,7 @@ import { memo, useCallback, useMemo, useState } from "react";
 import CloseButton from "@/app/_components/Buttons/CloseButton";
 import { type EditSponsorCellProps } from "@/app/_components/EditSponsorCell";
 import styles from "@/app/_components/EditSponsorCell/index.module.scss";
+import { compress } from "@/app/_lib/compress";
 import { trpc } from "@/trpc/react";
 import { SponsorLevel } from "@prisma/client";
 
@@ -19,8 +20,13 @@ const EditSponsorPopup = ({
   newSponsor,
   togglePopup,
 }: EditSponsorPopupProps) => {
+  const [error, setError] = useState(false);
   const utils = trpc.useUtils();
   const createSponsor = trpc.portal.createSponsor.useMutation({
+    onError: () => {
+      setSaving(false);
+      setError(true);
+    },
     onSuccess: async () => {
       await utils.portal.getSponsorsList.invalidate();
       setSaving(false);
@@ -129,7 +135,8 @@ const EditSponsorPopup = ({
           }
         };
 
-        reader.readAsDataURL(imageFile);
+        const compressedFile = await compress(imageFile);
+        reader.readAsDataURL(compressedFile);
       } else {
         if (newSponsor) {
           createSponsor.mutate({
@@ -234,6 +241,14 @@ const EditSponsorPopup = ({
         <div className={styles.buttonContainer}>
           {saving ? (
             <p>Saving...</p>
+          ) : error ? (
+            <div>
+              <div>
+                There was an error saving your changes. Please contact Telemetry
+                team for assistance.
+              </div>
+              <BasicButton onClick={togglePopup}>Close</BasicButton>
+            </div>
           ) : (
             <>
               <BasicButton onClick={togglePopup}>Cancel</BasicButton>
