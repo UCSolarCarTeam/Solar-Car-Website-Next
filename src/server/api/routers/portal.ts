@@ -63,7 +63,9 @@ export const portalRouter = createTRPCRouter({
 
   getClerkUsers: authedProcedure.query(async ({ ctx }) => {
     try {
-      const users = await ctx.clerkClient.users.getUserList();
+      const users = await ctx.clerkClient.users.getUserList({
+        limit: 500,
+      });
 
       return users.data.map((user) => ({
         email: user.emailAddresses[0]?.emailAddress,
