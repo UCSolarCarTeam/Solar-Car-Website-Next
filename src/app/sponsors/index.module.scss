@@ -1,7 +1,5 @@
 .container {
-  width: 99vw;
-  color: white;
-  text-shadow: 0 0.5px 10px black;
+  width: 100dvw;
 
   > img {
     z-index: -1;
@@ -18,7 +16,6 @@
   width: 100%;
   text-align: center;
   font-size: 5em;
-  color: white;
   padding-top: 0.5em;
   letter-spacing: 0.1em;
 }
@@ -47,7 +44,8 @@
 }
 
 .otherSponsors {
-  background-color: #121212;
+  color: black;
+  background-color: white;
   margin-top: 11%;
   padding: 0 1rem;
   border-radius: 50px 50px 0 0;
