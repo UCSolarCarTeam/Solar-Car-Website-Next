@@ -123,7 +123,7 @@ const TeamTable = (props: {
   });
 
   return (
-    <div>
+    <div id="team">
       <div className={styles.tableHeader}>Team Members</div>
       <div className={styles.tableContainer}>
         <table>

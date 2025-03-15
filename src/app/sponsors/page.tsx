@@ -47,7 +47,7 @@ const SponsorLevelImages = ({
 };
 
 const Sponsors = () => {
-  const { data: sponsors } = trpc.fe.getSponsors.useQuery();
+  const { data: sponsors, isFetching } = trpc.fe.getSponsors.useQuery();
 
   const [isImageLoading, setIsImageLoading] = useState(true);
 
@@ -57,7 +57,7 @@ const Sponsors = () => {
 
   return (
     <>
-      {isImageLoading && <Loader isLoading={isImageLoading} />}
+      {(isImageLoading || isFetching) && <Loader isLoading={isImageLoading} />}
       <main>
         <Navbar />
         <div className={styles.container}>

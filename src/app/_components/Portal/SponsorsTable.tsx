@@ -102,7 +102,7 @@ const SponsorsTable = (props: {
   });
 
   return (
-    <div>
+    <div id="sponsors">
       <div className={styles.tableHeader}>
         Sponsors
         <EditSponsorPopup

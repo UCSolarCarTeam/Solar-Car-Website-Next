@@ -110,7 +110,7 @@ const UsersTable = (props: {
   });
 
   return (
-    <div>
+    <div id="users">
       <div className={styles.tableHeader}>Portal Users</div>
       <div className={styles.tableContainer}>
         <table className={styles.table}>

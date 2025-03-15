@@ -49,8 +49,8 @@ const Portal = () => {
           <div>
             <PortalPageHeader currentUser={user} />
             <div className={styles.portalContent}>
-              <UsersTable currentUser={user} users={clerkUsers.data ?? []} />
               <TeamTable currentUser={user} users={dbUsers.data ?? []} />
+              <UsersTable currentUser={user} users={clerkUsers.data ?? []} />
               <SponsorsTable
                 currentUser={user}
                 sponsors={sponsors.data ?? []}
