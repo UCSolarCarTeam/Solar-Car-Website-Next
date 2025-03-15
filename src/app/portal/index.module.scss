@@ -11,7 +11,7 @@
   display: grid;
   grid-template-columns: 1fr;
   row-gap: 24px;
-  width: 100vw;
+  max-width: 100dvw;
   padding: 24px;
   height: 100%;
   * table {

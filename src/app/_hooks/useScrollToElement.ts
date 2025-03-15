@@ -5,10 +5,12 @@ const useScrollToElement = () => {
     const element = document.getElementById(elementId);
 
     if (element) {
-      element.scrollIntoView({
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - 120;
+
+      window.scrollTo({
         behavior: "smooth",
-        block: "start",
-        inline: "nearest",
+        top: offsetPosition,
       });
     } else {
     }

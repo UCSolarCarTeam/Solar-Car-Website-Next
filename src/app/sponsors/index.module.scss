@@ -1,5 +1,7 @@
 .container {
-  width: 100dvw;
+  max-width: 100dvw;
+  color: white;
+  text-shadow: 0 0.5px 10px black;
 
   > img {
     z-index: -1;
@@ -44,6 +46,7 @@
 }
 
 .otherSponsors {
+  text-shadow: none;
   color: black;
   background-color: white;
   margin-top: 11%;
