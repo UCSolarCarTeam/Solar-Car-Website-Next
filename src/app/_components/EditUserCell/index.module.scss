@@ -122,10 +122,17 @@
     }
   }
 
+  .profileImageContainer {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
   .popupProfileImage {
     position: relative;
     width: 256px;
-    height: 200px;
+    height: auto;
   }
 }
 
@@ -142,9 +149,16 @@
 }
 
 @media (max-width: 1024px) {
+  .popupForm {
+    width: 100%;
+  }
+
   .popupLayout {
     display: flex;
     flex-direction: column;
+    padding: 0;
+    overflow-y: scroll;
+    justify-content: unset;
   }
 
   .popupProfileImage {
@@ -157,6 +171,12 @@
 @media (max-width: 768px) {
   .popupForm {
     grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .popoutLayout {
+    display: flex;
+    flex-direction: column;
   }
 
   .popupContent {

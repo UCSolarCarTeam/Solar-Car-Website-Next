@@ -10,6 +10,7 @@ import { trpc } from "@/trpc/react";
 import { SponsorLevel } from "@prisma/client";
 
 import BasicButton from "../Buttons/BasicButton";
+import DropZone from "../DropZone";
 
 type EditSponsorPopupProps = {
   togglePopup: () => void;
@@ -161,20 +162,16 @@ const EditSponsorPopup = ({
     touched,
   ]);
 
-  const handleFileUpload = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      setTouched(true);
-      if (file) {
-        setImageFile(file);
-        setNewRowData((prev) => ({
-          ...prev,
-          logoUrl: URL.createObjectURL(file),
-        }));
-      }
-    },
-    [],
-  );
+  const handleFileUpload = useCallback((file: File) => {
+    setTouched(true);
+    if (file) {
+      setImageFile(file);
+      setNewRowData((prev) => ({
+        ...prev,
+        logoUrl: URL.createObjectURL(file),
+      }));
+    }
+  }, []);
 
   return (
     <div className={styles.popup} onClick={handleOverlayClick}>
@@ -189,22 +186,15 @@ const EditSponsorPopup = ({
                   <label htmlFor={row.id}>{row.label}</label>
                   {row.id === "logoUrl" ? (
                     <div className={styles.profileImageContainer}>
-                      <div className={styles.popupProfileImage}>
-                        <Image
-                          alt="profile image"
-                          fill
-                          src={
-                            row.value
+                      <DropZone
+                        currentImage={
+                          imageFile
+                            ? URL.createObjectURL(imageFile)
+                            : row.value
                               ? (row.value as string)
                               : defaultProfilePicture
-                          }
-                          style={{ objectFit: "cover" }}
-                        />
-                      </div>
-                      <input
-                        accept="image/*"
-                        onChange={handleFileUpload}
-                        type="file"
+                        }
+                        handleFileUpload={handleFileUpload}
                       />
                     </div>
                   ) : row.id === "sponsorLevel" ? (

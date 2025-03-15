@@ -20,6 +20,7 @@ import { trpc } from "@/trpc/react";
 import { useUser } from "@clerk/nextjs";
 
 import BasicButton from "../Buttons/BasicButton";
+import DropZone from "../DropZone";
 
 type EditUserPopupProps = {
   togglePopup: () => void;
@@ -192,20 +193,16 @@ const EditUserPopup = ({ currentRow, togglePopup }: EditUserPopupProps) => {
     }
   }, [imageFile, newRowData, togglePopup, touched]);
 
-  const handleFileUpload = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      setTouched(true);
-      if (file) {
-        setImageFile(file);
-        setNewRowData((prev) => ({
-          ...prev,
-          profilePictureUrl: URL.createObjectURL(file),
-        }));
-      }
-    },
-    [],
-  );
+  const handleFileUpload = useCallback((file: File) => {
+    setTouched(true);
+    if (file) {
+      setImageFile(file);
+      setNewRowData((prev) => ({
+        ...prev,
+        profilePictureUrl: URL.createObjectURL(file),
+      }));
+    }
+  }, []);
 
   return (
     <div className={styles.popup} onClick={handleOverlayClick}>
@@ -213,17 +210,18 @@ const EditUserPopup = ({ currentRow, togglePopup }: EditUserPopupProps) => {
         <CloseButton className={styles.closeButton} onClick={togglePopup} />
         <h2>Edit Team Member</h2>
         <div className={styles.popupLayout}>
-          <div>
-            Profile Picture
+          <div className={styles.profileImageContainer}>
+            <div>Profile Picture</div>
             <div className={styles.popupProfileImage}>
-              <Image
-                alt="profile image"
-                fill
-                src={newRowData.profilePictureUrl ?? defaultProfilePicture}
-                style={{ objectFit: "cover" }}
+              <DropZone
+                currentImage={
+                  imageFile
+                    ? URL.createObjectURL(imageFile)
+                    : (newRowData.profilePictureUrl ?? defaultProfilePicture)
+                }
+                handleFileUpload={handleFileUpload}
               />
             </div>
-            <input accept="image/*" onChange={handleFileUpload} type="file" />
           </div>
           {newRowData && (
             <div className={styles.popupForm}>
