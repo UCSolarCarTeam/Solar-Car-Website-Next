@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { memo, useEffect, useMemo } from "react";
+import { Toaster } from "react-hot-toast";
 
 import PortalPageHeader from "@/app/_components/Portal/PortalPageHeader";
 import SponsorsTable from "@/app/_components/Portal/SponsorsTable";
@@ -67,36 +68,28 @@ const Portal = () => {
     <>
       <main style={{ height: "auto" }}>
         <SignedIn>
-          <div>
-            <PortalPageHeader currentUser={user} />
-            <div className={styles.portalContent}>
-              {["admin", "business"].includes(
-                user.publicMetadata?.role as string,
-              ) ? (
-                <>
-                  <TeamTable currentUser={user} users={dbUsers.data ?? []} />
-                  <UsersTable
-                    currentUser={user}
-                    users={clerkUsers.data ?? []}
-                  />
-                  <SponsorsTable
-                    currentUser={user}
-                    sponsors={sponsors.data ?? []}
-                  />
-                </>
-              ) : (
-                <>
-                  {currentDBUser.data ? (
-                    <InlineUserPopup
-                      clerkUser={user}
-                      user={currentDBUser.data}
-                    />
-                  ) : (
-                    <></>
-                  )}
-                </>
-              )}
-            </div>
+          <PortalPageHeader currentUser={user} />
+          <div className={styles.portalContent}>
+            {["admin", "business"].includes(
+              user.publicMetadata?.role as string,
+            ) ? (
+              <>
+                <TeamTable currentUser={user} users={dbUsers.data ?? []} />
+                <UsersTable currentUser={user} users={clerkUsers.data ?? []} />
+                <SponsorsTable
+                  currentUser={user}
+                  sponsors={sponsors.data ?? []}
+                />
+              </>
+            ) : (
+              <>
+                {currentDBUser.data ? (
+                  <InlineUserPopup clerkUser={user} user={currentDBUser.data} />
+                ) : (
+                  <></>
+                )}
+              </>
+            )}
           </div>
         </SignedIn>
         <SignedOut>
@@ -104,6 +97,7 @@ const Portal = () => {
             <RedirectToSignIn />
           </div>
         </SignedOut>
+        <Toaster />
       </main>
     </>
   );

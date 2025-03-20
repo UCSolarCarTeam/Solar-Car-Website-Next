@@ -1,5 +1,6 @@
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { memo, useCallback, useMemo, useState } from "react";
+import toast from "react-hot-toast";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
 import { type EditSponsorCellProps } from "@/app/_components/EditSponsorCell";
@@ -20,22 +21,35 @@ const EditSponsorPopup = ({
   newSponsor,
   togglePopup,
 }: EditSponsorPopupProps) => {
-  const [error, setError] = useState(false);
   const utils = trpc.useUtils();
   const createSponsor = trpc.portal.createSponsor.useMutation({
     onError: () => {
+      toast.error(
+        "There was an error saving your changes. Please contact Telemetry Team.",
+      );
       setSaving(false);
-      setError(true);
     },
     onSuccess: async () => {
-      await utils.portal.getSponsorsList.invalidate();
+      await toast.promise(utils.portal.getSponsorsList.invalidate(), {
+        loading: "Saving...",
+        success: "Sponsor created successfully!",
+      });
       setSaving(false);
       togglePopup();
     },
   });
   const mutateSponsor = trpc.portal.updateSponsor.useMutation({
+    onError: () => {
+      toast.error(
+        "There was an error saving your changes. Please contact Telemetry Team.",
+      );
+      setSaving(false);
+    },
     onSuccess: async () => {
-      await utils.portal.getSponsorsList.invalidate();
+      await toast.promise(utils.portal.getSponsorsList.invalidate(), {
+        loading: "Saving...",
+        success: "Sponsor updated successfully!",
+      });
       setSaving(false);
       togglePopup();
     },
@@ -130,6 +144,9 @@ const EditSponsorPopup = ({
               });
             }
           } catch (error) {
+            toast.error(
+              "There was an error saving your changes. Please contact Telemetry Team.",
+            );
             global.console.log(error);
             togglePopup();
           }
@@ -191,7 +208,7 @@ const EditSponsorPopup = ({
                             ? URL.createObjectURL(imageFile)
                             : row.value
                               ? (row.value as string)
-                              : defaultProfilePicture
+                              : ""
                         }
                         handleFileUpload={handleFileUpload}
                       />
@@ -230,14 +247,6 @@ const EditSponsorPopup = ({
         <div className={styles.buttonContainer}>
           {saving ? (
             <p>Saving...</p>
-          ) : error ? (
-            <div>
-              <div>
-                There was an error saving your changes. Please contact Telemetry
-                team for assistance.
-              </div>
-              <BasicButton onClick={togglePopup}>Close</BasicButton>
-            </div>
           ) : (
             <>
               <BasicButton onClick={togglePopup}>Cancel</BasicButton>

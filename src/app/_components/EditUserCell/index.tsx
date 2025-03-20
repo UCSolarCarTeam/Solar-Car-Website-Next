@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useEffect, useState } from "react";
 
-import EditUserPopup from "@/app/_components/EditUserCell/EditUserPopup";
+import EditUserPopupAdmin from "@/app/_components/EditUserCell/EditUserPopupAdmin";
 import styles from "@/app/_components/EditUserCell/index.module.scss";
 import { type UserResource } from "@clerk/types";
 import { type AllTeamRoles } from "@prisma/client";
@@ -47,28 +47,20 @@ const EditUserCell = ({ currentRow, currentUser }: EditUserCellProps) => {
     };
   }, []);
 
-  if (
-    currentRow.clerkUserId === currentUser?.id ||
-    currentUser?.publicMetadata?.role === "admin" ||
-    currentUser?.publicMetadata?.role === "business"
-  ) {
-    return (
-      <div className={styles.editTeamCell}>
-        <BasicButton onClick={() => setPopupOpen((prev) => !prev)}>
-          Edit
-        </BasicButton>
-        {popupOpen && (
-          <EditUserPopup
-            currentRow={currentRow}
-            currentUser={currentUser}
-            togglePopup={togglePopup}
-          />
-        )}
-      </div>
-    );
-  }
-
-  return null;
+  return (
+    <div className={styles.editTeamCell}>
+      <BasicButton onClick={() => setPopupOpen((prev) => !prev)}>
+        Edit
+      </BasicButton>
+      {popupOpen && (
+        <EditUserPopupAdmin
+          currentRow={currentRow}
+          currentUser={currentUser}
+          togglePopup={togglePopup}
+        />
+      )}
+    </div>
+  );
 };
 
 export default memo(EditUserCell);

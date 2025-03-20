@@ -1,4 +1,5 @@
 import { memo } from "react";
+import toast from "react-hot-toast";
 
 import styles from "@/app/_components/EditSponsorCell/index.module.scss";
 import { trpc } from "@/trpc/react";
@@ -17,29 +18,32 @@ export interface DeleteSponsorProps {
   };
 }
 
-const DeleteSponsor = ({ currentRow, currentUser }: DeleteSponsorProps) => {
+const DeleteSponsor = ({ currentRow }: DeleteSponsorProps) => {
   const utils = trpc.useUtils();
   const deleteSponsorMutation = trpc.portal.deleteSponsor.useMutation({
+    onError: () => {
+      toast.error(
+        "There was an error deleting the sponsor. Please contact Telemetry Team.",
+      );
+    },
     onSuccess: async () => {
-      await utils.portal.getSponsorsList.invalidate();
+      await toast.promise(utils.portal.getSponsorsList.invalidate(), {
+        loading: "Deleting...",
+        success: "Sponsor deleted successfully!",
+      });
     },
   });
 
-  if (
-    currentUser?.publicMetadata?.role === "admin" ||
-    currentUser?.publicMetadata?.role === "business"
-  ) {
-    return (
-      <div className={styles.editSponsorCell}>
-        <BasicButton
-          onClick={() => deleteSponsorMutation.mutate(currentRow.id)}
-          style={{ backgroundColor: "#DC676C" }}
-        >
-          Delete
-        </BasicButton>
-      </div>
-    );
-  }
+  return (
+    <div className={styles.editSponsorCell}>
+      <BasicButton
+        onClick={() => deleteSponsorMutation.mutate({ id: currentRow.id })}
+        style={{ backgroundColor: "#DC676C" }}
+      >
+        Delete
+      </BasicButton>
+    </div>
+  );
 };
 
 export default memo(DeleteSponsor);

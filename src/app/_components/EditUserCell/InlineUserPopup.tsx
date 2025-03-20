@@ -1,5 +1,6 @@
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { memo, useCallback, useMemo, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 import styles from "@/app/_components/EditUserCell/index.module.scss";
 import { compress } from "@/app/_lib/compress";
@@ -23,17 +24,20 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
   const [touched, setTouched] = useState(false);
   const [newRowData, setNewRowData] = useState(user);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState(false);
 
   const mutateUserContent = trpc.portal.updateDBUser.useMutation({
     onError: () => {
       setSaving(false);
-      setError(true);
+      toast.error(
+        "There was an error saving your changes. Please contact Telemetry Team.",
+      );
     },
     onSuccess: async () => {
-      await utils.portal.getDBUsers.invalidate();
+      await toast.promise(utils.portal.getDBUsers.invalidate(), {
+        loading: "Saving...",
+        success: "Profile updated successfully!",
+      });
       setSaving(false);
-      // togglePopup();
     },
   });
 
@@ -123,6 +127,9 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
               profilePictureUrl: publicUrl,
             });
           } catch (error) {
+            toast.error(
+              "There was an error saving your changes. Please contact Telemetry Team.",
+            );
             global.console.log(error);
           }
         };
@@ -181,15 +188,6 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
                     value={row.value ?? ""}
                   >
                     <option value="">Please select</option>
-                    {clerkUser?.publicMetadata?.role === "admin" && (
-                      <optgroup key={"Lead Roles"} label="Lead Roles">
-                        {Object.entries(UpperTeamRoles).map(([key, label]) => (
-                          <option key={key} value={key}>
-                            {label}
-                          </option>
-                        ))}
-                      </optgroup>
-                    )}
                     {teamRoleOptions.map(({ label, options }) => (
                       <optgroup key={label} label={label}>
                         {Object.entries(options).map(([key, label]) => (
@@ -220,13 +218,6 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
       <div className={styles.buttonContainer}>
         {saving ? (
           <p>Saving...</p>
-        ) : error ? (
-          <div>
-            <div>
-              There was an error saving your changes. Please contact Telemetry
-              team for assistance.
-            </div>
-          </div>
         ) : (
           <BasicButton
             onClick={handleSave}

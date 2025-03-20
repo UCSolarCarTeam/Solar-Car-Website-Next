@@ -43,13 +43,31 @@ export const portalRouter = createTRPCRouter({
       }
     }),
 
+  deleteDBUser: adminMiddleware
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.db.user.delete({
+          where: {
+            id: input.id,
+          },
+        });
+        return true;
+      } catch (error) {
+        throw new TRPCError({
+          cause: error,
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
+
   deleteSponsor: adminMiddleware
-    .input(z.number())
+    .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
       try {
         await ctx.db.sponsor.delete({
           where: {
-            id: input,
+            id: input.id,
           },
         });
         return true;

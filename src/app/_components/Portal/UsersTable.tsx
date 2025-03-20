@@ -2,6 +2,7 @@ import Image from "next/image";
 import defaultProfilePictureSquare from "public/assets/DefaultProfilePicture-Square.png";
 import { useMemo, useState } from "react";
 import { memo } from "react";
+import toast from "react-hot-toast";
 import Select from "react-select";
 
 import { type UserRole } from "@/server/api/routers/portal";
@@ -39,8 +40,16 @@ const UsersTable = (props: {
   );
   const utils = trpc.useUtils();
   const mutateUserRole = trpc.portal.updateUserRole.useMutation({
+    onError: () => {
+      toast.error(
+        "There was an error saving your changes. Please contact Telemetry Team.",
+      );
+    },
     onSuccess: async () => {
-      await utils.portal.getClerkUsers.invalidate();
+      await toast.promise(utils.portal.getClerkUsers.invalidate(), {
+        loading: "Saving...",
+        success: "User updated successfully!",
+      });
     },
   });
 

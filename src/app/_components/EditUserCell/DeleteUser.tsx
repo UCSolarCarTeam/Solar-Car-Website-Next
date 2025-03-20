@@ -1,4 +1,5 @@
 import { memo } from "react";
+import toast from "react-hot-toast";
 
 import styles from "@/app/_components/EditSponsorCell/index.module.scss";
 import { trpc } from "@/trpc/react";
@@ -26,28 +27,32 @@ export interface DeleteUserProps {
   };
 }
 
-const DeleteUser = ({ currentRow, currentUser }: DeleteUserProps) => {
+const DeleteUser = ({ currentRow }: DeleteUserProps) => {
   const utils = trpc.useUtils();
-  const deleteSponsorMutation = trpc.portal.deleteSponsor.useMutation({
+  const deleteUserMutation = trpc.portal.deleteDBUser.useMutation({
+    onError: () => {
+      toast.error(
+        "There was an error deleting the user. Please contact Telemetry Team.",
+      );
+    },
     onSuccess: async () => {
-      await utils.portal.getSponsorsList.invalidate();
+      await toast.promise(utils.portal.getDBUsers.invalidate(), {
+        loading: "Deleting...",
+        success: "User deleted successfully!",
+      });
     },
   });
-  if (
-    currentUser?.publicMetadata?.role === "admin" ||
-    currentUser?.publicMetadata?.role === "business"
-  ) {
-    return (
-      <div className={styles.editSponsorCell}>
-        <BasicButton
-          onClick={() => deleteSponsorMutation.mutate(currentRow.id)}
-          style={{ backgroundColor: "#DC676C" }}
-        >
-          Delete
-        </BasicButton>
-      </div>
-    );
-  }
+
+  return (
+    <div className={styles.editSponsorCell}>
+      <BasicButton
+        onClick={() => deleteUserMutation.mutate({ id: currentRow.id })}
+        style={{ backgroundColor: "#DC676C" }}
+      >
+        Delete
+      </BasicButton>
+    </div>
+  );
 };
 
 export default memo(DeleteUser);

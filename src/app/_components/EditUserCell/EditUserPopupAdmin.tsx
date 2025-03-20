@@ -1,5 +1,6 @@
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { memo, useCallback, useMemo, useState } from "react";
+import toast from "react-hot-toast";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
 import { type EditUserCellProps } from "@/app/_components/EditUserCell";
@@ -11,23 +12,28 @@ import { trpc } from "@/trpc/react";
 import BasicButton from "../Buttons/BasicButton";
 import DropZone from "../DropZone";
 
-type EditUserPopupProps = {
+type EditUserPopupAdminProps = {
   togglePopup: () => void;
 } & EditUserCellProps;
 
-const EditUserPopup = ({
+const EditUserPopupAdmin = ({
   currentRow,
   currentUser,
   togglePopup,
-}: EditUserPopupProps) => {
+}: EditUserPopupAdminProps) => {
   const utils = trpc.useUtils();
   const mutateUserContent = trpc.portal.updateDBUser.useMutation({
     onError: () => {
       setSaving(false);
-      setError(true);
+      toast.error(
+        "There was an error saving your changes. Please contact Telemetry Team.",
+      );
     },
     onSuccess: async () => {
-      await utils.portal.getDBUsers.invalidate();
+      await toast.promise(utils.portal.getDBUsers.invalidate(), {
+        loading: "Saving...",
+        success: "Profile updated successfully!",
+      });
       setSaving(false);
       togglePopup();
     },
@@ -36,7 +42,6 @@ const EditUserPopup = ({
   const [newRowData, setNewRowData] = useState(currentRow);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState(false);
 
   const rowDataToRender = useMemo(() => {
     return Object.entries(newRowData)
@@ -122,6 +127,9 @@ const EditUserPopup = ({
               profilePictureUrl: publicUrl,
             });
           } catch (error) {
+            toast.error(
+              "There was an error saving your changes. Please contact Telemetry Team.",
+            );
             global.console.log(error);
             togglePopup();
           }
@@ -233,14 +241,6 @@ const EditUserPopup = ({
         <div className={styles.buttonContainer}>
           {saving ? (
             <p>Saving...</p>
-          ) : error ? (
-            <div>
-              <div>
-                There was an error saving your changes. Please contact Telemetry
-                team for assistance.
-              </div>
-              <BasicButton onClick={togglePopup}>Close</BasicButton>
-            </div>
           ) : (
             <>
               <BasicButton onClick={togglePopup}>Cancel</BasicButton>
@@ -258,4 +258,4 @@ const EditUserPopup = ({
   );
 };
 
-export default memo(EditUserPopup);
+export default memo(EditUserPopupAdmin);

@@ -44,15 +44,6 @@ const EditSponsorCell = ({
     };
   }, []);
 
-  if (
-    !(
-      currentUser?.publicMetadata?.role === "admin" ||
-      currentUser?.publicMetadata?.role === "business"
-    )
-  ) {
-    return null;
-  }
-
   if (newSponsor) {
     return (
       <>
