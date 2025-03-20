@@ -228,14 +228,12 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
             </div>
           </div>
         ) : (
-          <>
-            <BasicButton
-              onClick={handleSave}
-              style={{ backgroundColor: "#53A551" }}
-            >
-              Save
-            </BasicButton>
-          </>
+          <BasicButton
+            onClick={handleSave}
+            style={{ backgroundColor: "#53A551" }}
+          >
+            Save
+          </BasicButton>
         )}
       </div>
     </>

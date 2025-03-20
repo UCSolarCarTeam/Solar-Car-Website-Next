@@ -1,16 +1,10 @@
 "use server";
 
-import { type Metadata } from "next";
-
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 import TeamMember from "@/app/_components/TeamMember";
 import styles from "@/app/team/index.module.scss";
 import { HydrateClient, trpc } from "@/trpc/server";
-
-const metadata: Metadata = {
-  title: "Calgary Solar Car - Team",
-};
 
 const Team = async () => {
   const teamHierarchy = await trpc.fe.getTeamMembers();

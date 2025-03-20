@@ -1,6 +1,5 @@
 "use client";
 
-import Head from "next/head";
 import Image from "next/image";
 import backsplash from "public/assets/contact/backsplash.png";
 import { memo, useCallback, useState } from "react";

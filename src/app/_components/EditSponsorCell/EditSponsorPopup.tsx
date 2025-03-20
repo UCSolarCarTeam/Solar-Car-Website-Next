@@ -1,4 +1,3 @@
-import Image from "next/image";
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { memo, useCallback, useMemo, useState } from "react";
 

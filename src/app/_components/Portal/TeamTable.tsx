@@ -1,6 +1,6 @@
 import Image from "next/image";
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
-import { memo, useMemo } from "react";
+import { memo, useMemo, useState } from "react";
 
 import EditTeamCell from "@/app/_components/EditUserCell";
 import { type RouterOutputs } from "@/trpc/react";
@@ -13,6 +13,7 @@ import {
 } from "@tanstack/react-table";
 
 import DeleteUser from "../EditUserCell/DeleteUser";
+import SearchBar from "../SearchBar";
 import styles from "./index.module.scss";
 
 export type TeamMember = RouterOutputs["portal"]["getDBUsers"][number];
@@ -21,6 +22,19 @@ const TeamTable = (props: {
   users: TeamMember[];
   currentUser: UserResource | undefined | null;
 }) => {
+  const [searchValue, setSearchValue] = useState("");
+  const dataToRender = useMemo(
+    () =>
+      props.users.filter((user) => {
+        const lowerSearch = searchValue.toLowerCase();
+        return (
+          (user.firstName ?? "").toLowerCase().includes(lowerSearch) ||
+          (user.lastName ?? "").toLowerCase().includes(lowerSearch) ||
+          searchValue.toLowerCase() === ""
+        );
+      }) ?? [],
+    [props.users, searchValue],
+  );
   const columnHelper = useMemo(() => createColumnHelper<TeamMember>(), []);
   const columns = useMemo(
     () => [
@@ -103,27 +117,18 @@ const TeamTable = (props: {
     [columnHelper, props.currentUser],
   );
 
-  const shouldShowDeleteColumn = useMemo(
-    () =>
-      props.currentUser?.publicMetadata?.role === "admin" ||
-      props.currentUser?.publicMetadata?.role === "business",
-    [props.currentUser?.publicMetadata?.role],
-  );
-
   const table = useReactTable({
     columns,
-    data: props.users ?? [],
+    data: dataToRender,
     getCoreRowModel: getCoreRowModel(),
-    initialState: {
-      columnVisibility: {
-        delete: shouldShowDeleteColumn,
-      },
-    },
   });
 
   return (
     <div id="team">
-      <div className={styles.tableHeader}>Team Members</div>
+      <div className={styles.tableHeader}>
+        <div>Team Members</div>
+        <SearchBar setSearchValue={setSearchValue} value={searchValue} />
+      </div>
       <div className={styles.tableContainer}>
         <table>
           <thead>

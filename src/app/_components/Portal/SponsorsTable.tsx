@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { memo, useMemo } from "react";
+import { memo, useMemo, useState } from "react";
 
 import styles from "@/app/_components/Portal/index.module.scss";
 import { type RouterOutputs } from "@/trpc/react";
@@ -16,6 +16,7 @@ import {
 import EditSponsorPopup from "../EditSponsorCell";
 import EditSponsorCell from "../EditSponsorCell";
 import DeleteSponsor from "../EditSponsorCell/DeleteSponsor";
+import SearchBar from "../SearchBar";
 
 export type Sponsor = RouterOutputs["portal"]["getSponsorsList"][number];
 
@@ -23,6 +24,19 @@ const SponsorsTable = (props: {
   sponsors: Sponsor[];
   currentUser: UserResource | undefined | null;
 }) => {
+  const [searchValue, setSearchValue] = useState("");
+  const dataToRender = useMemo(
+    () =>
+      props.sponsors.filter((sponsor) => {
+        const lowerSearch = searchValue.toLowerCase();
+        return (
+          (sponsor.name ?? "").toLowerCase().includes(lowerSearch) ||
+          (sponsor.description ?? "").toLowerCase().includes(lowerSearch) ||
+          searchValue.toLowerCase() === ""
+        );
+      }) ?? [],
+    [props.sponsors, searchValue],
+  );
   const columnHelper = useMemo(() => createColumnHelper<Sponsor>(), []);
   const columns = useMemo(
     () => [
@@ -82,45 +96,35 @@ const SponsorsTable = (props: {
     [columnHelper, props.currentUser],
   );
 
-  const shouldShowModifyColumns = useMemo(
-    () =>
-      props.currentUser?.publicMetadata?.role === "admin" ||
-      props.currentUser?.publicMetadata?.role === "business",
-    [props.currentUser?.publicMetadata?.role],
-  );
-
   const table = useReactTable({
     columns,
-    data: props.sponsors ?? [],
+    data: dataToRender,
     getCoreRowModel: getCoreRowModel(),
-    initialState: {
-      columnVisibility: {
-        delete: shouldShowModifyColumns,
-        edit: shouldShowModifyColumns,
-      },
-    },
   });
 
   return (
     <div id="sponsors">
       <div className={styles.tableHeader}>
-        Sponsors
-        <EditSponsorPopup
-          currentRow={{
-            name: "",
-            // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
-            description: "",
-            websiteUrl: "",
-            // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
-            sponsorLevel: SponsorLevel.Gold,
-            // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
-            logoUrl: "",
-            // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
-            id: -1,
-          }}
-          currentUser={props.currentUser}
-          newSponsor
-        />
+        <div>Sponsors</div>
+        <div className={styles.tableHeaderSponsorRight}>
+          <SearchBar setSearchValue={setSearchValue} value={searchValue} />
+          <EditSponsorPopup
+            currentRow={{
+              name: "",
+              // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
+              description: "",
+              websiteUrl: "",
+              // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
+              sponsorLevel: SponsorLevel.Gold,
+              // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
+              logoUrl: "",
+              // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
+              id: -1,
+            }}
+            currentUser={props.currentUser}
+            newSponsor
+          />
+        </div>
       </div>
       <div className={styles.tableContainer}>
         <table>

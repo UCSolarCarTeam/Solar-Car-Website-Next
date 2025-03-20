@@ -1,6 +1,6 @@
 import Image from "next/image";
 import defaultProfilePictureSquare from "public/assets/DefaultProfilePicture-Square.png";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { memo } from "react";
 import Select from "react-select";
 
@@ -14,6 +14,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
+import SearchBar from "../SearchBar";
 import styles from "./index.module.scss";
 
 type User = RouterOutputs["portal"]["getClerkUsers"][number];
@@ -22,6 +23,20 @@ const UsersTable = (props: {
   users: User[];
   currentUser: UserResource | undefined | null;
 }) => {
+  const [searchValue, setSearchValue] = useState("");
+  const dataToRender = useMemo(
+    () =>
+      props.users.filter((user) => {
+        const lowerSearch = searchValue.toLowerCase();
+        return (
+          (user.firstName ?? "").toLowerCase().includes(lowerSearch) ||
+          (user.lastName ?? "").toLowerCase().includes(lowerSearch) ||
+          (user.username ?? "").toLowerCase().includes(lowerSearch) ||
+          searchValue.toLowerCase() === ""
+        );
+      }) ?? [],
+    [props.users, searchValue],
+  );
   const utils = trpc.useUtils();
   const mutateUserRole = trpc.portal.updateUserRole.useMutation({
     onSuccess: async () => {
@@ -105,13 +120,16 @@ const UsersTable = (props: {
 
   const table = useReactTable({
     columns,
-    data: props.users ?? [],
+    data: dataToRender,
     getCoreRowModel: getCoreRowModel(),
   });
 
   return (
     <div id="users">
-      <div className={styles.tableHeader}>Portal Users</div>
+      <div className={styles.tableHeader}>
+        <div>Portal Users</div>
+        <SearchBar setSearchValue={setSearchValue} value={searchValue} />
+      </div>
       <div className={styles.tableContainer}>
         <table className={styles.table}>
           <thead>
