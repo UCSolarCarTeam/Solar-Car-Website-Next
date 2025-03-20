@@ -73,3 +73,46 @@ export enum MechanicalTeam {
 export enum MultiTeam {
   MultiTeam = "Multi Team",
 }
+
+export const teamRoleOptions = [
+  {
+    label: "Accounting",
+    options: AccountingTeam,
+  },
+  {
+    label: "Communications",
+    options: CommunicationsTeam,
+  },
+  {
+    label: "Sponsorship",
+    options: SponsorshipTeam,
+  },
+  {
+    label: "Software",
+    options: SoftwareTeam,
+  },
+  {
+    label: "Electrical",
+    options: ElectricalTeam,
+  },
+  {
+    label: "Mechanical",
+    options: MechanicalTeam,
+  },
+  {
+    label: "Multi-Team",
+    options: MultiTeam,
+  },
+];
+
+export const userRowMetadata = {
+  description: "string",
+  fieldOfStudy: "string",
+  firstName: "string",
+  lastName: "string",
+  phoneNumber: "string",
+  schoolEmail: "string",
+  schoolYear: "string",
+  ucid: "number",
+  yearJoined: "string",
+};

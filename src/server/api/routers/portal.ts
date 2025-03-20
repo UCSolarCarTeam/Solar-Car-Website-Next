@@ -61,7 +61,7 @@ export const portalRouter = createTRPCRouter({
       }
     }),
 
-  getClerkUsers: authedProcedure.query(async ({ ctx }) => {
+  getClerkUsers: adminMiddleware.query(async ({ ctx }) => {
     try {
       const users = await ctx.clerkClient.users.getUserList({
         limit: 500,
@@ -85,7 +85,23 @@ export const portalRouter = createTRPCRouter({
     }
   }),
 
-  getDBUsers: authedProcedure.query(async ({ ctx }) => {
+  getCurrentDBUser: authedProcedure.query(async ({ ctx }) => {
+    try {
+      const user = await ctx.db.user.findUnique({
+        where: {
+          clerkUserId: ctx.user?.id,
+        },
+      });
+      return user;
+    } catch (error) {
+      throw new TRPCError({
+        cause: error,
+        code: "INTERNAL_SERVER_ERROR",
+      });
+    }
+  }),
+
+  getDBUsers: adminMiddleware.query(async ({ ctx }) => {
     try {
       const users = await ctx.db.user.findMany({ orderBy: { id: "desc" } });
       return users;
@@ -97,7 +113,7 @@ export const portalRouter = createTRPCRouter({
     }
   }),
 
-  getSponsorsList: authedProcedure.query(async ({ ctx }) => {
+  getSponsorsList: adminMiddleware.query(async ({ ctx }) => {
     try {
       const sponsors = await ctx.db.sponsor.findMany();
       return sponsors;

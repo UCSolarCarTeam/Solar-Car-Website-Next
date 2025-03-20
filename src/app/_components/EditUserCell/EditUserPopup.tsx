@@ -1,4 +1,3 @@
-import Image from "next/image";
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { memo, useCallback, useMemo, useState } from "react";
 
@@ -6,18 +5,8 @@ import CloseButton from "@/app/_components/Buttons/CloseButton";
 import { type EditUserCellProps } from "@/app/_components/EditUserCell";
 import styles from "@/app/_components/EditUserCell/index.module.scss";
 import { compress } from "@/app/_lib/compress";
-import {
-  AccountingTeam,
-  CommunicationsTeam,
-  ElectricalTeam,
-  MechanicalTeam,
-  MultiTeam,
-  SoftwareTeam,
-  SponsorshipTeam,
-  UpperTeamRoles,
-} from "@/app/_types";
+import { UpperTeamRoles, teamRoleOptions, userRowMetadata } from "@/app/_types";
 import { trpc } from "@/trpc/react";
-import { useUser } from "@clerk/nextjs";
 
 import BasicButton from "../Buttons/BasicButton";
 import DropZone from "../DropZone";
@@ -26,9 +15,11 @@ type EditUserPopupProps = {
   togglePopup: () => void;
 } & EditUserCellProps;
 
-const EditUserPopup = ({ currentRow, togglePopup }: EditUserPopupProps) => {
-  const [error, setError] = useState(false);
-  const { user } = useUser();
+const EditUserPopup = ({
+  currentRow,
+  currentUser,
+  togglePopup,
+}: EditUserPopupProps) => {
   const utils = trpc.useUtils();
   const mutateUserContent = trpc.portal.updateDBUser.useMutation({
     onError: () => {
@@ -45,54 +36,7 @@ const EditUserPopup = ({ currentRow, togglePopup }: EditUserPopupProps) => {
   const [newRowData, setNewRowData] = useState(currentRow);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
-
-  const rowMetadata = useMemo(() => {
-    return {
-      description: "string",
-      fieldOfStudy: "string",
-      firstName: "string",
-      lastName: "string",
-      phoneNumber: "string",
-      schoolEmail: "string",
-      schoolYear: "string",
-      ucid: "number",
-      yearJoined: "string",
-    };
-  }, []);
-
-  const teamRoleOptions = useMemo(
-    () => [
-      {
-        label: "Accounting",
-        options: AccountingTeam,
-      },
-      {
-        label: "Communications",
-        options: CommunicationsTeam,
-      },
-      {
-        label: "Sponsorship",
-        options: SponsorshipTeam,
-      },
-      {
-        label: "Software",
-        options: SoftwareTeam,
-      },
-      {
-        label: "Electrical",
-        options: ElectricalTeam,
-      },
-      {
-        label: "Mechanical",
-        options: MechanicalTeam,
-      },
-      {
-        label: "Multi-Team",
-        options: MultiTeam,
-      },
-    ],
-    [],
-  );
+  const [error, setError] = useState(false);
 
   const rowDataToRender = useMemo(() => {
     return Object.entries(newRowData)
@@ -248,7 +192,7 @@ const EditUserPopup = ({ currentRow, togglePopup }: EditUserPopupProps) => {
                       value={row.value ?? ""}
                     >
                       <option value="">Please select</option>
-                      {user?.publicMetadata?.role === "admin" && (
+                      {currentUser?.publicMetadata?.role === "admin" && (
                         <optgroup key={"Lead Roles"} label="Lead Roles">
                           {Object.entries(UpperTeamRoles).map(
                             ([key, label]) => (
@@ -275,7 +219,9 @@ const EditUserPopup = ({ currentRow, togglePopup }: EditUserPopupProps) => {
                       id={row.id}
                       name={row.label}
                       onChange={onInputChange}
-                      type={rowMetadata[row.id as keyof typeof rowMetadata]}
+                      type={
+                        userRowMetadata[row.id as keyof typeof userRowMetadata]
+                      }
                       value={row.value ?? undefined}
                     />
                   )}

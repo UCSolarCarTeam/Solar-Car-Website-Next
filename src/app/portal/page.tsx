@@ -1,8 +1,7 @@
 "use client";
 
-import Head from "next/head";
 import Link from "next/link";
-import { memo, useEffect } from "react";
+import { memo, useEffect, useMemo } from "react";
 
 import PortalPageHeader from "@/app/_components/Portal/PortalPageHeader";
 import SponsorsTable from "@/app/_components/Portal/SponsorsTable";
@@ -11,19 +10,41 @@ import UsersTable from "@/app/_components/Portal/UsersTable";
 import styles from "@/app/portal/index.module.scss";
 import { trpc } from "@/trpc/react";
 import { RedirectToSignIn, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
+import { skipToken } from "@tanstack/react-query";
+
+import InlineUserPopup from "../_components/EditUserCell/InlineUserPopup";
 
 const Portal = () => {
   const { isLoaded, user } = useUser();
+  const showAdminTables = useMemo(
+    () => ["admin", "business"].includes(user?.publicMetadata?.role as string),
+    [user?.publicMetadata?.role],
+  );
 
-  const clerkUsers = trpc.portal.getClerkUsers.useQuery();
-  const dbUsers = trpc.portal.getDBUsers.useQuery();
-  const sponsors = trpc.portal.getSponsorsList.useQuery();
+  const clerkUsers = trpc.portal.getClerkUsers.useQuery(
+    !showAdminTables ? skipToken : undefined,
+  );
+  const dbUsers = trpc.portal.getDBUsers.useQuery(
+    !showAdminTables ? skipToken : undefined,
+  );
+  const sponsors = trpc.portal.getSponsorsList.useQuery(
+    !showAdminTables ? skipToken : undefined,
+  );
+  const currentDBUser = trpc.portal.getCurrentDBUser.useQuery(
+    showAdminTables ? skipToken : undefined,
+  );
 
   useEffect(() => {
     document.documentElement.style.backgroundColor = "white";
   }, []);
 
-  if (!isLoaded || clerkUsers.isFetching || dbUsers.isFetching) {
+  if (
+    !isLoaded ||
+    clerkUsers.isFetching ||
+    dbUsers.isFetching ||
+    sponsors.isFetching ||
+    currentDBUser.isFetching
+  ) {
     return null;
   }
 
@@ -49,12 +70,32 @@ const Portal = () => {
           <div>
             <PortalPageHeader currentUser={user} />
             <div className={styles.portalContent}>
-              <TeamTable currentUser={user} users={dbUsers.data ?? []} />
-              <UsersTable currentUser={user} users={clerkUsers.data ?? []} />
-              <SponsorsTable
-                currentUser={user}
-                sponsors={sponsors.data ?? []}
-              />
+              {["admin", "business"].includes(
+                user.publicMetadata?.role as string,
+              ) ? (
+                <>
+                  <TeamTable currentUser={user} users={dbUsers.data ?? []} />
+                  <UsersTable
+                    currentUser={user}
+                    users={clerkUsers.data ?? []}
+                  />
+                  <SponsorsTable
+                    currentUser={user}
+                    sponsors={sponsors.data ?? []}
+                  />
+                </>
+              ) : (
+                <>
+                  {currentDBUser.data ? (
+                    <InlineUserPopup
+                      clerkUser={user}
+                      user={currentDBUser.data}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                </>
+              )}
             </div>
           </div>
         </SignedIn>

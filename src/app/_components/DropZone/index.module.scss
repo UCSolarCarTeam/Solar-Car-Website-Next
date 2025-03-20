@@ -9,7 +9,6 @@
   position: relative;
 
   img {
-    z-index: -10;
     opacity: 25%;
   }
 
@@ -27,6 +26,7 @@
 }
 
 .label {
+  z-index: 2;
   cursor: pointer;
   display: flex;
   flex-direction: column;
