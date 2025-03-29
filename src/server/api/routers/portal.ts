@@ -85,16 +85,31 @@ export const portalRouter = createTRPCRouter({
         limit: 500,
       });
 
-      return users.data.map((user) => ({
-        email: user.emailAddresses[0]?.emailAddress,
-        firstName: user.firstName,
-        id: user.id,
-        imageUrl: user.hasImage ? user.imageUrl : undefined,
-        lastName: user.lastName,
-        publicMetadata: user.publicMetadata,
-        role: user.publicMetadata?.role,
-        username: user.username,
-      }));
+      return users.data
+        .sort((a, b) => {
+          // Sort users with null role to the beginning
+          if (
+            a.publicMetadata?.role === null ||
+            a.publicMetadata?.role === undefined
+          )
+            return -1;
+          if (
+            b.publicMetadata?.role === null ||
+            b.publicMetadata?.role === undefined
+          )
+            return 1;
+          return 0;
+        })
+        .map((user) => ({
+          email: user.emailAddresses[0]?.emailAddress,
+          firstName: user.firstName,
+          id: user.id,
+          imageUrl: user.hasImage ? user.imageUrl : undefined,
+          lastName: user.lastName,
+          publicMetadata: user.publicMetadata,
+          role: user.publicMetadata?.role,
+          username: user.username,
+        }));
     } catch (error) {
       throw new TRPCError({
         cause: error,
