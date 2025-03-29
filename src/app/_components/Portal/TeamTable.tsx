@@ -121,6 +121,13 @@ const TeamTable = (props: {
     columns,
     data: dataToRender,
     getCoreRowModel: getCoreRowModel(),
+    initialState: {
+      columnVisibility: {
+        delete: ["admin", "business"].includes(
+          (props.currentUser?.publicMetadata.role as string) ?? "",
+        ),
+      },
+    },
   });
 
   return (

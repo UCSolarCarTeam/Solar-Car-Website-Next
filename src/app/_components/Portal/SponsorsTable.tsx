@@ -37,6 +37,14 @@ const SponsorsTable = (props: {
       }) ?? [],
     [props.sponsors, searchValue],
   );
+
+  const shouldShowAdminButtons = useMemo(
+    () =>
+      ["admin", "business"].includes(
+        (props.currentUser?.publicMetadata?.role as string) ?? "",
+      ),
+    [props.currentUser?.publicMetadata?.role],
+  );
   const columnHelper = useMemo(() => createColumnHelper<Sponsor>(), []);
   const columns = useMemo(
     () => [
@@ -100,6 +108,12 @@ const SponsorsTable = (props: {
     columns,
     data: dataToRender,
     getCoreRowModel: getCoreRowModel(),
+    initialState: {
+      columnVisibility: {
+        delete: shouldShowAdminButtons,
+        edit: shouldShowAdminButtons,
+      },
+    },
   });
 
   return (
@@ -108,22 +122,24 @@ const SponsorsTable = (props: {
         <div>Sponsors</div>
         <div className={styles.tableHeaderSponsorRight}>
           <SearchBar setSearchValue={setSearchValue} value={searchValue} />
-          <EditSponsorPopup
-            currentRow={{
-              name: "",
-              // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
-              description: "",
-              websiteUrl: "",
-              // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
-              sponsorLevel: SponsorLevel.Gold,
-              // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
-              logoUrl: "",
-              // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
-              id: -1,
-            }}
-            currentUser={props.currentUser}
-            newSponsor
-          />
+          {shouldShowAdminButtons && (
+            <EditSponsorPopup
+              currentRow={{
+                name: "",
+                // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
+                description: "",
+                websiteUrl: "",
+                // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
+                sponsorLevel: SponsorLevel.Gold,
+                // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
+                logoUrl: "",
+                // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
+                id: -1,
+              }}
+              currentUser={props.currentUser}
+              newSponsor
+            />
+          )}
         </div>
       </div>
       <div className={styles.tableContainer}>
