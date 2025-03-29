@@ -9,6 +9,7 @@
 import superjson from "superjson";
 import { ZodError } from "zod";
 
+import { adminClerkRoles } from "@/app/_types";
 import { db } from "@/server/db";
 import { type User, createClerkClient } from "@clerk/backend";
 import { currentUser } from "@clerk/nextjs/server";
@@ -141,11 +142,7 @@ const isAuthedMiddleware = t.middleware(({ ctx, next }) => {
 const isAdminMiddleware = t.middleware(async ({ ctx, next }) => {
   if (ctx.user) {
     const user = await ctx.clerkClient.users.getUser(ctx.user?.id);
-    if (
-      !["admin", "business", "mechanicallead", "electricallead"].includes(
-        user.publicMetadata?.role as string,
-      )
-    ) {
+    if (!adminClerkRoles.includes(user.publicMetadata?.role as string)) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
   }

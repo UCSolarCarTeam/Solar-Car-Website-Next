@@ -5,6 +5,7 @@ import { memo } from "react";
 import toast from "react-hot-toast";
 import Select from "react-select";
 
+import { adminClerkRoles } from "@/app/_types";
 import { type UserRole } from "@/server/api/routers/portal";
 import { type RouterOutputs, trpc } from "@/trpc/react";
 import { type UserResource } from "@clerk/types";
@@ -100,12 +101,7 @@ const UsersTable = (props: {
         cell: (info) => (
           <Select
             isDisabled={
-              ![
-                "admin",
-                "business",
-                "mechanicallead",
-                "electricallead",
-              ].includes(
+              !adminClerkRoles.includes(
                 (props.currentUser?.publicMetadata.role as string) ?? "",
               ) || info.row.original.id === props.currentUser?.id
             }

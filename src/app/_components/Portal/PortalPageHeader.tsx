@@ -5,6 +5,7 @@ import { memo } from "react";
 
 import styles from "@/app/_components/Portal/index.module.scss";
 import useScrollToElement from "@/app/_hooks/useScrollToElement";
+import { adminClerkRoles } from "@/app/_types";
 import { UserButton } from "@clerk/nextjs";
 import { type UserResource } from "@clerk/types";
 
@@ -20,7 +21,7 @@ const PortalPageHeader = ({ currentUser }: PortalPageHeaderProps) => {
         <Link href="/">
           <Image alt="navlogo" height={48} src={logo} width={48} />
         </Link>
-        {["admin", "business", "mechanicallead", "electricallead"].includes(
+        {adminClerkRoles.includes(
           (currentUser?.publicMetadata.role as string) ?? "",
         ) && (
           <div>

@@ -7,6 +7,13 @@ export interface SVGIconProps {
   size?: "sm" | "md" | "lg";
 }
 
+export const adminClerkRoles = [
+  "admin",
+  "business",
+  "mechanicallead",
+  "electricallead",
+];
+
 export enum UpperTeamRoles {
   TeamCaptain = "Team Captain",
   EngineeringTeamManager = "Engineering Team Manager",

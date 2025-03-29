@@ -14,14 +14,12 @@ import { RedirectToSignIn, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import { skipToken } from "@tanstack/react-query";
 
 import InlineUserPopup from "../_components/EditUserCell/InlineUserPopup";
+import { adminClerkRoles } from "../_types";
 
 const Portal = () => {
   const { isLoaded, user } = useUser();
   const showAdminTables = useMemo(
-    () =>
-      ["admin", "business", "mechanicallead", "electricallead"].includes(
-        user?.publicMetadata?.role as string,
-      ),
+    () => adminClerkRoles.includes(user?.publicMetadata?.role as string),
     [user?.publicMetadata?.role],
   );
 
@@ -73,9 +71,7 @@ const Portal = () => {
         <SignedIn>
           <PortalPageHeader currentUser={user} />
           <div className={styles.portalContent}>
-            {["admin", "business", "mechanicallead", "electricallead"].includes(
-              user.publicMetadata?.role as string,
-            ) ? (
+            {adminClerkRoles.includes(user.publicMetadata?.role as string) ? (
               <>
                 <TeamTable currentUser={user} users={dbUsers.data ?? []} />
                 <UsersTable currentUser={user} users={clerkUsers.data ?? []} />
