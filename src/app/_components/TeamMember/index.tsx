@@ -30,7 +30,7 @@ const TeamMember = ({ user }: TeamMemberProps) => {
           {(user.teamRole ?? "").replace(/([a-z])([A-Z])/g, "$1 $2")}
         </div>
         <div className={styles.fieldOfStudy}>{user.fieldOfStudy}</div>
-        <div>{user.description}</div>
+        <div className={styles.description}>{user.description}</div>
       </div>
     </div>
   );
