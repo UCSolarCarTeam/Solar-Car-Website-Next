@@ -20,14 +20,15 @@ const PortalPageHeader = ({ currentUser }: PortalPageHeaderProps) => {
         <Link href="/">
           <Image alt="navlogo" height={48} src={logo} width={48} />
         </Link>
-        {currentUser?.publicMetadata.role === "admin" ||
-          (currentUser?.publicMetadata.role === "business" && (
-            <div>
-              <div onClick={() => scrollToElement("team")}>Team</div>
-              <div onClick={() => scrollToElement("users")}>Users</div>
-              <div onClick={() => scrollToElement("sponsors")}>Sponsors</div>
-            </div>
-          ))}
+        {["admin", "business", "mechanicallead", "electricallead"].includes(
+          (currentUser?.publicMetadata.role as string) ?? "",
+        ) && (
+          <div>
+            <div onClick={() => scrollToElement("team")}>Team</div>
+            <div onClick={() => scrollToElement("users")}>Users</div>
+            <div onClick={() => scrollToElement("sponsors")}>Sponsors</div>
+          </div>
+        )}
       </div>
       <div className={styles.profilePicture}>
         {currentUser?.username}

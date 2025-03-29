@@ -141,7 +141,11 @@ const isAuthedMiddleware = t.middleware(({ ctx, next }) => {
 const isAdminMiddleware = t.middleware(async ({ ctx, next }) => {
   if (ctx.user) {
     const user = await ctx.clerkClient.users.getUser(ctx.user?.id);
-    if (!["admin", "business"].includes(user.publicMetadata?.role as string)) {
+    if (
+      !["admin", "business", "mechanicallead", "electricallead"].includes(
+        user.publicMetadata?.role as string,
+      )
+    ) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
   }

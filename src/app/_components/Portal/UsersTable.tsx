@@ -53,6 +53,17 @@ const UsersTable = (props: {
     },
   });
 
+  const dropdownOptions = useMemo(
+    () => [
+      { label: "Admin", value: "admin" },
+      { label: "Business", value: "business" },
+      { label: "Mechanical Lead", value: "mechanicallead" },
+      { label: "Electrical Lead", value: "electricallead" },
+      { label: "Member", value: "member" },
+    ],
+    [],
+  );
+
   const columnHelper = useMemo(() => createColumnHelper<User>(), []);
   const columns = useMemo(
     () => [
@@ -89,8 +100,14 @@ const UsersTable = (props: {
         cell: (info) => (
           <Select
             isDisabled={
-              props.currentUser?.publicMetadata.role !== "admin" ||
-              info.row.original.id === props.currentUser?.id
+              ![
+                "admin",
+                "business",
+                "mechanicallead",
+                "electricallead",
+              ].includes(
+                (props.currentUser?.publicMetadata.role as string) ?? "",
+              ) || info.row.original.id === props.currentUser?.id
             }
             onChange={(option) => {
               if (option) {
@@ -100,20 +117,12 @@ const UsersTable = (props: {
                 });
               }
             }}
-            options={[
-              { label: "Admin", value: "admin" },
-              { label: "Business", value: "business" },
-              { label: "Mechanical", value: "mechanical" },
-              { label: "Member", value: "member" },
-            ]}
-            value={{
-              label:
-                info.getValue() === undefined
-                  ? "Unverified"
-                  : String(info.getValue()).charAt(0).toUpperCase() +
-                    String(info.getValue()).slice(1),
-              value: info.getValue() ?? "Unverified",
-            }}
+            options={dropdownOptions}
+            value={
+              dropdownOptions.find(
+                (option) => option.value === info.getValue(),
+              ) ?? { label: "Unverified", value: "Unverified" }
+            }
           />
         ),
         header: "Role",
@@ -121,6 +130,7 @@ const UsersTable = (props: {
     ],
     [
       columnHelper,
+      dropdownOptions,
       mutateUserRole,
       props.currentUser?.id,
       props.currentUser?.publicMetadata.role,

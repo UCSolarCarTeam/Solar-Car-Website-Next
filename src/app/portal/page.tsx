@@ -18,7 +18,10 @@ import InlineUserPopup from "../_components/EditUserCell/InlineUserPopup";
 const Portal = () => {
   const { isLoaded, user } = useUser();
   const showAdminTables = useMemo(
-    () => ["admin", "business"].includes(user?.publicMetadata?.role as string),
+    () =>
+      ["admin", "business", "mechanicallead", "electricallead"].includes(
+        user?.publicMetadata?.role as string,
+      ),
     [user?.publicMetadata?.role],
   );
 
@@ -70,7 +73,7 @@ const Portal = () => {
         <SignedIn>
           <PortalPageHeader currentUser={user} />
           <div className={styles.portalContent}>
-            {["admin", "business"].includes(
+            {["admin", "business", "mechanicallead", "electricallead"].includes(
               user.publicMetadata?.role as string,
             ) ? (
               <>

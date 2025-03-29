@@ -9,8 +9,19 @@ import {
 import { AllTeamRoles, SponsorLevel } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 
-export type UserRole = "admin" | "mechanical" | "business" | "member";
-const UserRoleSchema = z.enum(["admin", "mechanical", "business", "member"]);
+export type UserRole =
+  | "admin"
+  | "business"
+  | "mechanicallead"
+  | "electricallead"
+  | "member";
+const UserRoleSchema = z.enum([
+  "admin",
+  "business",
+  "mechanicallead",
+  "electricallead",
+  "member",
+]);
 
 export const portalRouter = createTRPCRouter({
   createSponsor: adminMiddleware
