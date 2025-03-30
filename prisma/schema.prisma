@@ -16,7 +16,7 @@ model User {
     clerkUserId       String        @unique
     firstName         String?
     lastName          String?
-    ucid              Int?          @unique
+    ucid              Int?
     schoolEmail       String?       @unique
     phoneNumber       String?
     fieldOfStudy      String?
@@ -44,17 +44,18 @@ enum SponsorLevel {
 }
 
 enum AllTeamRoles {
-    TeamCaptain            @map("Team Captain")
-    EngineeringTeamManager @map("Engineering Team Manager")
-    BusinessTeamManager    @map("Business Team Manager")
+    TeamCaptain              @map("Team Captain")
+    EngineeringTeamManager   @map("Engineering Team Manager")
+    BusinessTeamManager      @map("Business Team Manager")
     // software team
-    SoftwareTeamLead       @map("Software Team Lead")
-    EmbeddedTeamLead       @map("Embedded Team Lead")
-    TelemetryTeamLead      @map("Telemetry Team Lead")
-    ViscommTeamLead        @map("Viscomm Team Lead")
-    EmbeddedTeam           @map("Embedded Team")
-    TelemetryTeam          @map("Telemetry Team")
-    ViscommTeam            @map("Viscomm Team")
+    SoftwareTeamManager      @map("Software Team Manager")
+    SoftwareTechnicalManager @map("Software Technical Manager")
+    EmbeddedTeamLead         @map("Embedded Team Lead")
+    TelemetryTeamLead        @map("Telemetry Team Lead")
+    ViscommTeamLead          @map("Viscomm Team Lead")
+    EmbeddedTeam             @map("Embedded Team")
+    TelemetryTeam            @map("Telemetry Team")
+    ViscommTeam              @map("Viscomm Team")
 
     // accounting team
     AccountingCoManager        @map("Accounting Co-Manager")
@@ -77,26 +78,29 @@ enum AllTeamRoles {
     SponsorshipAssociate        @map("Sponsorship Associate")
 
     // electrical team
-    ElectricalCoManager @map("Electrical Co-Manager")
-    ArraysLead          @map("Arrays Lead")
-    EnergyStorageLead   @map("Energy Storage Lead")
-    HighVoltageLead     @map("High Voltage Lead")
-    LowVoltageLead      @map("Low Voltage Lead")
-    ArraysTeam          @map("Arrays Team")
-    EnergyStorageTeam   @map("Energy Storage Team")
-    HighVoltageTeam     @map("High Voltage Team")
-    LowVoltageTeam      @map("Low Voltage Team")
-    ElectricalTeamTeam  @map("Electrical Team")
+    ElectricalManager          @map("Electrical Manager")
+    ElectricalCoManager        @map("Electrical Co-Manager")
+    ElectricalTechnicalManager @map("Electrical Technical Manager")
+    ArraysLead                 @map("Arrays Lead")
+    EnergyStorageLead          @map("Energy Storage Lead")
+    HighVoltageLead            @map("High Voltage Lead")
+    LowVoltageLead             @map("Low Voltage Lead")
+    ArraysTeam                 @map("Arrays Team")
+    EnergyStorageTeam          @map("Energy Storage Team")
+    HighVoltageTeam            @map("High Voltage Team")
+    LowVoltageTeam             @map("Low Voltage Team")
+    ElectricalTeamTeam         @map("Electrical Team")
 
     // mechanical team
-    MechanicalManager         @map("Mechanical Manager")
-    SuspensionAndSteeringLead @map("Suspension \\& Steering Lead")
-    StructuresLead            @map("Structures Lead")
-    ElectricalIntegrationLead @map("Electrical Integration Lead")
-    SuspensionAndSteeringTeam @map("Suspension \\& Steering Team")
-    StructuresTeam            @map("Structures Team")
-    ElectricalIntegrationTeam @map("Electrical Integration Team")
-    BodyAndChassisTeam        @map("Body \\& Chassis Team")
+    MechanicalManager          @map("Mechanical Manager")
+    MechanicalTechnicalManager @map("Mechanical Technical Manager")
+    SuspensionAndSteeringLead  @map("Suspension \\& Steering Lead")
+    StructuresLead             @map("Structures Lead")
+    ElectricalIntegrationLead  @map("Electrical Integration Lead")
+    SuspensionAndSteeringTeam  @map("Suspension \\& Steering Team")
+    StructuresTeam             @map("Structures Team")
+    ElectricalIntegrationTeam  @map("Electrical Integration Team")
+    BodyAndChassisTeam         @map("Body \\& Chassis Team")
 
     // multi team
     MultiTeam @map("Multi Team")

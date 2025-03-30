@@ -18,7 +18,10 @@ export enum UpperTeamRoles {
   TeamCaptain = "Team Captain",
   EngineeringTeamManager = "Engineering Team Manager",
   BusinessTeamManager = "Business Team Manager",
+  ElectricalTechnicalManager = "Electrical Technical Manager",
+  ElectricalManager = "Electrical Manager",
   ElectricalCoManager = "Electrical Co-Manager",
+  ElectricalIntegrationLead = "Electrical Integration Lead",
   AccountingCoManager = "Accounting Co-Manager",
   AssistantAccountingManager = "Assistant Accounting Manager",
   CommunicationsManager = "Communications Manager",
@@ -26,7 +29,8 @@ export enum UpperTeamRoles {
   SponsorshipAssistantManager = "Sponsorship Assistant Manager",
   MonetaryLead = "Monetary Lead",
   InKindLead = "In-Kind Lead",
-  SoftwareTeamLead = "Software Team Lead",
+  SoftwareTeamManager = "Software Team Manager",
+  SoftwareTechnicalManager = "Software Technical Manager",
   EmbeddedTeamLead = "Embedded Team Lead",
   TelemetryTeamLead = "Telemetry Team Lead",
   ViscommTeamLead = "Viscomm Team Lead",
@@ -35,9 +39,9 @@ export enum UpperTeamRoles {
   HighVoltageLead = "High Voltage Lead",
   LowVoltageLead = "Low Voltage Lead",
   MechanicalManager = "Mechanical Manager",
+  MechanicalTechnicalManager = "Mechanical Technical Manager",
   SuspensionAndSteeringLead = "Suspension & Steering Lead",
   StructuresLead = "Structures Lead",
-  ElectricalIntegrationLead = "Electrical Integration Lead",
 }
 
 export enum AccountingTeam {
