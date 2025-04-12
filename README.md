@@ -1,29 +1,122 @@
-# Create T3 App
+# Calgary Solar Car ☀️🚗
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+Welcome to the public-facing website for [calgarysolarcar.ca](https://calgarysolarcar.ca)! This project is built on the **T3 Stack** and is designed to deliver a seamless web experience for our team members.
 
-## What's next? How do I make an app with this?
+> **Note:** This project uses **Yarn v4**. To enable Yarn v4 with Corepack, simply run:
+>
+> ```bash
+> corepack enable yarn
+> ```
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## 🚀 Overview
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+The Calgary Solar Car website leverages modern technologies to ensure a scalable and efficient experience:
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+- **Next.js App Router:** React framework for building scalable web applications 🖥️
+- **Clerk:** Manages authentication and user sessions 🔒  
+  *Webhooks are used to synchronize Clerk users with our Supabase dashboard.*
+- **Supabase:** Provides database services and image storage 🗄️
+- **tRPC:** Enables type-safe APIs for seamless client-server communication 🔄
+- **SCSS:** Advanced styling featuring nested rules, variables, and mixins 🎨
+- **ESLint & Prettier:** Enforces consistent coding standards and style ⚙️
 
-## Learn More
+*For access to Clerk and Supabase, please contact the telemetry lead.* 🙋‍♂️
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## ⚙️ Getting Started
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+Follow these steps to set up your local development environment:
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+1. **Clone the Repository:**
 
-## How do I deploy this?
+   ```bash
+   git clone git@github.com:UCSolarCarTeam/Solar-Car-Website-Next.git
+   cd Solar-Car-Website-Next
+   ```
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+2. **Enable Yarn v4:**
+
+   ```bash
+   corepack enable yarn
+   ```
+
+3. **Install Dependencies:**
+
+   ```bash
+   yarn install
+   ```
+
+4. **Obtain the Environment Configuration:**
+
+   Request the `.env` file from the telemetry lead.
+
+5. **Generate the Database Client:**
+
+   ```bash
+   yarn db:generate
+   ```
+
+6. **Start the Development Server:**
+
+   ```bash
+   yarn dev
+   ```
+
+## 🌐 Using Webhooks Locally
+
+To ensure that Clerk syncs with our Supabase database, follow these steps for the first time while signing up on /portal locally.
+
+1. **Start the Server:**
+
+   Ensure your development server is running:
+
+   ```bash
+   yarn dev
+   ```
+
+2. **Expose Your Localhost to the Internet:**
+
+   Open a new terminal window and create a tunnel using SSH:
+
+   ```bash
+   ssh -p 443 -o StrictHostKeyChecking=no -o ServerAliveInterval=30 -R0:0.0.0.0:3000 a.pinggy.io
+   ```
+
+   This command will provide you with a public URL in the format:
+
+   ```
+   https://rngwz-XXX-XXX-XXX-XXX.a.free.pinggy.link
+   ```
+
+3. **Configure Clerk Webhooks:**
+
+   - Login to the Clerk Dashboard: Switch to the **development** instance.
+   - Navigate to: **Configure** > **Webhooks**.
+   - Edit the Webhook URL: Append `/api/webhooks` to your public URL.  
+     **Example:**
+     ```
+     https://rngwz-XXX-XXX-XXX-XXX.a.free.pinggy.link/api/webhooks
+     ```
+
+4. **Register Yourself on the Team Page:**
+
+   Make sure to register on the portal so Clerk sends a webhook event to write to the Supabase database with your user data.
+
+5. **Access the Application:**
+
+   - Visit `/portal` to sign up.
+   - To verify your user role, update your metadata on the Clerk user management page or ask a teammate with the proper permissions. 👍
+
+## 📚 Development Notes
+
+- **Next.js (App Router):** Utilizes the latest routing features for improved performance and scalability.
+- **SCSS vs. CSS:** SCSS offers enhanced styling capabilities like nested rules and variables. Please familiarize yourself with these differences if you're transitioning from CSS.
+- **Authentication (Clerk):** Critical for secure user sessions and synced user data with Supabase.
+- **Database & Image Storage (Supabase):** Manages both the database and secure image storage.
+- **tRPC:** Provides end-to-end type safety between the client and the server.
+- **ESLint & Prettier:** Ensures high-quality, consistent code throughout the project.
+
+## 🛠️ Code Quality
+
+We enforce strict code quality standards using **ESLint** and **Prettier**. Always run your linter and address any issues before merging your work.
+
+Rebase your branch from main before opening a merge request, and make sure your branch is up to date before merging changes into main.

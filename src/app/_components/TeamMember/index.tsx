@@ -2,7 +2,7 @@ import Image from "next/image";
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { memo } from "react";
 
-import styles from "@/app/_components/PortalComponents/TeamMember/index.module.scss";
+import styles from "@/app/_components/TeamMember/index.module.scss";
 import { type User } from "@prisma/client";
 
 type TeamMemberProps = {
