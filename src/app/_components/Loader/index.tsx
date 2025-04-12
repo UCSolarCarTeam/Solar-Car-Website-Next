@@ -3,14 +3,15 @@ import { BarLoader } from "react-spinners";
 
 export interface LoaderProps {
   isLoading: boolean;
+  lightmode?: boolean;
 }
 
-const Loader = ({ isLoading }: LoaderProps) => {
+const Loader = ({ isLoading, lightmode = false }: LoaderProps) => {
   return (
     <div
       style={{
         alignItems: "center",
-        backgroundColor: "#121212",
+        backgroundColor: lightmode ? "#e6e6e6" : "#121212",
         display: "flex",
         height: "100%",
         justifyContent: "center",
@@ -22,7 +23,7 @@ const Loader = ({ isLoading }: LoaderProps) => {
       }}
     >
       <BarLoader
-        color="#e6e6e6"
+        color={lightmode ? "#121212" : "#e6e6e6"}
         height="6px"
         loading={isLoading}
         width="148px"

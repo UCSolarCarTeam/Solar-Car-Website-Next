@@ -2,7 +2,8 @@ import Image from "next/image";
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { memo, useMemo, useState } from "react";
 
-import EditTeamCell from "@/app/_components/EditUserCell";
+import EditTeamCell from "@/app/_components/PortalComponents/EditUserCell";
+import DeleteUser from "@/app/_components/PortalComponents/EditUserCell/DeleteUser";
 import { type RouterOutputs } from "@/trpc/react";
 import { type UserResource } from "@clerk/types";
 import {
@@ -12,7 +13,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import DeleteUser from "../EditUserCell/DeleteUser";
 import SearchBar from "../SearchBar";
 import styles from "./index.module.scss";
 

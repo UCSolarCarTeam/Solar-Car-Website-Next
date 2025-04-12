@@ -16,6 +16,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
+import DeleteClerkUserCell from "../DeleteClerkUserCell";
 import SearchBar from "../SearchBar";
 import styles from "./index.module.scss";
 
@@ -122,6 +123,13 @@ const UsersTable = (props: {
           />
         ),
         header: "Role",
+      }),
+      columnHelper.display({
+        cell: (info) => {
+          return <DeleteClerkUserCell clerkId={info.row.original.id} />;
+        },
+        header: () => null,
+        id: "delete",
       }),
     ],
     [

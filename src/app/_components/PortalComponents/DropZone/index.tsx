@@ -1,7 +1,7 @@
 import Image, { type StaticImageData } from "next/image";
 import React, { memo, useCallback } from "react";
 
-import Upload from "../svgs/Upload";
+import Upload from "../../svgs/Upload";
 import styles from "./index.module.scss";
 
 interface DropZoneProps {

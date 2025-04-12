@@ -1,11 +1,11 @@
 import React, { memo, useCallback, useEffect, useState } from "react";
 
-import EditUserPopupAdmin from "@/app/_components/EditUserCell/EditUserPopupAdmin";
-import styles from "@/app/_components/EditUserCell/index.module.scss";
+import EditUserPopupAdmin from "@/app/_components/PortalComponents/EditUserCell/EditUserPopupAdmin";
+import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
 import { type UserResource } from "@clerk/types";
 import { type AllTeamRoles } from "@prisma/client";
 
-import BasicButton from "../Buttons/BasicButton";
+import BasicButton from "../../Buttons/BasicButton";
 
 export interface EditUserCellProps {
   currentUser: UserResource | undefined | null;

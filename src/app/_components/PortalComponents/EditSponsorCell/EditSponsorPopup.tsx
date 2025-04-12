@@ -1,65 +1,89 @@
-import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { memo, useCallback, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
-import { type EditUserCellProps } from "@/app/_components/EditUserCell";
-import styles from "@/app/_components/EditUserCell/index.module.scss";
+import { type EditSponsorCellProps } from "@/app/_components/PortalComponents/EditSponsorCell";
+import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import { compress } from "@/app/_lib/compress";
-import { UpperTeamRoles, teamRoleOptions, userRowMetadata } from "@/app/_types";
 import { trpc } from "@/trpc/react";
+import { SponsorLevel } from "@prisma/client";
 
-import BasicButton from "../Buttons/BasicButton";
+import BasicButton from "../../Buttons/BasicButton";
 import DropZone from "../DropZone";
 
-type EditUserPopupAdminProps = {
+type EditSponsorPopupProps = {
   togglePopup: () => void;
-} & EditUserCellProps;
+} & EditSponsorCellProps;
 
-const EditUserPopupAdmin = ({
+const EditSponsorPopup = ({
   currentRow,
-  currentUser,
+  newSponsor,
   togglePopup,
-}: EditUserPopupAdminProps) => {
+}: EditSponsorPopupProps) => {
   const utils = trpc.useUtils();
-  const mutateUserContent = trpc.portal.updateDBUser.useMutation({
+  const createSponsor = trpc.portal.createSponsor.useMutation({
     onError: () => {
-      setSaving(false);
       toast.error(
         "There was an error saving your changes. Please contact Telemetry Team.",
       );
+      setSaving(false);
     },
     onSuccess: async () => {
-      await toast.promise(utils.portal.getDBUsers.invalidate(), {
+      await toast.promise(utils.portal.getSponsorsList.invalidate(), {
         loading: "Saving...",
-        success: "Profile updated successfully!",
+        success: "Sponsor created successfully!",
       });
       setSaving(false);
       togglePopup();
     },
   });
+  const mutateSponsor = trpc.portal.updateSponsor.useMutation({
+    onError: () => {
+      toast.error(
+        "There was an error saving your changes. Please contact Telemetry Team.",
+      );
+      setSaving(false);
+    },
+    onSuccess: async () => {
+      await toast.promise(utils.portal.getSponsorsList.invalidate(), {
+        loading: "Saving...",
+        success: "Sponsor updated successfully!",
+      });
+      setSaving(false);
+      togglePopup();
+    },
+  });
+
+  const handleOverlayClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (e.target === e.currentTarget) {
+        togglePopup();
+      }
+    },
+    [togglePopup],
+  );
+
   const [touched, setTouched] = useState(false);
-  const [newRowData, setNewRowData] = useState(currentRow);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [newRowData, setNewRowData] = useState({
+    ...currentRow,
+    sponsorLevel: (newSponsor ? "" : currentRow.sponsorLevel) as SponsorLevel,
+  });
   const [saving, setSaving] = useState(false);
 
   const rowDataToRender = useMemo(() => {
     return Object.entries(newRowData)
-      .filter(
-        ([key]) => !["id", "clerkUserId", "profilePictureUrl"].includes(key),
-      )
+      .filter(([key]) => !["id"].includes(key))
       .reduce(
         (acc, [key, value]) => {
           acc[key] = {
             id: key,
             label:
-              key === "ucid"
-                ? "UCID"
-                : key === "description"
-                  ? "About Me"
-                  : key
-                      .replace(/([a-z])([A-Z])/g, "$1 $2")
-                      .replace(/^./, (match) => match.toUpperCase()),
+              key === "logoUrl"
+                ? "Logo"
+                : key
+                    .replace(/([a-z])([A-Z])/g, "$1 $2")
+                    .replace(/^./, (match) => match.toUpperCase()),
             value: value,
           };
           return acc;
@@ -75,27 +99,13 @@ const EditUserPopupAdmin = ({
       );
   }, [newRowData]);
 
-  const handleOverlayClick = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (e.target === e.currentTarget) {
-        togglePopup();
-      }
-    },
-    [togglePopup],
-  );
-
   const onInputChange = (
     e:
       | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>
       | React.ChangeEvent<HTMLSelectElement>,
   ) => {
     const { id, value } = e.target;
     setTouched(true);
-    if (id === "ucid") {
-      setNewRowData((prev) => ({ ...prev, ucid: Number(value) }));
-      return;
-    }
     setNewRowData((prev) => ({ ...prev, [id]: value }));
   };
 
@@ -104,13 +114,12 @@ const EditUserPopupAdmin = ({
       setSaving(true);
       if (imageFile) {
         const reader = new FileReader();
-
         reader.onload = async (e) => {
-          const fileContent = e.target?.result; // Binary string or base64
+          const fileContent = e.target?.result;
           try {
-            const response = await fetch("/api/uploadProfilePic", {
+            const response = await fetch("/api/uploadSponsorPic", {
               body: JSON.stringify({
-                fileContent, // Base64 or binary
+                fileContent,
                 fileName: imageFile.name,
                 fileType: imageFile.type,
               }),
@@ -122,10 +131,17 @@ const EditUserPopupAdmin = ({
             const { publicUrl } = (await response.json()) as {
               publicUrl: string;
             };
-            mutateUserContent.mutate({
-              ...newRowData,
-              profilePictureUrl: publicUrl,
-            });
+            if (newSponsor) {
+              createSponsor.mutate({
+                ...newRowData,
+                logoUrl: publicUrl,
+              });
+            } else {
+              mutateSponsor.mutate({
+                ...newRowData,
+                logoUrl: publicUrl,
+              });
+            }
           } catch (error) {
             toast.error(
               "There was an error saving your changes. Please contact Telemetry Team.",
@@ -138,12 +154,28 @@ const EditUserPopupAdmin = ({
         const compressedFile = await compress(imageFile);
         reader.readAsDataURL(compressedFile);
       } else {
-        mutateUserContent.mutate(newRowData);
+        if (newSponsor) {
+          createSponsor.mutate({
+            ...newRowData,
+          });
+        } else {
+          mutateSponsor.mutate({
+            ...newRowData,
+          });
+        }
       }
     } else {
       togglePopup();
     }
-  }, [imageFile, newRowData, togglePopup, touched]);
+  }, [
+    createSponsor,
+    imageFile,
+    mutateSponsor,
+    newRowData,
+    newSponsor,
+    togglePopup,
+    touched,
+  ]);
 
   const handleFileUpload = useCallback((file: File) => {
     setTouched(true);
@@ -151,7 +183,7 @@ const EditUserPopupAdmin = ({
       setImageFile(file);
       setNewRowData((prev) => ({
         ...prev,
-        profilePictureUrl: URL.createObjectURL(file),
+        logoUrl: URL.createObjectURL(file),
       }));
     }
   }, []);
@@ -160,65 +192,40 @@ const EditUserPopupAdmin = ({
     <div className={styles.popup} onClick={handleOverlayClick}>
       <div className={`${styles.popupContent} ${styles.popupEnter}`}>
         <CloseButton className={styles.closeButton} onClick={togglePopup} />
-        <h2>Edit Team Member</h2>
+        <h2>{newSponsor ? "New Sponsor" : "Edit Sponsor"}</h2>
         <div className={styles.popupLayout}>
-          <div className={styles.profileImageContainer}>
-            <div>Profile Picture</div>
-            <div className={styles.popupProfileImage}>
-              <DropZone
-                currentImage={
-                  imageFile
-                    ? URL.createObjectURL(imageFile)
-                    : (newRowData.profilePictureUrl ?? defaultProfilePicture)
-                }
-                handleFileUpload={handleFileUpload}
-              />
-            </div>
-          </div>
           {newRowData && (
             <div className={styles.popupForm}>
               {Object.values(rowDataToRender).map((row) => (
-                <div className={styles.textFieldContainer} key={row.id}>
-                  <label className={styles.textFieldLabel} htmlFor={row.id}>
-                    {row.label}
-                  </label>
-                  {row.id === "description" ? (
-                    <textarea
-                      className={styles.textFieldInput}
-                      id={row.id}
-                      name={row.label}
-                      onChange={onInputChange}
-                      rows={5}
-                      value={row.value ?? ""}
-                    ></textarea>
-                  ) : row.id === "teamRole" ? (
+                <div key={row.id}>
+                  <label htmlFor={row.id}>{row.label}</label>
+                  {row.id === "logoUrl" ? (
+                    <div className={styles.profileImageContainer}>
+                      <DropZone
+                        currentImage={
+                          imageFile
+                            ? URL.createObjectURL(imageFile)
+                            : row.value
+                              ? (row.value as string)
+                              : ""
+                        }
+                        handleFileUpload={handleFileUpload}
+                      />
+                    </div>
+                  ) : row.id === "sponsorLevel" ? (
                     <select
-                      className={styles.teamRoleSelect}
+                      className={styles.sponsorSelect}
                       id={row.id}
                       name={row.label}
                       onChange={onInputChange}
+                      required
                       value={row.value ?? ""}
                     >
                       <option value="">Please select</option>
-                      {currentUser?.publicMetadata?.role === "admin" && (
-                        <optgroup key={"Lead Roles"} label="Lead Roles">
-                          {Object.entries(UpperTeamRoles).map(
-                            ([key, label]) => (
-                              <option key={key} value={key}>
-                                {label}
-                              </option>
-                            ),
-                          )}
-                        </optgroup>
-                      )}
-                      {teamRoleOptions.map(({ label, options }) => (
-                        <optgroup key={label} label={label}>
-                          {Object.entries(options).map(([key, label]) => (
-                            <option key={key} value={key}>
-                              {label}
-                            </option>
-                          ))}
-                        </optgroup>
+                      {Object.entries(SponsorLevel).map(([key, label]) => (
+                        <option key={key} value={label}>
+                          {label}
+                        </option>
                       ))}
                     </select>
                   ) : (
@@ -227,9 +234,7 @@ const EditUserPopupAdmin = ({
                       id={row.id}
                       name={row.label}
                       onChange={onInputChange}
-                      type={
-                        userRowMetadata[row.id as keyof typeof userRowMetadata]
-                      }
+                      type="string"
                       value={row.value ?? undefined}
                     />
                   )}
@@ -258,4 +263,4 @@ const EditUserPopupAdmin = ({
   );
 };
 
-export default memo(EditUserPopupAdmin);
+export default memo(EditSponsorPopup);

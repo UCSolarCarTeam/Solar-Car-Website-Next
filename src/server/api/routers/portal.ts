@@ -54,6 +54,20 @@ export const portalRouter = createTRPCRouter({
       }
     }),
 
+  deleteClerkUser: adminMiddleware
+    .input(z.object({ clerkId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.clerkClient.users.deleteUser(input.clerkId);
+        return true;
+      } catch (error) {
+        throw new TRPCError({
+          cause: error,
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
+
   deleteDBUser: adminMiddleware
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {

@@ -1,22 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { memo, useEffect, useMemo } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { Toaster } from "react-hot-toast";
 
-import PortalPageHeader from "@/app/_components/Portal/PortalPageHeader";
-import SponsorsTable from "@/app/_components/Portal/SponsorsTable";
-import TeamTable from "@/app/_components/Portal/TeamTable";
-import UsersTable from "@/app/_components/Portal/UsersTable";
+import InlineUserPopup from "@/app/_components/PortalComponents/EditUserCell/InlineUserPopup";
+import PortalPageHeader from "@/app/_components/PortalComponents/Portal/PortalPageHeader";
+import SponsorsTable from "@/app/_components/PortalComponents/Portal/SponsorsTable";
+import TeamTable from "@/app/_components/PortalComponents/Portal/TeamTable";
+import UsersTable from "@/app/_components/PortalComponents/Portal/UsersTable";
 import styles from "@/app/portal/index.module.scss";
 import { trpc } from "@/trpc/react";
 import { RedirectToSignIn, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import { skipToken } from "@tanstack/react-query";
 
-import InlineUserPopup from "../_components/EditUserCell/InlineUserPopup";
+import Loader from "../_components/Loader";
 import { adminClerkRoles } from "../_types";
 
 const Portal = () => {
+  const [currentPage, setCurrentPage] = useState("team");
   const { isLoaded, user } = useUser();
   const showAdminTables = useMemo(
     () => adminClerkRoles.includes(user?.publicMetadata?.role as string),
@@ -24,13 +26,13 @@ const Portal = () => {
   );
 
   const clerkUsers = trpc.portal.getClerkUsers.useQuery(
-    !showAdminTables ? skipToken : undefined,
+    !showAdminTables || currentPage !== "users" ? skipToken : undefined,
   );
   const dbUsers = trpc.portal.getDBUsers.useQuery(
-    !showAdminTables ? skipToken : undefined,
+    !showAdminTables || currentPage !== "team" ? skipToken : undefined,
   );
   const sponsors = trpc.portal.getSponsorsList.useQuery(
-    !showAdminTables ? skipToken : undefined,
+    !showAdminTables || currentPage !== "sponsors" ? skipToken : undefined,
   );
   const currentDBUser = trpc.portal.getCurrentDBUser.useQuery(
     showAdminTables ? skipToken : undefined,
@@ -47,7 +49,7 @@ const Portal = () => {
     sponsors.isFetching ||
     currentDBUser.isFetching
   ) {
-    return null;
+    return <Loader isLoading lightmode />;
   }
 
   if (
@@ -69,16 +71,27 @@ const Portal = () => {
     <>
       <main style={{ height: "auto" }}>
         <SignedIn>
-          <PortalPageHeader currentUser={user} />
+          <PortalPageHeader
+            currentPage={currentPage}
+            currentUser={user}
+            setCurrentPage={setCurrentPage}
+          />
           <div className={styles.portalContent}>
             {adminClerkRoles.includes(user.publicMetadata?.role as string) ? (
               <>
-                <TeamTable currentUser={user} users={dbUsers.data ?? []} />
-                <UsersTable currentUser={user} users={clerkUsers.data ?? []} />
-                <SponsorsTable
-                  currentUser={user}
-                  sponsors={sponsors.data ?? []}
-                />
+                {currentPage === "team" ? (
+                  <TeamTable currentUser={user} users={dbUsers.data ?? []} />
+                ) : currentPage === "users" ? (
+                  <UsersTable
+                    currentUser={user}
+                    users={clerkUsers.data ?? []}
+                  />
+                ) : (
+                  <SponsorsTable
+                    currentUser={user}
+                    sponsors={sponsors.data ?? []}
+                  />
+                )}
               </>
             ) : (
               <>

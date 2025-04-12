@@ -2,13 +2,13 @@ import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { memo, useCallback, useMemo, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
-import styles from "@/app/_components/EditUserCell/index.module.scss";
+import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
 import { compress } from "@/app/_lib/compress";
 import { UpperTeamRoles, teamRoleOptions, userRowMetadata } from "@/app/_types";
 import { type RouterOutputs, trpc } from "@/trpc/react";
 import { type UserResource } from "@clerk/types";
 
-import BasicButton from "../Buttons/BasicButton";
+import BasicButton from "../../Buttons/BasicButton";
 import DropZone from "../DropZone";
 
 type User = RouterOutputs["portal"]["getCurrentDBUser"];

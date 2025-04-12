@@ -1,11 +1,11 @@
 import { memo, useCallback, useEffect, useState } from "react";
 
-import styles from "@/app/_components/EditSponsorCell/index.module.scss";
+import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import PlusIcon from "@/app/_components/svgs/PlusIcon";
 import { type UserResource } from "@clerk/types";
 import { type SponsorLevel } from "@prisma/client";
 
-import BasicButton from "../Buttons/BasicButton";
+import BasicButton from "../../Buttons/BasicButton";
 import EditSponsorPopup from "./EditSponsorPopup";
 
 export interface EditSponsorCellProps {

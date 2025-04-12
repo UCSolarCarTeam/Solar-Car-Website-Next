@@ -3,18 +3,22 @@ import Link from "next/link";
 import logo from "public/assets/logo-center-black.png";
 import { memo } from "react";
 
-import styles from "@/app/_components/Portal/index.module.scss";
-import useScrollToElement from "@/app/_hooks/useScrollToElement";
+import styles from "@/app/_components/PortalComponents/Portal/index.module.scss";
 import { adminClerkRoles } from "@/app/_types";
 import { UserButton } from "@clerk/nextjs";
 import { type UserResource } from "@clerk/types";
 
 interface PortalPageHeaderProps {
   currentUser: UserResource | undefined | null;
+  currentPage: string;
+  setCurrentPage: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const PortalPageHeader = ({ currentUser }: PortalPageHeaderProps) => {
-  const scrollToElement = useScrollToElement();
+const PortalPageHeader = ({
+  currentPage,
+  currentUser,
+  setCurrentPage,
+}: PortalPageHeaderProps) => {
   return (
     <header className={styles.portalPageHeaderLayout}>
       <div className={styles.portalPageHeader}>
@@ -25,9 +29,24 @@ const PortalPageHeader = ({ currentUser }: PortalPageHeaderProps) => {
           (currentUser?.publicMetadata.role as string) ?? "",
         ) && (
           <div>
-            <div onClick={() => scrollToElement("team")}>Team</div>
-            <div onClick={() => scrollToElement("users")}>Users</div>
-            <div onClick={() => scrollToElement("sponsors")}>Sponsors</div>
+            <div
+              className={`${currentPage === "team" ? styles.active : ""}`}
+              onClick={() => setCurrentPage("team")}
+            >
+              Team
+            </div>
+            <div
+              className={`${currentPage === "users" ? styles.active : ""}`}
+              onClick={() => setCurrentPage("users")}
+            >
+              Users
+            </div>
+            <div
+              className={`${currentPage === "sponsors" ? styles.active : ""}`}
+              onClick={() => setCurrentPage("sponsors")}
+            >
+              Sponsors
+            </div>
           </div>
         )}
       </div>

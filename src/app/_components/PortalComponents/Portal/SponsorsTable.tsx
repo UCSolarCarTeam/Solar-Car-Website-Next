@@ -2,7 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { memo, useMemo, useState } from "react";
 
-import styles from "@/app/_components/Portal/index.module.scss";
+import EditSponsorCell from "@/app/_components/PortalComponents/EditSponsorCell";
+import DeleteSponsor from "@/app/_components/PortalComponents/EditSponsorCell/DeleteSponsor";
+import styles from "@/app/_components/PortalComponents/Portal/index.module.scss";
+import SearchBar from "@/app/_components/PortalComponents/SearchBar";
 import { type RouterOutputs } from "@/trpc/react";
 import { type UserResource } from "@clerk/types";
 import { SponsorLevel } from "@prisma/client";
@@ -12,11 +15,6 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
-import EditSponsorPopup from "../EditSponsorCell";
-import EditSponsorCell from "../EditSponsorCell";
-import DeleteSponsor from "../EditSponsorCell/DeleteSponsor";
-import SearchBar from "../SearchBar";
 
 export type Sponsor = RouterOutputs["portal"]["getSponsorsList"][number];
 
@@ -123,7 +121,7 @@ const SponsorsTable = (props: {
         <div className={styles.tableHeaderSponsorRight}>
           <SearchBar setSearchValue={setSearchValue} value={searchValue} />
           {shouldShowAdminButtons && (
-            <EditSponsorPopup
+            <EditSponsorCell
               currentRow={{
                 name: "",
                 // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys

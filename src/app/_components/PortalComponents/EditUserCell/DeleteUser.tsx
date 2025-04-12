@@ -1,12 +1,12 @@
 import { memo } from "react";
 import toast from "react-hot-toast";
 
-import styles from "@/app/_components/EditSponsorCell/index.module.scss";
+import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import { trpc } from "@/trpc/react";
 import { type UserResource } from "@clerk/types";
 import { type AllTeamRoles } from "@prisma/client";
 
-import BasicButton from "../Buttons/BasicButton";
+import BasicButton from "../../Buttons/BasicButton";
 
 export interface DeleteUserProps {
   currentUser: UserResource | undefined | null;
