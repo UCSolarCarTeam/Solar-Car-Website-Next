@@ -10,11 +10,15 @@ import { type RouterOutputs } from "@/trpc/react";
 import { type UserResource } from "@clerk/types";
 import { SponsorLevel } from "@prisma/client";
 import {
+  PaginationState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+
+import PaginationOptions from "../Pagination/PaginationOptions";
 
 export type Sponsor = RouterOutputs["portal"]["getSponsorsList"][number];
 
@@ -102,15 +106,25 @@ const SponsorsTable = (props: {
     [columnHelper, props.currentUser],
   );
 
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 1,
+  });
+
   const table = useReactTable({
     columns,
     data: dataToRender,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       columnVisibility: {
         delete: shouldShowAdminButtons,
         edit: shouldShowAdminButtons,
       },
+    },
+    onPaginationChange: setPagination,
+    state: {
+      pagination,
     },
   });
 
@@ -170,6 +184,7 @@ const SponsorsTable = (props: {
             ))}
           </tbody>
         </table>
+        <PaginationOptions table={table} />
       </div>
     </div>
   );
