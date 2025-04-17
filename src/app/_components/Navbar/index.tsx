@@ -93,7 +93,7 @@ const Navbar = () => {
         )}
         {width && width <= 1024 && (
           <div onClick={toggleHambugerMenu}>
-            <Chevron className={styles.chevron} />
+            <Chevron className={styles.chevron} rotation={"down"} />
           </div>
         )}
       </nav>
