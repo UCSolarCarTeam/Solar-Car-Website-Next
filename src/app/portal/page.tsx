@@ -15,10 +15,12 @@ import { RedirectToSignIn, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import { skipToken } from "@tanstack/react-query";
 
 import Loader from "../_components/Loader";
-import { adminClerkRoles } from "../_types";
+import { PortalNavLinks, adminClerkRoles } from "../_types";
 
 const Portal = () => {
-  const [currentPage, setCurrentPage] = useState("team");
+  const [currentPage, setCurrentPage] = useState<PortalNavLinks>(
+    PortalNavLinks.TEAM,
+  );
   const { isLoaded, user } = useUser();
   const showAdminTables = useMemo(
     () => adminClerkRoles.includes(user?.publicMetadata?.role as string),
@@ -26,13 +28,19 @@ const Portal = () => {
   );
 
   const clerkUsers = trpc.portal.getClerkUsers.useQuery(
-    !showAdminTables || currentPage !== "users" ? skipToken : undefined,
+    !showAdminTables || currentPage !== PortalNavLinks.USERS
+      ? skipToken
+      : undefined,
   );
   const dbUsers = trpc.portal.getDBUsers.useQuery(
-    !showAdminTables || currentPage !== "team" ? skipToken : undefined,
+    !showAdminTables || currentPage !== PortalNavLinks.TEAM
+      ? skipToken
+      : undefined,
   );
   const sponsors = trpc.portal.getSponsorsList.useQuery(
-    !showAdminTables || currentPage !== "sponsors" ? skipToken : undefined,
+    !showAdminTables || currentPage !== PortalNavLinks.SPONSORS
+      ? skipToken
+      : undefined,
   );
   const currentDBUser = trpc.portal.getCurrentDBUser.useQuery(
     showAdminTables ? skipToken : undefined,
@@ -79,9 +87,9 @@ const Portal = () => {
           <div className={styles.portalContent}>
             {adminClerkRoles.includes(user.publicMetadata?.role as string) ? (
               <>
-                {currentPage === "team" ? (
+                {currentPage === PortalNavLinks.TEAM ? (
                   <TeamTable currentUser={user} users={dbUsers.data ?? []} />
-                ) : currentPage === "users" ? (
+                ) : currentPage === PortalNavLinks.USERS ? (
                   <UsersTable
                     currentUser={user}
                     users={clerkUsers.data ?? []}
