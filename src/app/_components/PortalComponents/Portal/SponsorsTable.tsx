@@ -10,7 +10,7 @@ import { type RouterOutputs } from "@/trpc/react";
 import { type UserResource } from "@clerk/types";
 import { SponsorLevel } from "@prisma/client";
 import {
-  PaginationState,
+  type PaginationState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
@@ -108,7 +108,7 @@ const SponsorsTable = (props: {
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 1,
+    pageSize: 10,
   });
 
   const table = useReactTable({
