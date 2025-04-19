@@ -57,25 +57,30 @@ const Footer = () => {
         </div>
         <div className={styles.gridContainer}>
           <div>Contact Information</div>
-          <Link href="mailto:communications@calgarysolarcar.ca">
-            communications@calgarysolarcar.ca
-          </Link>
-          <Link href="mailto:sponsorship@calgarysolarcar.ca">
-            sponsorship@calgarysolarcar.ca
-          </Link>
+          <div className={styles.linkList}>
+            <Link href="mailto:communications@calgarysolarcar.ca">
+              communications@calgarysolarcar.ca
+            </Link>
+            <Link href="mailto:sponsorship@calgarysolarcar.ca">
+              sponsorship@calgarysolarcar.ca
+            </Link>
+          </div>
+          <div className={styles.line} />
           <span>ENC 36, Schulich School of Engineering</span>
           <span>2500 University Dr NW</span>
           <span>Calgary, AB T2N 1N4</span>
         </div>
         <div className={styles.gridContainer}>
           <div>Resources</div>
-          <Link href="/">Homepage</Link>
-          <Link href="/cars">Cars</Link>
-          <Link href="/team">Team</Link>
-          <Link href="/support-us">Support Us</Link>
-          <Link href="/sponsors">Sponsors</Link>
-          <Link href="/contact">Contact Us</Link>
-          <Link href="/portal/sign-in">Team Portal</Link>
+          <div className={styles.linkList}>
+            <Link href="/">Homepage</Link>
+            <Link href="/cars">Cars</Link>
+            <Link href="/team">Team</Link>
+            <Link href="/support-us">Support Us</Link>
+            <Link href="/sponsors">Sponsors</Link>
+            <Link href="/contact">Contact Us</Link>
+            <Link href="/portal/sign-in">Team Portal</Link>
+          </div>
         </div>
       </div>
       <div className={styles.seperator} style={{ width: "80%" }} />
