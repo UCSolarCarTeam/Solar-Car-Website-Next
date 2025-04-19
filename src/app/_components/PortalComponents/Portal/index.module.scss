@@ -31,9 +31,13 @@
     font-weight: 400;
     > div {
       cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
     display: flex;
-    gap: 10px;
+    gap: 1.5rem;
     align-items: center;
   }
 }
