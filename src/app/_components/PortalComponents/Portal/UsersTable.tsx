@@ -10,13 +10,16 @@ import { type UserRole } from "@/server/api/routers/portal";
 import { type RouterOutputs, trpc } from "@/trpc/react";
 import { type UserResource } from "@clerk/types";
 import {
+  PaginationState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
 import DeleteClerkUserCell from "../DeleteClerkUserCell";
+import PaginationOptions from "../Pagination/PaginationOptions";
 import SearchBar from "../SearchBar";
 import styles from "./index.module.scss";
 
@@ -141,10 +144,18 @@ const UsersTable = (props: {
     ],
   );
 
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 1,
+  });
+
   const table = useReactTable({
     columns,
     data: dataToRender,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
+    state: { pagination },
   });
 
   return (
@@ -183,6 +194,7 @@ const UsersTable = (props: {
             ))}
           </tbody>
         </table>
+        <PaginationOptions table={table} />
       </div>
     </div>
   );

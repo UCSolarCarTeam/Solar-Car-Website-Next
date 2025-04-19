@@ -7,12 +7,15 @@ import DeleteUser from "@/app/_components/PortalComponents/EditUserCell/DeleteUs
 import { type RouterOutputs } from "@/trpc/react";
 import { type UserResource } from "@clerk/types";
 import {
+  type PaginationState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
+import PaginationOptions from "../Pagination/PaginationOptions";
 import SearchBar from "../SearchBar";
 import styles from "./index.module.scss";
 
@@ -117,10 +120,16 @@ const TeamTable = (props: {
     [columnHelper, props.currentUser],
   );
 
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 1,
+  });
+
   const table = useReactTable({
     columns,
     data: dataToRender,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       columnVisibility: {
         delete: ["admin", "business"].includes(
@@ -128,6 +137,8 @@ const TeamTable = (props: {
         ),
       },
     },
+    onPaginationChange: setPagination,
+    state: { pagination },
   });
 
   return (
@@ -166,6 +177,7 @@ const TeamTable = (props: {
             ))}
           </tbody>
         </table>
+        <PaginationOptions table={table} />
       </div>
     </div>
   );
