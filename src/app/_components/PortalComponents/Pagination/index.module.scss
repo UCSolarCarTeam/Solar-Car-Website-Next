@@ -18,38 +18,8 @@
     border: 1px solid #6c6a7a;
     color: black;
     height: 36px;
-    border-radius: 3px 0 0 3px;
     padding: 0 0.75rem 0 0.75rem;
     gap: 1rem;
-  }
-}
-
-.dropdown {
-  display: flex;
-  align-items: center;
-  border: 1px solid #6c6a7a;
-  color: #6c6a7a;
-  height: max-content;
-  width: 100%;
-  border-radius: 5px;
-  flex-direction: column;
-  position: absolute;
-  top: 100%;
-  left: 0;
-
-  > span:not(:last-child) {
-    border-bottom: 1px solid #6c6a7a;
-  }
-
-  > span {
-    width: 100%;
-    text-align: center;
-  }
-
-  > span:hover {
-    background-color: #e1dedd;
-    color: black;
-    cursor: pointer;
   }
 }
 
@@ -113,6 +83,7 @@
 .paginationContainer {
   position: relative;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 0 2rem;
@@ -123,4 +94,38 @@
   right: 2rem;
   color: #6c6a7a;
   text-wrap: nowrap;
+}
+
+@media screen and (max-width: 768px) {
+  .itemCount {
+    position: static;
+  }
+  .paginationContainer {
+    padding: 0.5rem;
+  }
+}
+
+.pageDropdownMenu {
+  user-select: none;
+  background-color: white;
+  border: 1px solid #6c6a7a;
+  border-top: none;
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
+  z-index: 999;
+  height: fit-content;
+  overflow-y: scroll;
+
+  .pageOption {
+    cursor: pointer;
+    padding: 0.25rem 0.75rem;
+    &:hover {
+      background-color: #f0f0f0;
+    }
+  }
+
+  .activePage {
+    background-color: #d9dbe4;
+  }
 }

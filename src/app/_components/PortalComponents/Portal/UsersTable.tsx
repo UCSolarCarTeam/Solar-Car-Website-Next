@@ -10,7 +10,7 @@ import { type UserRole } from "@/server/api/routers/portal";
 import { type RouterOutputs, trpc } from "@/trpc/react";
 import { type UserResource } from "@clerk/types";
 import {
-  PaginationState,
+  type PaginationState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
