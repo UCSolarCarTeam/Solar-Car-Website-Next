@@ -13,7 +13,7 @@ const cx = classNames.bind(styles);
 
 function PaginationOptions<T>({ table }: TableProps<T>) {
   return (
-    <>
+    <div className={styles.paginationContainer}>
       <div className={styles.pagination}>
         <div>
           <span>
@@ -24,7 +24,6 @@ function PaginationOptions<T>({ table }: TableProps<T>) {
                   .padStart(2, "0")}
           </span>
         </div>
-
         <div className={styles.arrowsContainer}>
           <span>of {table.getPageCount().toLocaleString()} pages</span>
           <div
@@ -67,7 +66,20 @@ function PaginationOptions<T>({ table }: TableProps<T>) {
           </div>
         </div>
       </div>
-    </>
+      <div className={styles.itemCount}>
+        Showing{" "}
+        {table.getState().pagination.pageIndex *
+          table.getState().pagination.pageSize +
+          1}
+        -
+        {Math.min(
+          (table.getState().pagination.pageIndex + 1) *
+            table.getState().pagination.pageSize,
+          table.getFilteredRowModel().rows.length,
+        )}{" "}
+        of {table.getFilteredRowModel().rows.length} items
+      </div>
+    </div>
   );
 }
 
