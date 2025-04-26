@@ -5,6 +5,7 @@ import { type SVGIconProps } from "@/app/_types";
 const Twitter = ({ className }: SVGIconProps) => {
   return (
     <svg
+      className={className}
       fill="none"
       height="24"
       viewBox="0 0 29 24"

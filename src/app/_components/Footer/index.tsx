@@ -39,19 +39,19 @@ const Footer = () => {
           <span>Follow us on our Social Media</span>
           <div className={styles.iconGrid}>
             <Link href="https://www.facebook.com/UofCSolarTeam">
-              <Facebook />
+              <Facebook className={styles.socialMediaLogo} />
             </Link>
             <Link href="https://x.com/uofcsolarcar">
-              <Twitter />
+              <Twitter className={styles.socialMediaLogo} />
             </Link>
             <Link href="https://www.instagram.com/uofc_solarcar">
-              <Instagram />
+              <Instagram className={styles.socialMediaLogo} />
             </Link>
             <Link href="https://www.linkedin.com/company/university-of-calgary-solar-car-team">
-              <Linkedin />
+              <Linkedin className={styles.socialMediaLogo} />
             </Link>
             <Link href="https://www.youtube.com/user/calgarysolarcar">
-              <Youtube />
+              <Youtube className={styles.socialMediaLogo} />
             </Link>
           </div>
         </div>

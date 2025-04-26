@@ -5,6 +5,7 @@ import { type SVGIconProps } from "@/app/_types";
 const Instagram = ({ className }: SVGIconProps) => {
   return (
     <svg
+      className={className}
       fill="none"
       height="28"
       viewBox="0 0 27 28"
