@@ -1,10 +1,10 @@
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { memo, useCallback, useMemo, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
 import { compress } from "@/app/_lib/compress";
-import { UpperTeamRoles, teamRoleOptions, userRowMetadata } from "@/app/_types";
+import { teamRoleOptions, userRowMetadata } from "@/app/_types";
 import { type RouterOutputs, trpc } from "@/trpc/react";
 import { type UserResource } from "@clerk/types";
 

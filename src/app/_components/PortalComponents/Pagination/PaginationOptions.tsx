@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import Chevron from "@/app/_components/svgs/Chevron";
 import { type Table } from "@tanstack/react-table";
