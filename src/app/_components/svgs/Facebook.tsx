@@ -5,6 +5,7 @@ import { type SVGIconProps } from "@/app/_types";
 const Facebook = ({ className }: SVGIconProps) => {
   return (
     <svg
+      className={className}
       fill="none"
       height="29"
       viewBox="0 0 16 29"

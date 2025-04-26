@@ -39,43 +39,48 @@ const Footer = () => {
           <span>Follow us on our Social Media</span>
           <div className={styles.iconGrid}>
             <Link href="https://www.facebook.com/UofCSolarTeam">
-              <Facebook />
+              <Facebook className={styles.socialMediaLogo} />
             </Link>
             <Link href="https://x.com/uofcsolarcar">
-              <Twitter />
+              <Twitter className={styles.socialMediaLogo} />
             </Link>
             <Link href="https://www.instagram.com/uofc_solarcar">
-              <Instagram />
+              <Instagram className={styles.socialMediaLogo} />
             </Link>
             <Link href="https://www.linkedin.com/company/university-of-calgary-solar-car-team">
-              <Linkedin />
+              <Linkedin className={styles.socialMediaLogo} />
             </Link>
             <Link href="https://www.youtube.com/user/calgarysolarcar">
-              <Youtube />
+              <Youtube className={styles.socialMediaLogo} />
             </Link>
           </div>
         </div>
         <div className={styles.gridContainer}>
           <div>Contact Information</div>
-          <Link href="mailto:communications@calgarysolarcar.ca">
-            communications@calgarysolarcar.ca
-          </Link>
-          <Link href="mailto:sponsorship@calgarysolarcar.ca">
-            sponsorship@calgarysolarcar.ca
-          </Link>
+          <div className={styles.linkList}>
+            <Link href="mailto:communications@calgarysolarcar.ca">
+              communications@calgarysolarcar.ca
+            </Link>
+            <Link href="mailto:sponsorship@calgarysolarcar.ca">
+              sponsorship@calgarysolarcar.ca
+            </Link>
+          </div>
+          <div className={styles.line} />
           <span>ENC 36, Schulich School of Engineering</span>
           <span>2500 University Dr NW</span>
           <span>Calgary, AB T2N 1N4</span>
         </div>
         <div className={styles.gridContainer}>
           <div>Resources</div>
-          <Link href="/">Homepage</Link>
-          <Link href="/cars">Cars</Link>
-          <Link href="/team">Team</Link>
-          <Link href="/support-us">Support Us</Link>
-          <Link href="/sponsors">Sponsors</Link>
-          <Link href="/contact">Contact Us</Link>
-          <Link href="/portal/sign-in">Team Portal</Link>
+          <div className={styles.linkList}>
+            <Link href="/">Homepage</Link>
+            <Link href="/cars">Cars</Link>
+            <Link href="/team">Team</Link>
+            <Link href="/support-us">Support Us</Link>
+            <Link href="/sponsors">Sponsors</Link>
+            <Link href="/contact">Contact Us</Link>
+            <Link href="/portal/sign-in">Team Portal</Link>
+          </div>
         </div>
       </div>
       <div className={styles.seperator} style={{ width: "80%" }} />

@@ -5,6 +5,7 @@ import { type SVGIconProps } from "@/app/_types";
 const Linkedin = ({ className }: SVGIconProps) => {
   return (
     <svg
+      className={className}
       fill="none"
       height="26"
       viewBox="0 0 28 26"
