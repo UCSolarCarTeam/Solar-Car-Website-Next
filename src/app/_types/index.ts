@@ -4,6 +4,7 @@ export interface SVGIconProps {
   width?: number;
   fill?: string;
   onClick?: () => void;
+  rotation?: "left" | "right" | "up" | "down";
   size?: "sm" | "md" | "lg";
 }
 

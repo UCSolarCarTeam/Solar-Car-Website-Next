@@ -2,15 +2,26 @@ import { memo } from "react";
 
 import { type SVGIconProps } from "@/app/_types";
 
-const Chevron = ({ className }: SVGIconProps) => {
+const Chevron = ({
+  className,
+  fill = "white",
+  height = 25,
+  rotation,
+  width = 25,
+}: SVGIconProps) => {
+  // rotate 90 is down
+  // rotate 180 is left
+  // rotate 270 is up
+  // rotate 0 is right
   return (
     <svg
       className={className}
-      height="25px"
-      transform="rotate(90)"
+      fill={fill}
+      height={height}
+      transform={`rotate(${rotation === "left" ? 180 : rotation === "up" ? 270 : rotation === "down" ? 90 : 0})`}
       version="1.1"
       viewBox="0 0 185.343 185.343"
-      width="25px"
+      width={width}
       xmlSpace="preserve"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
