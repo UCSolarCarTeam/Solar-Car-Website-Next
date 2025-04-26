@@ -14,6 +14,12 @@ export const adminClerkRoles = [
   "electricallead",
 ];
 
+export enum PortalNavLinks {
+  TEAM = "team",
+  USERS = "users",
+  SPONSORS = "sponsors",
+}
+
 export enum UpperTeamRoles {
   TeamCaptain = "Team Captain",
   EngineeringTeamManager = "Engineering Team Manager",
