@@ -6,7 +6,8 @@
   padding: 2rem;
   color: #6c6a7a;
   height: 5rem;
-  border-radius: 20px;
+  border-radius: 30px;
+  font-size: 16px;
   width: 100%;
 
   > div:first-child {
@@ -17,7 +18,7 @@
     border: 1px solid #6c6a7a;
     color: black;
     height: 36px;
-    border-radius: 5px 0 0 5px;
+    border-radius: 3px 0 0 3px;
     padding: 0 0.75rem 0 0.75rem;
     gap: 1rem;
   }
@@ -92,17 +93,19 @@
 
     &:last-child {
       border: 1px solid #6c6a7a;
-      border-radius: 0 5px 5px 0;
+      border-radius: 0 3px 3px 0;
     }
 
     &:hover {
-      background-color: var(--color-primary-dark);
-    }
-
-    &:disabled {
-      background-color: var(--color-gray);
-      cursor: not-allowed;
-      border: 1px solid #6c6a7a;
+      background-color: #d9dbe4;
     }
   }
+}
+
+.chevron {
+  cursor: pointer;
+}
+
+.disabled {
+  cursor: not-allowed;
 }

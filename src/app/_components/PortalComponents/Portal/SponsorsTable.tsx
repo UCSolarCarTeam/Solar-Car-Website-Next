@@ -108,7 +108,7 @@ const SponsorsTable = (props: {
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 15,
   });
 
   const table = useReactTable({

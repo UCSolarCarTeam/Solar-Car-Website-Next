@@ -122,7 +122,7 @@ const TeamTable = (props: {
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 1,
+    pageSize: 15,
   });
 
   const table = useReactTable({
