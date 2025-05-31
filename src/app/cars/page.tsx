@@ -18,25 +18,24 @@ const Cars = () => {
     () => ({
       // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
       Helios: {
-        content: `Schulich Helios, the current project in the making by the University
-          of Calgary Solar Car Team, embodies the future of renewable automotive
-          technology. This vehicle, capable of theoretically reaching speeds of
-          110 km/h, represents the culmination of our intensified
-          efforts. Racing with four passengers to maximize points, the team aims
-          for excellence at the Formula Sun Grand Prix in the summer of 2025,
-          showcasing the incredible potential of solar-powered vehicles. Be sure
-          to stay updated with any new developments!`,
+        content: `Schulich Helios, the current project in the making by the University 
+        of Calgary Solar Car Team, embodies the future of renewable automotive technology. 
+        This vehicle, capable of theoretically reaching speeds of 110 km/h, represents the 
+        culmination of our intensified efforts. The team aims for excellence at the Formula 
+        Sun Grand Prix in the summer of 2026, showcasing the incredible potential of solar-powered 
+        vehicles. Be sure to stay updated with any new developments!`,
         image: backsplash1,
         position: "left",
         title: "Schulich Helios",
       },
       // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
       Elysia: {
-        content: `Schulich Elysia started it’s design phase in 2016 and this catamaran
-          style cruise car was completed in 2019. This design was implemented to
-          improve battery cooling as well as increase aerodynamics. The Elysia
-          raced in the 2019 American Solar Challenge where it took first place
-          in the Multi Occupant Vehicle Class.`,
+        content: `Schulich Elysia started it’s design phase in 2016 and this catamaran 
+        style cruise car was completed in 2019. This design was implemented to improve 
+        battery cooling as well as increase aerodynamics. The Elysia raced in the 2019 
+        American Solar Challenge where it took first place in the Multi Occupant Vehicle Class. 
+        In summer of 2025, Elysia will be retiring at its final race at the Formula Sun Grand 
+        Prix in Bowling Green, Kentucky. Stay tuned for race updates!`,
         image: backsplash2,
         position: "left",
         title: "Schulich Elysia",
