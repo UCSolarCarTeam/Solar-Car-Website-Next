@@ -1,6 +1,6 @@
 "use client";
 
-import backsplash1 from "public/assets/cars/backsplash1.jpeg";
+import backsplash1 from "public/assets/cars/backsplash1.png";
 import backsplash2 from "public/assets/cars/backsplash2.jpeg";
 import backsplash3 from "public/assets/cars/backsplash3.jpeg";
 import backsplash4 from "public/assets/cars/backsplash4.jpeg";

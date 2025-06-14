@@ -79,6 +79,10 @@
   scroll-behavior: smooth; /* Smooth snapping */
 }
 
+.snapContainer::-webkit-scrollbar {
+  display: none;
+}
+
 .snapItem {
   scroll-snap-align: start;
   height: 100vh;
