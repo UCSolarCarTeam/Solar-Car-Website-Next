@@ -5,15 +5,16 @@ import styles from "./index.module.scss";
 export interface SearchBarProps {
   setSearchValue: Dispatch<SetStateAction<string>>;
   value: string;
+  placeholder?: string;
 }
 
-const SearchBar = ({ setSearchValue, value }: SearchBarProps) => {
+const SearchBar = ({ placeholder, setSearchValue, value }: SearchBarProps) => {
   return (
     <div className={styles.searchBar}>
       <input
         className="search"
         onChange={(e) => setSearchValue(e.target.value)}
-        placeholder="Search..."
+        placeholder={placeholder ? placeholder : "Search..."}
         value={value}
       />
     </div>

@@ -171,6 +171,26 @@ export const portalRouter = createTRPCRouter({
     }
   }),
 
+  getInvitedUsers: adminMiddleware.query(async ({ ctx }) => {
+    try {
+      const invitations = await ctx.clerkClient.invitations.getInvitationList({
+        limit: 500,
+      });
+
+      return invitations.data.map((invitation) => ({
+        createdAt: invitation.createdAt,
+        email: invitation.emailAddress,
+        id: invitation.id,
+        status: invitation.status,
+      }));
+    } catch (error) {
+      throw new TRPCError({
+        cause: error,
+        code: "INTERNAL_SERVER_ERROR",
+      });
+    }
+  }),
+
   getSponsorsList: adminMiddleware.query(async ({ ctx }) => {
     try {
       const sponsors = await ctx.db.sponsor.findMany();
@@ -182,6 +202,36 @@ export const portalRouter = createTRPCRouter({
       });
     }
   }),
+
+  inviteUser: adminMiddleware
+    .input(z.object({ email: z.string().email() }))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.clerkClient.invitations.createInvitation({
+          emailAddress: input.email,
+        });
+        return true;
+      } catch (error) {
+        throw new TRPCError({
+          cause: error,
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
+
+  revokeUserInvitation: adminMiddleware
+    .input(z.object({ invitationId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.clerkClient.invitations.revokeInvitation(input.invitationId);
+        return true;
+      } catch (error) {
+        throw new TRPCError({
+          cause: error,
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
 
   updateDBUser: authedProcedure
     .input(

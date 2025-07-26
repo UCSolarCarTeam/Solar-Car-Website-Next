@@ -4,14 +4,14 @@ import logo from "public/assets/logo-center-black.png";
 import { memo } from "react";
 
 import styles from "@/app/_components/PortalComponents/Portal/index.module.scss";
-import { adminClerkRoles } from "@/app/_types";
+import { PortalNavigationLinks, adminClerkRoles } from "@/app/_types";
 import { UserButton } from "@clerk/nextjs";
 import { type UserResource } from "@clerk/types";
 
 interface PortalPageHeaderProps {
   currentUser: UserResource | undefined | null;
   currentPage: string;
-  setCurrentPage: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentPage: React.Dispatch<React.SetStateAction<PortalNavigationLinks>>;
 }
 
 const PortalPageHeader = ({
@@ -31,21 +31,27 @@ const PortalPageHeader = ({
           <div>
             <div
               className={`${currentPage === "team" ? styles.active : ""}`}
-              onClick={() => setCurrentPage("team")}
+              onClick={() => setCurrentPage(PortalNavigationLinks.Team)}
             >
               Team
             </div>
             <div
               className={`${currentPage === "users" ? styles.active : ""}`}
-              onClick={() => setCurrentPage("users")}
+              onClick={() => setCurrentPage(PortalNavigationLinks.Users)}
             >
               Users
             </div>
             <div
               className={`${currentPage === "sponsors" ? styles.active : ""}`}
-              onClick={() => setCurrentPage("sponsors")}
+              onClick={() => setCurrentPage(PortalNavigationLinks.Sponsors)}
             >
               Sponsors
+            </div>
+            <div
+              className={`${currentPage === "invitations" ? styles.active : ""}`}
+              onClick={() => setCurrentPage(PortalNavigationLinks.Invitations)}
+            >
+              Invitations
             </div>
           </div>
         )}

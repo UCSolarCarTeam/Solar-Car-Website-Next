@@ -111,3 +111,24 @@
   align-items: center;
   gap: 1rem;
 }
+
+.inviteUserContainer {
+  display: flex;
+  flex-direction: column;
+  font-weight: 650;
+  font-size: 1.2rem;
+  margin: 16px 0;
+}
+
+.inviteUserFormContainer {
+  display: flex;
+  overflow: hidden;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+}
+
+.noResults {
+  text-align: center;
+  padding: 5px 0;
+}
