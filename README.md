@@ -1,4 +1,4 @@
-# Calgary Solar Car ☀️🚗
+# Calgary Solar Car
 
 Welcome to the public-facing website for [calgarysolarcar.ca](https://calgarysolarcar.ca)! This project is built on the **T3 Stack** and is designed to deliver a seamless web experience for our team members.
 
