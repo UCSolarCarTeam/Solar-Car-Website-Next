@@ -23,6 +23,14 @@ const UserRoleSchema = z.enum([
   "member",
 ]);
 
+// const getBaseUrl = () => {
+//   if (process.env.NODE_ENV === "development") {
+//     return `http://localhost:${process.env.PORT ?? 3000}`;
+//   }
+
+//   return "https://calgarysolarcar.ca"; // this shouldn't really change, so I wouldn't worry about it
+// };
+
 export const portalRouter = createTRPCRouter({
   createSponsor: adminMiddleware
     .input(
@@ -209,6 +217,9 @@ export const portalRouter = createTRPCRouter({
       try {
         await ctx.clerkClient.invitations.createInvitation({
           emailAddress: input.email,
+          publicMetadata: {
+            role: "member",
+          },
         });
         return true;
       } catch (error) {

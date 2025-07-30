@@ -33,7 +33,7 @@ export default function RootLayout({
         signInForceRedirectUrl="/portal"
         signInUrl="/portal/sign-in"
         signUpForceRedirectUrl="/portal"
-        signUpUrl="/portal/sign-in"
+        signUpUrl="/portal/sign-up"
       >
         <html className={`${saira.className}`} lang="en">
           <body>
