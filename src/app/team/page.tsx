@@ -9,7 +9,7 @@ import { HydrateClient, trpc } from "@/trpc/server";
 const Team = async () => {
   const teamHierarchy = await trpc.fe.getTeamMembers();
 
-  const tempFlag = true;
+  const tempFlag = false;
 
   const {
     accountingTeam,
