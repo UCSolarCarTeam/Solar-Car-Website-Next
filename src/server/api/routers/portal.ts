@@ -23,14 +23,6 @@ const UserRoleSchema = z.enum([
   "member",
 ]);
 
-// const getBaseUrl = () => {
-//   if (process.env.NODE_ENV === "development") {
-//     return `http://localhost:${process.env.PORT ?? 3000}`;
-//   }
-
-//   return "https://calgarysolarcar.ca"; // this shouldn't really change, so I wouldn't worry about it
-// };
-
 export const portalRouter = createTRPCRouter({
   createRecruitmentForm: adminMiddleware
     .input(

@@ -25,6 +25,10 @@
   align-items: center;
   justify-content: center;
 
+  // technically all these styles are derived from the sponsor cell popup,
+  // so we can delete these and just use one source of truth for these form popups.
+  min-width: 40dvw;
+
   // Base state
   opacity: 0;
   transform: scale(0.9);

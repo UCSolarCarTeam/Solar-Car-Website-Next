@@ -2,15 +2,15 @@ import { memo, useCallback, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
-import { type EditRecruitmentCellProps } from "@/app/_components/PortalComponents/EditRecruitmentFormCell";
-import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
+import { type EditRecruitmentFormCellProps } from "@/app/_components/PortalComponents/EditRecruitmentFormCell";
+import styles from "@/app/_components/PortalComponents/EditRecruitmentFormCell/index.module.scss";
 import { trpc } from "@/trpc/react";
 
 import BasicButton from "../../Buttons/BasicButton";
 
 type EditRecruitmentFormPopupProps = {
   togglePopup: () => void;
-} & EditRecruitmentCellProps;
+} & EditRecruitmentFormCellProps;
 
 const EditFormPopup = ({
   currentRow,
@@ -92,7 +92,8 @@ const EditFormPopup = ({
   const onInputChange = (
     e:
       | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLSelectElement>,
+      | React.ChangeEvent<HTMLSelectElement>
+      | React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     const { id, value } = e.target;
     setTouched(true);
@@ -134,14 +135,26 @@ const EditFormPopup = ({
               {Object.values(rowDataToRender).map((row) => (
                 <div key={row.id}>
                   <label htmlFor={row.id}>{row.label}</label>
-                  <input
-                    className={styles.textFieldInput}
-                    id={row.id}
-                    name={row.label}
-                    onChange={onInputChange}
-                    type={row.id === "link" ? "url" : "text"}
-                    value={row.value ?? ""}
-                  />
+                  {row.id === "description" ? (
+                    <textarea
+                      className={styles.textFieldInput}
+                      id={row.id}
+                      name={row.label}
+                      onChange={onInputChange}
+                      rows={4}
+                      style={{ resize: "vertical" }}
+                      value={row.value ?? ""}
+                    />
+                  ) : (
+                    <input
+                      className={styles.textFieldInput}
+                      id={row.id}
+                      name={row.label}
+                      onChange={onInputChange}
+                      type={row.id === "link" ? "url" : "text"}
+                      value={row.value ?? ""}
+                    />
+                  )}
                 </div>
               ))}
             </div>

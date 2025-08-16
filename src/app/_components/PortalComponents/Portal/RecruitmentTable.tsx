@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { memo, useMemo, useState } from "react";
 
-import EditSponsorCell from "@/app/_components/PortalComponents/EditSponsorCell";
+import EditRecruitmentFormCell from "@/app/_components/PortalComponents/EditRecruitmentFormCell";
 import styles from "@/app/_components/PortalComponents/Portal/index.module.scss";
 import SearchBar from "@/app/_components/PortalComponents/SearchBar";
 import { type UserResource } from "@clerk/types";
-import { SponsorLevel } from "@prisma/client";
 import {
   createColumnHelper,
   flexRender,
@@ -13,7 +12,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import EditRecruitmentFormCell from "../EditRecruitmentFormCell";
 import DeleteForm from "../EditRecruitmentFormCell/DeleteForm";
 
 export type RecruitmentForm = {
@@ -122,22 +120,18 @@ const RecruitmentTable = (props: {
         <div className={styles.tableHeaderSponsorRight}>
           <SearchBar setSearchValue={setSearchValue} value={searchValue} />
           {
-            /*shouldShowAdminButtons*/ 0 && (
-              <EditSponsorCell
+            /*shouldShowAdminButtons*/ true && (
+              <EditRecruitmentFormCell
                 currentRow={{
-                  name: "",
+                  id: -1,
+                  // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
+                  header: "",
                   // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
                   description: "",
-                  websiteUrl: "",
-                  // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
-                  sponsorLevel: SponsorLevel.Gold,
-                  // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
-                  logoUrl: "",
-                  // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
-                  id: -1,
+                  link: "",
                 }}
                 currentUser={props.currentUser}
-                newSponsor
+                newForm
               />
             )
           }

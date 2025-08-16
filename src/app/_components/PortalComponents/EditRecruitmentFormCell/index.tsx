@@ -7,7 +7,7 @@ import { type UserResource } from "@clerk/types";
 import BasicButton from "../../Buttons/BasicButton";
 import EditFormPopup from "./EditFormPopup";
 
-export interface EditRecruitmentCellProps {
+export interface EditRecruitmentFormCellProps {
   currentUser: UserResource | undefined | null;
   currentRow: {
     id: number;
@@ -18,11 +18,11 @@ export interface EditRecruitmentCellProps {
   newForm: boolean;
 }
 
-const EditRecruitmentCell = ({
+const EditRecruitmentFormCell = ({
   currentRow,
   currentUser,
   newForm,
-}: EditRecruitmentCellProps) => {
+}: EditRecruitmentFormCellProps) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const togglePopup = useCallback(() => {
     setPopupOpen((prev) => !prev);
@@ -74,4 +74,4 @@ const EditRecruitmentCell = ({
   );
 };
 
-export default memo(EditRecruitmentCell);
+export default memo(EditRecruitmentFormCell);

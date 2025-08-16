@@ -35,12 +35,16 @@
   align-items: center;
   gap: 16px;
   text-align: center;
+
+  min-width: 20%;
+  max-width: 40%;
 }
 
 .applicationContainer {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 48px;
 
   .applicationTitle {
     font-size: 1.8em;
@@ -51,43 +55,24 @@
     font-size: 1.1em;
     font-weight: 400;
   }
-
-  &:nth-last-child(odd) > :last-child {
-    grid-column: 1 / -1; /* Span across all columns */
-    max-width: calc(50% - 12px); /* Constrain width to one column's width */
-    justify-self: center; /* Center the element */
-  }
 }
 
 @media (max-width: 1024px) {
   .container {
     padding: 0rem 2rem;
   }
-  .applicationContainer {
-    grid-template-columns: repeat(1, 1fr);
-    &:nth-last-child(odd) > :last-child {
-      grid-column: span 1;
-      max-width: 100%;
-      justify-self: stretch;
-    }
-  }
   .pageHeading {
     letter-spacing: 0;
     padding-top: 0.8em;
+  }
+  .application {
+    min-width: 100%;
   }
 }
 
 @media (max-width: 640px) {
   .container {
     padding: 0rem 2rem;
-  }
-  .applicationContainer {
-    grid-template-columns: repeat(1, 1fr);
-    &:nth-last-child(odd) > :last-child {
-      grid-column: span 1;
-      max-width: 100%;
-      justify-self: stretch;
-    }
   }
   .pageHeading {
     font-size: 2.7em;
@@ -97,14 +82,6 @@
 @media screen and (max-height: 768px) {
   .container {
     padding: 0rem 2rem;
-  }
-  .applicationContainer {
-    grid-template-columns: repeat(1, 1fr);
-    &:nth-last-child(odd) > :last-child {
-      grid-column: span 1;
-      max-width: 100%;
-      justify-self: stretch;
-    }
   }
   .pageHeading {
     padding-top: 0.5em;
