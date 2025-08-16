@@ -18,9 +18,10 @@ export const feRouter = createTRPCRouter({
     try {
       const forms = await ctx.db.recruitment.findMany();
       return forms.map((form) => {
-        const { description, header, id, link } = form;
+        const { description, expiresAt, header, id, link } = form;
         return {
           description,
+          expiresAt,
           header,
           id,
           link,

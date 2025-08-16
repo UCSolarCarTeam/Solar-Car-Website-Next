@@ -14,6 +14,7 @@ export interface DeleteFormProps {
     header: string;
     description: string;
     link: string;
+    expiresAt: string;
   };
 }
 

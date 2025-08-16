@@ -19,6 +19,7 @@ export type RecruitmentForm = {
   header: string;
   description: string;
   link: string;
+  expiresAt: string;
 };
 
 const RecruitmentTable = (props: {
@@ -68,12 +69,20 @@ const RecruitmentTable = (props: {
         ),
         header: "Link",
       }),
+      columnHelper.accessor("expiresAt", {
+        cell: (info) => {
+          const date = new Date(info.getValue());
+          return date.toLocaleDateString() + " " + date.toLocaleTimeString();
+        },
+        header: "Expires At",
+      }),
       columnHelper.display({
         cell: (info) => (
           <EditRecruitmentFormCell
             currentRow={{
               ...info.row.original,
               description: info.row.original.description,
+              expiresAt: info.row.original.expiresAt,
               header: info.row.original.header,
               link: info.row.original.link,
             }}
@@ -89,6 +98,7 @@ const RecruitmentTable = (props: {
             currentRow={{
               ...info.row.original,
               description: info.row.original.description,
+              expiresAt: info.row.original.expiresAt,
               header: info.row.original.header,
               link: info.row.original.link,
             }}
@@ -129,6 +139,8 @@ const RecruitmentTable = (props: {
                   // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
                   description: "",
                   link: "",
+                  // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
+                  expiresAt: "",
                 }}
                 currentUser={props.currentUser}
                 newForm

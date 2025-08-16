@@ -14,6 +14,7 @@ export interface EditRecruitmentFormCellProps {
     header: string;
     description: string;
     link: string;
+    expiresAt: string;
   };
   newForm: boolean;
 }

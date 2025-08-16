@@ -71,14 +71,23 @@ const EditFormPopup = ({
       { id: "header", label: "Header" },
       { id: "description", label: "Description" },
       { id: "link", label: "Link" },
+      { id: "expiresAt", label: "Expires At" }, // Add expiresAt field
     ];
     return fields.reduce(
       (acc, { id, label }) => {
+        let value = newRowData[id as keyof typeof newRowData] ?? "";
+        if (id === "expiresAt" && value) {
+          try {
+            const date = new Date(value);
+            value = toLocalDateTimeString(date);
+          } catch {
+            value = "";
+          }
+        }
         acc[id] = {
           id,
           label,
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          value: newRowData[id as keyof typeof newRowData] ?? "",
+          value,
         };
         return acc;
       },
@@ -97,7 +106,9 @@ const EditFormPopup = ({
   ) => {
     const { id, value } = e.target;
     setTouched(true);
-    setNewRowData((prev) => ({ ...prev, [id]: value }));
+    setNewRowData((prev) => {
+      return { ...prev, [id]: value };
+    });
   };
 
   const handleSave = useCallback(async () => {
@@ -145,6 +156,15 @@ const EditFormPopup = ({
                       style={{ resize: "vertical" }}
                       value={row.value ?? ""}
                     />
+                  ) : row.id === "expiresAt" ? (
+                    <input
+                      className={styles.textFieldInput}
+                      id={row.id}
+                      name={row.label}
+                      onChange={onInputChange}
+                      type="datetime-local"
+                      value={row.value ?? ""}
+                    />
                   ) : (
                     <input
                       className={styles.textFieldInput}
@@ -179,5 +199,21 @@ const EditFormPopup = ({
     </div>
   );
 };
+
+function toLocalDateTimeString(date: Date): string {
+  const pad = (n: number) => String(n).padStart(2, "0");
+
+  return (
+    date.getFullYear() +
+    "-" +
+    pad(date.getMonth() + 1) +
+    "-" +
+    pad(date.getDate()) +
+    "T" +
+    pad(date.getHours()) +
+    ":" +
+    pad(date.getMinutes())
+  );
+}
 
 export default memo(EditFormPopup);
