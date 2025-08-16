@@ -12,7 +12,7 @@ export interface DeleteSponsorProps {
   currentRow: {
     id: number;
     name: string;
-    description: string;
+    description: string | null;
     websiteUrl: string;
     logoUrl: string;
   };

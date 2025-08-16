@@ -78,7 +78,7 @@ const EditFormPopup = ({
           id,
           label,
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          value: newRowData[id] ?? "",
+          value: newRowData[id as keyof typeof newRowData] ?? "",
         };
         return acc;
       },

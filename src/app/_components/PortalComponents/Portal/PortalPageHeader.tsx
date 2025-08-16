@@ -55,7 +55,7 @@ const PortalPageHeader = ({
             </div>
             <div
               className={`${currentPage === "recruitment" ? styles.active : ""}`}
-              onClick={() => setCurrentPage("recruitment")}
+              onClick={() => setCurrentPage(PortalNavigationLinks.Recruitment)}
             >
               Recruitment
             </div>
