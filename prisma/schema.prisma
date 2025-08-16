@@ -36,6 +36,14 @@ model Sponsor {
     logoUrl      String
 }
 
+model Recruitment {
+  id          Int     @id @default(autoincrement())
+  header      String
+  description String
+  link        String
+}
+
+
 enum SponsorLevel {
     Gold    @map("Gold")
     Silver  @map("Silver")

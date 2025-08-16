@@ -53,6 +53,12 @@ const PortalPageHeader = ({
             >
               Invitations
             </div>
+            <div
+              className={`${currentPage === "recruitment" ? styles.active : ""}`}
+              onClick={() => setCurrentPage("recruitment")}
+            >
+              Recruitment
+            </div>
           </div>
         )}
       </div>

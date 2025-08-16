@@ -7,29 +7,28 @@ import { type UserResource } from "@clerk/types";
 
 import BasicButton from "../../Buttons/BasicButton";
 
-export interface DeleteSponsorProps {
+export interface DeleteFormProps {
   currentUser: UserResource | undefined | null;
   currentRow: {
     id: number;
-    name: string;
+    header: string;
     description: string;
-    websiteUrl: string;
-    logoUrl: string;
+    link: string;
   };
 }
 
-const DeleteSponsor = ({ currentRow }: DeleteSponsorProps) => {
+const DeleteSponsor = ({ currentRow }: DeleteFormProps) => {
   const utils = trpc.useUtils();
-  const deleteSponsorMutation = trpc.portal.deleteSponsor.useMutation({
+  const deleteFormMutation = trpc.portal.deleteRecruitmentForm.useMutation({
     onError: () => {
       toast.error(
-        "There was an error deleting the sponsor. Please contact Telemetry Team.",
+        "There was an error deleting the form. Please contact Telemetry Team.",
       );
     },
     onSuccess: async () => {
-      await toast.promise(utils.portal.getSponsorsList.invalidate(), {
+      await toast.promise(utils.portal.getFormsList.invalidate(), {
         loading: "Deleting...",
-        success: "Sponsor deleted successfully!",
+        success: "Form deleted successfully!",
       });
     },
   });
@@ -37,7 +36,7 @@ const DeleteSponsor = ({ currentRow }: DeleteSponsorProps) => {
   return (
     <div className={styles.editSponsorCell}>
       <BasicButton
-        onClick={() => deleteSponsorMutation.mutate({ id: currentRow.id })}
+        onClick={() => deleteFormMutation.mutate({ id: currentRow.id })}
         style={{ backgroundColor: "#DC676C" }}
       >
         Delete

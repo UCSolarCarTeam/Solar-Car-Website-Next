@@ -18,6 +18,7 @@ export enum PortalNavigationLinks {
   Team = "team",
   Users = "users",
   Sponsors = "sponsors",
+  Recruitment = "recruitment",
   Invitations = "invitations",
 }
 
