@@ -41,6 +41,7 @@ model Recruitment {
   header      String
   description String
   link        String
+  expiresAt   DateTime
 }
 
 
