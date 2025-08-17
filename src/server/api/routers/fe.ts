@@ -16,7 +16,16 @@ import { createTRPCRouter, publicProcedure } from "../trpc";
 export const feRouter = createTRPCRouter({
   getRecruitment: publicProcedure.query(async ({ ctx }) => {
     try {
-      const forms = await ctx.db.recruitment.findMany();
+      const forms = await ctx.db.recruitment.findMany({
+        orderBy: {
+          expiresAt: "asc",
+        },
+        where: {
+          expiresAt: {
+            gte: new Date(), // greater than or equal to the current date
+          },
+        },
+      });
       return forms.map((form) => {
         const { description, expiresAt, header, id, link } = form;
         return {

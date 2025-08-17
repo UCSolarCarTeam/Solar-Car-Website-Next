@@ -16,6 +16,8 @@ const Recruitment = () => {
   const { data: recruitmentForms, isFetching } =
     trpc.fe.getRecruitment.useQuery();
 
+  const RELEASE_DATE = new Date("2025-08-23T00:00:00");
+
   return (
     <>
       <main className={styles.main}>
@@ -26,7 +28,7 @@ const Recruitment = () => {
             <div className={styles.applicationContainer}>
               {isFetching ? (
                 <Loader isLoading={isFetching} />
-              ) : !recruitmentForms || recruitmentForms.length === 0 ? (
+              ) : RELEASE_DATE >= new Date() ? (
                 <div className={styles.application}>
                   <div className={styles.applicationDescription}>
                     The current application period for the Calgary Solar Car
