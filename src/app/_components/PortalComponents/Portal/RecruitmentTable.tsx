@@ -5,6 +5,7 @@ import BasicButton from "@/app/_components/Buttons/BasicButton";
 import EditRecruitmentFormCell from "@/app/_components/PortalComponents/EditRecruitmentFormCell";
 import styles from "@/app/_components/PortalComponents/Portal/index.module.scss";
 import SearchBar from "@/app/_components/PortalComponents/SearchBar";
+import { toLocalDateTimeString } from "@/app/_lib/toLocalDate";
 import { type UserResource } from "@clerk/types";
 import {
   createColumnHelper,
@@ -20,7 +21,7 @@ export type RecruitmentForm = {
   header: string;
   description: string;
   link: string;
-  expiresAt: string;
+  expiresAt: Date;
 };
 
 const RecruitmentTable = (props: {
@@ -83,7 +84,7 @@ const RecruitmentTable = (props: {
             currentRow={{
               ...info.row.original,
               description: info.row.original.description,
-              expiresAt: info.row.original.expiresAt,
+              expiresAt: toLocalDateTimeString(info.row.original.expiresAt),
               header: info.row.original.header,
               link: info.row.original.link,
             }}
@@ -99,7 +100,7 @@ const RecruitmentTable = (props: {
             currentRow={{
               ...info.row.original,
               description: info.row.original.description,
-              expiresAt: info.row.original.expiresAt,
+              expiresAt: toLocalDateTimeString(info.row.original.expiresAt),
               header: info.row.original.header,
               link: info.row.original.link,
             }}

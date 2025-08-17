@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import CloseButton from "@/app/_components/Buttons/CloseButton";
 import { type EditRecruitmentFormCellProps } from "@/app/_components/PortalComponents/EditRecruitmentFormCell";
 import styles from "@/app/_components/PortalComponents/EditRecruitmentFormCell/index.module.scss";
+import { toLocalDateTimeString } from "@/app/_lib/toLocalDate";
 import { trpc } from "@/trpc/react";
 
 import BasicButton from "../../Buttons/BasicButton";
@@ -199,21 +200,5 @@ const EditFormPopup = ({
     </div>
   );
 };
-
-function toLocalDateTimeString(date: Date): string {
-  const pad = (n: number) => String(n).padStart(2, "0");
-
-  return (
-    date.getFullYear() +
-    "-" +
-    pad(date.getMonth() + 1) +
-    "-" +
-    pad(date.getDate()) +
-    "T" +
-    pad(date.getHours()) +
-    ":" +
-    pad(date.getMinutes())
-  );
-}
 
 export default memo(EditFormPopup);
