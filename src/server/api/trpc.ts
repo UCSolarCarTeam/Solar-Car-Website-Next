@@ -10,13 +10,14 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { adminClerkRoles } from "@/app/_types";
+import { AdminRoles, UserRole } from "@/server/api/routers/portal";
 import { db } from "@/server/db";
 import { type User, createClerkClient } from "@clerk/backend";
 import { currentUser } from "@clerk/nextjs/server";
 import { createClient } from "@supabase/supabase-js";
 import { TRPCError, initTRPC } from "@trpc/server";
 
-const clerkClient = createClerkClient({
+export const clerkClient = createClerkClient({
   secretKey: process.env.CLERK_SECRET_KEY,
 });
 
@@ -142,7 +143,7 @@ const isAuthedMiddleware = t.middleware(({ ctx, next }) => {
 const isAdminMiddleware = t.middleware(async ({ ctx, next }) => {
   if (ctx.user) {
     const user = await ctx.clerkClient.users.getUser(ctx.user?.id);
-    if (!adminClerkRoles.includes(user.publicMetadata?.role as string)) {
+    if (!adminClerkRoles.includes(user.publicMetadata?.role as AdminRoles)) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
   }

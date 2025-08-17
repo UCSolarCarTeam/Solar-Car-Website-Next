@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { Webhook } from "svix";
 
 import { env } from "@/env";
+import { clerkClient } from "@/server/api/trpc";
 import { db } from "@/server/db";
 import { type WebhookEvent } from "@clerk/nextjs/server";
 
@@ -39,11 +40,21 @@ export async function POST(req: Request) {
       }) as WebhookEvent;
       const eventType = evt.type;
       if (eventType === "user.created") {
+        const role = evt.data.public_metadata?.role;
+
+        // update the users entry in supabase
         await db.user.create({
           data: {
             clerkUserId: evt.data.id,
             firstName: evt.data.first_name,
             lastName: evt.data.last_name,
+          },
+        });
+
+        // update the users metadata with the role specified
+        await clerkClient.users.updateUser(evt.data.id, {
+          publicMetadata: {
+            role,
           },
         });
       } else if (eventType === "user.deleted") {

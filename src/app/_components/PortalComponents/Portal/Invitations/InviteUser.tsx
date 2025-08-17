@@ -3,12 +3,15 @@ import { toast } from "react-hot-toast";
 
 import BasicButton from "@/app/_components/Buttons/BasicButton";
 import SearchBar from "@/app/_components/PortalComponents/SearchBar";
+import { allClerkRoles } from "@/app/_types";
+import { type UserRole } from "@/server/api/routers/portal";
 import { trpc } from "@/trpc/react";
 
 import styles from "../index.module.scss";
 
 const InviteUser = () => {
   const [email, setEmail] = useState<string>("");
+  const [selectedRole, setSelectedRole] = useState<UserRole>(allClerkRoles[0]);
 
   const utils = trpc.useUtils();
   const inviteUserMutation = trpc.portal.inviteUser.useMutation({
@@ -35,7 +38,7 @@ const InviteUser = () => {
       return;
     }
 
-    inviteUserMutation.mutate({ email });
+    inviteUserMutation.mutate({ email, selectedRole });
   };
 
   return (
@@ -45,6 +48,17 @@ const InviteUser = () => {
         setSearchValue={setEmail}
         value={email}
       />
+      <select
+        className={styles.userRoleSelect}
+        onChange={(e) => setSelectedRole(e.target.value as UserRole)}
+        value={selectedRole}
+      >
+        {allClerkRoles.map((role) => (
+          <option key={role} value={role}>
+            {role}
+          </option>
+        ))}
+      </select>
       <BasicButton
         disabled={inviteUserMutation.isPending || !email.trim()}
         onClick={inviteUser}
