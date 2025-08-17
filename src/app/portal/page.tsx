@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast";
 import InlineUserPopup from "@/app/_components/PortalComponents/EditUserCell/InlineUserPopup";
 import InvitationsTable from "@/app/_components/PortalComponents/Portal/Invitations/InvitationsTable";
 import PortalPageHeader from "@/app/_components/PortalComponents/Portal/PortalPageHeader";
+import RecruitmentTable from "@/app/_components/PortalComponents/Portal/RecruitmentTable";
 import SponsorsTable from "@/app/_components/PortalComponents/Portal/SponsorsTable";
 import TeamTable from "@/app/_components/PortalComponents/Portal/TeamTable";
 import UsersTable from "@/app/_components/PortalComponents/Portal/UsersTable";
@@ -45,6 +46,11 @@ const Portal = () => {
   );
   const sponsors = trpc.portal.getSponsorsList.useQuery(
     !showAdminTables || currentPage !== PortalNavigationLinks.Sponsors
+      ? skipToken
+      : undefined,
+  );
+  const forms = trpc.portal.getFormsList.useQuery(
+    !showAdminTables || currentPage !== PortalNavigationLinks.Recruitment
       ? skipToken
       : undefined,
   );
@@ -106,12 +112,17 @@ const Portal = () => {
                     currentUser={user}
                     invitations={invitedUsers.data ?? []}
                   />
-                ) : (
+                ) : currentPage === PortalNavigationLinks.Sponsors ? (
                   <SponsorsTable
                     currentUser={user}
                     sponsors={sponsors.data ?? []}
                   />
-                )}
+                ) : currentPage === PortalNavigationLinks.Recruitment ? (
+                  <RecruitmentTable
+                    currentUser={user}
+                    forms={forms.data ?? []}
+                  />
+                ) : null}
               </>
             ) : (
               <>

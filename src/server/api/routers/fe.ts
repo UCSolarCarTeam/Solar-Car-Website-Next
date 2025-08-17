@@ -14,6 +14,36 @@ import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const feRouter = createTRPCRouter({
+  getRecruitment: publicProcedure.query(async ({ ctx }) => {
+    try {
+      const forms = await ctx.db.recruitment.findMany({
+        orderBy: {
+          expiresAt: "asc",
+        },
+        where: {
+          expiresAt: {
+            gte: new Date(), // greater than or equal to the current date
+          },
+        },
+      });
+      return forms.map((form) => {
+        const { description, expiresAt, header, id, link } = form;
+        return {
+          description,
+          expiresAt,
+          header,
+          id,
+          link,
+        };
+      });
+    } catch (error) {
+      throw new TRPCError({
+        cause: error,
+        code: "INTERNAL_SERVER_ERROR",
+      });
+    }
+  }),
+
   getSponsors: publicProcedure.query(async ({ ctx }) => {
     try {
       const sponsors = await ctx.db.sponsor.findMany();
