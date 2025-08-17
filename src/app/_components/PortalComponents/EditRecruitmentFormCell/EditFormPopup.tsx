@@ -114,14 +114,14 @@ const EditFormPopup = ({
   const handleSave = useCallback(async () => {
     if (touched) {
       setSaving(true);
+      const payload = {
+        ...newRowData,
+        expiresAt: new Date(newRowData.expiresAt).toISOString(),
+      };
       if (newForm) {
-        createRecruitmentForm.mutate({
-          ...newRowData,
-        });
+        createRecruitmentForm.mutate(payload);
       } else {
-        mutateRecruitmentForm.mutate({
-          ...newRowData,
-        });
+        mutateRecruitmentForm.mutate(payload);
       }
     } else {
       togglePopup();

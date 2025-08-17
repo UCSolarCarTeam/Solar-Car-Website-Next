@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { memo, useMemo, useState } from "react";
 
+import BasicButton from "@/app/_components/Buttons/BasicButton";
 import EditRecruitmentFormCell from "@/app/_components/PortalComponents/EditRecruitmentFormCell";
 import styles from "@/app/_components/PortalComponents/Portal/index.module.scss";
 import SearchBar from "@/app/_components/PortalComponents/SearchBar";
@@ -59,12 +60,12 @@ const RecruitmentTable = (props: {
       }),
       columnHelper.accessor("description", {
         cell: (info) => info.getValue(),
-        header: "Body",
+        header: "Description",
       }),
       columnHelper.accessor("link", {
         cell: (info) => (
           <Link href={info.getValue()} prefetch={false}>
-            {info.getValue()}
+            <BasicButton>Go to Form</BasicButton>
           </Link>
         ),
         header: "Link",

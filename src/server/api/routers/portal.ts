@@ -38,7 +38,7 @@ export const portalRouter = createTRPCRouter({
         await ctx.db.recruitment.create({
           data: {
             description: input.description,
-            expiresAt: new Date(input.expiresAt).toISOString(),
+            expiresAt: input.expiresAt,
             header: input.header,
             link: input.link,
           },
@@ -373,9 +373,7 @@ export const portalRouter = createTRPCRouter({
         // only update the fields that are non null
         const updateData = {
           description: input.description,
-          expiresAt: input.expiresAt
-            ? new Date(input.expiresAt).toISOString()
-            : null,
+          expiresAt: input.expiresAt,
           header: input.header,
           link: input.link,
         };
