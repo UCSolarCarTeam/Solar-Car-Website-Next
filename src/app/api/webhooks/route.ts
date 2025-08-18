@@ -54,7 +54,7 @@ export async function POST(req: Request) {
         // update the users metadata with the role specified
         await clerkClient.users.updateUser(evt.data.id, {
           publicMetadata: {
-            role,
+            role: role,
           },
         });
       } else if (eventType === "user.deleted") {
