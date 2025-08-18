@@ -12,6 +12,7 @@ import SponsorsTable from "@/app/_components/PortalComponents/Portal/SponsorsTab
 import TeamTable from "@/app/_components/PortalComponents/Portal/TeamTable";
 import UsersTable from "@/app/_components/PortalComponents/Portal/UsersTable";
 import styles from "@/app/portal/index.module.scss";
+import { AdminRoles } from "@/server/api/routers/portal";
 import { trpc } from "@/trpc/react";
 import { RedirectToSignIn, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import { skipToken } from "@tanstack/react-query";
@@ -25,7 +26,7 @@ const Portal = () => {
   );
   const { isLoaded, user } = useUser();
   const showAdminTables = useMemo(
-    () => adminClerkRoles.includes(user?.publicMetadata?.role as string),
+    () => adminClerkRoles.includes(user?.publicMetadata?.role as AdminRoles),
     [user?.publicMetadata?.role],
   );
 
@@ -98,7 +99,9 @@ const Portal = () => {
             setCurrentPage={setCurrentPage}
           />
           <div className={styles.portalContent}>
-            {adminClerkRoles.includes(user.publicMetadata?.role as string) ? (
+            {adminClerkRoles.includes(
+              user.publicMetadata?.role as AdminRoles,
+            ) ? (
               <>
                 {currentPage === PortalNavigationLinks.Team ? (
                   <TeamTable currentUser={user} users={dbUsers.data ?? []} />
