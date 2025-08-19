@@ -13,9 +13,6 @@ ALTER TYPE "AllTeamRoles_new" RENAME TO "AllTeamRoles";
 DROP TYPE "AllTeamRoles_old";
 COMMIT;
 
--- DropIndex
-DROP INDEX "User_ucid_key";
-
 -- CreateTable
 CREATE TABLE "Recruitment" (
     "id" SERIAL NOT NULL,

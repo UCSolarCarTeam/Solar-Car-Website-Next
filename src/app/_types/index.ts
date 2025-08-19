@@ -12,7 +12,15 @@ export const adminClerkRoles = [
   "business",
   "mechanicallead",
   "electricallead",
-];
+] as const;
+
+export const allClerkRoles = [
+  "member",
+  "admin",
+  "business",
+  "mechanicallead",
+  "electricallead",
+] as const;
 
 export enum PortalNavigationLinks {
   Team = "team",

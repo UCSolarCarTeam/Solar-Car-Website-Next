@@ -15,6 +15,9 @@ export type UserRole =
   | "mechanicallead"
   | "electricallead"
   | "member";
+
+export type AdminRoles = Exclude<UserRole, "member">;
+
 const UserRoleSchema = z.enum([
   "admin",
   "business",
@@ -261,13 +264,15 @@ export const portalRouter = createTRPCRouter({
   }),
 
   inviteUser: adminMiddleware
-    .input(z.object({ email: z.string().email() }))
+    .input(
+      z.object({ email: z.string().email(), selectedRole: UserRoleSchema }),
+    )
     .mutation(async ({ ctx, input }) => {
       try {
         await ctx.clerkClient.invitations.createInvitation({
           emailAddress: input.email,
           publicMetadata: {
-            role: "member",
+            role: input.selectedRole,
           },
         });
         return true;
