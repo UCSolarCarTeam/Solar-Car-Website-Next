@@ -65,9 +65,9 @@ const RecruitmentTable = (props: {
       }),
       columnHelper.accessor("link", {
         cell: (info) => (
-          <Link href={info.getValue()} prefetch={false}>
+          <a href={info.getValue()} rel="noopener noreferrer" target="_blank">
             <BasicButton>Go to Form</BasicButton>
-          </Link>
+          </a>
         ),
         header: "Link",
       }),
