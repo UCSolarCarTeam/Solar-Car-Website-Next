@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import Select from "react-select";
 
 import { adminClerkRoles } from "@/app/_types";
-import { type UserRole } from "@/server/api/routers/portal";
+import { type AdminRoles, type UserRole } from "@/server/api/routers/portal";
 import { type RouterOutputs, trpc } from "@/trpc/react";
 import { type UserResource } from "@clerk/types";
 import {
@@ -103,7 +103,7 @@ const UsersTable = (props: {
           <Select
             isDisabled={
               !adminClerkRoles.includes(
-                (props.currentUser?.publicMetadata.role as string) ?? "",
+                (props.currentUser?.publicMetadata.role as AdminRoles) ?? "",
               ) || info.row.original.id === props.currentUser?.id
             }
             onChange={(option) => {
