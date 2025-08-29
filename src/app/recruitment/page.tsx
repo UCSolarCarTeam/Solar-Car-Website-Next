@@ -25,6 +25,9 @@ const Recruitment = () => {
           <Navbar />
           <div className={styles.container}>
             <div className={styles.pageHeading}>Applications</div>
+            <div className={styles.applicationDescription}>
+              Applications close on September 13th.
+            </div>
             <div className={styles.applicationContainer}>
               {isFetching ? (
                 <Loader isLoading={isFetching} />
