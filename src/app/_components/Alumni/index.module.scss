@@ -1,0 +1,121 @@
+.alumniCard {
+  // background: hsl(var(--card));
+  background: slategray;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+
+  width: 50%;
+}
+
+.alumniCard:hover {
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.alumniCardContent {
+  padding: 1.5rem;
+  text-align: left;
+}
+
+.alumniCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.alumniCardAvatar {
+  position: relative;
+  height: 64px;
+  width: 64px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background: hsl(var(--muted));
+}
+
+.alumniCardInfo {
+  min-width: 0;
+}
+
+.alumniCardName {
+  font-weight: 600;
+  font-size: 1rem;
+  color: hsl(var(--foreground));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0 0 0.25rem 0;
+}
+
+.alumniCardTitle {
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0 0 0.25rem 0;
+}
+
+.alumniCardCompany {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: hsl(var(--foreground));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+.alumniCardQuote {
+  fill: white;
+  font-size: 0.875rem;
+  font-style: italic;
+  margin: 0 0.5rem 1rem 0.5rem;
+  position: relative;
+}
+
+.alumniCardQuoteIcon {
+  height: 0.75rem;
+  width: 0.75rem;
+  display: inline;
+  margin-right: 0.25rem;
+}
+
+.alumniCardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.alumniCardLinkedinBtn {
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.alumniCardLinkedinBtn:hover {
+  background: hsl(var(--accent));
+}
+
+.alumniCardLinkedinIcon {
+  height: 1rem;
+  width: 1rem;
+}
+
+.alumniCardClassTag {
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: hsl(var(--primary) / 0.1);
+  color: hsl(var(--primary));
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+}

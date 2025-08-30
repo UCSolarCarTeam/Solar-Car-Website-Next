@@ -1,5 +1,6 @@
 "use server";
 
+import Alumni from "@/app/_components/Alumni";
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 import TeamMember from "@/app/_components/TeamMember";
@@ -9,7 +10,7 @@ import { HydrateClient, trpc } from "@/trpc/server";
 const Team = async () => {
   const teamHierarchy = await trpc.fe.getTeamMembers();
 
-  const tempFlag = false;
+  const tempFlag = true;
 
   const {
     accountingTeam,
@@ -40,6 +41,7 @@ const Team = async () => {
           working on our sixth car and have completed 7 races with previous
           vehicles.`}
           </div>
+          <Alumni />
           {tempFlag ? (
             <div className={styles.teamMembersContainer}>
               <div className={styles.teamManagers}>
