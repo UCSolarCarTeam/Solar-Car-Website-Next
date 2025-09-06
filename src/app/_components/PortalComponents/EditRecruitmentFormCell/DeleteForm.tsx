@@ -5,7 +5,7 @@ import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.mod
 import { trpc } from "@/trpc/react";
 import { type UserResource } from "@clerk/types";
 
-import DeleteButton from "../../Buttons/DeleteButton";
+import BasicButton from "../../Buttons/BasicButton";
 
 export interface DeleteFormProps {
   currentUser: UserResource | undefined | null;
@@ -36,11 +36,12 @@ const DeleteSponsor = ({ currentRow }: DeleteFormProps) => {
 
   return (
     <div className={styles.editSponsorCell}>
-      <DeleteButton
-        id={currentRow.id}
-        label="Form"
-        onDelete={(id) => deleteFormMutation.mutate({ id })}
-      />
+      <BasicButton
+        onConfirmDelete={() => deleteFormMutation.mutate({ id: currentRow.id })}
+        variant="delete"
+      >
+        Delete
+      </BasicButton>
     </div>
   );
 };

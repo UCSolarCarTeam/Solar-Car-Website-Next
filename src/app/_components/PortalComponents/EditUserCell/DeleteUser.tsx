@@ -6,7 +6,7 @@ import { trpc } from "@/trpc/react";
 import { type UserResource } from "@clerk/types";
 import { type AllTeamRoles } from "@prisma/client";
 
-import DeleteButton from "../../Buttons/DeleteButton";
+import BasicButton from "../../Buttons/BasicButton";
 
 export interface DeleteUserProps {
   currentUser: UserResource | undefined | null;
@@ -45,11 +45,12 @@ const DeleteUser = ({ currentRow }: DeleteUserProps) => {
 
   return (
     <div className={styles.editSponsorCell}>
-      <DeleteButton
-        id={currentRow.id}
-        label="User"
-        onDelete={(id) => deleteUserMutation.mutate({ id })}
-      />
+      <BasicButton
+        onConfirmDelete={() => deleteUserMutation.mutate({ id: currentRow.id })}
+        variant="delete"
+      >
+        Delete
+      </BasicButton>
     </div>
   );
 };
