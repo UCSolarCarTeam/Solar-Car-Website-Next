@@ -30,6 +30,7 @@ const Navbar = () => {
       { href: "/cars", label: "Cars" },
       { href: "/team", label: "Team" },
       { href: "/support-us", label: "Support Us" },
+      { href: "/our-work", label: "Our Work" },
       { href: "/sponsors", label: "Sponsors" },
       { href: "/contact", label: "Contact Us" },
     ],
