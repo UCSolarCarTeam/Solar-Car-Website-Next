@@ -29,11 +29,15 @@ export default function RootLayout({
   return (
     <>
       <ClerkProvider
+        appearance={{
+          elements: {
+            footer: { display: "none" },
+            footerAction: { display: "none" },
+          },
+        }}
         dynamic
         signInForceRedirectUrl="/portal"
         signInUrl="/portal/sign-in"
-        signUpForceRedirectUrl="/portal"
-        signUpUrl="/portal/sign-up"
       >
         <html className={`${saira.className}`} lang="en">
           <body>
