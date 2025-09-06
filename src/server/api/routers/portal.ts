@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { UpperTeamRoles } from "@/app/_types";
+import { LeadRoles, ManagerRoles } from "@/app/_types";
 import {
   adminMiddleware,
   authedProcedure,
@@ -325,9 +325,10 @@ export const portalRouter = createTRPCRouter({
         }
 
         const user = await ctx.clerkClient.users.getUser(ctx.user?.id);
-        const isUpperTeamRole = Object.values(UpperTeamRoles).includes(
-          input.teamRole as UpperTeamRoles,
-        );
+        const isUpperTeamRole =
+          Object.values(ManagerRoles).includes(
+            input.teamRole as ManagerRoles,
+          ) || Object.values(LeadRoles).includes(input.teamRole as LeadRoles);
 
         if (isUpperTeamRole && user.publicMetadata?.role !== "admin") {
           throw new TRPCError({

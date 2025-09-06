@@ -6,7 +6,12 @@ import CloseButton from "@/app/_components/Buttons/CloseButton";
 import { type EditUserCellProps } from "@/app/_components/PortalComponents/EditUserCell";
 import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
 import { compress } from "@/app/_lib/compress";
-import { UpperTeamRoles, teamRoleOptions, userRowMetadata } from "@/app/_types";
+import {
+  LeadRoles,
+  ManagerRoles,
+  teamRoleOptions,
+  userRowMetadata,
+} from "@/app/_types";
 import { trpc } from "@/trpc/react";
 
 import BasicButton from "../../Buttons/BasicButton";
@@ -201,14 +206,21 @@ const EditUserPopupAdmin = ({
                     >
                       <option value="">Please select</option>
                       {currentUser?.publicMetadata?.role === "admin" && (
+                        <optgroup key={"Manager Roles"} label="Manager Roles">
+                          {Object.entries(ManagerRoles).map(([key, label]) => (
+                            <option key={key} value={key}>
+                              {label}
+                            </option>
+                          ))}
+                        </optgroup>
+                      )}
+                      {currentUser?.publicMetadata?.role === "admin" && (
                         <optgroup key={"Lead Roles"} label="Lead Roles">
-                          {Object.entries(UpperTeamRoles).map(
-                            ([key, label]) => (
-                              <option key={key} value={key}>
-                                {label}
-                              </option>
-                            ),
-                          )}
+                          {Object.entries(LeadRoles).map(([key, label]) => (
+                            <option key={key} value={key}>
+                              {label}
+                            </option>
+                          ))}
                         </optgroup>
                       )}
                       {teamRoleOptions.map(({ label, options }) => (

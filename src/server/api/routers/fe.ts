@@ -2,11 +2,12 @@ import {
   AccountingTeam,
   CommunicationsTeam,
   ElectricalTeam,
+  LeadRoles,
+  ManagerRoles,
   MechanicalTeam,
   MultiTeam,
   SoftwareTeam,
   SponsorshipTeam,
-  UpperTeamRoles,
 } from "@/app/_types";
 import { AllTeamRoles, type User } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
@@ -108,17 +109,29 @@ export const feRouter = createTRPCRouter({
             teamMember.teamRole === AllTeamRoles.BusinessTeamManager,
         ) ?? null;
 
-      const leadRoles = teamMembers
+      const managerRoles = teamMembers
         .filter(
           (teamMember) =>
-            teamMember.teamRole !== null &&
-            teamMember.teamRole in UpperTeamRoles,
+            teamMember.teamRole !== null && teamMember.teamRole in ManagerRoles,
         )
         .filter(
           (teamMember) =>
             teamMember !== teamCaptain &&
             teamMember !== engineeringTeamManager &&
             teamMember !== businessTeamManager,
+        );
+
+      const leadRoles = teamMembers
+        .filter(
+          (teamMember) =>
+            teamMember.teamRole !== null && teamMember.teamRole in LeadRoles,
+        )
+        .filter(
+          (teamMember) =>
+            teamMember !== teamCaptain &&
+            teamMember !== engineeringTeamManager &&
+            teamMember !== businessTeamManager &&
+            !managerRoles.includes(teamMember),
         );
 
       const accountingTeam = filterByRole(teamMembers, AccountingTeam);
@@ -136,6 +149,7 @@ export const feRouter = createTRPCRouter({
         electricalTeam,
         engineeringTeamManager,
         leadRoles,
+        managerRoles,
         mechanicalTeam,
         multiTeam,
         softwareTeam,
