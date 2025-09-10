@@ -46,8 +46,8 @@ const DeleteUser = ({ currentRow }: DeleteUserProps) => {
   return (
     <div className={styles.editSponsorCell}>
       <BasicButton
-        onClick={() => deleteUserMutation.mutate({ id: currentRow.id })}
-        style={{ backgroundColor: "#DC676C" }}
+        onConfirmDelete={() => deleteUserMutation.mutate({ id: currentRow.id })}
+        variant="delete"
       >
         Delete
       </BasicButton>
