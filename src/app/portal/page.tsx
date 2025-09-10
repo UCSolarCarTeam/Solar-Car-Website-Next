@@ -72,7 +72,8 @@ const Portal = () => {
     invitedUsers.isFetching ||
     dbUsers.isFetching ||
     sponsors.isFetching ||
-    currentDBUser.isFetching
+    currentDBUser.isFetching ||
+    forms.isFetching
   ) {
     return <Loader isLoading lightmode />;
   }

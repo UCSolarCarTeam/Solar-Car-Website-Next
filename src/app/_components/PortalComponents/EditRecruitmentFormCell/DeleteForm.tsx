@@ -7,6 +7,11 @@ import { type UserResource } from "@clerk/types";
 
 import BasicButton from "../../Buttons/BasicButton";
 
+enum ButtonVariant {
+  Default = "default",
+  Delete = "delete",
+}
+
 export interface DeleteFormProps {
   currentUser: UserResource | undefined | null;
   currentRow: {
@@ -18,7 +23,7 @@ export interface DeleteFormProps {
   };
 }
 
-const DeleteSponsor = ({ currentRow }: DeleteFormProps) => {
+const DeleteForm = ({ currentRow }: DeleteFormProps) => {
   const utils = trpc.useUtils();
   const deleteFormMutation = trpc.portal.deleteRecruitmentForm.useMutation({
     onError: () => {
@@ -38,7 +43,7 @@ const DeleteSponsor = ({ currentRow }: DeleteFormProps) => {
     <div className={styles.editSponsorCell}>
       <BasicButton
         onConfirmDelete={() => deleteFormMutation.mutate({ id: currentRow.id })}
-        variant="delete"
+        variant={ButtonVariant.Delete}
       >
         Delete
       </BasicButton>
@@ -46,4 +51,4 @@ const DeleteSponsor = ({ currentRow }: DeleteFormProps) => {
   );
 };
 
-export default memo(DeleteSponsor);
+export default memo(DeleteForm);

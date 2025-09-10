@@ -8,15 +8,11 @@ const BasicButton = (
     React.ButtonHTMLAttributes<HTMLButtonElement> & {
       variant?: "default" | "delete";
       onConfirmDelete?: () => void;
-      confirmMessage?: string;
-      confirmTitle?: string;
     }
   >,
 ) => {
   const {
     children,
-    confirmMessage = "Are you sure you want to delete this item?",
-    confirmTitle = "Delete Item",
     onClick,
     onConfirmDelete,
     variant = "default",
@@ -47,14 +43,14 @@ const BasicButton = (
         <ConfirmModal
           cancelText="Cancel"
           confirmText="Yes, delete"
-          message={confirmMessage}
+          message="Are you sure you want to delete this item?"
           onClose={() => setShowConfirm(false)}
           onConfirm={() => {
             onConfirmDelete?.();
             setShowConfirm(false);
           }}
           open={showConfirm}
-          title={confirmTitle}
+          title="Delete Item"
         />
       )}
     </>

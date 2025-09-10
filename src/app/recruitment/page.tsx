@@ -20,6 +20,7 @@ const Recruitment = () => {
 
   return (
     <>
+      {true && <Loader isLoading={true} />}
       <main className={styles.main}>
         <>
           <Navbar />
