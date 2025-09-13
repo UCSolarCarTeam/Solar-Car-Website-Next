@@ -9,6 +9,9 @@ import Loader from "@/app/_components/Loader";
 import Navbar from "@/app/_components/Navbar";
 import styles from "@/app/contact/index.module.scss";
 
+import Chevron from "../_components/svgs/Chevron";
+import useScrollToElement from "../_hooks/useScrollToElement";
+
 const Contact = () => {
   const [isImageLoading, setIsImageLoading] = useState(true);
 
@@ -16,73 +19,91 @@ const Contact = () => {
     setIsImageLoading(false);
   }, []);
 
+  // function scrollToElement(arg0: string): void {
+  //   throw new Error("Function not implemented.");
+  // }
+
+  const scrollToElement = useScrollToElement();
+
   return (
     <>
       {isImageLoading && <Loader isLoading={isImageLoading} />}
-      <main className={styles.main}>
-        <>
-          <Navbar />
-          <div className={styles.container}>
-            <div className={styles.pageHeading}>Contact Us</div>
-            <div className={styles.descriptionContainer}>
-              <div>
-                <form id="contact-form" method="POST">
-                  <div>
-                    <label htmlFor="name">Name</label>
-                    <input
-                      className={styles.formInput}
-                      id="name"
-                      placeholder="Value"
-                      type="text"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="surname">Surname</label>
-                    <input
-                      className={styles.formInput}
-                      id="surname"
-                      placeholder="Value"
-                      type="text"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="inputEmail">Email address</label>
-                    <input
-                      className={styles.formInput}
-                      id="inputEmail"
-                      placeholder="Value"
-                      type="email"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="message">Message</label>
-                    <textarea
-                      className={styles.formInput}
-                      id="message"
-                      placeholder="Value"
-                    ></textarea>
-                  </div>
-                  <div>
-                    <button className={styles.submitButton} type="submit">
-                      Submit
-                    </button>
-                  </div>
-                </form>
-              </div>
+      <main>
+        <Navbar />
+        <div className={styles.container}>
+          <div className={styles.pageHeading}>Contact Us</div>
+          <div className={styles.descriptionTitle}>
+            {`We'd love to hear from you! Fill out the form below and we'll get back to you as soon as possible.`}
+            <div
+              className={styles.chevronContainer}
+              onClick={() => scrollToElement("contact-form")}
+            >
+              <Chevron className={styles.chevron} />
             </div>
-            <Image
-              alt="backsplash"
-              fill
-              id="backsplashImage"
-              loading="eager"
-              onLoad={handleImageLoad}
-              placeholder="blur"
-              priority
-              src={backsplash}
-              style={{ objectFit: "cover" }}
-            />
           </div>
-        </>
+
+          <div className={styles.descriptionContainer}>
+            <form id="contact-form" method="POST">
+              <div className={styles.rowGroup}>
+                <div>
+                  <label htmlFor="name">First Name</label>
+                  <input
+                    className={styles.formInput}
+                    id="name"
+                    placeholder="First Name"
+                    type="text"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="surname">Last Name</label>
+                  <input
+                    className={styles.formInput}
+                    id="surname"
+                    placeholder="Last Name"
+                    type="text"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="inputEmail">Email Address</label>
+                <input
+                  className={styles.formInput}
+                  id="inputEmail"
+                  placeholder="Email Address"
+                  type="email"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="message">Message</label>
+                <textarea
+                  className={styles.formInput}
+                  id="message"
+                  placeholder="Message"
+                ></textarea>
+              </div>
+
+              <div>
+                <button className={styles.submitButton} type="submit">
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+          <Image
+            alt="backsplash"
+            fill
+            id="backsplashImage"
+            loading="eager"
+            onLoad={handleImageLoad}
+            placeholder="blur"
+            priority
+            src={backsplash}
+            style={{ objectFit: "cover" }}
+          />
+        </div>
       </main>
       <Footer />
     </>
