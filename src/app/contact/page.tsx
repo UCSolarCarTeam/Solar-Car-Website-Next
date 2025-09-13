@@ -9,12 +9,21 @@ import Loader from "@/app/_components/Loader";
 import Navbar from "@/app/_components/Navbar";
 import styles from "@/app/contact/index.module.scss";
 
+import Chevron from "../_components/svgs/Chevron";
+import useScrollToElement from "../_hooks/useScrollToElement";
+
 const Contact = () => {
   const [isImageLoading, setIsImageLoading] = useState(true);
 
   const handleImageLoad = useCallback(() => {
     setIsImageLoading(false);
   }, []);
+
+  // function scrollToElement(arg0: string): void {
+  //   throw new Error("Function not implemented.");
+  // }
+
+  const scrollToElement = useScrollToElement();
 
   return (
     <>
@@ -25,6 +34,12 @@ const Contact = () => {
           <div className={styles.pageHeading}>Contact Us</div>
           <div className={styles.descriptionTitle}>
             {`We'd love to hear from you! Fill out the form below and we'll get back to you as soon as possible.`}
+            <div
+              className={styles.chevronContainer}
+              onClick={() => scrollToElement("contact-form")}
+            >
+              <Chevron className={styles.chevron} />
+            </div>
           </div>
 
           <div className={styles.descriptionContainer}>
