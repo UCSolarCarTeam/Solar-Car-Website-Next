@@ -2,11 +2,12 @@ import {
   AccountingTeam,
   CommunicationsTeam,
   ElectricalTeam,
+  LeadRoles,
+  ManagerRoles,
   MechanicalTeam,
   MultiTeam,
   SoftwareTeam,
   SponsorshipTeam,
-  UpperTeamRoles,
 } from "@/app/_types";
 import { AllTeamRoles, type User } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
@@ -14,6 +15,36 @@ import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const feRouter = createTRPCRouter({
+  getRecruitment: publicProcedure.query(async ({ ctx }) => {
+    try {
+      const forms = await ctx.db.recruitment.findMany({
+        orderBy: {
+          expiresAt: "asc",
+        },
+        where: {
+          expiresAt: {
+            gte: new Date(), // greater than or equal to the current date
+          },
+        },
+      });
+      return forms.map((form) => {
+        const { description, expiresAt, header, id, link } = form;
+        return {
+          description,
+          expiresAt,
+          header,
+          id,
+          link,
+        };
+      });
+    } catch (error) {
+      throw new TRPCError({
+        cause: error,
+        code: "INTERNAL_SERVER_ERROR",
+      });
+    }
+  }),
+
   getSponsors: publicProcedure.query(async ({ ctx }) => {
     try {
       const sponsors = await ctx.db.sponsor.findMany();
@@ -78,17 +109,29 @@ export const feRouter = createTRPCRouter({
             teamMember.teamRole === AllTeamRoles.BusinessTeamManager,
         ) ?? null;
 
-      const leadRoles = teamMembers
+      const managerRoles = teamMembers
         .filter(
           (teamMember) =>
-            teamMember.teamRole !== null &&
-            teamMember.teamRole in UpperTeamRoles,
+            teamMember.teamRole !== null && teamMember.teamRole in ManagerRoles,
         )
         .filter(
           (teamMember) =>
             teamMember !== teamCaptain &&
             teamMember !== engineeringTeamManager &&
             teamMember !== businessTeamManager,
+        );
+
+      const leadRoles = teamMembers
+        .filter(
+          (teamMember) =>
+            teamMember.teamRole !== null && teamMember.teamRole in LeadRoles,
+        )
+        .filter(
+          (teamMember) =>
+            teamMember !== teamCaptain &&
+            teamMember !== engineeringTeamManager &&
+            teamMember !== businessTeamManager &&
+            !managerRoles.includes(teamMember),
         );
 
       const accountingTeam = filterByRole(teamMembers, AccountingTeam);
@@ -106,6 +149,7 @@ export const feRouter = createTRPCRouter({
         electricalTeam,
         engineeringTeamManager,
         leadRoles,
+        managerRoles,
         mechanicalTeam,
         multiTeam,
         softwareTeam,

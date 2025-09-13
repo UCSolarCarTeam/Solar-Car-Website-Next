@@ -18,6 +18,7 @@ const Team = async () => {
     electricalTeam,
     engineeringTeamManager,
     leadRoles,
+    managerRoles,
     mechanicalTeam,
     multiTeam,
     softwareTeam,
@@ -27,7 +28,7 @@ const Team = async () => {
 
   return (
     <HydrateClient>
-      <main style={{ height: "100vh" }}>
+      <main className={styles.maincontainer}>
         <Navbar />
         <div className={styles.container}>
           <div className={styles.title}>Our Team</div>
@@ -47,6 +48,19 @@ const Team = async () => {
                 <TeamMember user={teamCaptain} />
                 <TeamMember user={businessTeamManager} />
               </div>
+              {managerRoles && managerRoles.length > 0 && (
+                <div className={styles.teamRoleContainer}>
+                  <div className={styles.title}>Subteam Managers</div>
+                  <div className={styles.teamMembers}>
+                    {managerRoles.map((teamMember) => (
+                      <TeamMember
+                        key={teamMember.clerkUserId}
+                        user={teamMember}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
               {leadRoles && leadRoles.length > 0 && (
                 <div className={styles.teamRoleContainer}>
                   <div className={styles.title}>Team Leads</div>

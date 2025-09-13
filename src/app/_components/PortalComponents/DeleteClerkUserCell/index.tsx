@@ -19,7 +19,7 @@ const DeleteClerkUser = ({ clerkId }: DeleteClerkUserProps) => {
       );
     },
     onSuccess: async () => {
-      await toast.promise(utils.portal.getSponsorsList.invalidate(), {
+      await toast.promise(utils.portal.getClerkUsers.invalidate(), {
         loading: "Deleting...",
         success: "Clerk user deleted successfully!",
       });

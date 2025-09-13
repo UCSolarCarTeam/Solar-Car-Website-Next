@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { UpperTeamRoles } from "@/app/_types";
+import { LeadRoles, ManagerRoles } from "@/app/_types";
 import {
   adminMiddleware,
   authedProcedure,
@@ -15,6 +15,9 @@ export type UserRole =
   | "mechanicallead"
   | "electricallead"
   | "member";
+
+export type AdminRoles = Exclude<UserRole, "member">;
+
 const UserRoleSchema = z.enum([
   "admin",
   "business",
@@ -23,15 +26,34 @@ const UserRoleSchema = z.enum([
   "member",
 ]);
 
-// const getBaseUrl = () => {
-//   if (process.env.NODE_ENV === "development") {
-//     return `http://localhost:${process.env.PORT ?? 3000}`;
-//   }
-
-//   return "https://calgarysolarcar.ca"; // this shouldn't really change, so I wouldn't worry about it
-// };
-
 export const portalRouter = createTRPCRouter({
+  createRecruitmentForm: adminMiddleware
+    .input(
+      z.object({
+        description: z.string(),
+        expiresAt: z.string(),
+        header: z.string(),
+        link: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.db.recruitment.create({
+          data: {
+            description: input.description,
+            expiresAt: input.expiresAt,
+            header: input.header,
+            link: input.link,
+          },
+        });
+        return true;
+      } catch (error) {
+        throw new TRPCError({
+          cause: error,
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
   createSponsor: adminMiddleware
     .input(
       z.object({
@@ -81,6 +103,24 @@ export const portalRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       try {
         await ctx.db.user.delete({
+          where: {
+            id: input.id,
+          },
+        });
+        return true;
+      } catch (error) {
+        throw new TRPCError({
+          cause: error,
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
+
+  deleteRecruitmentForm: adminMiddleware
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.db.recruitment.delete({
           where: {
             id: input.id,
           },
@@ -179,6 +219,18 @@ export const portalRouter = createTRPCRouter({
     }
   }),
 
+  getFormsList: adminMiddleware.query(async ({ ctx }) => {
+    try {
+      const forms = await ctx.db.recruitment.findMany();
+      return forms;
+    } catch (error) {
+      throw new TRPCError({
+        cause: error,
+        code: "INTERNAL_SERVER_ERROR",
+      });
+    }
+  }),
+
   getInvitedUsers: adminMiddleware.query(async ({ ctx }) => {
     try {
       const invitations = await ctx.clerkClient.invitations.getInvitationList({
@@ -212,13 +264,15 @@ export const portalRouter = createTRPCRouter({
   }),
 
   inviteUser: adminMiddleware
-    .input(z.object({ email: z.string().email() }))
+    .input(
+      z.object({ email: z.string().email(), selectedRole: UserRoleSchema }),
+    )
     .mutation(async ({ ctx, input }) => {
       try {
         await ctx.clerkClient.invitations.createInvitation({
           emailAddress: input.email,
           publicMetadata: {
-            role: "member",
+            role: input.selectedRole,
           },
         });
         return true;
@@ -271,9 +325,10 @@ export const portalRouter = createTRPCRouter({
         }
 
         const user = await ctx.clerkClient.users.getUser(ctx.user?.id);
-        const isUpperTeamRole = Object.values(UpperTeamRoles).includes(
-          input.teamRole as UpperTeamRoles,
-        );
+        const isUpperTeamRole =
+          Object.values(ManagerRoles).includes(
+            input.teamRole as ManagerRoles,
+          ) || Object.values(LeadRoles).includes(input.teamRole as LeadRoles);
 
         if (isUpperTeamRole && user.publicMetadata?.role !== "admin") {
           throw new TRPCError({
@@ -300,6 +355,44 @@ export const portalRouter = createTRPCRouter({
           where: { id: input.id },
         });
 
+        return true;
+      } catch (error) {
+        throw new TRPCError({
+          cause: error,
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
+
+  updateRecruitmentForm: adminMiddleware
+    .input(
+      z.object({
+        description: z.string().nullable(),
+        expiresAt: z.string().nullable(),
+        header: z.string().nullable(),
+        id: z.number(),
+        link: z.string().nullable(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        // only update the fields that are non null
+        const updateData = {
+          description: input.description,
+          expiresAt: input.expiresAt,
+          header: input.header,
+          link: input.link,
+        };
+        const filteredUpdateData = Object.fromEntries(
+          Object.entries(updateData).filter(([_, value]) => value !== null),
+        );
+
+        await ctx.db.recruitment.update({
+          data: filteredUpdateData,
+          where: {
+            id: input.id,
+          },
+        });
         return true;
       } catch (error) {
         throw new TRPCError({

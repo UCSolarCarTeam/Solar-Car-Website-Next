@@ -16,50 +16,6 @@ const Contact = () => {
     setIsImageLoading(false);
   }, []);
 
-  // return (
-  //   <>
-  //     {isImageLoading && <Loader isLoading={isImageLoading} />}
-  //     <main className={styles.main}>
-  //       {/* <> */}
-  //       <Navbar />
-  //       <div className={styles.container}>
-  //         <div className={styles.pageHeading}>Contact Us</div>
-  //         <div
-  //           className={styles.descriptionTitle}
-  //         >{`We'd love to hear from you! Fill out the form below and we'll get back to you as soon as possible.`}</div>
-
-  //         {/* <Image
-  //           alt="backsplash"
-  //           fill
-  //           id="backsplashImage"
-  //           loading="eager"
-  //           onLoad={handleImageLoad}
-  //           placeholder="blur"
-  //           priority
-  //           src={backsplash}
-  //           style={{ objectFit: "cover" }}
-  //         /> */}
-  //         {/* </div> */}
-  {
-    /* <Image
-            alt="backsplash"
-            fill
-            id="backsplashImage"
-            loading="eager"
-            onLoad={handleImageLoad}
-            placeholder="blur"
-            priority
-            src={backsplash}
-            style={{ objectFit: "cover" }}
-          /> */
-  }
-  // </div>
-  //       {/* </> */}
-  //     </main>
-  //     <Footer />
-  //   </>
-  // );
-
   return (
     <>
       {isImageLoading && <Loader isLoading={isImageLoading} />}

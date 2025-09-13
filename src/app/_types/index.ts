@@ -12,32 +12,46 @@ export const adminClerkRoles = [
   "business",
   "mechanicallead",
   "electricallead",
-];
+] as const;
+
+export const allClerkRoles = [
+  "member",
+  "admin",
+  "business",
+  "mechanicallead",
+  "electricallead",
+] as const;
 
 export enum PortalNavigationLinks {
   Team = "team",
   Users = "users",
   Sponsors = "sponsors",
+  Recruitment = "recruitment",
   Invitations = "invitations",
 }
 
-export enum UpperTeamRoles {
+export enum ManagerRoles {
   TeamCaptain = "Team Captain",
   EngineeringTeamManager = "Engineering Team Manager",
   BusinessTeamManager = "Business Team Manager",
   ElectricalTechnicalManager = "Electrical Technical Manager",
   ElectricalManager = "Electrical Manager",
   ElectricalCoManager = "Electrical Co-Manager",
-  ElectricalIntegrationLead = "Electrical Integration Lead",
   AccountingCoManager = "Accounting Co-Manager",
   AssistantAccountingManager = "Assistant Accounting Manager",
   CommunicationsManager = "Communications Manager",
   SponsorshipManager = "Sponsorship Manager",
   SponsorshipAssistantManager = "Sponsorship Assistant Manager",
-  MonetaryLead = "Monetary Lead",
-  InKindLead = "In-Kind Lead",
   SoftwareTeamManager = "Software Team Manager",
   SoftwareTechnicalManager = "Software Technical Manager",
+  MechanicalManager = "Mechanical Manager",
+  MechanicalTechnicalManager = "Mechanical Technical Manager",
+}
+
+export enum LeadRoles {
+  ElectricalIntegrationLead = "Electrical Integration Lead",
+  MonetaryLead = "Monetary Lead",
+  InKindLead = "In-Kind Lead",
   EmbeddedTeamLead = "Embedded Team Lead",
   TelemetryTeamLead = "Telemetry Team Lead",
   ViscommTeamLead = "Viscomm Team Lead",
@@ -45,8 +59,6 @@ export enum UpperTeamRoles {
   EnergyStorageLead = "Energy Storage Lead",
   HighVoltageLead = "High Voltage Lead",
   LowVoltageLead = "Low Voltage Lead",
-  MechanicalManager = "Mechanical Manager",
-  MechanicalTechnicalManager = "Mechanical Technical Manager",
   SuspensionAndSteeringLead = "Suspension & Steering Lead",
   StructuresLead = "Structures Lead",
 }

@@ -4,7 +4,9 @@ import logo from "public/assets/logo-center-black.png";
 import { memo } from "react";
 
 import styles from "@/app/_components/PortalComponents/Portal/index.module.scss";
+import { useSessionStorage } from "@/app/_hooks/useSessionStorage";
 import { PortalNavigationLinks, adminClerkRoles } from "@/app/_types";
+import { type AdminRoles } from "@/server/api/routers/portal";
 import { UserButton } from "@clerk/nextjs";
 import { type UserResource } from "@clerk/types";
 
@@ -26,7 +28,7 @@ const PortalPageHeader = ({
           <Image alt="navlogo" height={48} src={logo} width={48} />
         </Link>
         {adminClerkRoles.includes(
-          (currentUser?.publicMetadata.role as string) ?? "",
+          (currentUser?.publicMetadata.role as AdminRoles) ?? "",
         ) && (
           <div>
             <div
@@ -52,6 +54,12 @@ const PortalPageHeader = ({
               onClick={() => setCurrentPage(PortalNavigationLinks.Invitations)}
             >
               Invitations
+            </div>
+            <div
+              className={`${currentPage === "recruitment" ? styles.active : ""}`}
+              onClick={() => setCurrentPage(PortalNavigationLinks.Recruitment)}
+            >
+              Recruitment
             </div>
           </div>
         )}

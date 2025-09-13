@@ -1,16 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { memo, useEffect, useMemo, useState } from "react";
+import { memo, useEffect, useMemo } from "react";
 import { Toaster } from "react-hot-toast";
 
 import InlineUserPopup from "@/app/_components/PortalComponents/EditUserCell/InlineUserPopup";
 import InvitationsTable from "@/app/_components/PortalComponents/Portal/Invitations/InvitationsTable";
 import PortalPageHeader from "@/app/_components/PortalComponents/Portal/PortalPageHeader";
+import RecruitmentTable from "@/app/_components/PortalComponents/Portal/RecruitmentTable";
 import SponsorsTable from "@/app/_components/PortalComponents/Portal/SponsorsTable";
 import TeamTable from "@/app/_components/PortalComponents/Portal/TeamTable";
 import UsersTable from "@/app/_components/PortalComponents/Portal/UsersTable";
+import { useSessionStorage } from "@/app/_hooks/useSessionStorage";
 import styles from "@/app/portal/index.module.scss";
+import { type AdminRoles } from "@/server/api/routers/portal";
 import { trpc } from "@/trpc/react";
 import { RedirectToSignIn, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import { skipToken } from "@tanstack/react-query";
@@ -19,12 +22,14 @@ import Loader from "../_components/Loader";
 import { PortalNavigationLinks, adminClerkRoles } from "../_types";
 
 const Portal = () => {
-  const [currentPage, setCurrentPage] = useState<PortalNavigationLinks>(
+  const [currentPage, setCurrentPage] = useSessionStorage(
+    PortalNavigationLinks.Team,
     PortalNavigationLinks.Team,
   );
+
   const { isLoaded, user } = useUser();
   const showAdminTables = useMemo(
-    () => adminClerkRoles.includes(user?.publicMetadata?.role as string),
+    () => adminClerkRoles.includes(user?.publicMetadata?.role as AdminRoles),
     [user?.publicMetadata?.role],
   );
 
@@ -45,6 +50,11 @@ const Portal = () => {
   );
   const sponsors = trpc.portal.getSponsorsList.useQuery(
     !showAdminTables || currentPage !== PortalNavigationLinks.Sponsors
+      ? skipToken
+      : undefined,
+  );
+  const forms = trpc.portal.getFormsList.useQuery(
+    !showAdminTables || currentPage !== PortalNavigationLinks.Recruitment
       ? skipToken
       : undefined,
   );
@@ -92,7 +102,9 @@ const Portal = () => {
             setCurrentPage={setCurrentPage}
           />
           <div className={styles.portalContent}>
-            {adminClerkRoles.includes(user.publicMetadata?.role as string) ? (
+            {adminClerkRoles.includes(
+              user.publicMetadata?.role as AdminRoles,
+            ) ? (
               <>
                 {currentPage === PortalNavigationLinks.Team ? (
                   <TeamTable currentUser={user} users={dbUsers.data ?? []} />
@@ -106,12 +118,17 @@ const Portal = () => {
                     currentUser={user}
                     invitations={invitedUsers.data ?? []}
                   />
-                ) : (
+                ) : currentPage === PortalNavigationLinks.Sponsors ? (
                   <SponsorsTable
                     currentUser={user}
                     sponsors={sponsors.data ?? []}
                   />
-                )}
+                ) : currentPage === PortalNavigationLinks.Recruitment ? (
+                  <RecruitmentTable
+                    currentUser={user}
+                    forms={forms.data ?? []}
+                  />
+                ) : null}
               </>
             ) : (
               <>

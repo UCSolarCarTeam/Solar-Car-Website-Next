@@ -71,7 +71,7 @@ const Navbar = () => {
             placeholder="blur"
             priority
             src={Logo}
-            width={370}
+            width={350}
           />
         </div>
         {width && width > 1024 && (
