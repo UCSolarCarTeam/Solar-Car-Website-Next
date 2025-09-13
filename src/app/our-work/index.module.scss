@@ -95,3 +95,45 @@
     font-size: 3.6em;
   }
 }
+
+.chevronBtn {
+  margin: 0 0.5rem;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chevronIconLeft {
+  display: inline-block;
+  transform: rotate(90deg);
+  width: 32px;
+  height: 32px;
+}
+
+.chevronIconRight {
+  display: inline-block;
+  transform: rotate(-90deg);
+  width: 32px;
+  height: 32px;
+}
+
+.chevronSvg {
+  fill: #fff;
+  width: 32px;
+  height: 32px;
+}
+
+.monthScrollContainer {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  /* Optional: hide scrollbar */
+  scrollbar-width: none;
+}
+.monthScrollContainer::-webkit-scrollbar {
+  display: none;
+}
