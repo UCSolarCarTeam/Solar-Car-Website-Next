@@ -7,11 +7,11 @@ import backsplash3 from "public/assets/cars/backsplash3.jpeg";
 import backsplash4 from "public/assets/cars/backsplash4.jpeg";
 import backsplash5 from "public/assets/cars/backsplash5.jpeg";
 import backsplash6 from "public/assets/cars/backsplash6.jpeg";
-import { memo, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
-import Chevron from "@/app/_components/svgs/Chevron";
+import Pagebullets from "@/app/_components/Pagebullets";
 import styles from "@/app/our-work/index.module.scss";
 
 const timelineData = [
@@ -66,7 +66,7 @@ const timelineData = [
 ];
 
 const Timeline = () => (
-  <div style={{ margin: "0 auto", maxWidth: 900, width: "100%" }}>
+  <div className={styles.timeline}>
     {timelineData.map((yearData) => (
       <YearSection key={yearData.year} yearData={yearData} />
     ))}
@@ -76,145 +76,112 @@ const Timeline = () => (
 const YearSection = ({ yearData }: { yearData: (typeof timelineData)[0] }) => {
   const [monthIdx, setMonthIdx] = useState<number>(0);
   const month = yearData.months[monthIdx];
-  const handlePrev = () =>
-    setMonthIdx((idx: number) =>
-      idx > 0 ? idx - 1 : yearData.months.length - 1,
-    );
-  const handleNext = () =>
-    setMonthIdx((idx: number) =>
-      idx < yearData.months.length - 1 ? idx + 1 : 0,
-    );
-  return (
-    <section style={{ position: "relative" }}>
-      <div
-        style={{
-          alignItems: "center",
-          display: "flex",
-          flexDirection: "row",
-          gap: "2rem",
-          marginTop: "2rem",
-        }}
-      >
-        <div
-          style={{
-            alignItems: "center",
-            display: "flex",
-            height: "400px",
-            justifyContent: "center",
-            minWidth: "60px",
-          }}
-        >
-          <span
-            style={{
-              borderRadius: "16px",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-              color: "#fff",
-              fontSize: "8rem",
-              fontWeight: 700,
-              letterSpacing: "2px",
-              marginRight: "12rem",
-              backgroundColor: "var(--primary-red)",
-              padding: "1rem 0.5rem",
-              textOrientation: "mixed",
-              userSelect: "none",
-              writingMode: "vertical-rl",
-            }}
-          >
-            {yearData.year}
-          </span>
-        </div>
-        <button
-          aria-label="Previous month"
-          className={styles.chevronBtn}
-          onClick={handlePrev}
-        >
-          <span className={styles.chevronIconLeft}>
-            <Chevron className={styles.chevronSvg} />
-          </span>
-        </button>
-        <div
-          style={{
-            alignItems: "center",
-            borderRadius: "16px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
-            color: "#fff",
 
-            display: "flex",
-            flex: 1,
-            gap: "2rem",
-            padding: "1rem",
-          }}
-        >
+  return (
+    <section className={styles.yearSection} id={yearData.year}>
+      <div className={styles.yearContainer}>
+        <div className={styles.yearLabelContainer}>
+          <span className={styles.yearLabel}>{yearData.year}</span>
+        </div>
+
+        <div className={styles.monthCard}>
           {month && (
             <>
               <Image
                 alt={month.month}
+                className={styles.monthImage}
                 src={month.image}
-                style={{
-                  borderRadius: "12px",
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-                  height: "400px",
-                  objectFit: "cover",
-                  width: "800px",
-                }}
               />
-              <div>
-                <h3
-                  style={{
-                    backgroundColor: "var(--primary-red)",
-                    borderRadius: "12px",
-                    color: "#fff",
-                    fontWeight: 600,
-                    margin: 0,
-                    padding: "8px",
-                  }}
-                >
-                  {month.month}
-                </h3>
-                <p style={{ color: "#fff", margin: "0.5rem 0 0 0.3rem" }}>
-                  {month.description}
-                </p>
+              <div className={styles.monthContent}>
+                <h3 className={styles.monthTitle}>{month.month}</h3>
+                <p className={styles.monthDescription}>{month.description}</p>
               </div>
             </>
           )}
         </div>
-        <button
-          aria-label="Next month"
-          className={styles.chevronBtn}
-          onClick={handleNext}
-        >
-          <span className={styles.chevronIconRight}>
-            <Chevron className={styles.chevronSvg} />
-          </span>
-        </button>
+      </div>
+
+      <div className={styles.horizontalDots}>
+        {yearData.months.map((_, index) => (
+          <button
+            aria-label={`View ${yearData.months[index]?.month}`}
+            className={`${styles.horizontalDot} ${index === monthIdx ? styles.active : ""}`}
+            key={index}
+            onClick={() => setMonthIdx(index)}
+          />
+        ))}
       </div>
     </section>
   );
 };
 
 const OurWorkTimelinePage = () => {
+  // State for tracking current year section (similar to cars page)
+  const [currentElement, setCurrentElement] = useState("2025");
+
+  // Handle dot click for scrolling to year sections (same as cars page)
+  const handleDotClick = useCallback((id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  }, []);
+
+  // Intersection observer for tracking visible sections (same logic as cars page)
+  useEffect(() => {
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (
+            entry.target.id === "__next" ||
+            entry.target.id === "__next-build-watcher" ||
+            entry.target.id === "locatorjs-wrapper" ||
+            entry.target.id === "clerk-components"
+          ) {
+            setCurrentElement("2025"); // Default to first year
+          } else {
+            setCurrentElement(entry.target.id);
+          }
+        }
+      });
+    };
+
+    const observerOptions = {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0.5, // Trigger when 50% of the element is visible
+    };
+
+    const observer = new IntersectionObserver(
+      observerCallback,
+      observerOptions,
+    );
+
+    const elements = document.querySelectorAll("[id]"); // Select all elements with an `id`
+    elements.forEach((element) => observer.observe(element));
+
+    return () => {
+      elements.forEach((element) => observer.unobserve(element));
+    };
+  }, []);
+
   return (
     <>
-      <main
-        style={{
-          minHeight: "100vh",
-          paddingBottom: "2rem",
-        }}
-      >
+      <main className={styles.main}>
         <Navbar />
-        <div style={{ padding: "2rem 0" }}>
-          <h1
-            style={{
-              color: "white",
-              fontSize: "3rem",
-              fontWeight: 700,
-              marginLeft: "10rem",
-              textAlign: "left",
-            }}
-          >
-            What We're Working On...
-          </h1>
-          <Timeline />
+        {/* Vertical Dot Navigation for year sections - same as cars page */}
+        <Pagebullets
+          currentId={currentElement}
+          handleDotClick={handleDotClick}
+          pageIds={timelineData.map((data) => data.year)}
+        />
+        <div className={styles.container}>
+          <div>
+            <h1 className={styles.timelineHeading}>
+              What We&apos;re Working On...
+            </h1>
+            <Timeline />
+          </div>
         </div>
       </main>
       <Footer />
