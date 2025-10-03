@@ -80,7 +80,7 @@ const Cars = () => {
         title: "Schulich 1",
       },
       // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
-      Solean: {
+      Soleon: {
         content: `The University of Calgary Solar Car Team built Soleon in 2004 for the 
           inaugural North American Solar Challenge (2005), finishing 13th with a total driving 
           time of 73:55.13—an impressive debut. Soleon then competed in the 2005 World Solar 
@@ -88,7 +88,7 @@ const Cars = () => {
           to make way for Schulich I.`,
         image: backsplash6,
         position: "right",
-        title: "Schulich Solean",
+        title: "Schulich Soleon",
       },
     }),
     [],
