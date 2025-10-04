@@ -11,24 +11,24 @@ interface ArrowButtonProps {
 }
 
 const ArrowButton: React.FC<ArrowButtonProps> = ({
+  ariaLabel,
   direction,
   onClick,
   size = 40,
   style,
-  ariaLabel,
 }) => {
   return (
     <button
+      aria-label={ariaLabel ?? (direction === "left" ? "Previous" : "Next")}
       onClick={onClick}
-      aria-label={ariaLabel || (direction === "left" ? "Previous" : "Next")}
       style={{
+        alignItems: "center",
         background: "none",
         border: "none",
-        padding: 0,
         cursor: "pointer",
         display: "flex",
-        alignItems: "center",
         justifyContent: "center",
+        padding: 0,
         ...style,
       }}
     >
