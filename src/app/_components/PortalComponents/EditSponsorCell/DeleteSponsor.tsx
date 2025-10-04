@@ -37,8 +37,10 @@ const DeleteSponsor = ({ currentRow }: DeleteSponsorProps) => {
   return (
     <div className={styles.editSponsorCell}>
       <BasicButton
-        onClick={() => deleteSponsorMutation.mutate({ id: currentRow.id })}
-        style={{ backgroundColor: "#DC676C" }}
+        onConfirmDelete={() =>
+          deleteSponsorMutation.mutate({ id: currentRow.id })
+        }
+        variant="delete"
       >
         Delete
       </BasicButton>
