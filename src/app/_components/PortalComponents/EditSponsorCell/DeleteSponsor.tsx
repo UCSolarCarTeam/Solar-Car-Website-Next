@@ -5,7 +5,7 @@ import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.mod
 import { trpc } from "@/trpc/react";
 import { type UserResource } from "@clerk/types";
 
-import BasicButton from "../../Buttons/BasicButton";
+import BasicButton, { ButtonVariant } from "../../Buttons/BasicButton";
 
 export interface DeleteSponsorProps {
   currentUser: UserResource | undefined | null;
@@ -40,7 +40,7 @@ const DeleteSponsor = ({ currentRow }: DeleteSponsorProps) => {
         onConfirmDelete={() =>
           deleteSponsorMutation.mutate({ id: currentRow.id })
         }
-        variant="delete"
+        variant={ButtonVariant.Delete}
       >
         Delete
       </BasicButton>

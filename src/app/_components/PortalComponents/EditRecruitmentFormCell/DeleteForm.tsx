@@ -5,12 +5,7 @@ import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.mod
 import { trpc } from "@/trpc/react";
 import { type UserResource } from "@clerk/types";
 
-import BasicButton from "../../Buttons/BasicButton";
-
-enum ButtonVariant {
-  Default = "default",
-  Delete = "delete",
-}
+import BasicButton, { ButtonVariant } from "../../Buttons/BasicButton";
 
 export interface DeleteFormProps {
   currentUser: UserResource | undefined | null;
