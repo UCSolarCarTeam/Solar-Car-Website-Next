@@ -6,9 +6,9 @@ const Twitter = ({ className }: SVGIconProps) => {
   return (
     <svg
       fill="none"
-      height="24"
+      height="28"
       viewBox="0 0 29 24"
-      width="29"
+      width="28"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
