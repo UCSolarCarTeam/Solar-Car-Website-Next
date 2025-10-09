@@ -1,16 +1,19 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import toast from "react-hot-toast";
 
 import styles from "@/app/_components/PortalComponents/DeleteClerkUserCell/index.module.scss";
 import { trpc } from "@/trpc/react";
 
 import BasicButton from "../../Buttons/BasicButton";
+import ConfirmModal from "../../Modals/ConfirmModal";
 
 export interface DeleteClerkUserProps {
   clerkId: string;
 }
 
 const DeleteClerkUser = ({ clerkId }: DeleteClerkUserProps) => {
+  const [showConfirm, setShowConfirm] = useState(false);
+
   const utils = trpc.useUtils();
   const deleteUser = trpc.portal.deleteClerkUser.useMutation({
     onError: () => {
@@ -25,15 +28,31 @@ const DeleteClerkUser = ({ clerkId }: DeleteClerkUserProps) => {
       });
     },
   });
+
   return (
     <div
       className={styles.deleteClerkUserCell}
-      onClick={(e) => {
-        e.stopPropagation();
-        deleteUser.mutate({ clerkId: clerkId });
-      }}
+      onClick={(e) => e.stopPropagation()}
     >
-      <BasicButton style={{ backgroundColor: "#DC676C" }}>Delete</BasicButton>
+      <BasicButton
+        onClick={() => setShowConfirm(true)}
+        style={{ backgroundColor: "#DC676C" }}
+      >
+        Delete
+      </BasicButton>
+
+      <ConfirmModal
+        cancelText="Cancel"
+        confirmText="Yes, Delete"
+        message="Are you sure you want to delete this clerk user?"
+        onClose={() => setShowConfirm(false)}
+        onConfirm={() => {
+          deleteUser.mutate({ clerkId });
+          setShowConfirm(false);
+        }}
+        open={showConfirm}
+        title="Delete Clerk User"
+      />
     </div>
   );
 };

@@ -5,7 +5,7 @@ import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.mod
 import { trpc } from "@/trpc/react";
 import { type UserResource } from "@clerk/types";
 
-import BasicButton from "../../Buttons/BasicButton";
+import BasicButton, { ButtonVariant } from "../../Buttons/BasicButton";
 
 export interface DeleteSponsorProps {
   currentUser: UserResource | undefined | null;
@@ -37,8 +37,10 @@ const DeleteSponsor = ({ currentRow }: DeleteSponsorProps) => {
   return (
     <div className={styles.editSponsorCell}>
       <BasicButton
-        onClick={() => deleteSponsorMutation.mutate({ id: currentRow.id })}
-        style={{ backgroundColor: "#DC676C" }}
+        onConfirmDelete={() =>
+          deleteSponsorMutation.mutate({ id: currentRow.id })
+        }
+        variant={ButtonVariant.Delete}
       >
         Delete
       </BasicButton>

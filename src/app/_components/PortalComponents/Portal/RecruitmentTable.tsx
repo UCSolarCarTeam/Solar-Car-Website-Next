@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { memo, useMemo, useState } from "react";
 
 import BasicButton from "@/app/_components/Buttons/BasicButton";
@@ -41,16 +40,6 @@ const RecruitmentTable = (props: {
       }) ?? [],
     [props.forms, searchValue],
   );
-
-  // const shouldShowAdminButtons = useMemo(
-  //   () =>
-  //     ["admin", "business"].includes(
-  //       (props.currentUser?.publicMetadata?.role as string) ?? "",
-  //     ),
-  //   [props.currentUser?.publicMetadata?.role],
-  // );
-
-  // use that later
 
   const columnHelper = useMemo(() => createColumnHelper<RecruitmentForm>(), []);
   const columns = useMemo(
@@ -117,12 +106,6 @@ const RecruitmentTable = (props: {
     columns,
     data: dataToRender,
     getCoreRowModel: getCoreRowModel(),
-    initialState: {
-      columnVisibility: {
-        // delete: shouldShowAdminButtons,
-        // edit: shouldShowAdminButtons,
-      },
-    },
   });
 
   return (
@@ -132,22 +115,20 @@ const RecruitmentTable = (props: {
         <div className={styles.tableHeaderSponsorRight}>
           <SearchBar setSearchValue={setSearchValue} value={searchValue} />
           {
-            /*shouldShowAdminButtons*/ true && (
-              <EditRecruitmentFormCell
-                currentRow={{
-                  id: -1,
-                  // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
-                  header: "",
-                  // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
-                  description: "",
-                  link: "",
-                  // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
-                  expiresAt: "",
-                }}
-                currentUser={props.currentUser}
-                newForm
-              />
-            )
+            <EditRecruitmentFormCell
+              currentRow={{
+                id: -1,
+                // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
+                header: "",
+                // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
+                description: "",
+                link: "",
+                // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
+                expiresAt: "",
+              }}
+              currentUser={props.currentUser}
+              newForm
+            />
           }
         </div>
       </div>
