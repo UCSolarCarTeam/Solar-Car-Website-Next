@@ -1,116 +1,111 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider  = "postgresql"
-    url       = env("DATABASE_URL")
-    directUrl = env("DIRECT_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
-    id                Int           @id @default(autoincrement())
-    clerkUserId       String        @unique
-    firstName         String?
-    lastName          String?
-    ucid              Int?
-    schoolEmail       String?       @unique
-    phoneNumber       String?
-    fieldOfStudy      String?
-    teamRole          AllTeamRoles?
-    schoolYear        String?
-    yearJoined        String?
-    profilePictureUrl String?
-    description       String?
+  id                Int           @id @default(autoincrement())
+  clerkUserId       String        @unique
+  ucid              Int?
+  schoolEmail       String?       @unique
+  phoneNumber       String?
+  firstName         String?
+  lastName          String?
+  fieldOfStudy      String?
+  schoolYear        String?
+  yearJoined        String?
+  profilePictureUrl String?
+  description       String?
+  teamRole          AllTeamRoles?
+}
+
+model Timeline {
+  id          Int      @id @default(autoincrement())
+  year        Int
+  monthNum    Int
+  monthName   String
+  description String?
+  imageUrl    String?    
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  @@unique([year, monthNum])
 }
 
 model Sponsor {
-    id           Int          @id @default(autoincrement())
-    name         String
-    description  String?
-    websiteUrl   String
-    sponsorLevel SponsorLevel
-    logoUrl      String
+  id           Int          @id @default(autoincrement())
+  name         String
+  logoUrl      String
+  websiteUrl   String
+  description  String?
+  sponsorLevel SponsorLevel
 }
 
 model Recruitment {
-  id          Int     @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   header      String
   description String
   link        String
   expiresAt   DateTime
 }
 
-
 enum SponsorLevel {
-    Gold    @map("Gold")
-    Silver  @map("Silver")
-    Bronze  @map("Bronze")
-    Friends @map("Friends")
+  Gold    @map("Gold")
+  Silver  @map("Silver")
+  Bronze  @map("Bronze")
+  Friends @map("Friends")
 }
 
 enum AllTeamRoles {
-    TeamCaptain              @map("Team Captain")
-    EngineeringTeamManager   @map("Engineering Team Manager")
-    BusinessTeamManager      @map("Business Team Manager")
-    // software team
-    SoftwareTeamManager      @map("Software Team Manager")
-    SoftwareTechnicalManager @map("Software Technical Manager")
-    EmbeddedTeamLead         @map("Embedded Team Lead")
-    TelemetryTeamLead        @map("Telemetry Team Lead")
-    ViscommTeamLead          @map("Viscomm Team Lead")
-    EmbeddedTeam             @map("Embedded Team")
-    TelemetryTeam            @map("Telemetry Team")
-    ViscommTeam              @map("Viscomm Team")
-
-    // accounting team
-    AccountingCoManager        @map("Accounting Co-Manager")
-    AssistantAccountingManager @map("Assistant Accounting Manager")
-    AccountingAnalyst          @map("Accounting Analyst")
-    AccountingAssociate        @map("Accounting Associate")
-
-    // communications team
-    CommunicationsManager       @map("Communications Manager")
-    EventAssociate              @map("Event Associate")
-    MarketingAssociate          @map("Marketing Associate")
-    Videographer                @map("Videographer")
-    MarketingAndEventsAssociate @map("Marketing \\& Events Associate")
-
-    // sponsorship
-    SponsorshipManager          @map("Sponsorship Manager")
-    SponsorshipAssistantManager @map("Sponsorship Assistant Manager")
-    MonetaryLead                @map("Monetary Lead")
-    InKindLead                  @map("In-Kind Lead")
-    SponsorshipAssociate        @map("Sponsorship Associate")
-
-    // electrical team
-    ElectricalManager          @map("Electrical Manager")
-    ElectricalCoManager        @map("Electrical Co-Manager")
-    ElectricalTechnicalManager @map("Electrical Technical Manager")
-    ArraysLead                 @map("Arrays Lead")
-    EnergyStorageLead          @map("Energy Storage Lead")
-    HighVoltageLead            @map("High Voltage Lead")
-    LowVoltageLead             @map("Low Voltage Lead")
-    ArraysTeam                 @map("Arrays Team")
-    EnergyStorageTeam          @map("Energy Storage Team")
-    HighVoltageTeam            @map("High Voltage Team")
-    LowVoltageTeam             @map("Low Voltage Team")
-    ElectricalTeamTeam         @map("Electrical Team")
-
-    // mechanical team
-    MechanicalManager          @map("Mechanical Manager")
-    MechanicalTechnicalManager @map("Mechanical Technical Manager")
-    SuspensionAndSteeringLead  @map("Suspension \\& Steering Lead")
-    StructuresLead             @map("Structures Lead")
-    ElectricalIntegrationLead  @map("Electrical Integration Lead")
-    SuspensionAndSteeringTeam  @map("Suspension \\& Steering Team")
-    StructuresTeam             @map("Structures Team")
-    ElectricalIntegrationTeam  @map("Electrical Integration Team")
-    BodyAndChassisTeam         @map("Body \\& Chassis Team")
-
-    // multi team
-    MultiTeam @map("Multi Team")
+  TeamCaptain                 @map("Team Captain")
+  EngineeringTeamManager      @map("Engineering Team Manager")
+  BusinessTeamManager         @map("Business Team Manager")
+  SoftwareTeamManager         @map("Software Team Manager")
+  SoftwareTechnicalManager    @map("Software Technical Manager")
+  EmbeddedTeamLead            @map("Embedded Team Lead")
+  TelemetryTeamLead           @map("Telemetry Team Lead")
+  ViscommTeamLead             @map("Viscomm Team Lead")
+  EmbeddedTeam                @map("Embedded Team")
+  TelemetryTeam               @map("Telemetry Team")
+  ViscommTeam                 @map("Viscomm Team")
+  AccountingCoManager         @map("Accounting Co-Manager")
+  AssistantAccountingManager  @map("Assistant Accounting Manager")
+  AccountingAnalyst           @map("Accounting Analyst")
+  AccountingAssociate         @map("Accounting Associate")
+  CommunicationsManager       @map("Communications Manager")
+  EventAssociate              @map("Event Associate")
+  MarketingAssociate          @map("Marketing Associate")
+  Videographer                @map("Videographer")
+  MarketingAndEventsAssociate @map("Marketing \\& Events Associate")
+  SponsorshipManager          @map("Sponsorship Manager")
+  SponsorshipAssistantManager @map("Sponsorship Assistant Manager")
+  MonetaryLead                @map("Monetary Lead")
+  InKindLead                  @map("In-Kind Lead")
+  SponsorshipAssociate        @map("Sponsorship Associate")
+  ElectricalManager           @map("Electrical Manager")
+  ElectricalCoManager         @map("Electrical Co-Manager")
+  ElectricalTechnicalManager  @map("Electrical Technical Manager")
+  ArraysLead                  @map("Arrays Lead")
+  EnergyStorageLead           @map("Energy Storage Lead")
+  HighVoltageLead             @map("High Voltage Lead")
+  LowVoltageLead              @map("Low Voltage Lead")
+  ArraysTeam                  @map("Arrays Team")
+  EnergyStorageTeam           @map("Energy Storage Team")
+  HighVoltageTeam             @map("High Voltage Team")
+  LowVoltageTeam              @map("Low Voltage Team")
+  ElectricalTeamTeam          @map("Electrical Team")
+  MechanicalManager           @map("Mechanical Manager")
+  MechanicalTechnicalManager  @map("Mechanical Technical Manager")
+  SuspensionAndSteeringLead   @map("Suspension \\& Steering Lead")
+  StructuresLead              @map("Structures Lead")
+  ElectricalIntegrationLead   @map("Electrical Integration Lead")
+  SuspensionAndSteeringTeam   @map("Suspension \\& Steering Team")
+  StructuresTeam              @map("Structures Team")
+  ElectricalIntegrationTeam   @map("Electrical Integration Team")
+  BodyAndChassisTeam          @map("Body \\& Chassis Team")
+  MultiTeam                   @map("Multi Team")
 }
