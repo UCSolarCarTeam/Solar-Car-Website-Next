@@ -134,6 +134,8 @@ To ensure that Clerk syncs with our Supabase database, follow these steps for th
 - **tRPC:** Provides end-to-end type safety between the client and the server.
 - **ESLint & Prettier:** Ensures high-quality, consistent code throughout the project.
 
+- **Framer Motion:** Used to animate images and carousels. Find the documentation here --> https://motion.dev/
+
 ## 🛠️ Code Quality
 
 We enforce strict code quality standards using **ESLint** and **Prettier**. Always run your linter and address any issues before merging your work.

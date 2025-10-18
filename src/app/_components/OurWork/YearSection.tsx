@@ -6,6 +6,10 @@ import styles from "@/app/our-work/index.module.scss";
 
 import type { TimelineYear } from "./Timeline";
 
+const SCROLL_DISTANCE = 700;
+const DELAY_MS = 500;
+const HORIZONTAL_SCROLL = 20;
+
 const swipeVariants = {
   center: {
     position: "relative",
@@ -13,16 +17,16 @@ const swipeVariants = {
   },
   enter: (direction: number) => ({
     position: "absolute",
-    x: direction > 0 ? 700 : -700,
+    x: direction > 0 ? SCROLL_DISTANCE : -SCROLL_DISTANCE,
   }),
   exit: (direction: number) => ({
     position: "absolute",
-    x: direction < 0 ? 700 : -700,
+    x: direction < 0 ? SCROLL_DISTANCE : -SCROLL_DISTANCE,
   }),
 };
 
 const YearSection = ({ yearData }: { yearData: TimelineYear }) => {
-  const [[monthIdx, direction], setMonth] = useState<[number, number]>([0, 0]);
+  const [[monthIdx, direction], setMonth] = useState<[number, number]>([0, 0]); // we want to default set this to the most recent year for the vertical dots (0 and 0)
   const [isAnimating, setIsAnimating] = useState(false);
   const month = yearData.months[monthIdx];
 
@@ -33,7 +37,7 @@ const YearSection = ({ yearData }: { yearData: TimelineYear }) => {
       if (newIdx === monthIdx) return;
       setMonth([newIdx, newIdx > monthIdx ? 1 : -1]);
       setIsAnimating(true);
-      setTimeout(() => setIsAnimating(false), 500);
+      setTimeout(() => setIsAnimating(false), DELAY_MS);
     },
     [monthIdx],
   );
@@ -43,9 +47,12 @@ const YearSection = ({ yearData }: { yearData: TimelineYear }) => {
       if (isAnimating) return;
       if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
         e.preventDefault();
-        if (e.deltaX > 20 && monthIdx < yearData.months.length - 1) {
+        if (
+          e.deltaX > HORIZONTAL_SCROLL &&
+          monthIdx < yearData.months.length - 1
+        ) {
           paginate(monthIdx + 1);
-        } else if (e.deltaX < -20 && monthIdx > 0) {
+        } else if (e.deltaX < -HORIZONTAL_SCROLL && monthIdx > 0) {
           paginate(monthIdx - 1);
         }
       }
@@ -75,7 +82,6 @@ const YearSection = ({ yearData }: { yearData: TimelineYear }) => {
                 exit="exit"
                 initial="enter"
                 key={monthIdx}
-                style={{ position: "absolute" }}
                 transition={{
                   opacity: { duration: 0.4 },
                   x: {
