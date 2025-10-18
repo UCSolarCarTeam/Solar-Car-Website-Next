@@ -269,6 +269,37 @@ export const portalRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       try {
+        const existingInvitation =
+          await ctx.clerkClient.invitations.getInvitationList({
+            limit: 1,
+            query: input.email,
+          });
+
+        if (existingInvitation.data[0]) {
+          const invitation = existingInvitation.data[0];
+
+          if ((invitation.status as string) === "pending") {
+            throw new TRPCError({
+              code: "CONFLICT",
+              message:
+                "This user has already been invited. Please remind them to check their spam",
+            });
+          }
+
+          if ((invitation.status as string) === "expired") {
+            try {
+              await ctx.clerkClient.invitations.revokeInvitation(invitation.id);
+            } catch (error) {
+              throw new TRPCError({
+                cause: error,
+                code: "INTERNAL_SERVER_ERROR",
+                message: "Failed to revoke expired invitation.",
+              });
+            }
+          }
+        }
+
+        // if the invitation was either expired or revoked, create a new invitation
         await ctx.clerkClient.invitations.createInvitation({
           emailAddress: input.email,
           publicMetadata: {
@@ -280,6 +311,8 @@ export const portalRouter = createTRPCRouter({
         throw new TRPCError({
           cause: error,
           code: "INTERNAL_SERVER_ERROR",
+          message:
+            "Failed to create invitation. Please contact the Telemetry Team",
         });
       }
     }),
