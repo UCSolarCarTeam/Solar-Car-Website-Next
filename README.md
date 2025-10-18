@@ -8,19 +8,38 @@ Welcome to the public-facing website for [calgarysolarcar.ca](https://calgarysol
 > corepack enable yarn
 > ```
 
+### Revoking users the manual way
+
+This should be a ticket and should be made a priority:
+
+You can't invite users who have already been invited, so get all ids that have expired:
+
+```bash
+curl 'https://api.clerk.com/v1/invitations?status=expired&query=&order_by=-created_at&paginated=true&limit=10&offset=0' \
+  --header 'Authorization: Bearer SECRET_KEY' | jq -r '.data[].id'
+```
+
+Then delete their expired invitation:
+
+```bash
+curl 'https://api.clerk.com/v1/invitations/{invitation ID}/revoke' \
+  --request POST \
+  --header 'Authorization: Bearer SECRET_KEY'
+```
+
 ## 🚀 Overview
 
 The Calgary Solar Car website leverages modern technologies to ensure a scalable and efficient experience:
 
 - **Next.js App Router:** React framework for building scalable web applications 🖥️
 - **Clerk:** Manages authentication and user sessions 🔒  
-  *Webhooks are used to synchronize Clerk users with our Supabase dashboard.*
+  _Webhooks are used to synchronize Clerk users with our Supabase dashboard._
 - **Supabase:** Provides database services and image storage 🗄️
 - **tRPC:** Enables type-safe APIs for seamless client-server communication 🔄
 - **SCSS:** Advanced styling featuring nested rules, variables, and mixins 🎨
 - **ESLint & Prettier:** Enforces consistent coding standards and style ⚙️
 
-*For access to Clerk and Supabase, please contact the telemetry lead.* 🙋‍♂️
+_For access to Clerk and Supabase, please contact the telemetry lead._ 🙋‍♂️
 
 ## ⚙️ Getting Started
 
