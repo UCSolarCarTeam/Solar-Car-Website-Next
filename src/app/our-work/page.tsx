@@ -5,12 +5,21 @@ import { memo, useCallback, useEffect, useState } from "react";
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 import Timeline from "@/app/_components/OurWork/Timeline";
-import { timelineData } from "@/app/_components/OurWork/Timeline";
 import Pagebullets from "@/app/_components/Pagebullets";
 import styles from "@/app/our-work/index.module.scss";
+import { trpc } from "@/trpc/react";
 
 const OurWorkTimelinePage = () => {
-  const [currentElement, setCurrentElement] = useState("2025");
+  const { data: timelineData } = trpc.fe.getOurWork.useQuery();
+  const [currentElement, setCurrentElement] = useState<string>(
+    timelineData?.[0]?.year ?? "2025",
+  );
+
+  useEffect(() => {
+    if (timelineData && timelineData.length > 0 && timelineData[0]) {
+      setCurrentElement(timelineData[0].year);
+    }
+  }, [timelineData]);
 
   const handleDotClick = useCallback((id: string) => {
     const el = document.getElementById(id);
@@ -29,7 +38,9 @@ const OurWorkTimelinePage = () => {
             entry.target.id === "locatorjs-wrapper" ||
             entry.target.id === "clerk-components"
           ) {
-            setCurrentElement("2025");
+            if (timelineData && timelineData.length > 0 && timelineData[0]) {
+              setCurrentElement(timelineData[0].year);
+            }
           } else {
             setCurrentElement(entry.target.id);
           }
@@ -54,23 +65,25 @@ const OurWorkTimelinePage = () => {
     return () => {
       elements.forEach((element) => observer.unobserve(element));
     };
-  }, []);
+  }, [timelineData]);
 
   return (
     <>
       <main className={styles.main}>
         <Navbar />
-        <Pagebullets
-          currentId={currentElement}
-          handleDotClick={handleDotClick}
-          pageIds={timelineData.map((data) => data.year)}
-        />
+        {timelineData && (
+          <Pagebullets
+            currentId={currentElement}
+            handleDotClick={handleDotClick}
+            pageIds={timelineData.map((data) => data.year)}
+          />
+        )}
         <div className={styles.container}>
           <div>
             <h1 className={styles.timelineHeading}>
               What We&apos;re Working On...
             </h1>
-            <Timeline />
+            <Timeline data={timelineData} />
           </div>
         </div>
       </main>

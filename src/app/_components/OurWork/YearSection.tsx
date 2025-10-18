@@ -4,7 +4,7 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 import styles from "@/app/our-work/index.module.scss";
 
-import { type timelineData } from "./Timeline";
+import type { TimelineYear } from "./Timeline";
 
 const swipeVariants = {
   center: {
@@ -21,7 +21,7 @@ const swipeVariants = {
   }),
 };
 
-const YearSection = ({ yearData }: { yearData: (typeof timelineData)[0] }) => {
+const YearSection = ({ yearData }: { yearData: TimelineYear }) => {
   const [[monthIdx, direction], setMonth] = useState<[number, number]>([0, 0]);
   const [isAnimating, setIsAnimating] = useState(false);
   const month = yearData.months[monthIdx];
@@ -89,7 +89,9 @@ const YearSection = ({ yearData }: { yearData: (typeof timelineData)[0] }) => {
                 <Image
                   alt={month?.month ?? ""}
                   className={styles.monthImage}
+                  height={200}
                   src={month?.image ?? ""}
+                  width={300}
                 />
               </motion.div>
             </AnimatePresence>
