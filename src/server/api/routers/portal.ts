@@ -27,6 +27,35 @@ const UserRoleSchema = z.enum([
 ]);
 
 export const portalRouter = createTRPCRouter({
+  createOurWorkEntry: adminMiddleware
+    .input(
+      z.object({
+        description: z.string().nullable(),
+        imageUrl: z.string().nullable(),
+        monthName: z.string(),
+        monthNum: z.number(),
+        year: z.number(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.db.timeline.create({
+          data: {
+            description: input.description,
+            imageUrl: input.imageUrl,
+            monthName: input.monthName,
+            monthNum: input.monthNum,
+            year: input.year,
+          },
+        });
+        return true;
+      } catch (error) {
+        throw new TRPCError({
+          cause: error,
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
   createRecruitmentForm: adminMiddleware
     .input(
       z.object({
@@ -103,6 +132,24 @@ export const portalRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       try {
         await ctx.db.user.delete({
+          where: {
+            id: input.id,
+          },
+        });
+        return true;
+      } catch (error) {
+        throw new TRPCError({
+          cause: error,
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
+
+  deleteOurWorkEntry: adminMiddleware
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.db.timeline.delete({
           where: {
             id: input.id,
           },
@@ -230,7 +277,6 @@ export const portalRouter = createTRPCRouter({
       });
     }
   }),
-
   getInvitedUsers: adminMiddleware.query(async ({ ctx }) => {
     try {
       const invitations = await ctx.clerkClient.invitations.getInvitationList({
@@ -243,6 +289,18 @@ export const portalRouter = createTRPCRouter({
         id: invitation.id,
         status: invitation.status,
       }));
+    } catch (error) {
+      throw new TRPCError({
+        cause: error,
+        code: "INTERNAL_SERVER_ERROR",
+      });
+    }
+  }),
+
+  getOurWorkList: adminMiddleware.query(async ({ ctx }) => {
+    try {
+      const forms = await ctx.db.timeline.findMany();
+      return forms;
     } catch (error) {
       throw new TRPCError({
         cause: error,
@@ -364,6 +422,45 @@ export const portalRouter = createTRPCRouter({
       }
     }),
 
+  updateOurWorkEntry: adminMiddleware
+    .input(
+      z.object({
+        description: z.string().nullable(),
+        id: z.number(),
+        imageUrl: z.string().nullable(),
+        monthName: z.string().nullable(),
+        monthNum: z.number().nullable(),
+        year: z.number().nullable(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        // only update the fields that are non null
+        const updateData = {
+          description: input.description,
+          imageUrl: input.imageUrl,
+          monthName: input.monthName,
+          monthNum: input.monthNum,
+          year: input.year,
+        };
+        const filteredUpdateData = Object.fromEntries(
+          Object.entries(updateData).filter(([_, value]) => value !== null),
+        );
+
+        await ctx.db.timeline.update({
+          data: filteredUpdateData,
+          where: {
+            id: input.id,
+          },
+        });
+        return true;
+      } catch (error) {
+        throw new TRPCError({
+          cause: error,
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
   updateRecruitmentForm: adminMiddleware
     .input(
       z.object({

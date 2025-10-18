@@ -19,6 +19,7 @@ import { RedirectToSignIn, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import { skipToken } from "@tanstack/react-query";
 
 import Loader from "../_components/Loader";
+import OurWorkEntriesTable from "../_components/PortalComponents/Portal/OurWorkEntriesTable";
 import { PortalNavigationLinks, adminClerkRoles } from "../_types";
 
 const Portal = () => {
@@ -58,6 +59,11 @@ const Portal = () => {
       ? skipToken
       : undefined,
   );
+  const ourWork = trpc.portal.getOurWorkList.useQuery(
+    !showAdminTables || currentPage !== PortalNavigationLinks.OurWork
+      ? skipToken
+      : undefined,
+  );
   const currentDBUser = trpc.portal.getCurrentDBUser.useQuery(
     showAdminTables ? skipToken : undefined,
   );
@@ -73,7 +79,8 @@ const Portal = () => {
     dbUsers.isFetching ||
     sponsors.isFetching ||
     currentDBUser.isFetching ||
-    forms.isFetching
+    forms.isFetching ||
+    ourWork.isFetching
   ) {
     return <Loader isLoading lightmode />;
   }
@@ -128,6 +135,11 @@ const Portal = () => {
                   <RecruitmentTable
                     currentUser={user}
                     forms={forms.data ?? []}
+                  />
+                ) : currentPage === PortalNavigationLinks.OurWork ? (
+                  <OurWorkEntriesTable
+                    currentUser={user}
+                    entries={ourWork.data ?? []}
                   />
                 ) : null}
               </>
