@@ -47,6 +47,7 @@ const EditUserPopupAdmin = ({
   const [newRowData, setNewRowData] = useState(currentRow);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+  const MAX_DESCRIPTION_LENGTH = 250;
 
   const rowDataToRender = useMemo(() => {
     return Object.entries(newRowData)
@@ -101,6 +102,12 @@ const EditUserPopupAdmin = ({
       setNewRowData((prev) => ({ ...prev, ucid: Number(value) }));
       return;
     }
+    // set a max length on description field
+    if (id === "description") {
+      const truncated = value.slice(0, MAX_DESCRIPTION_LENGTH);
+      setNewRowData((prev) => ({ ...prev, [id]: truncated }));
+      return;
+    }
     setNewRowData((prev) => ({ ...prev, [id]: value }));
   };
 
@@ -148,7 +155,7 @@ const EditUserPopupAdmin = ({
     } else {
       togglePopup();
     }
-  }, [imageFile, newRowData, togglePopup, touched]);
+  }, [imageFile, newRowData, togglePopup, touched, mutateUserContent]);
 
   const handleFileUpload = useCallback((file: File) => {
     setTouched(true);
@@ -188,14 +195,22 @@ const EditUserPopupAdmin = ({
                     {row.label}
                   </label>
                   {row.id === "description" ? (
-                    <textarea
-                      className={styles.textFieldInput}
-                      id={row.id}
-                      name={row.label}
-                      onChange={onInputChange}
-                      rows={5}
-                      value={row.value ?? ""}
-                    ></textarea>
+                    <>
+                      <textarea
+                        className={styles.textFieldInput}
+                        id={row.id}
+                        maxLength={MAX_DESCRIPTION_LENGTH}
+                        name={row.label}
+                        onChange={onInputChange}
+                        rows={5}
+                        value={row.value ?? ""}
+                      />
+                      <div className={styles.charCounter}>
+                        <span>{(row.value as string)?.length ?? 0}</span>
+                        <span>/</span>
+                        <span>{MAX_DESCRIPTION_LENGTH}</span>
+                      </div>
+                    </>
                   ) : row.id === "teamRole" ? (
                     <select
                       className={styles.teamRoleSelect}
