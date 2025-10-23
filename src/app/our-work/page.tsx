@@ -3,6 +3,7 @@
 import { memo, useCallback, useEffect, useState } from "react";
 
 import Footer from "@/app/_components/Footer";
+import Loader from "@/app/_components/Loader";
 import Navbar from "@/app/_components/Navbar";
 import Timeline from "@/app/_components/OurWork/Timeline";
 import Pagebullets from "@/app/_components/Pagebullets";
@@ -12,7 +13,7 @@ import { trpc } from "@/trpc/react";
 import { useIntersectionObserver } from "../_hooks/useIntersectionObserver";
 
 const OurWorkTimelinePage = () => {
-  const { data: timelineData } = trpc.fe.getOurWork.useQuery();
+  const { data: timelineData, isFetching } = trpc.fe.getOurWork.useQuery();
   const [currentElement, setCurrentElement] = useState<string>(
     timelineData?.[0]?.year ?? "2025",
   );
@@ -34,6 +35,7 @@ const OurWorkTimelinePage = () => {
 
   return (
     <>
+      {isFetching && <Loader isLoading={isFetching} />}
       <main className={styles.main}>
         <Navbar />
         {timelineData && (
@@ -48,7 +50,7 @@ const OurWorkTimelinePage = () => {
             <h1 className={styles.timelineHeading}>
               What We&apos;re Working On...
             </h1>
-            <Timeline data={timelineData} />
+            <Timeline data={timelineData ?? []} />
           </div>
         </div>
       </main>

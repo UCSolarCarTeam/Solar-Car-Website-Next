@@ -28,7 +28,7 @@ const swipeVariants = {
 const YearSection = ({ yearData }: { yearData: TimelineYear }) => {
   const [[monthIdx, direction], setMonth] = useState<[number, number]>([0, 0]); // we want to default set this to the most recent year for the vertical dots (0 and 0)
   const [isAnimating, setIsAnimating] = useState(false);
-  const month = yearData.months[monthIdx];
+  const month = yearData.months[monthIdx]!; // never out of range, use ! so ts knows month is never undefined
 
   const imageWrapperRef = useRef<HTMLDivElement>(null);
 
@@ -93,7 +93,7 @@ const YearSection = ({ yearData }: { yearData: TimelineYear }) => {
                 variants={swipeVariants}
               >
                 <Image
-                  alt={month?.month ?? ""}
+                  alt={month.month ?? ""}
                   className={styles.monthImage}
                   height={200}
                   src={month?.image ?? ""}
@@ -111,7 +111,7 @@ const YearSection = ({ yearData }: { yearData: TimelineYear }) => {
               key={monthIdx}
               transition={{ duration: 0.4 }}
             >
-              <h3 className={styles.monthTitle}>{month?.month}</h3>
+              <h3 className={styles.monthTitle}>{month.month}</h3>
               <p className={styles.monthDescription}>{month?.description}</p>
             </motion.div>
           </AnimatePresence>

@@ -4,7 +4,7 @@ import YearSection from "@/app/_components/OurWork/YearSection";
 import styles from "@/app/our-work/index.module.scss";
 
 interface TimelineMonth {
-  description: string;
+  description: string | null;
   image: string | null;
   month: string;
 }
@@ -15,7 +15,7 @@ export interface TimelineYear {
 }
 
 interface TimelineProps {
-  data?: TimelineYear[];
+  data: TimelineYear[];
 }
 
 const Timeline = ({ data }: TimelineProps) => {
