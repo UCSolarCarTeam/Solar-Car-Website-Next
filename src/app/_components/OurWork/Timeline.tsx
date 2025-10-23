@@ -20,7 +20,9 @@ interface TimelineProps {
 
 const Timeline = ({ data }: TimelineProps) => {
   if (!data || data.length === 0) {
-    return <div className={styles.timeline}>Loading timeline...</div>;
+    return (
+      <div className={styles.timeline}>No Timeline. Check back later!</div>
+    );
   }
 
   return (
