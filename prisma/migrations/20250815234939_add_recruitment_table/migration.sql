@@ -10,7 +10,7 @@ CREATE TYPE "AllTeamRoles_new" AS ENUM ('Team Captain', 'Engineering Team Manage
 ALTER TABLE "User" ALTER COLUMN "teamRole" TYPE "AllTeamRoles_new" USING ("teamRole"::text::"AllTeamRoles_new");
 ALTER TYPE "AllTeamRoles" RENAME TO "AllTeamRoles_old";
 ALTER TYPE "AllTeamRoles_new" RENAME TO "AllTeamRoles";
-DROP TYPE "AllTeamRoles_old";
+DROP TYPE IF EXISTS "AllTeamRoles_old";
 COMMIT;
 
 -- CreateTable
