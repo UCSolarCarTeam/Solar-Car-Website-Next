@@ -6,12 +6,14 @@ import backsplash3 from "public/assets/cars/backsplash3.jpeg";
 import backsplash4 from "public/assets/cars/backsplash4.jpeg";
 import backsplash5 from "public/assets/cars/backsplash5.jpeg";
 import backsplash6 from "public/assets/cars/backsplash6.jpeg";
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 
 import CarScreenView from "@/app/_components/Cars/CarScreenView";
 import Loader from "@/app/_components/Loader";
 import Pagebullets from "@/app/_components/Pagebullets";
 import styles from "@/app/cars/index.module.scss";
+
+import { useIntersectionObserver } from "../_hooks/useIntersectionObserver";
 
 const Cars = () => {
   const pageIds = useMemo(
@@ -103,42 +105,7 @@ const Cars = () => {
     }
   }, []);
 
-  useEffect(() => {
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          if (
-            entry.target.id === "__next" ||
-            entry.target.id === "__next-build-watcher" ||
-            entry.target.id === "locatorjs-wrapper" ||
-            entry.target.id === "clerk-components"
-          ) {
-            setCurrentElement("Helios");
-          } else {
-            setCurrentElement(entry.target.id);
-          }
-        }
-      });
-    };
-
-    const observerOptions = {
-      root: null,
-      rootMargin: "0px",
-      threshold: 0.5, // Trigger when 50% of the element is visible
-    };
-
-    const observer = new IntersectionObserver(
-      observerCallback,
-      observerOptions,
-    );
-
-    const elements = document.querySelectorAll("[id]"); // Select all elements with an `id`
-    elements.forEach((element) => observer.observe(element));
-
-    return () => {
-      elements.forEach((element) => observer.unobserve(element));
-    };
-  }, []);
+  useIntersectionObserver(Object.keys(pageIds), setCurrentElement);
 
   const [isImageLoading, setIsImageLoading] = useState(true);
 
