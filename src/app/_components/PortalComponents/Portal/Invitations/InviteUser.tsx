@@ -26,10 +26,8 @@ const InviteUser = () => {
 
   const utils = trpc.useUtils();
   const inviteUserMutation = trpc.portal.inviteUser.useMutation({
-    onError: () => {
-      toast.error(
-        "There was an error inviting the user. Please contact Telemetry Team.",
-      );
+    onError: (error) => {
+      toast.error("Failed to invite user: " + error.message);
     },
     onSuccess: async () => {
       await toast.promise(utils.portal.getInvitedUsers.invalidate(), {
