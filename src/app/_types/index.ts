@@ -61,6 +61,7 @@ export enum LeadRoles {
   HighVoltageLead = "High Voltage Lead",
   LowVoltageLead = "Low Voltage Lead",
   SuspensionAndSteeringLead = "Suspension & Steering Lead",
+  BodyAndChassisLead = "Body & Chassis Lead",
   StructuresLead = "Structures Lead",
 }
 
