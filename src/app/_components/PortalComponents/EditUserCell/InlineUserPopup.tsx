@@ -1,6 +1,6 @@
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { memo, useCallback, useMemo, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
 import { compress } from "@/app/_lib/compress";
@@ -24,6 +24,7 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
   const [touched, setTouched] = useState(false);
   const [newRowData, setNewRowData] = useState(user);
   const [saving, setSaving] = useState(false);
+  const MAX_DESCRIPTION_LENGTH = 250;
 
   const mutateUserContent = trpc.portal.updateDBUser.useMutation({
     onError: () => {
@@ -96,6 +97,12 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
       setNewRowData((prev) => ({ ...prev, ucid: Number(value) }));
       return;
     }
+    // set a max length on description field
+    if (id === "description") {
+      const truncated = value.slice(0, MAX_DESCRIPTION_LENGTH);
+      setNewRowData((prev) => ({ ...prev, [id]: truncated }));
+      return;
+    }
     setNewRowData((prev) => ({ ...prev, [id]: value }));
   };
 
@@ -140,7 +147,7 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
         mutateUserContent.mutate(newRowData);
       }
     }
-  }, [imageFile, newRowData, touched]);
+  }, [imageFile, newRowData, touched, mutateUserContent]);
 
   if (!user) return null;
 
@@ -171,14 +178,22 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
                   {row.label}
                 </label>
                 {row.id === "description" ? (
-                  <textarea
-                    className={styles.textFieldInput}
-                    id={row.id}
-                    name={row.label}
-                    onChange={onInputChange}
-                    rows={5}
-                    value={row.value ?? ""}
-                  ></textarea>
+                  <>
+                    <textarea
+                      className={styles.textFieldInput}
+                      id={row.id}
+                      maxLength={MAX_DESCRIPTION_LENGTH}
+                      name={row.label}
+                      onChange={onInputChange}
+                      rows={5}
+                      value={row.value ?? ""}
+                    />
+                    <div className={styles.charCounter}>
+                      <span>{(row.value as string)?.length ?? 0}</span>
+                      <span>/</span>
+                      <span>{MAX_DESCRIPTION_LENGTH}</span>
+                    </div>
+                  </>
                 ) : row.id === "teamRole" ? (
                   <select
                     className={styles.teamRoleSelect}
