@@ -65,9 +65,11 @@ export const userFormSchema = z.object({
   ucid: z
     .number()
     .int("UCID must be a whole number")
-    .positive("UCID must be a positive number")
-    .min(10000000, "UCID must be at least 8 digits")
-    .max(99999999, "UCID must be at most 8 digits")
+    .nonnegative("UCID must be a non-negative number")
+    .max(99999999, "UCID must be exactly 8 digits")
+    .refine((val) => val >= 0 && val <= 99999999, {
+      message: "UCID must be exactly 8 digits",
+    })
     .optional()
     .or(z.literal(null)),
 
