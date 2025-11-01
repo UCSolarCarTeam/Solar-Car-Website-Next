@@ -6,6 +6,18 @@ const emailDomainRegex = /@ucalgary\.ca$/i; // UCalgary email validation
 const currentYear = new Date().getFullYear();
 
 export const userFormSchema = z.object({
+  description: z
+    .string()
+    .max(250, "Description must be less than 250 characters")
+    .optional()
+    .or(z.literal("")),
+
+  fieldOfStudy: z
+    .string()
+    .max(100, "Field of study must be less than 100 characters")
+    .optional()
+    .or(z.literal("")),
+
   firstName: z
     .string()
     .min(1, "First name is required")
@@ -24,13 +36,6 @@ export const userFormSchema = z.object({
       "Last name can only contain letters, spaces, hyphens, and apostrophes",
     ),
 
-  schoolEmail: z
-    .string()
-    .email("Please enter a valid email address")
-    .regex(emailDomainRegex, "Must be a @ucalgary.ca email address")
-    .optional()
-    .or(z.literal("")),
-
   phoneNumber: z
     .string()
     .regex(phoneRegex, "Please enter a valid phone number")
@@ -38,6 +43,24 @@ export const userFormSchema = z.object({
     .max(20, "Phone number is too long")
     .optional()
     .or(z.literal("")),
+
+  // profile picture (not validated here as it's a file upload)
+  profilePictureUrl: z.string().optional().or(z.literal("")),
+
+  schoolEmail: z
+    .string()
+    .email("Please enter a valid email address")
+    .regex(emailDomainRegex, "Must be a @ucalgary.ca email address")
+    .optional()
+    .or(z.literal("")),
+
+  schoolYear: z
+    .string()
+    .max(50, "School year must be less than 50 characters")
+    .optional()
+    .or(z.literal("")),
+
+  teamRole: z.string().optional().or(z.literal("")),
 
   ucid: z
     .number()
@@ -47,18 +70,6 @@ export const userFormSchema = z.object({
     .max(99999999, "UCID must be at most 8 digits")
     .optional()
     .or(z.literal(null)),
-
-  fieldOfStudy: z
-    .string()
-    .max(100, "Field of study must be less than 100 characters")
-    .optional()
-    .or(z.literal("")),
-
-  schoolYear: z
-    .string()
-    .max(50, "School year must be less than 50 characters")
-    .optional()
-    .or(z.literal("")),
 
   yearJoined: z
     .string()
@@ -74,17 +85,6 @@ export const userFormSchema = z.object({
     )
     .optional()
     .or(z.literal("")),
-
-  description: z
-    .string()
-    .max(250, "Description must be less than 250 characters")
-    .optional()
-    .or(z.literal("")),
-
-  teamRole: z.string().optional().or(z.literal("")),
-
-  // profile picture (not validated here as it's a file upload)
-  profilePictureUrl: z.string().optional().or(z.literal("")),
 });
 
 export type UserFormData = z.infer<typeof userFormSchema>;
