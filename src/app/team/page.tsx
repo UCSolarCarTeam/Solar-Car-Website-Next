@@ -44,6 +44,7 @@ const Team = async () => {
           {tempFlag ? (
             <div className={styles.teamMembersContainer}>
               <div className={styles.teamManagers}>
+                <div className={styles.title}>Co-Chairs</div>
                 <TeamMember user={engineeringTeamManager} />
                 <TeamMember user={teamCaptain} />
                 <TeamMember user={businessTeamManager} />
