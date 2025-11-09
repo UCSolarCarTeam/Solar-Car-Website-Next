@@ -43,10 +43,13 @@ const Team = async () => {
           </div>
           {tempFlag ? (
             <div className={styles.teamMembersContainer}>
-              <div className={styles.teamManagers}>
-                <TeamMember user={engineeringTeamManager} />
-                <TeamMember user={teamCaptain} />
-                <TeamMember user={businessTeamManager} />
+              <div className={styles.teamRoleContainer}>
+                <div className={styles.title}>Co-Chairs</div>
+                <div className={styles.teamManagers}>
+                  <TeamMember user={engineeringTeamManager} />
+                  <TeamMember user={teamCaptain} />
+                  <TeamMember user={businessTeamManager} />
+                </div>
               </div>
               {managerRoles && managerRoles.length > 0 && (
                 <div className={styles.teamRoleContainer}>
