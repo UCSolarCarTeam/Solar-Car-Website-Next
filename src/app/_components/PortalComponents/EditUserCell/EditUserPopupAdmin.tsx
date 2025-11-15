@@ -297,7 +297,7 @@ const EditUserPopupAdmin = ({
                       type={
                         userRowMetadata[row.id as keyof typeof userRowMetadata]
                       }
-                      value={row.value ?? undefined}
+                      value={row.value ?? ""}
                     />
                   )}
                   {validationErrors[row.id as keyof UserFormData] && (
