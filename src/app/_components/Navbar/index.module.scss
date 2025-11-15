@@ -98,7 +98,7 @@
   text-underline-offset: 4px;
   &.active {
     text-decoration-line: underline;
-    text-decoration-color: red;
+    text-decoration-color: var(--primary-helios);
     text-decoration-thickness: 3px;
   }
 }

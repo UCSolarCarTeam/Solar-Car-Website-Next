@@ -30,8 +30,14 @@ const TeamMember = ({ user }: TeamMemberProps) => {
         <div className={styles.teamRole}>
           {(user.teamRole ?? "").replace(/([a-z])([A-Z])/g, "$1 $2")}
         </div>
-        <div className={styles.fieldOfStudy}>{user.fieldOfStudy}</div>
-        <div className={styles.description}>{user.description}</div>
+      </div>
+
+      {/* Hover overlay */}
+      <div className={styles.hoverOverlay}>
+        <div className={styles.overlayContent}>
+          <div className={styles.fieldOfStudy}>{user.fieldOfStudy}</div>
+          <div className={styles.description}>{user.description}</div>
+        </div>
       </div>
     </div>
   );

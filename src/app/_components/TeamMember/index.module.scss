@@ -1,11 +1,19 @@
 .teamMemberImage {
   position: relative;
-  width: 300px;
-  height: 200px;
-  border-radius: 25px;
+  width: 225px;
+  height: 225px;
+  border-radius: 100%;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition:
+    border-color 0.3s ease,
+    transform 0.3s ease;
+  z-index: 1; // Keep image behind overlay
 
   img {
-    border-radius: 22px 22px 0px 0px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }
 
@@ -14,34 +22,204 @@
   flex-direction: column;
   align-items: center;
   box-sizing: content-box;
-  border: solid #f3f3f3;
-  border-radius: 25px;
   width: 300px;
-  background-color: #f3f3f3;
-  color: black;
-  height: 360px;
+  min-height: 350px;
+  text-align: center;
+  color: white;
+  gap: 0.75rem;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  border-radius: 16px;
+  padding-top: 3rem;
+
+  &:hover {
+    transform: translateY(-4px);
+
+    .teamMemberImage {
+      border-color: var(--primary-red);
+      transform: scale(1.05);
+    }
+  }
 }
 
-.name {
-  color: var(--secondary-red);
-  font-size: 1.7rem;
-  font-weight: 600;
+.hoverOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  z-index: 10; // Ensure overlay is above image and text
+
+  .teamMember:hover & {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 
-.teamRole {
-  font-size: 1.2rem;
-  font-weight: 350;
+.overlayContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: center;
+  width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--primary-red);
+    border-radius: 2px;
+  }
 }
 
 .fieldOfStudy {
   font-style: italic;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 500;
+  padding-bottom: 0.75rem;
+  position: relative;
+  overflow-wrap: break-word;
+  word-break: break-word;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--primary-red),
+      transparent
+    );
+  }
 }
 
 .description {
-  display: -webkit-box;
-  line-clamp: 2;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+  font-size: 0.95rem;
+  padding: 0 0.5rem;
+  text-align: center;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.name {
+  background-color: var(--primary-red);
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 600;
+  padding: 0.2rem 0.3rem;
+  border-radius: 12px;
+  min-width: 210px;
+  width: fit-content;
+  overflow-wrap: break-word;
+}
+
+.teamRole {
+  font-size: 1.075rem;
+  font-weight: 500;
+  color: white;
+  margin-top: 0.6rem;
+}
+
+@media (max-width: 1024px) {
+  .teamMember {
+    width: 280px;
+    min-height: 380px;
+  }
+
+  .teamMemberImage {
+    width: 220px;
+    height: 220px;
+  }
+
+  .name {
+    font-size: 1.3rem;
+    padding: 0.4rem 1.2rem;
+  }
+
+  .teamRole {
+    font-size: 1.1rem;
+  }
+
+  .overlayName {
+    font-size: 1.3rem;
+    max-width: 85%;
+  }
+
+  .hoverOverlay {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .fieldOfStudy {
+    font-size: 0.95rem;
+  }
+
+  .description {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .teamMember {
+    width: 100%;
+    max-width: 300px;
+    min-height: 360px;
+  }
+
+  .teamMemberImage {
+    width: 200px;
+    height: 200px;
+  }
+
+  .name {
+    font-size: 1.2rem;
+    padding: 0.4rem 1rem;
+  }
+
+  .teamRole {
+    font-size: 1rem;
+  }
+
+  .overlayName {
+    font-size: 1.2rem;
+    max-width: 85%;
+  }
+
+  .hoverOverlay {
+    padding: 1.5rem 1rem;
+    border-radius: 12px;
+  }
+
+  .fieldOfStudy {
+    font-size: 0.9rem;
+  }
+
+  .description {
+    font-size: 0.85rem;
+  }
 }
