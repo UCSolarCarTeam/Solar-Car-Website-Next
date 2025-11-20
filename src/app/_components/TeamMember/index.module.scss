@@ -33,12 +33,14 @@
   border-radius: 16px;
   padding-top: 3rem;
 
-  &:hover {
-    transform: translateY(-4px);
+  &.hasOverlay {
+    &:hover {
+      transform: translateY(-4px);
 
-    .teamMemberImage {
-      border-color: var(--primary-red);
-      transform: scale(1.05);
+      .teamMemberImage {
+        border-color: var(--primary-red);
+        transform: scale(1.05);
+      }
     }
   }
 }

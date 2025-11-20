@@ -12,7 +12,13 @@ type TeamMemberProps = {
 const TeamMember = ({ user }: TeamMemberProps) => {
   if (!user) return null;
   return (
-    <div className={styles.teamMember} key={user.profilePictureUrl}>
+    <div
+      className={`${styles.teamMember} ${
+        user.fieldOfStudy || user.description ? styles.hasOverlay : ""
+      }`}
+      key={user.profilePictureUrl}
+    >
+      {" "}
       <div className={styles.teamMemberImage}>
         <Image
           alt="Headshot"
@@ -31,14 +37,20 @@ const TeamMember = ({ user }: TeamMemberProps) => {
           {(user.teamRole ?? "").replace(/([a-z])([A-Z])/g, "$1 $2")}
         </div>
       </div>
-
       {/* Hover overlay */}
-      <div className={styles.hoverOverlay}>
-        <div className={styles.overlayContent}>
-          <div className={styles.fieldOfStudy}>{user.fieldOfStudy}</div>
-          <div className={styles.description}>{user.description}</div>
+      {/* eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing */}
+      {(user.fieldOfStudy || user.description) && (
+        <div className={styles.hoverOverlay}>
+          <div className={styles.overlayContent}>
+            {user.fieldOfStudy && (
+              <div className={styles.fieldOfStudy}>{user.fieldOfStudy}</div>
+            )}
+            {user.description && (
+              <div className={styles.description}>{user.description}</div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
