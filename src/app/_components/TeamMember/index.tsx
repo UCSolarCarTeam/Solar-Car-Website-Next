@@ -38,8 +38,7 @@ const TeamMember = ({ user }: TeamMemberProps) => {
         </div>
       </div>
       {/* Hover overlay */}
-      {/* eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing */}
-      {(user.fieldOfStudy || user.description) && (
+      {(user.fieldOfStudy ?? user.description) && (
         <div className={styles.hoverOverlay}>
           <div className={styles.overlayContent}>
             {user.fieldOfStudy && (

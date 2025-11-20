@@ -32,6 +32,7 @@
   transition: transform 0.3s ease;
   border-radius: 16px;
   padding-top: 3rem;
+  cursor: default;
 
   &.hasOverlay {
     &:hover {
