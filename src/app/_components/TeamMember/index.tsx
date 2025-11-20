@@ -29,7 +29,7 @@ const TeamMember = ({ user }: TeamMemberProps) => {
           unoptimized
         />
       </div>
-      <div>
+      <div className={styles.nameRoleContainer}>
         <div className={styles.name}>
           {[user.firstName, user.lastName].join(" ")}
         </div>

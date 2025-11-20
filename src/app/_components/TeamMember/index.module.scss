@@ -149,6 +149,12 @@
   margin-top: 0.6rem;
 }
 
+.nameRoleContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 @media (max-width: 1024px) {
   .teamMember {
     width: 280px;
