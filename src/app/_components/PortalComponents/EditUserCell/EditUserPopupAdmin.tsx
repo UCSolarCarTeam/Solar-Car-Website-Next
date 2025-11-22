@@ -115,7 +115,7 @@ const EditUserPopupAdmin = ({
     if (id === "ucid") {
       setNewRowData((prev) => ({
         ...prev,
-        ucid: value ? value.trim() : null,
+        ucid: value ? Number(value) : null,
       }));
       return;
     }

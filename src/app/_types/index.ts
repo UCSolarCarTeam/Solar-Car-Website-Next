@@ -145,6 +145,6 @@ export const userRowMetadata = {
   phoneNumber: "string",
   schoolEmail: "string",
   schoolYear: "string",
-  ucid: "string",
+  ucid: "number",
   yearJoined: "string",
 };

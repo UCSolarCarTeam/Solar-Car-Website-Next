@@ -63,11 +63,14 @@ export const userFormSchema = z.object({
   teamRole: z.string().optional().or(z.literal("")),
 
   ucid: z
-    .string()
-    .trim()
-    .regex(/^\d{8}$/, "UCID must be exactly 8 digits")
+    .number()
+    .int("UCID must be a whole number")
+    .nonnegative("UCID must be a non-negative number")
+    .max(99999999, "UCID must be exactly 8 digits")
+    .refine((val) => val >= 0 && val <= 99999999, {
+      message: "UCID must be exactly 8 digits",
+    })
     .optional()
-    .or(z.literal(""))
     .or(z.literal(null)),
 
   yearJoined: z
