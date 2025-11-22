@@ -110,7 +110,7 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
     if (id === "ucid") {
       setNewRowData((prev) => ({
         ...prev,
-        ucid: value ? Number(value) : null,
+        ucid: value ? value.trim() : null,
       }));
       return;
     }
