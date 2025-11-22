@@ -402,7 +402,7 @@ export const portalRouter = createTRPCRouter({
         schoolEmail: z.string().nullable(),
         schoolYear: z.string().nullable(),
         teamRole: z.nativeEnum(AllTeamRoles).nullable(),
-        ucid: z.number().nullable(),
+        ucid: z.string().nullable(),
         yearJoined: z.string().nullable(),
       }),
     )
@@ -440,7 +440,7 @@ export const portalRouter = createTRPCRouter({
             schoolEmail: input.schoolEmail,
             schoolYear: input.schoolYear,
             teamRole: input.teamRole,
-            ucid: Number(input.ucid),
+            ucid: input.ucid,
             yearJoined: input.yearJoined,
           },
           where: { id: input.id },

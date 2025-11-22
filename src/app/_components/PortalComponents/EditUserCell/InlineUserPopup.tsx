@@ -4,6 +4,11 @@ import toast from "react-hot-toast";
 
 import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
 import { compress } from "@/app/_lib/compress";
+import {
+  type UserFormData,
+  type UserFormErrors,
+  validateUserForm,
+} from "@/app/_lib/userValidation";
 import { teamRoleOptions, userRowMetadata } from "@/app/_types";
 import { type RouterOutputs, trpc } from "@/trpc/react";
 import { type UserResource } from "@clerk/types";
@@ -24,6 +29,7 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
   const [touched, setTouched] = useState(false);
   const [newRowData, setNewRowData] = useState(user);
   const [saving, setSaving] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<UserFormErrors>({});
   const MAX_DESCRIPTION_LENGTH = 250;
 
   const mutateUserContent = trpc.portal.updateDBUser.useMutation({
@@ -93,8 +99,19 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
   ) => {
     const { id, value } = e.target;
     setTouched(true);
+
+    // clear the field's validation errors
+    setValidationErrors((prev) => {
+      const newErrors = { ...prev };
+      delete newErrors[id as keyof UserFormData];
+      return newErrors;
+    });
+
     if (id === "ucid") {
-      setNewRowData((prev) => ({ ...prev, ucid: Number(value) }));
+      setNewRowData((prev) => ({
+        ...prev,
+        ucid: value ? value.trim() : null,
+      }));
       return;
     }
     // set a max length on description field
@@ -108,6 +125,15 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
 
   const handleSave = useCallback(async () => {
     if (touched) {
+      // validate the form's fields
+      const errors = validateUserForm(newRowData as Partial<UserFormData>);
+
+      if (Object.keys(errors).length > 0) {
+        setValidationErrors(errors);
+        toast.error("Please fix the validation errors before saving.");
+        return;
+      }
+
       setSaving(true);
       if (imageFile) {
         const reader = new FileReader();
@@ -180,7 +206,11 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
                 {row.id === "description" ? (
                   <>
                     <textarea
-                      className={styles.textFieldInput}
+                      className={`${styles.textFieldInput} ${
+                        validationErrors[row.id as keyof UserFormData]
+                          ? styles.inputError
+                          : ""
+                      }`}
                       id={row.id}
                       maxLength={MAX_DESCRIPTION_LENGTH}
                       name={row.label}
@@ -196,7 +226,11 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
                   </>
                 ) : row.id === "teamRole" ? (
                   <select
-                    className={styles.teamRoleSelect}
+                    className={`${styles.teamRoleSelect} ${
+                      validationErrors[row.id as keyof UserFormData]
+                        ? styles.inputError
+                        : ""
+                    }`}
                     id={row.id}
                     name={row.label}
                     onChange={onInputChange}
@@ -215,15 +249,24 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
                   </select>
                 ) : (
                   <input
-                    className={styles.textFieldInput}
+                    className={`${styles.textFieldInput} ${
+                      validationErrors[row.id as keyof UserFormData]
+                        ? styles.inputError
+                        : ""
+                    }`}
                     id={row.id}
                     name={row.label}
                     onChange={onInputChange}
                     type={
                       userRowMetadata[row.id as keyof typeof userRowMetadata]
                     }
-                    value={row.value ?? undefined}
+                    value={row.value ?? ""}
                   />
+                )}
+                {validationErrors[row.id as keyof UserFormData] && (
+                  <span className={styles.errorMessage}>
+                    {validationErrors[row.id as keyof UserFormData]}
+                  </span>
                 )}
               </div>
             ))}

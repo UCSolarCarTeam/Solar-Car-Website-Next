@@ -11,7 +11,7 @@ datasource db {
 model User {
   id                Int           @id @default(autoincrement())
   clerkUserId       String        @unique
-  ucid              Int?
+  ucid              String?
   schoolEmail       String?       @unique
   phoneNumber       String?
   firstName         String?

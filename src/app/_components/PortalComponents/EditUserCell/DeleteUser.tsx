@@ -23,7 +23,7 @@ export interface DeleteUserProps {
     profilePictureUrl: string | null;
     phoneNumber: string | null;
     schoolEmail: string | null;
-    ucid: number | null;
+    ucid: string | null;
   };
 }
 

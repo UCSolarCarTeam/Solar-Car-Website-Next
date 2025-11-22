@@ -7,6 +7,11 @@ import { type EditUserCellProps } from "@/app/_components/PortalComponents/EditU
 import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
 import { compress } from "@/app/_lib/compress";
 import {
+  type UserFormData,
+  type UserFormErrors,
+  validateUserForm,
+} from "@/app/_lib/userValidation";
+import {
   LeadRoles,
   ManagerRoles,
   teamRoleOptions,
@@ -47,6 +52,7 @@ const EditUserPopupAdmin = ({
   const [newRowData, setNewRowData] = useState(currentRow);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<UserFormErrors>({});
   const MAX_DESCRIPTION_LENGTH = 250;
 
   const rowDataToRender = useMemo(() => {
@@ -98,8 +104,19 @@ const EditUserPopupAdmin = ({
   ) => {
     const { id, value } = e.target;
     setTouched(true);
+
+    // clear the field's validation errors
+    setValidationErrors((prev) => {
+      const newErrors = { ...prev };
+      delete newErrors[id as keyof UserFormData];
+      return newErrors;
+    });
+
     if (id === "ucid") {
-      setNewRowData((prev) => ({ ...prev, ucid: Number(value) }));
+      setNewRowData((prev) => ({
+        ...prev,
+        ucid: value ? value.trim() : null,
+      }));
       return;
     }
     // set a max length on description field
@@ -113,6 +130,17 @@ const EditUserPopupAdmin = ({
 
   const handleSave = useCallback(async () => {
     if (touched) {
+      // validate the form's fields
+      const errors = validateUserForm(newRowData as Partial<UserFormData>);
+
+      if (Object.keys(errors).length > 0) {
+        setValidationErrors(errors);
+        toast.error(
+          "There are errors in the form. Please fix them and try again.",
+        );
+        return;
+      }
+
       setSaving(true);
       if (imageFile) {
         const reader = new FileReader();
@@ -197,7 +225,11 @@ const EditUserPopupAdmin = ({
                   {row.id === "description" ? (
                     <>
                       <textarea
-                        className={styles.textFieldInput}
+                        className={`${styles.textFieldInput} ${
+                          validationErrors[row.id as keyof UserFormData]
+                            ? styles.inputError
+                            : ""
+                        }`}
                         id={row.id}
                         maxLength={MAX_DESCRIPTION_LENGTH}
                         name={row.label}
@@ -213,7 +245,11 @@ const EditUserPopupAdmin = ({
                     </>
                   ) : row.id === "teamRole" ? (
                     <select
-                      className={styles.teamRoleSelect}
+                      className={`${styles.teamRoleSelect} ${
+                        validationErrors[row.id as keyof UserFormData]
+                          ? styles.inputError
+                          : ""
+                      }`}
                       id={row.id}
                       name={row.label}
                       onChange={onInputChange}
@@ -250,15 +286,24 @@ const EditUserPopupAdmin = ({
                     </select>
                   ) : (
                     <input
-                      className={styles.textFieldInput}
+                      className={`${styles.textFieldInput} ${
+                        validationErrors[row.id as keyof UserFormData]
+                          ? styles.inputError
+                          : ""
+                      }`}
                       id={row.id}
                       name={row.label}
                       onChange={onInputChange}
                       type={
                         userRowMetadata[row.id as keyof typeof userRowMetadata]
                       }
-                      value={row.value ?? undefined}
+                      value={row.value ?? ""}
                     />
+                  )}
+                  {validationErrors[row.id as keyof UserFormData] && (
+                    <span className={styles.errorMessage}>
+                      {validationErrors[row.id as keyof UserFormData]}
+                    </span>
                   )}
                 </div>
               ))}
