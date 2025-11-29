@@ -2,6 +2,8 @@
   background: #121212;
   color: white;
   scroll-snap-align: center;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .logo {
@@ -15,21 +17,22 @@
 .footer {
   background-color: #121212;
   color: white;
-  display: grid;
+  display: flex;
+  flex-direction: row;
   width: 100%;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  justify-items: center;
-  padding: 2rem 1rem 2rem 0;
+  gap: 120px;
+  justify-content: center;
+  padding: 2rem 0 2rem 0;
 }
 
 .gridContainer {
   display: flex;
   flex-direction: column;
   row-gap: 10px;
-
+  
   > :first-child {
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     font-size: large;
   }
 }
@@ -70,6 +73,7 @@
   padding-top: 16px;
   display: flex;
   margin: auto;
+  // margin-left: 10px;
 }
 
 .copyright {
