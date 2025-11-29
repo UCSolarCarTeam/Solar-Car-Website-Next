@@ -1,24 +1,14 @@
-"use client";
-
-import Image from "next/image";
 import backsplash from "public/assets/home/backsplash.jpeg";
-import { memo, useCallback, useState } from "react";
+import { memo } from "react";
 
 import Footer from "@/app/_components/Footer";
-import Loader from "@/app/_components/Loader";
+import ImageHero from "@/app/_components/ImageHero/ImageHero";
 import Navbar from "@/app/_components/Navbar";
 import styles from "@/app/index.module.scss";
 
 const Home = () => {
-  const [isImageLoading, setIsImageLoading] = useState(true);
-
-  const handleImageLoad = useCallback(() => {
-    setIsImageLoading(false);
-  }, []);
-
   return (
     <>
-      {isImageLoading && <Loader isLoading={isImageLoading} />}
       <main className={styles.main}>
         <Navbar />
         <div className={styles.container}>
@@ -33,17 +23,7 @@ const Home = () => {
               where it took first place in the Multi Occupant Vehicle Class.
             </div>
           </div>
-          <Image
-            alt="backsplash"
-            fill
-            id="backsplashImage"
-            loading="eager"
-            onLoad={handleImageLoad}
-            placeholder="blur"
-            priority
-            src={backsplash}
-            style={{ objectFit: "cover" }}
-          />
+          <ImageHero src={backsplash} />
         </div>
       </main>
       <Footer />
