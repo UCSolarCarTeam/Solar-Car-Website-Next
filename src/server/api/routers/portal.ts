@@ -404,6 +404,7 @@ export const portalRouter = createTRPCRouter({
         teamRole: z.nativeEnum(AllTeamRoles).nullable(),
         ucid: z.number().nullable(),
         yearJoined: z.string().nullable(),
+        linkedIn: z.string().nullable(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -442,6 +443,7 @@ export const portalRouter = createTRPCRouter({
             teamRole: input.teamRole,
             ucid: Number(input.ucid),
             yearJoined: input.yearJoined,
+            linkedIn: input.linkedIn,
           },
           where: { id: input.id },
         });

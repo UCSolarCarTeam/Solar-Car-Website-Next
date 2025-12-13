@@ -49,37 +49,37 @@ const EditUserPopupAdmin = ({
   const [saving, setSaving] = useState(false);
   const MAX_DESCRIPTION_LENGTH = 250;
 
-  const rowDataToRender = useMemo(() => {
-    return Object.entries(newRowData)
-      .filter(
-        ([key]) => !["id", "clerkUserId", "profilePictureUrl"].includes(key),
-      )
-      .reduce(
-        (acc, [key, value]) => {
-          acc[key] = {
-            id: key,
-            label:
-              key === "ucid"
-                ? "UCID"
-                : key === "description"
-                  ? "About Me"
-                  : key
-                      .replace(/([a-z])([A-Z])/g, "$1 $2")
-                      .replace(/^./, (match) => match.toUpperCase()),
-            value: value,
-          };
-          return acc;
-        },
-        {} as Record<
-          string,
-          {
-            id: string;
-            label: string;
-            value: string | number | null | undefined;
-          }
-        >,
-      );
-  }, [newRowData]);
+const rowDataToRender = useMemo(() => {
+  return Object.entries(newRowData)
+    .filter(
+      ([key]) => !["id", "clerkUserId", "profilePictureUrl"].includes(key),
+    )
+    .reduce(
+      (acc, [key, value]) => {
+        let label: string;
+        if (key === "ucid") {
+          label = "UCID";
+        } else if (key === "description") {
+          label = "About Me";
+        } else if (key === "linkedIn") {
+          label = "LinkedIn Profile URL";
+        } else {
+          label = key
+            .replace(/([a-z])([A-Z])/g, "$1 $2")
+            .replace(/^./, (match) => match.toUpperCase());
+        }
+
+        acc[key] = {
+          id: key,
+          label: label,
+          value: value,
+        };
+        return acc;
+      },
+      {} as Record<string, { id: string; label: string; value: string | number | null | undefined }>
+    );
+}, [newRowData]);
+
 
   const handleOverlayClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -255,7 +255,14 @@ const EditUserPopupAdmin = ({
                       name={row.label}
                       onChange={onInputChange}
                       type={
-                        userRowMetadata[row.id as keyof typeof userRowMetadata]
+                        row.id === "linkedIn" 
+                          ? "url" 
+                          : userRowMetadata[row.id as keyof typeof userRowMetadata]
+                      }
+                      placeholder={
+                        row.id === "linkedIn"
+                          ? "https://www.linkedin.com/in/yourprofile"
+                          : undefined
                       }
                       value={row.value ?? undefined}
                     />

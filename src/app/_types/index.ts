@@ -147,4 +147,5 @@ export const userRowMetadata = {
   schoolYear: "string",
   ucid: "number",
   yearJoined: "string",
+  linkedIn: "string",
 };

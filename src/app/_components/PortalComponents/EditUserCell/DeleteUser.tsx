@@ -24,6 +24,7 @@ export interface DeleteUserProps {
     phoneNumber: string | null;
     schoolEmail: string | null;
     ucid: number | null;
+    linkedIn: string | null;
   };
 }
 

@@ -83,6 +83,12 @@ const TeamTable = (props: {
         },
         header: "Team Role",
       }),
+      columnHelper.accessor("linkedIn", {
+        cell: (info) => {
+          return (info.getValue() ?? "").replace(/([a-z])([A-Z])/g, "$1 $2");
+        },
+        header: "Linkedin",
+      }),
       // columnHelper.accessor("schoolYear", {
       //   cell: (info) => info.getValue(),
       //   header: "School Year",
