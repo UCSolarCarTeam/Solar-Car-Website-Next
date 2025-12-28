@@ -36,3 +36,16 @@ img#backsplashImage {
     height: 100dvh !important;
   }
 }
+
+::-webkit-scrollbar {
+  width: 0.4rem;
+  height: 0.4rem;
+}
+
+::-webkit-scrollbar-track {
+  background: #121212;
+}
+
+::-webkit-scrollbar-thumb {
+  background: red;
+}
