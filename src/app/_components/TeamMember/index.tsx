@@ -4,23 +4,28 @@ import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { memo } from "react";
 
 import styles from "@/app/_components/TeamMember/index.module.scss";
-import { type User } from "@prisma/client";
+import { type Alumni, type User } from "@prisma/client";
 
 import Linkedin from "../svgs/Linkedin";
 
 type TeamMemberProps = {
-  user: User | null | undefined;
+  user: User | Alumni | null | undefined;
 };
 
 const TeamMember = ({ user }: TeamMemberProps) => {
   if (!user) return null;
 
-  const hasOverlay =
-    user.fieldOfStudy ?? user.description ?? user.linkedIn ?? false;
+  // team members use fieldOfStudy and description, alumni use company and position
+  const fieldOfStudy =
+    "fieldOfStudy" in user ? user.fieldOfStudy : user.company;
+  const description = "description" in user ? user.description : user.position;
+
+  const hasOverlay = fieldOfStudy ?? description ?? user.linkedIn ?? false;
 
   return (
     <div
       className={`${styles.teamMember} ${hasOverlay ? styles.hasOverlay : ""}`}
+      key={user.profilePictureUrl}
     >
       <div className={styles.teamMemberImage}>
         <Image
@@ -38,18 +43,25 @@ const TeamMember = ({ user }: TeamMemberProps) => {
         </div>
         <div className={styles.teamRole}>
           {(user.teamRole ?? "").replace(/([a-z])([A-Z])/g, "$1 $2")}
+          {"yearJoinedSolarCar" in user &&
+            user.yearJoinedSolarCar &&
+            user.yearLeftSolarCar && (
+              <>
+                <br />
+                {user.yearJoinedSolarCar} - {user.yearLeftSolarCar}
+              </>
+            )}
         </div>
       </div>
-
+      {/* Hover overlay */}
       {hasOverlay && (
         <div className={styles.hoverOverlay}>
           <div className={styles.overlayContent}>
-            {user.fieldOfStudy && (
-              <div className={styles.fieldOfStudy}>{user.fieldOfStudy}</div>
+            {fieldOfStudy && (
+              <div className={styles.fieldOfStudy}>{fieldOfStudy}</div>
             )}
-
-            {user.description && (
-              <div className={styles.description}>{user.description}</div>
+            {description && (
+              <div className={styles.description}>{description}</div>
             )}
 
             {user.linkedIn && (
