@@ -1,12 +1,11 @@
 import { memo } from "react";
 
 import { type SVGIconProps } from "@/app/_types";
-import { color } from "framer-motion";
 
 const Linkedin = ({ className, color }: SVGIconProps) => {
   return (
     <svg
-      fill= {color}
+      fill= "currentColor"
       height="26"
       viewBox="0 0 28 26"
       width="28"
