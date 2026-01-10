@@ -94,7 +94,8 @@
       transform 0.3s ease,
       color 0.2s ease;
 
-    &:hover {
+    &:hover,
+    + &:focus-visible {
       transform: scale(1.05);
       color: var(--primary-helios);
     }
