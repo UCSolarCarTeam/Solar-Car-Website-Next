@@ -4,6 +4,7 @@ import { memo } from "react";
 
 import styles from "@/app/_components/TeamMember/index.module.scss";
 import { type User } from "@prisma/client";
+import Linkedin from "../svgs/Linkedin";
 
 type TeamMemberProps = {
   user: User | null | undefined;
@@ -49,7 +50,11 @@ const TeamMember = ({ user }: TeamMemberProps) => {
             )}
             <div className={styles.overlayDivider}></div>
             {user.linkedIn && (
-              <div className={styles.linkedIn}><a href={user.linkedIn}><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg" alt="linkedin logo" /></a></div>
+              <div className={styles.linkedIn}>
+                <a href={user.linkedIn}>
+                  <Linkedin color="#111111" />
+                </a>
+              </div>  
             )}
           </div>
         </div>
