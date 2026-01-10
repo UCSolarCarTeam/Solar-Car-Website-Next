@@ -16,6 +16,7 @@ import { trpc } from "@/trpc/react";
 
 import BasicButton from "../../Buttons/BasicButton";
 import DropZone from "../DropZone";
+import { UserFormData, validateUserForm } from "@/app/_lib/userValidation";
 
 type EditUserPopupAdminProps = {
   togglePopup: () => void;
@@ -130,15 +131,21 @@ const rowDataToRender = useMemo(() => {
 
   const handleSave = useCallback(async () => {
     if (touched) {
-      // validate LinkedIn URL before saving
-      if (!isValidLinkedInUrl(newRowData.linkedIn as string | undefined | null)) {
-        toast.error("Please enter a valid LinkedIn profile URL (https://www.linkedin.com/...)");
+      // validate the form's fields
+      const errors = validateUserForm(newRowData as Partial<UserFormData>);
+ 
+      if (Object.keys(errors).length > 0) {
+        setValidationErrors(errors);
+        toast.error(
+          "There are errors in the form. Please fix them and try again.",
+        );
         return;
       }
+ 
       setSaving(true);
       if (imageFile) {
         const reader = new FileReader();
-
+ 
         reader.onload = async (e) => {
           const fileContent = e.target?.result; // Binary string or base64
           try {
@@ -168,7 +175,7 @@ const rowDataToRender = useMemo(() => {
             togglePopup();
           }
         };
-
+ 
         const compressedFile = await compress(imageFile);
         reader.readAsDataURL(compressedFile);
       } else {
@@ -178,7 +185,6 @@ const rowDataToRender = useMemo(() => {
       togglePopup();
     }
   }, [imageFile, newRowData, togglePopup, touched, mutateUserContent]);
-
   const handleFileUpload = useCallback((file: File) => {
     setTouched(true);
     if (file) {
@@ -321,3 +327,7 @@ const rowDataToRender = useMemo(() => {
 };
 
 export default memo(EditUserPopupAdmin);
+
+function setValidationErrors(errors: Partial<Record<("firstName" | "lastName") | ("description" | "fieldOfStudy" | "phoneNumber" | "profilePictureUrl" | "schoolEmail" | "schoolYear" | "teamRole" | "ucid" | "yearJoined"), string>>) {
+  throw new Error("Function not implemented.");
+}
