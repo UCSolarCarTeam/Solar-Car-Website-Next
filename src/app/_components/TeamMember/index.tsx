@@ -40,7 +40,7 @@ const TeamMember = ({ user }: TeamMemberProps) => {
         </div>
       </div>
       {/* Hover overlay */}
-      {(user.fieldOfStudy ?? user.description) && (
+      {(user.fieldOfStudy || user.description || user.linkedIn) && (
         <div className={styles.hoverOverlay}>
           <div className={styles.overlayContent}>
             {user.fieldOfStudy && (

@@ -279,7 +279,7 @@ const rowDataToRender = useMemo(() => {
                       type={row.id === "linkedIn" ? "url" : userRowMetadata[row.id as keyof typeof userRowMetadata]}
                       pattern={
                         row.id === "linkedIn"
-                          ? "^https://(www\\.)?linkedin\\.com(/.*)?$"
+                          ? "^https://([a-z]{2,3}\\.)?linkedin\\.com/.+$"
                           : undefined
                       }
                       title={
