@@ -16,7 +16,7 @@ import { trpc } from "@/trpc/react";
 
 import BasicButton from "../../Buttons/BasicButton";
 import DropZone from "../DropZone";
-import { UserFormData, validateUserForm } from "@/app/_lib/userValidation";
+import { UserFormData, UserFormErrors, validateUserForm } from "@/app/_lib/userValidation";
 
 type EditUserPopupAdminProps = {
   togglePopup: () => void;
@@ -48,6 +48,7 @@ const EditUserPopupAdmin = ({
   const [newRowData, setNewRowData] = useState(currentRow);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<UserFormErrors>({})
   const MAX_DESCRIPTION_LENGTH = 250;
 
 const rowDataToRender = useMemo(() => {
@@ -110,23 +111,6 @@ const rowDataToRender = useMemo(() => {
       return;
     }
     setNewRowData((prev) => ({ ...prev, [id]: value }));
-  };
-
-  const isValidLinkedInUrl = (value?: string | null) => {
-    if (!value) return true; // empty is allowed
-    const trimmed = String(value).trim();
-    try {
-      const url = new URL(trimmed);
-      // require https and linkedin domain
-      if (url.protocol !== "https:") return false;
-      const host = url.hostname.toLowerCase();
-      if (!host.endsWith("linkedin.com")) return false;
-      // ensure there's a path after the domain (not just https://linkedin.com)
-      if (!url.pathname || url.pathname === "/") return false;
-      return true;
-    } catch {
-      return false;
-    }
   };
 
   const handleSave = useCallback(async () => {
@@ -225,7 +209,11 @@ const rowDataToRender = useMemo(() => {
                   {row.id === "description" ? (
                     <>
                       <textarea
-                        className={styles.textFieldInput}
+                        className={`${styles.textFieldInput} ${
+                          validationErrors[row.id as keyof UserFormData]
+                            ? styles.inputError
+                            : ""
+                        }`}
                         id={row.id}
                         maxLength={MAX_DESCRIPTION_LENGTH}
                         name={row.label}
@@ -241,7 +229,11 @@ const rowDataToRender = useMemo(() => {
                     </>
                   ) : row.id === "teamRole" ? (
                     <select
-                      className={styles.teamRoleSelect}
+                      className={`${styles.teamRoleSelect} ${
+                        validationErrors[row.id as keyof UserFormData]
+                          ? styles.inputError
+                          : ""
+                      }`}
                       id={row.id}
                       name={row.label}
                       onChange={onInputChange}
@@ -278,16 +270,15 @@ const rowDataToRender = useMemo(() => {
                     </select>
                   ) : (
                     <input
-                      className={styles.textFieldInput}
+                      className={`${styles.textFieldInput} ${
+                        validationErrors[row.id as keyof UserFormData]
+                          ? styles.inputError
+                          : ""
+                      }`}
                       id={row.id}
                       name={row.label}
                       onChange={onInputChange}
                       type={row.id === "linkedIn" ? "url" : userRowMetadata[row.id as keyof typeof userRowMetadata]}
-                      pattern={
-                        row.id === "linkedIn"
-                          ? "^https://([a-z]{2,3}\\.)?linkedin\\.com/.+$"
-                          : undefined
-                      }
                       title={
                         row.id === "linkedIn"
                           ? "Enter a valid LinkedIn profile URL"
@@ -298,8 +289,13 @@ const rowDataToRender = useMemo(() => {
                           ? "https://www.linkedin.com/in/yourprofile"
                           : undefined
                       }
-                      value={row.value ?? undefined}
+                      value={row.value ?? ""}
                     />
+                  )}
+                  {validationErrors[row.id as keyof UserFormData] && (
+                    <span className={styles.errorMessage}>
+                      {validationErrors[row.id as keyof UserFormData]}
+                    </span>
                   )}
                 </div>
               ))}
@@ -327,7 +323,3 @@ const rowDataToRender = useMemo(() => {
 };
 
 export default memo(EditUserPopupAdmin);
-
-function setValidationErrors(errors: Partial<Record<("firstName" | "lastName") | ("description" | "fieldOfStudy" | "phoneNumber" | "profilePictureUrl" | "schoolEmail" | "schoolYear" | "teamRole" | "ucid" | "yearJoined"), string>>) {
-  throw new Error("Function not implemented.");
-}

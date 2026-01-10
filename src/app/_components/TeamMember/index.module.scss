@@ -106,7 +106,12 @@
     width: 150px;
     height: 2px;
     margin: 0.5rem auto 0;
-    background: linear-gradient(90deg, transparent, var(--primary-red), transparent);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--primary-red),
+      transparent
+    );
   }
 }
 
@@ -126,7 +131,12 @@
     width: 150px;
     height: 2px;
     margin: 0.5rem auto 0;
-    background: linear-gradient(90deg, transparent, var(--primary-red), transparent);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--primary-red),
+      transparent
+    );
   }
 }
 
@@ -144,18 +154,16 @@
   color: black;
 
   svg {
-    width: 20px;
-    height: 20px;
-    max-width: 100%;
-    max-height: 100%;
     object-fit: contain;
     display: block;
     opacity: 0.8;
   }
 
-  transition: transform 0.3s ease-in-out, color 0.2s ease-in-out;
-  transform: scale(0.99);
-  
+  transition:
+    transform 0.3s ease-in-out,
+    color 0.2s ease-in-out;
+  transform: scale(0.99); //dont remove, important for animation smoothness
+
   &:hover,
   &:focus-visible {
     color: white;

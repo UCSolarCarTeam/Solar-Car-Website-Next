@@ -53,7 +53,7 @@ const TeamMember = ({ user }: TeamMemberProps) => {
               <div className={styles.linkedIn}>
                 <Link href={user.linkedIn}
                 target="_blank">
-                  <Linkedin />
+                  <Linkedin height={20} width={20}/>
                 </Link>
               </div>  
             )}

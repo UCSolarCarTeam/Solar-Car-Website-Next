@@ -2,13 +2,13 @@ import { memo } from "react";
 
 import { type SVGIconProps } from "@/app/_types";
 
-const Linkedin = ({ className }: SVGIconProps) => {
+const Linkedin = ({ className , width, height}: SVGIconProps) => {
   return (
     <svg
       fill="currentColor"
-      height="26"
+      height={height}
       viewBox="0 0 28 26"
-      width="28"
+      width={width}
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
