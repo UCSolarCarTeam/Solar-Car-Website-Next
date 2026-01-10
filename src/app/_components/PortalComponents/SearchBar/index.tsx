@@ -14,7 +14,7 @@ const SearchBar = ({ placeholder, setSearchValue, value }: SearchBarProps) => {
       <input
         className="search"
         onChange={(e) => setSearchValue(e.target.value)}
-        placeholder={placeholder ? placeholder : "Search..."}
+        placeholder={placeholder ?? "Search..."}
         value={value}
       />
     </div>

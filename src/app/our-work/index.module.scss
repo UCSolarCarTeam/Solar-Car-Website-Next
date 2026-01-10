@@ -6,6 +6,7 @@
 .container {
   display: flex;
   flex-direction: column;
+  background-color: #121212;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
@@ -184,6 +185,8 @@
   flex-direction: column;
   flex: 1;
   margin-left: 2rem;
+  // this works with feb which is the largest width
+  max-width: 175px;
 }
 
 .monthTitle {

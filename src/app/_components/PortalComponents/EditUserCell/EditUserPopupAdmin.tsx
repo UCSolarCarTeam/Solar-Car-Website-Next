@@ -7,6 +7,11 @@ import { type EditUserCellProps } from "@/app/_components/PortalComponents/EditU
 import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
 import { compress } from "@/app/_lib/compress";
 import {
+  type UserFormData,
+  type UserFormErrors,
+  validateUserForm,
+} from "@/app/_lib/userValidation";
+import {
   LeadRoles,
   ManagerRoles,
   teamRoleOptions,
@@ -48,6 +53,7 @@ const EditUserPopupAdmin = ({
   const [newRowData, setNewRowData] = useState(currentRow);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<UserFormErrors>({});
   const MAX_DESCRIPTION_LENGTH = 250;
 
 const rowDataToRender = useMemo(() => {
@@ -99,8 +105,19 @@ const rowDataToRender = useMemo(() => {
   ) => {
     const { id, value } = e.target;
     setTouched(true);
+
+    // clear the field's validation errors
+    setValidationErrors((prev) => {
+      const newErrors = { ...prev };
+      delete newErrors[id as keyof UserFormData];
+      return newErrors;
+    });
+
     if (id === "ucid") {
-      setNewRowData((prev) => ({ ...prev, ucid: Number(value) }));
+      setNewRowData((prev) => ({
+        ...prev,
+        ucid: value ? value.trim() : null,
+      }));
       return;
     }
     // set a max length on description field
@@ -225,7 +242,11 @@ const rowDataToRender = useMemo(() => {
                   {row.id === "description" ? (
                     <>
                       <textarea
-                        className={styles.textFieldInput}
+                        className={`${styles.textFieldInput} ${
+                          validationErrors[row.id as keyof UserFormData]
+                            ? styles.inputError
+                            : ""
+                        }`}
                         id={row.id}
                         maxLength={MAX_DESCRIPTION_LENGTH}
                         name={row.label}
@@ -241,7 +262,11 @@ const rowDataToRender = useMemo(() => {
                     </>
                   ) : row.id === "teamRole" ? (
                     <select
-                      className={styles.teamRoleSelect}
+                      className={`${styles.teamRoleSelect} ${
+                        validationErrors[row.id as keyof UserFormData]
+                          ? styles.inputError
+                          : ""
+                      }`}
                       id={row.id}
                       name={row.label}
                       onChange={onInputChange}
@@ -278,7 +303,11 @@ const rowDataToRender = useMemo(() => {
                     </select>
                   ) : (
                     <input
-                      className={styles.textFieldInput}
+                      className={`${styles.textFieldInput} ${
+                        validationErrors[row.id as keyof UserFormData]
+                          ? styles.inputError
+                          : ""
+                      }`}
                       id={row.id}
                       name={row.label}
                       onChange={onInputChange}
@@ -298,8 +327,13 @@ const rowDataToRender = useMemo(() => {
                           ? "https://www.linkedin.com/in/yourprofile"
                           : undefined
                       }
-                      value={row.value ?? undefined}
+                      value={row.value ?? ""}
                     />
+                  )}
+                  {validationErrors[row.id as keyof UserFormData] && (
+                    <span className={styles.errorMessage}>
+                      {validationErrors[row.id as keyof UserFormData]}
+                    </span>
                   )}
                 </div>
               ))}

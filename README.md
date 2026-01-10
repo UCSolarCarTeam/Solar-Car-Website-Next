@@ -66,7 +66,7 @@ Follow these steps to set up your local development environment:
 
 4. **Obtain the Environment Configuration:**
 
-   Request the `.env` file from the telemetry lead.
+   Copy the env variables from [Confluence](https://uofcsolarcar.atlassian.net/wiki/spaces/ST/pages/345931787/Solar+Car+Next+Website+Environment+Variables) or request the `.env` file from the telemetry lead.
 
 5. **Generate the Database Client:**
 
