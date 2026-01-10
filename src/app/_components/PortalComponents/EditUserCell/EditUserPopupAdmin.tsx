@@ -111,8 +111,30 @@ const rowDataToRender = useMemo(() => {
     setNewRowData((prev) => ({ ...prev, [id]: value }));
   };
 
+  const isValidLinkedInUrl = (value?: string | null) => {
+    if (!value) return true; // empty is allowed
+    const trimmed = String(value).trim();
+    try {
+      const url = new URL(trimmed);
+      // require https and linkedin domain
+      if (url.protocol !== "https:") return false;
+      const host = url.hostname.toLowerCase();
+      if (!host.endsWith("linkedin.com")) return false;
+      // ensure there's a path after the domain (not just https://linkedin.com)
+      if (!url.pathname || url.pathname === "/") return false;
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
   const handleSave = useCallback(async () => {
     if (touched) {
+      // validate LinkedIn URL before saving
+      if (!isValidLinkedInUrl(newRowData.linkedIn as string | undefined | null)) {
+        toast.error("Please enter a valid LinkedIn profile URL (https://www.linkedin.com/...)");
+        return;
+      }
       setSaving(true);
       if (imageFile) {
         const reader = new FileReader();
@@ -254,10 +276,16 @@ const rowDataToRender = useMemo(() => {
                       id={row.id}
                       name={row.label}
                       onChange={onInputChange}
-                      type={
-                        row.id === "linkedIn" 
-                          ? "url" 
-                          : userRowMetadata[row.id as keyof typeof userRowMetadata]
+                      type={row.id === "linkedIn" ? "url" : userRowMetadata[row.id as keyof typeof userRowMetadata]}
+                      pattern={
+                        row.id === "linkedIn"
+                          ? "^https://(www\\.)?linkedin\\.com(/.*)?$"
+                          : undefined
+                      }
+                      title={
+                        row.id === "linkedIn"
+                          ? "Enter a valid LinkedIn profile URL"
+                          : undefined
                       }
                       placeholder={
                         row.id === "linkedIn"

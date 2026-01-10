@@ -85,7 +85,7 @@ const TeamTable = (props: {
       }),
       columnHelper.accessor("linkedIn", {
         cell: (info) => info.getValue(),
-        header: "Linkedin",
+        header: "LinkedIn",
       }),
       // columnHelper.accessor("schoolYear", {
       //   cell: (info) => info.getValue(),

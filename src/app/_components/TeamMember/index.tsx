@@ -5,6 +5,7 @@ import { memo } from "react";
 import styles from "@/app/_components/TeamMember/index.module.scss";
 import { type User } from "@prisma/client";
 import Linkedin from "../svgs/Linkedin";
+import Link from "next/link";
 
 type TeamMemberProps = {
   user: User | null | undefined;
@@ -50,9 +51,10 @@ const TeamMember = ({ user }: TeamMemberProps) => {
             )}
             {user.linkedIn && (
               <div className={styles.linkedIn}>
-                <a href={user.linkedIn}>
-                  <Linkedin color="#111111" />
-                </a>
+                <Link href={user.linkedIn}
+                target="_blank">
+                  <Linkedin />
+                </Link>
               </div>  
             )}
           </div>
