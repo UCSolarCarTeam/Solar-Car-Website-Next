@@ -28,7 +28,7 @@
   display: flex;
   flex-direction: column;
   row-gap: 10px;
-  
+
   > :first-child {
     font-weight: bold;
     margin-bottom: 12px;
@@ -87,4 +87,16 @@
   flex-direction: row;
   gap: 35px;
   margin: 10px;
+
+  a {
+    display: inline-flex;
+    transition:
+      transform 0.3s ease,
+      color 0.2s ease;
+
+    &:hover {
+      transform: scale(1.05);
+      color: var(--primary-helios); // Change color on hover
+    }
+  }
 }
