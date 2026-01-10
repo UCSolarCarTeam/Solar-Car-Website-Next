@@ -3,7 +3,6 @@ export interface SVGIconProps {
   height?: number;
   width?: number;
   fill?: string;
-  color?: string;
   onClick?: () => void;
   size?: "sm" | "md" | "lg";
 }

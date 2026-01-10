@@ -2,10 +2,10 @@ import { memo } from "react";
 
 import { type SVGIconProps } from "@/app/_types";
 
-const Linkedin = ({ className, color }: SVGIconProps) => {
+const Linkedin = ({ className }: SVGIconProps) => {
   return (
     <svg
-      fill= "currentColor"
+      fill="currentColor"
       height="26"
       viewBox="0 0 28 26"
       width="28"

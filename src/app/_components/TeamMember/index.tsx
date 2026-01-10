@@ -48,7 +48,6 @@ const TeamMember = ({ user }: TeamMemberProps) => {
             {user.description && (
               <div className={styles.description}>{user.description}</div>
             )}
-            <div className={styles.overlayDivider}></div>
             {user.linkedIn && (
               <div className={styles.linkedIn}>
                 <a href={user.linkedIn}>
