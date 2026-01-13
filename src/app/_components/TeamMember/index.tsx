@@ -4,6 +4,8 @@ import { memo } from "react";
 
 import styles from "@/app/_components/TeamMember/index.module.scss";
 import { type User } from "@prisma/client";
+import Linkedin from "../svgs/Linkedin";
+import Link from "next/link";
 
 type TeamMemberProps = {
   user: User | null | undefined;
@@ -37,7 +39,7 @@ const TeamMember = ({ user }: TeamMemberProps) => {
         </div>
       </div>
       {/* Hover overlay */}
-      {(user.fieldOfStudy ?? user.description) && (
+      {(user.fieldOfStudy || user.description || user.linkedIn) && (
         <div className={styles.hoverOverlay}>
           <div className={styles.overlayContent}>
             {user.fieldOfStudy && (
@@ -45,6 +47,14 @@ const TeamMember = ({ user }: TeamMemberProps) => {
             )}
             {user.description && (
               <div className={styles.description}>{user.description}</div>
+            )}
+            {user.linkedIn && (
+              <div className={styles.linkedIn}>
+                <Link href={user.linkedIn}
+                target="_blank">
+                  <Linkedin height={20} width={20}/>
+                </Link>
+              </div>  
             )}
           </div>
         </div>
