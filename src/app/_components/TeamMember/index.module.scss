@@ -162,7 +162,7 @@
   transition:
     transform 0.3s ease-in-out,
     color 0.2s ease-in-out;
-  transform: scale(0.99); //dont remove, important for animation smoothness
+  will-change: transform;
 
   &:hover,
   &:focus-visible {

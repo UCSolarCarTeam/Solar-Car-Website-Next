@@ -157,6 +157,7 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
             };
             mutateUserContent.mutate({
               ...newRowData,
+              ucid: newRowData.ucid ? String(newRowData.ucid) : null,
               profilePictureUrl: publicUrl,
             });
           } catch (error) {

@@ -229,6 +229,7 @@ export const portalRouter = createTRPCRouter({
           publicMetadata: user.publicMetadata,
           role: user.publicMetadata?.role,
           username: user.username,
+          // linkedIn: user.linkedIn, 
         }));
     } catch (error) {
       throw new TRPCError({
@@ -404,6 +405,7 @@ export const portalRouter = createTRPCRouter({
         teamRole: z.nativeEnum(AllTeamRoles).nullable(),
         ucid: z.string().nullable(),
         yearJoined: z.string().nullable(),
+        linkedIn: z.string().nullable(),
       }),
     )
     .mutation(async ({ ctx, input }) => {

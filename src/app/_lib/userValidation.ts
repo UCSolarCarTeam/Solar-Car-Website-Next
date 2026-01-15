@@ -84,6 +84,12 @@ export const userFormSchema = z.object({
     )
     .optional()
     .or(z.literal("")),
+
+  linkedIn: z
+    .string()
+    .regex(/^https:\/\/([a-z]{2,3}\.)?linkedin\.com\/.+$/, "Invalid LinkedIn URL")
+    .optional()
+    .or(z.literal("")),
 });
 
 export type UserFormData = z.infer<typeof userFormSchema>;

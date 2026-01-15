@@ -1,3 +1,5 @@
+import Linkedin from "../_components/svgs/Linkedin";
+
 export interface SVGIconProps {
   className?: string;
   height?: number;
@@ -147,4 +149,5 @@ export const userRowMetadata = {
   schoolYear: "string",
   ucid: "string",
   yearJoined: "string",
+  linkedIn: "string",
 };

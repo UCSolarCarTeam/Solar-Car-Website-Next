@@ -94,6 +94,10 @@ const TeamTable = (props: {
       //   cell: (info) => info.getValue(),
       //   header: "Description",
       // }),
+      columnHelper.accessor("linkedIn", {
+        cell: (info) => info.getValue(),
+        header: "LinkedIn",
+      }),
       columnHelper.display({
         cell: (info) => (
           <EditTeamCell
