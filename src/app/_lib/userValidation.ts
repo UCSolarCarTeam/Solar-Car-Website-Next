@@ -39,8 +39,8 @@ export const userFormSchema = z.object({
   linkedIn: z
     .string()
     .regex(
-      /^https:\/\/([a-z]{2,3}\.)?linkedin\.com\/.+$/,
-      "Invalid LinkedIn URL",
+      /^https:\/\/([a-z]{2,3}\.)?linkedin\.com\/in\/[A-Za-z0-9-_%]+\/?$/,
+      "Invalid LinkedIn profile URL",
     )
     .optional()
     .or(z.literal("")),

@@ -67,11 +67,14 @@ const EditUserPopupAdmin = ({
             label:
               key === "ucid"
                 ? "UCID"
-                : key === "description"
-                  ? "About Me"
-                  : key
-                      .replace(/([a-z])([A-Z])/g, "$1 $2")
-                      .replace(/^./, (match) => match.toUpperCase()),
+                : key === "linkedIn"
+                  ? "LinkedIn"
+                  : key === "description"
+                    ? "About Me"
+                    : key
+                        .replace(/([a-z])([A-Z])/g, "$1 $2")
+                        .replace(/^./, (match) => match.toUpperCase()),
+
             value: value,
           };
           return acc;
