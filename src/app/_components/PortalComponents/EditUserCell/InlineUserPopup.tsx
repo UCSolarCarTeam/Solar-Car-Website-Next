@@ -131,7 +131,7 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
           value == null ? "" : String(value),
         ]),
       ) as Partial<UserFormData>;
- 
+
       // validate the form's fields
       const errors = validateUserForm(sanitizedData);
       if (Object.keys(errors).length > 0) {

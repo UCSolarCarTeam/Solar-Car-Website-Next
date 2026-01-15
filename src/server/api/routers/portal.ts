@@ -397,6 +397,7 @@ export const portalRouter = createTRPCRouter({
         firstName: z.string().nullable(),
         id: z.number(),
         lastName: z.string().nullable(),
+        linkedIn: z.string().nullable(),
         phoneNumber: z.string().nullable(),
         profilePictureUrl: z.string().nullable(),
         schoolEmail: z.string().nullable(),
@@ -404,7 +405,6 @@ export const portalRouter = createTRPCRouter({
         teamRole: z.nativeEnum(AllTeamRoles).nullable(),
         ucid: z.string().nullable(),
         yearJoined: z.string().nullable(),
-        linkedIn: z.string().nullable(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -436,6 +436,7 @@ export const portalRouter = createTRPCRouter({
             fieldOfStudy: input.fieldOfStudy,
             firstName: input.firstName,
             lastName: input.lastName,
+            linkedIn: input.linkedIn,
             phoneNumber: input.phoneNumber,
             profilePictureUrl: input.profilePictureUrl,
             schoolEmail: input.schoolEmail,
@@ -443,7 +444,6 @@ export const portalRouter = createTRPCRouter({
             teamRole: input.teamRole,
             ucid: input.ucid,
             yearJoined: input.yearJoined,
-            linkedIn: input.linkedIn,
           },
           where: { id: input.id },
         });

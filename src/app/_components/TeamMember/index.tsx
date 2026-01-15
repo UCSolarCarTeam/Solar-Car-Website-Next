@@ -1,11 +1,12 @@
 import Image from "next/image";
+import Link from "next/link";
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { memo } from "react";
 
 import styles from "@/app/_components/TeamMember/index.module.scss";
 import { type User } from "@prisma/client";
+
 import Linkedin from "../svgs/Linkedin";
-import Link from "next/link";
 
 type TeamMemberProps = {
   user: User | null | undefined;
@@ -13,14 +14,14 @@ type TeamMemberProps = {
 
 const TeamMember = ({ user }: TeamMemberProps) => {
   if (!user) return null;
+
+  const hasOverlay =
+    user.fieldOfStudy ?? user.description ?? user.linkedIn ?? false;
+
   return (
     <div
-      className={`${styles.teamMember} ${
-        user.fieldOfStudy || user.description ? styles.hasOverlay : ""
-      }`}
-      key={user.profilePictureUrl}
+      className={`${styles.teamMember} ${hasOverlay ? styles.hasOverlay : ""}`}
     >
-      {" "}
       <div className={styles.teamMemberImage}>
         <Image
           alt="Headshot"
@@ -30,32 +31,37 @@ const TeamMember = ({ user }: TeamMemberProps) => {
           style={{ objectFit: "cover" }}
         />
       </div>
+
       <div className={styles.nameRoleContainer}>
         <div className={styles.name}>
-          {[user.firstName, user.lastName].join(" ")}
+          {[user.firstName, user.lastName].filter(Boolean).join(" ")}
         </div>
         <div className={styles.teamRole}>
           {(user.teamRole ?? "").replace(/([a-z])([A-Z])/g, "$1 $2")}
         </div>
       </div>
-      {/* Hover overlay */}
-      {(user.fieldOfStudy || user.description || user.linkedIn) && (
+
+      {hasOverlay && (
         <div className={styles.hoverOverlay}>
           <div className={styles.overlayContent}>
             {user.fieldOfStudy && (
               <div className={styles.fieldOfStudy}>{user.fieldOfStudy}</div>
             )}
+
             {user.description && (
               <div className={styles.description}>{user.description}</div>
             )}
+
             {user.linkedIn && (
               <div className={styles.linkedIn}>
-                <Link href={user.linkedIn}
-                target="_blank"
-                rel="noopener noreferrer">
-                  <Linkedin height={20} width={20}/>
+                <Link
+                  href={user.linkedIn}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  <Linkedin height={20} width={20} />
                 </Link>
-              </div>  
+              </div>
             )}
           </div>
         </div>
