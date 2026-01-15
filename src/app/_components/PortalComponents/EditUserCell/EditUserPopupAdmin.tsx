@@ -130,8 +130,13 @@ const EditUserPopupAdmin = ({
 
   const handleSave = useCallback(async () => {
     if (touched) {
-      // validate the form's fields
-      const errors = validateUserForm(newRowData as Partial<UserFormData>);
+      const sanitizedData = Object.fromEntries(
+        Object.entries(newRowData).map(([key, value]) => [
+          key,
+          value == null ? "" : String(value),
+        ]),
+      ) as Partial<UserFormData>;
+      const errors = validateUserForm(sanitizedData);
 
       if (Object.keys(errors).length > 0) {
         setValidationErrors(errors);

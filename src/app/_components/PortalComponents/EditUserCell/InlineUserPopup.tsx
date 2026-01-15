@@ -125,9 +125,15 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
 
   const handleSave = useCallback(async () => {
     if (touched) {
+      const sanitizedData = Object.fromEntries(
+        Object.entries(newRowData).map(([key, value]) => [
+          key,
+          value == null ? "" : String(value),
+        ]),
+      ) as Partial<UserFormData>;
+ 
       // validate the form's fields
-      const errors = validateUserForm(newRowData as Partial<UserFormData>);
-
+      const errors = validateUserForm(sanitizedData);
       if (Object.keys(errors).length > 0) {
         setValidationErrors(errors);
         toast.error("Please fix the validation errors before saving.");
@@ -157,7 +163,6 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
             };
             mutateUserContent.mutate({
               ...newRowData,
-              ucid: newRowData.ucid ? String(newRowData.ucid) : null,
               profilePictureUrl: publicUrl,
             });
           } catch (error) {

@@ -1,5 +1,3 @@
-import Linkedin from "../_components/svgs/Linkedin";
-
 export interface SVGIconProps {
   className?: string;
   height?: number;

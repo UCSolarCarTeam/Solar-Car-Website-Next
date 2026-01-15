@@ -229,7 +229,6 @@ export const portalRouter = createTRPCRouter({
           publicMetadata: user.publicMetadata,
           role: user.publicMetadata?.role,
           username: user.username,
-          // linkedIn: user.linkedIn, 
         }));
     } catch (error) {
       throw new TRPCError({
@@ -444,6 +443,7 @@ export const portalRouter = createTRPCRouter({
             teamRole: input.teamRole,
             ucid: input.ucid,
             yearJoined: input.yearJoined,
+            linkedIn: input.linkedIn,
           },
           where: { id: input.id },
         });
