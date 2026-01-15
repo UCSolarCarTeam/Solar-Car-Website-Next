@@ -29,6 +29,7 @@ export enum PortalNavigationLinks {
   Recruitment = "recruitment",
   Invitations = "invitations",
   OurWork = "our-work",
+  Alumni = "alumni",
 }
 
 export enum ManagerRoles {
