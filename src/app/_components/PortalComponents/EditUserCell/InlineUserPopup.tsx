@@ -94,7 +94,7 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
   // Cleanup object URL on unmount or when image changes
   useEffect(() => {
     return () => {
-      if (newRowData.profilePictureUrl?.startsWith('blob:')) {
+      if (newRowData.profilePictureUrl?.startsWith(`"blob:"`)) {
         URL.revokeObjectURL(newRowData.profilePictureUrl);
       }
     };
@@ -142,15 +142,15 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
 
       // Transform data for validation (convert null to undefined, ensure required fields)
       const formData: Partial<UserFormData> = {
+        description: processedData.description ?? undefined,
+        fieldOfStudy: processedData.fieldOfStudy ?? undefined,
         firstName: processedData.firstName ?? undefined,
         lastName: processedData.lastName ?? undefined,
-        description: processedData.description ?? undefined,
-        ucid: processedData.ucid ?? undefined,
-        schoolEmail: processedData.schoolEmail ?? undefined,
-        phoneNumber: processedData.phoneNumber ?? undefined,
-        fieldOfStudy: processedData.fieldOfStudy ?? undefined,
-        teamRole: processedData.teamRole ?? undefined,
         linkedIn: processedData.linkedIn ?? undefined,
+        phoneNumber: processedData.phoneNumber ?? undefined,
+        schoolEmail: processedData.schoolEmail ?? undefined,
+        teamRole: processedData.teamRole ?? undefined,
+        ucid: processedData.ucid ?? undefined,
       };
 
       // validate the form's fields
@@ -191,6 +191,7 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
             toast.error(
               "There was an error saving your changes. Please contact Telemetry Team.",
             );
+            // eslint-disable-next-line no-console
             console.error("Profile picture upload error:", error);
           }
         };
