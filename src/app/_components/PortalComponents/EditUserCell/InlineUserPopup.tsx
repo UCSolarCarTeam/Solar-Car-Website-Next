@@ -1,5 +1,5 @@
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
-import { memo, useCallback, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
 import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
@@ -91,6 +91,15 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
     }
   }, []);
 
+  // Cleanup object URL on unmount or when image changes
+  useEffect(() => {
+    return () => {
+      if (newRowData.profilePictureUrl?.startsWith('blob:')) {
+        URL.revokeObjectURL(newRowData.profilePictureUrl);
+      }
+    };
+  }, [newRowData.profilePictureUrl]);
+
   const onInputChange = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -125,15 +134,27 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
 
   const handleSave = useCallback(async () => {
     if (touched) {
-      const sanitizedData = Object.fromEntries(
-        Object.entries(newRowData).map(([key, value]) => [
-          key,
-          value == null ? "" : String(value),
-        ]),
-      ) as Partial<UserFormData>;
+      // Ensure ucid is converted to string if it exists
+      const processedData = {
+        ...newRowData,
+        ucid: newRowData.ucid ? String(newRowData.ucid) : null,
+      };
+
+      // Transform data for validation (convert null to undefined, ensure required fields)
+      const formData: Partial<UserFormData> = {
+        firstName: processedData.firstName ?? undefined,
+        lastName: processedData.lastName ?? undefined,
+        description: processedData.description ?? undefined,
+        ucid: processedData.ucid ?? undefined,
+        schoolEmail: processedData.schoolEmail ?? undefined,
+        phoneNumber: processedData.phoneNumber ?? undefined,
+        fieldOfStudy: processedData.fieldOfStudy ?? undefined,
+        teamRole: processedData.teamRole ?? undefined,
+        linkedIn: processedData.linkedIn ?? undefined,
+      };
 
       // validate the form's fields
-      const errors = validateUserForm(sanitizedData);
+      const errors = validateUserForm(formData);
       if (Object.keys(errors).length > 0) {
         setValidationErrors(errors);
         toast.error("Please fix the validation errors before saving.");
@@ -166,10 +187,11 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
               profilePictureUrl: publicUrl,
             });
           } catch (error) {
+            setSaving(false);
             toast.error(
               "There was an error saving your changes. Please contact Telemetry Team.",
             );
-            global.console.log(error);
+            console.error("Profile picture upload error:", error);
           }
         };
 

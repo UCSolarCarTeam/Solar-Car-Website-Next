@@ -16,7 +16,7 @@ const TeamMember = ({ user }: TeamMemberProps) => {
   if (!user) return null;
 
   const hasOverlay =
-    user.fieldOfStudy || user.description || user.linkedIn;
+    user.fieldOfStudy ?? user.description ?? user.linkedIn ?? false;
 
   return (
     <div
