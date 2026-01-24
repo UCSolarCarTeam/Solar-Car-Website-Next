@@ -21,8 +21,8 @@ model User {
   yearJoined        String?
   profilePictureUrl String?
   description       String?
-  teamRole          AllTeamRoles?
   linkedIn          String?
+  teamRole          AllTeamRoles?
 }
 
 model Timeline {
@@ -124,4 +124,17 @@ enum AllTeamRoles {
 
     // multi team
     MultiTeam @map("Multi Team")
+}
+
+model Alumni {
+  id                 Int     @id @default(autoincrement())
+  firstName          String
+  lastName           String
+  profilePictureUrl  String?
+  company            String?
+  position           String?
+  yearJoinedSolarCar String?
+  yearLeftSolarCar   String?
+  teamRole           String?
+  linkedIn           String?
 }

@@ -8,6 +8,7 @@ import { HydrateClient, trpc } from "@/trpc/server";
 
 const Team = async () => {
   const teamHierarchy = await trpc.fe.getTeamMembers();
+  const alumniTeam = await trpc.fe.getAlumni();
 
   const tempFlag = true;
 
@@ -164,6 +165,16 @@ const Team = async () => {
                         key={teamMember.clerkUserId}
                         user={teamMember}
                       />
+                    ))}
+                  </div>
+                </div>
+              )}
+              {alumniTeam && alumniTeam.length > 0 && (
+                <div className={styles.teamRoleContainer}>
+                  <div className={styles.title}>Alumni</div>
+                  <div className={styles.teamMembers}>
+                    {alumniTeam.map((teamMember) => (
+                      <TeamMember key={teamMember.id} user={teamMember} />
                     ))}
                   </div>
                 </div>

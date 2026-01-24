@@ -15,6 +15,21 @@ import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const feRouter = createTRPCRouter({
+  getAlumni: publicProcedure.query(async ({ ctx }) => {
+    try {
+      const alumni = await ctx.db.alumni.findMany({
+        orderBy: {
+          yearLeftSolarCar: "desc",
+        },
+      });
+      return alumni;
+    } catch (error) {
+      throw new TRPCError({
+        cause: error,
+        code: "INTERNAL_SERVER_ERROR",
+      });
+    }
+  }),
   getOurWork: publicProcedure.query(async ({ ctx }) => {
     try {
       const rows = await ctx.db.timeline.findMany({
