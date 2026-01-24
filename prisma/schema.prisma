@@ -23,7 +23,6 @@ model User {
   description       String?
   linkedIn          String?
   teamRole          AllTeamRoles?
-  linkedIn          String?
 }
 
 model Timeline {
@@ -137,4 +136,5 @@ model Alumni {
   yearJoinedSolarCar String?
   yearLeftSolarCar   String?
   teamRole           String?
+  linkedIn           String?
 }

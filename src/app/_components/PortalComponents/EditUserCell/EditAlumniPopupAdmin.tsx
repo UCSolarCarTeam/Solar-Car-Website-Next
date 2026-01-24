@@ -72,6 +72,7 @@ const EditAlumniPopupAdmin = ({
       company: "",
       firstName: "",
       lastName: "",
+      linkedIn: "",
       position: "",
       profilePictureUrl: null,
       teamRole: "",
@@ -103,6 +104,11 @@ const EditAlumniPopupAdmin = ({
         id: "yearLeftSolarCar",
         label: "Year Left",
         value: newRowData.yearLeftSolarCar,
+      },
+      {
+        id: "linkedIn",
+        label: "LinkedIn",
+        value: newRowData.linkedIn,
       },
     ];
     return fields;
@@ -151,6 +157,7 @@ const EditAlumniPopupAdmin = ({
       company: newRowData.company ?? null,
       firstName: newRowData.firstName ?? "",
       lastName: newRowData.lastName ?? "",
+      linkedIn: newRowData.linkedIn ?? null,
       position: newRowData.position ?? null,
       profilePictureUrl: newRowData.profilePictureUrl ?? null,
       teamRole: newRowData.teamRole ?? null,

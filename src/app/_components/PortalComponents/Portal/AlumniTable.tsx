@@ -98,6 +98,10 @@ const AlumniTable = (props: { alumni: AlumniMember[] }) => {
         cell: (info) => info.getValue(),
         header: "Position",
       }),
+      columnHelper.accessor("linkedIn", {
+        cell: (info) => info.getValue(),
+        header: "LinkedIn",
+      }),
       columnHelper.display({
         cell: (info) => {
           const row = info.row.original;
