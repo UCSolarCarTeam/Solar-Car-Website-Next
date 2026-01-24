@@ -48,7 +48,7 @@ const Footer = () => {
               <Instagram />
             </Link>
             <Link href="https://www.linkedin.com/company/university-of-calgary-solar-car-team">
-              <Linkedin />
+              <Linkedin height={26} width={28} />
             </Link>
             <Link href="https://www.youtube.com/user/calgarysolarcar">
               <Youtube />

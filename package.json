@@ -6,6 +6,7 @@
   "scripts": {
     "build": "next build",
     "db:generate": "prisma generate",
+    "db:migrate:reset": "prisma migrate reset",
     "db:migrate-dev": "prisma migrate dev",
     "db:migrate-prod": "prisma migrate deploy",
     "db:pull": "prisma db pull",

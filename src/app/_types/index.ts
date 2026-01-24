@@ -142,6 +142,7 @@ export const userRowMetadata = {
   fieldOfStudy: "string",
   firstName: "string",
   lastName: "string",
+  linkedIn: "string",
   phoneNumber: "string",
   schoolEmail: "string",
   schoolYear: "string",

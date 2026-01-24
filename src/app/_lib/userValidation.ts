@@ -36,6 +36,14 @@ export const userFormSchema = z.object({
       "Last name can only contain letters, spaces, hyphens, and apostrophes",
     ),
 
+  linkedIn: z
+    .string()
+    .regex(
+      /^https:\/\/([a-z]{2,3}\.)?linkedin\.com\/in\/[A-Za-z0-9-_%]+\/?$/,
+      "Invalid LinkedIn profile URL",
+    )
+    .optional()
+    .or(z.literal("")),
   phoneNumber: z
     .string()
     .regex(phoneRegex, "Please enter a valid phone number")
@@ -45,6 +53,7 @@ export const userFormSchema = z.object({
     .or(z.literal("")),
 
   // profile picture (not validated here as it's a file upload)
+
   profilePictureUrl: z.string().optional().or(z.literal("")),
 
   schoolEmail: z

@@ -4,7 +4,6 @@ import logo from "public/assets/logo-center-black.png";
 import { memo } from "react";
 
 import styles from "@/app/_components/PortalComponents/Portal/index.module.scss";
-import { useSessionStorage } from "@/app/_hooks/useSessionStorage";
 import { PortalNavigationLinks, adminClerkRoles } from "@/app/_types";
 import { type AdminRoles } from "@/server/api/routers/portal";
 import { UserButton } from "@clerk/nextjs";

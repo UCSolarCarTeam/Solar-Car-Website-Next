@@ -10,7 +10,7 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { adminClerkRoles } from "@/app/_types";
-import { AdminRoles, UserRole } from "@/server/api/routers/portal";
+import { type AdminRoles } from "@/server/api/routers/portal";
 import { db } from "@/server/db";
 import { type User, createClerkClient } from "@clerk/backend";
 import { currentUser } from "@clerk/nextjs/server";
