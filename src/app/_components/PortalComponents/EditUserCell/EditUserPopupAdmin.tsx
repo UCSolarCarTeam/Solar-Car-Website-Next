@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import CloseButton from "@/app/_components/Buttons/CloseButton";
 import { type EditUserCellProps } from "@/app/_components/PortalComponents/EditUserCell";
 import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
-import { compress } from "@/app/_lib/compress";
+import { useUploadProfilePic } from "@/app/_hooks/useUploadProfilePic";
 import {
   type UserFormData,
   type UserFormErrors,
@@ -32,9 +32,9 @@ const EditUserPopupAdmin = ({
   togglePopup,
 }: EditUserPopupAdminProps) => {
   const utils = trpc.useUtils();
+  const uploadProfilePicMutation = useUploadProfilePic();
   const mutateUserContent = trpc.portal.updateDBUser.useMutation({
     onError: () => {
-      setSaving(false);
       toast.error(
         "There was an error saving your changes. Please contact Telemetry Team.",
       );
@@ -44,14 +44,12 @@ const EditUserPopupAdmin = ({
         loading: "Saving...",
         success: "Profile updated successfully!",
       });
-      setSaving(false);
       togglePopup();
     },
   });
   const [touched, setTouched] = useState(false);
   const [newRowData, setNewRowData] = useState(currentRow);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [saving, setSaving] = useState(false);
   const [validationErrors, setValidationErrors] = useState<UserFormErrors>({});
   const MAX_DESCRIPTION_LENGTH = 250;
 
@@ -132,66 +130,49 @@ const EditUserPopupAdmin = ({
   };
 
   const handleSave = useCallback(async () => {
-    if (touched) {
-      const sanitizedData = Object.fromEntries(
-        Object.entries(newRowData).map(([key, value]) => [
-          key,
-          value == null ? "" : String(value),
-        ]),
-      ) as Partial<UserFormData>;
-      const errors = validateUserForm(sanitizedData);
+    if (!touched) {
+      togglePopup();
+      return;
+    }
+    const sanitizedData = Object.fromEntries(
+      Object.entries(newRowData).map(([key, value]) => [
+        key,
+        value == null ? "" : String(value),
+      ]),
+    ) as Partial<UserFormData>;
+    const errors = validateUserForm(sanitizedData);
 
-      if (Object.keys(errors).length > 0) {
-        setValidationErrors(errors);
-        toast.error(
-          "There are errors in the form. Please fix them and try again.",
-        );
-        return;
-      }
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      toast.error(
+        "There are errors in the form. Please fix them and try again.",
+      );
+      return;
+    }
 
-      setSaving(true);
-      if (imageFile) {
-        const reader = new FileReader();
-
-        reader.onload = async (e) => {
-          const fileContent = e.target?.result; // Binary string or base64
-          try {
-            const response = await fetch("/api/uploadProfilePic", {
-              body: JSON.stringify({
-                fileContent, // Base64 or binary
-                fileName: imageFile.name,
-                fileType: imageFile.type,
-              }),
-              headers: {
-                "Content-Type": "application/json",
-              },
-              method: "POST",
-            });
-            const { publicUrl } = (await response.json()) as {
-              publicUrl: string;
-            };
+    if (imageFile) {
+      uploadProfilePicMutation.mutate(
+        { file: imageFile, fileName: imageFile.name },
+        {
+          onSuccess: (profilePictureUrl) => {
             mutateUserContent.mutate({
               ...newRowData,
-              profilePictureUrl: publicUrl,
+              profilePictureUrl,
             });
-          } catch (error) {
-            toast.error(
-              "There was an error saving your changes. Please contact Telemetry Team.",
-            );
-            global.console.log(error);
-            togglePopup();
-          }
-        };
-
-        const compressedFile = await compress(imageFile);
-        reader.readAsDataURL(compressedFile);
-      } else {
-        mutateUserContent.mutate(newRowData);
-      }
+          },
+        },
+      );
     } else {
-      togglePopup();
+      mutateUserContent.mutate(newRowData);
     }
-  }, [imageFile, newRowData, togglePopup, touched, mutateUserContent]);
+  }, [
+    imageFile,
+    newRowData,
+    togglePopup,
+    touched,
+    mutateUserContent,
+    uploadProfilePicMutation,
+  ]);
 
   const handleFileUpload = useCallback((file: File) => {
     setTouched(true);
@@ -319,7 +300,7 @@ const EditUserPopupAdmin = ({
           )}
         </div>
         <div className={styles.buttonContainer}>
-          {saving ? (
+          {uploadProfilePicMutation.isPending || mutateUserContent.isPending ? (
             <p>Saving...</p>
           ) : (
             <>
