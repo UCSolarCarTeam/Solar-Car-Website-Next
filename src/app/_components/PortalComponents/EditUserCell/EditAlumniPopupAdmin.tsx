@@ -181,6 +181,13 @@ const EditAlumniPopupAdmin = ({
 
       reader.onload = async (e) => {
         const fileContent = e.target?.result;
+
+        if (!fileContent) {
+          toast.error("Failed to read image file. Please try again.");
+          setSaving(false);
+          return;
+        }
+
         try {
           const response = await fetch("/api/uploadProfilePic", {
             body: JSON.stringify({
@@ -226,8 +233,18 @@ const EditAlumniPopupAdmin = ({
         }
       };
 
-      const compressedFile = await compress(imageFile);
-      reader.readAsDataURL(compressedFile);
+      reader.onerror = () => {
+        toast.error("Failed to read image file. Please try again.");
+        setSaving(false);
+      };
+
+      try {
+        const compressedFile = await compress(imageFile);
+        reader.readAsDataURL(compressedFile);
+      } catch {
+        toast.error("Failed to compress image. Please try a different file.");
+        setSaving(false);
+      }
     } else {
       await saveData();
     }

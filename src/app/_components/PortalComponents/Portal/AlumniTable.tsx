@@ -143,11 +143,26 @@ const AlumniTable = (props: { alumni: AlumniMember[] }) => {
         <div>Alumni</div>
         <div className={styles.tableHeaderSponsorRight}>
           <SearchBar setSearchValue={setSearchValue} value={searchValue} />
-          <PlusIcon
-            fill="#000000"
+          <button
+            aria-label="Create alumni"
             onClick={() => setCreatePopupOpen(true)}
-            size="md"
-          />
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setCreatePopupOpen(true);
+              }
+            }}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              display: "flex",
+              padding: 0,
+            }}
+            type="button"
+          >
+            <PlusIcon fill="#000000" size="md" />
+          </button>
         </div>
       </div>
       <div className={styles.tableContainer}>
