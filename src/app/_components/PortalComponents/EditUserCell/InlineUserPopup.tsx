@@ -129,8 +129,9 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
     if (touched) {
       const processedData = { ...newRowData };
       processedData.ucid = String(processedData.ucid);
+      processedData.linkedIn = processedData.linkedIn?.trim() ?? null;
       // validate the form's fields
-      const errors = validateUserForm(newRowData as Partial<UserFormData>);
+      const errors = validateUserForm(processedData as Partial<UserFormData>);
 
       if (Object.keys(errors).length > 0) {
         setValidationErrors(errors);
