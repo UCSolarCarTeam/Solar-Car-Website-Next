@@ -1,5 +1,5 @@
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
-import { memo, useCallback, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
@@ -30,11 +30,17 @@ const EditAlumniPopupAdmin = ({
     },
     onSuccess: async () => {
       await toast.promise(utils.portal.getAlumniList.invalidate(), {
+        error: () => {
+          setSaving(false);
+          return "Failed to refresh alumni list";
+        },
         loading: "Creating...",
-        success: "Alumni created successfully!",
+        success: () => {
+          setSaving(false);
+          togglePopup();
+          return "Alumni created successfully!";
+        },
       });
-      setSaving(false);
-      togglePopup();
     },
   });
 
@@ -47,11 +53,17 @@ const EditAlumniPopupAdmin = ({
     },
     onSuccess: async () => {
       await toast.promise(utils.portal.getAlumniList.invalidate(), {
+        error: () => {
+          setSaving(false);
+          return "Failed to refresh alumni list";
+        },
         loading: "Saving...",
-        success: "Alumni updated successfully!",
+        success: () => {
+          setSaving(false);
+          togglePopup();
+          return "Alumni updated successfully!";
+        },
       });
-      setSaving(false);
-      togglePopup();
     },
   });
 
@@ -68,6 +80,7 @@ const EditAlumniPopupAdmin = ({
     },
   );
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const blobUrlRef = useRef<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [validationErrors, setValidationErrors] = useState<
     Record<string, string>
@@ -180,6 +193,27 @@ const EditAlumniPopupAdmin = ({
             },
             method: "POST",
           });
+
+          if (!response.ok) {
+            let errorMessage = "Failed to upload image";
+            const textBody = await response.text();
+            if (textBody) {
+              try {
+                const errorBody = JSON.parse(textBody) as {
+                  error?: string;
+                  message?: string;
+                };
+                errorMessage = errorBody.error ?? errorBody.message ?? textBody;
+              } catch {
+                // if JSON parsing fails, use raw text
+                errorMessage = textBody;
+              }
+            }
+            toast.error(errorMessage);
+            setSaving(false);
+            return;
+          }
+
           const { publicUrl } = (await response.json()) as {
             publicUrl: string;
           };
@@ -207,12 +241,27 @@ const EditAlumniPopupAdmin = ({
 
   const handleFileUpload = useCallback((file: File) => {
     if (file) {
+      // Revoke previous blob URL to prevent memory leak
+      if (blobUrlRef.current) {
+        URL.revokeObjectURL(blobUrlRef.current);
+      }
+      const newBlobUrl = URL.createObjectURL(file);
+      blobUrlRef.current = newBlobUrl;
       setImageFile(file);
       setNewRowData((prev) => ({
         ...prev,
-        profilePictureUrl: URL.createObjectURL(file),
+        profilePictureUrl: newBlobUrl,
       }));
     }
+  }, []);
+
+  // Cleanup blob URL on unmount
+  useEffect(() => {
+    return () => {
+      if (blobUrlRef.current) {
+        URL.revokeObjectURL(blobUrlRef.current);
+      }
+    };
   }, []);
 
   return (
@@ -226,9 +275,7 @@ const EditAlumniPopupAdmin = ({
             <div className={styles.popupProfileImage}>
               <DropZone
                 currentImage={
-                  imageFile
-                    ? URL.createObjectURL(imageFile)
-                    : (newRowData.profilePictureUrl ?? defaultProfilePicture)
+                  newRowData.profilePictureUrl ?? defaultProfilePicture
                 }
                 handleFileUpload={handleFileUpload}
               />

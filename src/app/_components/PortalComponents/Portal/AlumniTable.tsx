@@ -36,6 +36,8 @@ const AlumniTable = (props: { alumni: AlumniMember[] }) => {
     },
     onSuccess: async () => {
       await toast.promise(utils.portal.getAlumniList.invalidate(), {
+        error: (err: Error) =>
+          `Failed to delete alumni: ${err?.message || "Unknown error"}`,
         loading: "Deleting...",
         success: "Alumni deleted successfully!",
       });
