@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   title: "Calgary Solar Car",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;

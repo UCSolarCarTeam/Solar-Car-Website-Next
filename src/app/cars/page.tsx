@@ -1,7 +1,7 @@
 import { memo } from "react";
 
 import CarScreenView from "@/app/_components/Cars/CarScreenView";
-import PageBulletsClient from "@/app/_components/Pagebullets/PageBulletsClientWrapper";
+import Pagebullets from "@/app/_components/Pagebullets";
 import { pageIds } from "@/app/cars/carInformation";
 import styles from "@/app/cars/index.module.scss";
 
@@ -10,7 +10,7 @@ const Cars = () => {
     <>
       <main style={{ height: "auto" }}>
         <div className={styles.snapContainer}>
-          <PageBulletsClient
+          <Pagebullets
             defaultCurrentId="Helios"
             pageIds={Object.keys(pageIds)}
           />

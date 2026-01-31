@@ -5,7 +5,7 @@ import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 import styles from "@/app/index.module.scss";
 
-const Home = async () => {
+const Home = () => {
   return (
     <>
       <main className={styles.main}>

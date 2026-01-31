@@ -3,7 +3,7 @@ import { memo } from "react";
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 import Timeline from "@/app/_components/OurWork/Timeline";
-import PageBulletsClient from "@/app/_components/Pagebullets/PageBulletsClientWrapper";
+import Pagebullets from "@/app/_components/Pagebullets";
 import styles from "@/app/our-work/index.module.scss";
 import { trpc } from "@/trpc/server";
 
@@ -15,7 +15,7 @@ const OurWorkTimelinePage = async () => {
       <main className={styles.main}>
         <Navbar />
         {timelineData && timelineData.length > 0 && (
-          <PageBulletsClient
+          <Pagebullets
             defaultCurrentId={timelineData[0]?.year ?? "2025"}
             pageIds={timelineData.map((data) => data.year)}
           />
