@@ -73,6 +73,7 @@ export function useIntersectionObserver<T>(
     return () => {
       elements.forEach((element) => observer.unobserve(element));
       intersectingElements.clear();
+      observer.disconnect();
     };
   }, [data, setCurrentElement, getIdFromItem]);
 }

@@ -14,7 +14,7 @@ const OurWorkTimelinePage = async () => {
     <>
       <main className={styles.main}>
         <Navbar />
-        {timelineData && (
+        {timelineData && timelineData.length > 0 && (
           <PageBulletsClient
             defaultCurrentId={timelineData[0]?.year ?? "2025"}
             pageIds={timelineData.map((data) => data.year)}
