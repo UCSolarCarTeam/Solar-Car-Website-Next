@@ -124,20 +124,7 @@
   text-align: center;
   overflow-wrap: break-word;
   word-break: break-word;
-
-  &::after {
-    content: "";
-    display: block;
-    width: 150px;
-    height: 2px;
-    margin: 0.5rem auto 0;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      var(--primary-red),
-      transparent
-    );
-  }
+  margin-bottom: 1rem;
 }
 
 .linkedIn {
