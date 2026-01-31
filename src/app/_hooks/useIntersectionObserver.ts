@@ -33,17 +33,19 @@ export function useIntersectionObserver<T>(
 
       // Find the topmost visible element
       if (intersectingElements.size > 0) {
-        let topmostElement: { id: string; top: number } | null = null;
+        let topmostElement: string | null = null;
+        let topmostTop = Infinity;
 
         intersectingElements.forEach((entry, id) => {
           const top = entry.boundingClientRect.top;
-          if (!topmostElement || top < topmostElement.top) {
-            topmostElement = { id, top };
+          if (top < topmostTop) {
+            topmostTop = top;
+            topmostElement = id;
           }
         });
 
         if (topmostElement) {
-          setCurrentElement(topmostElement.id);
+          setCurrentElement(topmostElement);
         }
       } else if (data && data.length > 0 && data[0]) {
         // Fallback to first element if nothing is intersecting
