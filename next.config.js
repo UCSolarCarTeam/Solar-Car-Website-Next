@@ -35,6 +35,7 @@ const config = {
   },
   reactStrictMode: true,
   transpilePackages: ["geist"],
+  reactCompiler: true,
 };
 
 export default config;

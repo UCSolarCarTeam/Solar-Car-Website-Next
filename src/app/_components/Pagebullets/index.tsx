@@ -1,3 +1,5 @@
+"use client";
+
 import { memo, useMemo } from "react";
 
 import styles from "@/app/_components/Pagebullets/index.module.scss";
