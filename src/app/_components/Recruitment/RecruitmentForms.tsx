@@ -36,9 +36,9 @@ export default async function RecruitmentForms({
             </div>
             <Link
               href={form.link}
+              rel="noopener noreferrer"
               style={{ marginTop: "auto" }}
               target="_blank"
-              rel="noopener noreferrer"
             >
               <BasicButton
                 style={{
