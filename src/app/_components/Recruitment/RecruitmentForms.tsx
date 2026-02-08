@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import BasicButton from "@/app/_components/Buttons/BasicButton";
-import { trpc } from "@/trpc/server";
+import { trpcStatic } from "@/trpc/server";
 
 import styles from "./index.module.scss";
 
@@ -10,7 +10,7 @@ export default async function RecruitmentForms({
 }: {
   isRecruitmentClosed: boolean;
 }) {
-  const recruitmentForms = await trpc.fe.getRecruitment();
+  const recruitmentForms = await trpcStatic.fe.getRecruitment();
 
   return (
     <div className={styles.applicationContainer}>

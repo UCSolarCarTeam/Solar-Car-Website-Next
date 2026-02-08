@@ -7,7 +7,7 @@ import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 import styles from "@/app/sponsors/index.module.scss";
 import { type RouterOutputs } from "@/trpc/react";
-import { trpc } from "@/trpc/server";
+import { trpcStatic } from "@/trpc/server";
 import { SponsorLevel } from "@prisma/client";
 
 type Sponsor = RouterOutputs["fe"]["getSponsors"][0];
@@ -24,8 +24,8 @@ const SponsorLevelImages = ({
       {sponsors
         .filter((sponsor) => sponsor.sponsorLevel === sponsorLevel)
         .map((sponsor) => (
-          <div className={styles.sponsorContainer} key={sponsorLevel}>
-            <div className={styles.sponsor} key={sponsor.name}>
+          <div className={styles.sponsorContainer} key={sponsor.name}>
+            <div className={styles.sponsor}>
               <Link href={sponsor.websiteUrl} prefetch={false} target="_blank">
                 <Image
                   alt={sponsor.name}
@@ -42,7 +42,7 @@ const SponsorLevelImages = ({
 };
 
 const Sponsors = async () => {
-  const sponsors = await trpc.fe.getSponsors();
+  const sponsors = await trpcStatic.fe.getSponsors();
 
   return (
     <>

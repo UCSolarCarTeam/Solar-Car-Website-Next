@@ -5,10 +5,10 @@ import Navbar from "@/app/_components/Navbar";
 import Timeline from "@/app/_components/OurWork/Timeline";
 import Pagebullets from "@/app/_components/Pagebullets";
 import styles from "@/app/our-work/index.module.scss";
-import { trpc } from "@/trpc/server";
+import { trpcStatic } from "@/trpc/server";
 
 const OurWorkTimelinePage = async () => {
-  const timelineData = await trpc.fe.getOurWork();
+  const timelineData = await trpcStatic.fe.getOurWork();
 
   return (
     <>

@@ -29,7 +29,6 @@ export default function RootLayout({
   return (
     <>
       <ClerkProvider
-        dynamic
         signInForceRedirectUrl="/portal"
         signInUrl="/portal/sign-in"
         signUpForceRedirectUrl="/portal"
