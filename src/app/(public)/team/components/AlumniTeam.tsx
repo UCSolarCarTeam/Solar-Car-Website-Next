@@ -1,6 +1,7 @@
 import TeamMember from "@/app/_components/TeamMember";
-import styles from "@/app/team/index.module.scss";
 import { trpcStatic } from "@/trpc/server";
+
+import styles from "../index.module.scss";
 
 export default async function AlumniTeam() {
   const alumniTeam = await trpcStatic.fe.getAlumni();

@@ -80,4 +80,4 @@ export const pageIds = {
     position: "right",
     title: "Schulich Soleon",
   },
-};
+} as const;

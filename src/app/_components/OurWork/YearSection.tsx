@@ -4,7 +4,7 @@ import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import Image from "next/image";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
-import styles from "@/app/our-work/index.module.scss";
+import styles from "@/app/(public)/our-work/index.module.scss";
 
 import type { TimelineYear } from "./Timeline";
 

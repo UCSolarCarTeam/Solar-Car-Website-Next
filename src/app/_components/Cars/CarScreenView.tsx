@@ -4,13 +4,10 @@ import classNames from "classnames";
 import Image, { type StaticImageData } from "next/image";
 import { memo, useEffect, useState } from "react";
 
-import Navbar from "@/app/_components/Navbar";
+import styles from "@/app/(public)/cars/index.module.scss";
 import MinusIcon from "@/app/_components/svgs/MinusIcon";
 import PlusIcon from "@/app/_components/svgs/PlusIcon";
 import useViewport from "@/app/_hooks/useViewport";
-import styles from "@/app/cars/index.module.scss";
-
-import Footer from "../Footer";
 
 const cx = classNames.bind(styles);
 
@@ -28,10 +25,8 @@ interface CarScreenViewProps {
 const CarScreenView = ({
   className,
   content,
-  footerEnabled,
   id,
   image,
-  navbarEnabled,
   position,
   title,
 }: CarScreenViewProps) => {
@@ -52,50 +47,46 @@ const CarScreenView = ({
   }
 
   return (
-    <>
-      <div className={cx(styles.container, className)} id={id}>
-        {navbarEnabled && <Navbar />}
+    <div className={cx(styles.container, className)} id={id}>
+      <div
+        className={cx(
+          position === "right"
+            ? styles.descriptionRight
+            : styles.descriptionLeft,
+          styles.descriptionContainer,
+        )}
+        onClick={() => setShowContent((prev) => !prev)}
+      >
+        <div className={styles.descriptionTitle}>
+          <div>{title}</div>
+          {width && width <= 648 && showContent ? (
+            <MinusIcon />
+          ) : width && width <= 648 && !showContent ? (
+            <PlusIcon />
+          ) : (
+            <></>
+          )}
+        </div>
         <div
           className={cx(
-            position === "right"
-              ? styles.descriptionRight
-              : styles.descriptionLeft,
-            styles.descriptionContainer,
+            styles.descriptionContent,
+            showContent ? styles.show : "",
           )}
-          onClick={() => setShowContent((prev) => !prev)}
         >
-          <div className={styles.descriptionTitle}>
-            <div>{title}</div>
-            {width && width <= 648 && showContent ? (
-              <MinusIcon />
-            ) : width && width <= 648 && !showContent ? (
-              <PlusIcon />
-            ) : (
-              <></>
-            )}
-          </div>
-          <div
-            className={cx(
-              styles.descriptionContent,
-              showContent ? styles.show : "",
-            )}
-          >
-            {content}
-          </div>
+          {content}
         </div>
-        <Image
-          alt="backsplash"
-          className={styles.backSplashImage}
-          fill
-          loading="eager"
-          placeholder="blur"
-          priority
-          src={image}
-          style={{ objectFit: "cover" }}
-        />
       </div>
-      {footerEnabled && <Footer />}
-    </>
+      <Image
+        alt="backsplash"
+        className={styles.backSplashImage}
+        fill
+        loading="eager"
+        placeholder="blur"
+        priority
+        src={image}
+        style={{ objectFit: "cover" }}
+      />
+    </div>
   );
 };
 

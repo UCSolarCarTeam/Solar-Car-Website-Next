@@ -1,7 +1,7 @@
 import { memo } from "react";
 
+import styles from "@/app/(public)/our-work/index.module.scss";
 import YearSection from "@/app/_components/OurWork/YearSection";
-import styles from "@/app/our-work/index.module.scss";
 
 interface TimelineMonth {
   description: string | null;

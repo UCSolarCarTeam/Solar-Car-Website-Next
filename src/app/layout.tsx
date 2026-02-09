@@ -27,19 +27,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <ClerkProvider
-        signInForceRedirectUrl="/portal"
-        signInUrl="/portal/sign-in"
-        signUpForceRedirectUrl="/portal"
-        signUpUrl="/portal/sign-up"
-      >
-        <html className={`${saira.className}`} lang="en">
-          <body>
-            <TRPCReactProvider>{children}</TRPCReactProvider>
-          </body>
-        </html>
-      </ClerkProvider>
-    </>
+    <html className={`${saira.className}`} lang="en">
+      <body>
+        <ClerkProvider
+          signInForceRedirectUrl="/portal"
+          signInUrl="/portal/sign-in"
+          signUpForceRedirectUrl="/portal"
+          signUpUrl="/portal/sign-up"
+        >
+          <TRPCReactProvider>{children}</TRPCReactProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }
