@@ -49,6 +49,9 @@ const Portal = () => {
     !showAdminTables || currentPage !== PortalNavigationLinks.Team
       ? skipToken
       : undefined,
+    {
+      refetchOnWindowFocus: false,
+    },
   );
   const sponsors = trpc.portal.getSponsorsList.useQuery(
     !showAdminTables || currentPage !== PortalNavigationLinks.Sponsors
