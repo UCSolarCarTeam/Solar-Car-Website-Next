@@ -17,7 +17,7 @@ const TeamMember = ({ user }: TeamMemberProps) => {
 
   // team members use fieldOfStudy and description, alumni use company and position
   const fieldOfStudy =
-    "fieldOfStudy" in user ? user.fieldOfStudy : user.company;
+    "fieldOfStudy" in user ? user.fieldOfStudy : "Works at " + user.company;
   const description = "description" in user ? user.description : user.position;
 
   const hasOverlay = fieldOfStudy ?? description ?? user.linkedIn ?? false;
