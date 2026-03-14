@@ -1,45 +1,67 @@
 import { useEffect } from "react";
 
-// custom hook that tracks the visible section/DOM elements on the view, used for dot scrolling
-
-export function useIntersectionObserver<T = string>(
+export function useIntersectionObserver<T>(
   data: T[] | undefined,
   setCurrentElement: (value: string) => void,
   getIdFromItem?: (item: T) => string,
 ) {
   useEffect(() => {
+    // Track all currently intersecting sections
+    const intersectingElements = new Map<string, IntersectionObserverEntry>();
+
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
-        // runs when elements in viewport change
+        const id = entry.target.id;
+
+        // Skip Next.js elements
+        if (
+          id === "__next" ||
+          id === "__next-build-watcher" ||
+          id === "locatorjs-wrapper" ||
+          id === "clerk-components"
+        ) {
+          return;
+        }
+
+        // Update tracking map
         if (entry.isIntersecting) {
-          const id = entry.target.id;
-          if (
-            // filter out Next.js elemenents (don't want these to trigger observer) and default to first element
-            id === "__next" ||
-            id === "__next-build-watcher" ||
-            id === "locatorjs-wrapper" ||
-            id === "clerk-components"
-          ) {
-            if (data && data.length > 0 && data[0]) {
-              const firstId = getIdFromItem
-                ? getIdFromItem(data[0])
-                : String(data[0]);
-              setCurrentElement(firstId);
-            }
-          } else {
-            setCurrentElement(id); // set the current element as what is in view
-          }
+          intersectingElements.set(id, entry);
+        } else {
+          intersectingElements.delete(id);
         }
       });
+
+      // Find the topmost visible element
+      if (intersectingElements.size > 0) {
+        let topmostElement: string | null = null;
+        let topmostTop = Infinity;
+
+        intersectingElements.forEach((entry, id) => {
+          const top = entry.boundingClientRect.top;
+          if (top < topmostTop) {
+            topmostTop = top;
+            topmostElement = id;
+          }
+        });
+
+        if (topmostElement) {
+          setCurrentElement(topmostElement);
+        }
+      } else if (data && data.length > 0 && data[0]) {
+        // Fallback to first element if nothing is intersecting
+        const firstId = getIdFromItem
+          ? getIdFromItem(data[0])
+          : String(data[0]);
+        setCurrentElement(firstId);
+      }
     };
 
     const observerOptions = {
-      root: null, // use browser viewport as parent
+      root: null,
       rootMargin: "0px",
-      threshold: 0.5, // trigger when 50% of an element is in view
+      threshold: 0.5,
     };
 
-    // create the observer to observe for changes in viewport, trigger callback when 50% of a DOM element is in view
     const observer = new IntersectionObserver(
       observerCallback,
       observerOptions,
@@ -49,7 +71,9 @@ export function useIntersectionObserver<T = string>(
     elements.forEach((element) => observer.observe(element));
 
     return () => {
-      elements.forEach((element) => observer.unobserve(element)); // observe the elements
+      elements.forEach((element) => observer.unobserve(element));
+      intersectingElements.clear();
+      observer.disconnect();
     };
   }, [data, setCurrentElement, getIdFromItem]);
 }
