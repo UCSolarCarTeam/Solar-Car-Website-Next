@@ -39,6 +39,9 @@ const Portal = () => {
     !showAdminTables || currentPage !== PortalNavigationLinks.Users
       ? skipToken
       : undefined,
+    {
+      refetchOnWindowFocus: false,
+    },
   );
   const invitedUsers = trpc.portal.getInvitedUsers.useQuery(
     !showAdminTables || currentPage !== PortalNavigationLinks.Invitations
@@ -57,21 +60,33 @@ const Portal = () => {
     !showAdminTables || currentPage !== PortalNavigationLinks.Sponsors
       ? skipToken
       : undefined,
+    {
+      refetchOnWindowFocus: false,
+    },
   );
   const forms = trpc.portal.getFormsList.useQuery(
     !showAdminTables || currentPage !== PortalNavigationLinks.Recruitment
       ? skipToken
       : undefined,
+    {
+      refetchOnWindowFocus: false,
+    },
   );
   const ourWork = trpc.portal.getOurWorkList.useQuery(
     !showAdminTables || currentPage !== PortalNavigationLinks.OurWork
       ? skipToken
       : undefined,
+    {
+      refetchOnWindowFocus: false,
+    },
   );
   const alumniList = trpc.portal.getAlumniList.useQuery(
     !showAdminTables || currentPage !== PortalNavigationLinks.Alumni
       ? skipToken
       : undefined,
+    {
+      refetchOnWindowFocus: false,
+    },
   );
   const currentDBUser = trpc.portal.getCurrentDBUser.useQuery(
     showAdminTables ? skipToken : undefined,
