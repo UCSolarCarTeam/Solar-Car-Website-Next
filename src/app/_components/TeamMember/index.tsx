@@ -59,7 +59,7 @@ const TeamMember = ({ user }: TeamMemberProps) => {
         <div className={styles.hoverOverlay}>
           <div className={styles.overlayContent}>
             {fieldOfStudy && (
-              <div className={styles.fieldOfStudy}>{fieldOfStudy}</div>
+              <div className={styles.fieldOfStudy}>Works at {fieldOfStudy}</div>
             )}
             {description && (
               <div className={styles.description}>{description}</div>
