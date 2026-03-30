@@ -15,12 +15,13 @@ type TeamMemberProps = {
 const TeamMember = ({ user }: TeamMemberProps) => {
   if (!user) return null;
 
-  // team members use fieldOfStudy and description, alumni use company and position
-  const fieldOfStudy =
+  // team members use fieldOfStudy and description; alumni use company and position
+  const isAlumni = !("fieldOfStudy" in user);
+  const fieldOrCompany =
     "fieldOfStudy" in user ? user.fieldOfStudy : user.company;
   const description = "description" in user ? user.description : user.position;
 
-  const hasOverlay = fieldOfStudy ?? description ?? user.linkedIn ?? false;
+  const hasOverlay = fieldOrCompany ?? description ?? user.linkedIn ?? false;
 
   return (
     <div
@@ -58,8 +59,10 @@ const TeamMember = ({ user }: TeamMemberProps) => {
       {hasOverlay && (
         <div className={styles.hoverOverlay}>
           <div className={styles.overlayContent}>
-            {fieldOfStudy && (
-              <div className={styles.fieldOfStudy}>Works at {fieldOfStudy}</div>
+            {fieldOrCompany && (
+              <div className={styles.fieldOfStudy}>
+                {isAlumni ? `Works at ${fieldOrCompany}` : fieldOrCompany}
+              </div>
             )}
             {description && (
               <div className={styles.description}>{description}</div>
