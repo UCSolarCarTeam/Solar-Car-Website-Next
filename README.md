@@ -141,3 +141,50 @@ To ensure that Clerk syncs with our Supabase database, follow these steps for th
 We enforce strict code quality standards using **ESLint** and **Prettier**. Always run your linter and address any issues before merging your work.
 
 Rebase your branch from main before opening a merge request, and make sure your branch is up to date before merging changes into main.
+
+## 🗄️ Local Database (Docker Compose)
+
+This repo includes a `docker-compose.yml` to run a local Postgres instance used by Prisma.
+
+- Start Postgres in the background:
+
+```bash
+docker-compose up -d
+```
+
+- Create a local `.env` from the example (then edit secrets if needed):
+
+PowerShell:
+```powershell
+copy .env.example .env
+```
+
+bash / WSL / git-bash:
+```bash
+cp .env.example .env
+```
+
+- Generate Prisma client and run migrations:
+
+```bash
+yarn install
+yarn db:generate
+yarn db:migrate-dev
+```
+
+- Open the Prisma Studio UI:
+
+```bash
+yarn db:studio
+```
+
+- Stop and remove containers when finished:
+
+```bash
+docker-compose down
+```
+
+Notes:
+
+- The `.env.example` now includes `DIRECT_URL` which Prisma uses for `directUrl` (shadow/direct connections).
+- If `env` validation blocks `yarn dev`, run with `SKIP_ENV_VALIDATION=1 yarn dev`.
