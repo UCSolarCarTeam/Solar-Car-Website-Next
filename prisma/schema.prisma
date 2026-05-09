@@ -83,10 +83,8 @@ enum AllTeamRoles {
 
     // communications team
     CommunicationsManager       @map("Communications Manager")
-    EventAssociate              @map("Event Associate")
-    MarketingAssociate          @map("Marketing Associate")
-    Videographer                @map("Videographer")
-    MarketingAndEventsAssociate @map("Marketing \\& Events Associate")
+    CommunicationsCoManager     @map("Communications Co-Manager")
+    CommunicationsAssociate     @map("Communications Associate")
 
     // sponsorship
     SponsorshipManager          @map("Sponsorship Manager")

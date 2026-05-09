@@ -531,9 +531,8 @@ export const portalRouter = createTRPCRouter({
 
         const user = await ctx.clerkClient.users.getUser(ctx.user?.id);
         const isUpperTeamRole =
-          Object.values(ManagerRoles).includes(
-            input.teamRole as ManagerRoles,
-          ) || Object.values(LeadRoles).includes(input.teamRole as LeadRoles);
+          (input.teamRole != null && input.teamRole in ManagerRoles) ||
+          (input.teamRole != null && input.teamRole in LeadRoles);
 
         if (isUpperTeamRole && user.publicMetadata?.role !== "admin") {
           throw new TRPCError({
