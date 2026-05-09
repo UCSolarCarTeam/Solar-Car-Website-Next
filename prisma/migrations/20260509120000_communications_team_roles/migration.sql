@@ -9,7 +9,7 @@ WHERE "teamRole" IN (
   'Event Associate',
   'Marketing Associate',
   'Videographer',
-  'Marketing & Events Associate'
+  'Marketing \& Events Associate'
 );
 
 DROP TYPE "AllTeamRoles";
