@@ -42,6 +42,7 @@ export enum ManagerRoles {
   AccountingCoManager = "Accounting Co-Manager",
   AssistantAccountingManager = "Assistant Accounting Manager",
   CommunicationsManager = "Communications Manager",
+  CommunicationsCoManager = "Communications Co-Manager",
   SponsorshipManager = "Sponsorship Manager",
   SponsorshipAssistantManager = "Sponsorship Assistant Manager",
   SoftwareTeamManager = "Software Team Manager",
@@ -72,10 +73,7 @@ export enum AccountingTeam {
 }
 
 export enum CommunicationsTeam {
-  EventAssociate = "Event Associate",
-  MarketingAssociate = "Marketing Associate",
-  Videographer = "Videographer",
-  MarketingAndEventsAssociate = "Marketing & Events Associate",
+  CommunicationsAssociate = "Communications Associate",
 }
 
 export enum SponsorshipTeam {
