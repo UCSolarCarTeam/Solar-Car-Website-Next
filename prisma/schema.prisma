@@ -10,7 +10,7 @@ datasource db {
 
 model User {
   id                Int           @id @default(autoincrement())
-  clerkUserId       String        @unique
+  clerkUserId       String?       @unique
   ucid              String?
   schoolEmail       String?       @unique
   phoneNumber       String?
@@ -19,6 +19,9 @@ model User {
   fieldOfStudy      String?
   schoolYear        String?
   yearJoined        String?
+  yearRetired       String?
+  company           String?
+  companyTitle      String?
   profilePictureUrl String?
   description       String?
   linkedIn          String?
@@ -31,9 +34,10 @@ model Timeline {
   monthNum    Int
   monthName   String
   description String?
-  imageUrl    String?    
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
   @@unique([year, monthNum])
 }
 
@@ -62,77 +66,66 @@ enum SponsorLevel {
 }
 
 enum AllTeamRoles {
-    TeamCaptain              @map("Team Captain")
-    EngineeringTeamManager   @map("Engineering Team Manager")
-    BusinessTeamManager      @map("Business Team Manager")
-    // software team
-    SoftwareTeamManager      @map("Software Team Manager")
-    SoftwareTechnicalManager @map("Software Technical Manager")
-    EmbeddedTeamLead         @map("Embedded Team Lead")
-    TelemetryTeamLead        @map("Telemetry Team Lead")
-    ViscommTeamLead          @map("Viscomm Team Lead")
-    EmbeddedTeam             @map("Embedded Team")
-    TelemetryTeam            @map("Telemetry Team")
-    ViscommTeam              @map("Viscomm Team")
+  TeamCaptain              @map("Team Captain")
+  EngineeringTeamManager   @map("Engineering Team Manager")
+  BusinessTeamManager      @map("Business Team Manager")
+  // software team
+  SoftwareTeamManager      @map("Software Team Manager")
+  SoftwareTechnicalManager @map("Software Technical Manager")
+  EmbeddedTeamLead         @map("Embedded Team Lead")
+  TelemetryTeamLead        @map("Telemetry Team Lead")
+  ViscommTeamLead          @map("Viscomm Team Lead")
+  EmbeddedTeam             @map("Embedded Team")
+  TelemetryTeam            @map("Telemetry Team")
+  ViscommTeam              @map("Viscomm Team")
 
-    // accounting team
-    AccountingCoManager        @map("Accounting Co-Manager")
-    AssistantAccountingManager @map("Assistant Accounting Manager")
-    AccountingAnalyst          @map("Accounting Analyst")
-    AccountingAssociate        @map("Accounting Associate")
+  // accounting team
+  AccountingCoManager        @map("Accounting Co-Manager")
+  AssistantAccountingManager @map("Assistant Accounting Manager")
+  AccountingAnalyst          @map("Accounting Analyst")
+  AccountingAssociate        @map("Accounting Associate")
 
-    // communications team
-    CommunicationsManager       @map("Communications Manager")
-    CommunicationsCoManager     @map("Communications Co-Manager")
-    CommunicationsAssociate     @map("Communications Associate")
+  // communications team
+  CommunicationsManager       @map("Communications Manager")
+  EventAssociate              @map("Event Associate")
+  MarketingAssociate          @map("Marketing Associate")
+  Videographer                @map("Videographer")
+  MarketingAndEventsAssociate @map("Marketing \\& Events Associate")
 
-    // sponsorship
-    SponsorshipManager          @map("Sponsorship Manager")
-    SponsorshipAssistantManager @map("Sponsorship Assistant Manager")
-    MonetaryLead                @map("Monetary Lead")
-    InKindLead                  @map("In-Kind Lead")
-    SponsorshipAssociate        @map("Sponsorship Associate")
+  // sponsorship
+  SponsorshipManager          @map("Sponsorship Manager")
+  SponsorshipAssistantManager @map("Sponsorship Assistant Manager")
+  MonetaryLead                @map("Monetary Lead")
+  InKindLead                  @map("In-Kind Lead")
+  SponsorshipAssociate        @map("Sponsorship Associate")
 
-    // electrical team
-    ElectricalManager          @map("Electrical Manager")
-    ElectricalCoManager        @map("Electrical Co-Manager")
-    ElectricalTechnicalManager @map("Electrical Technical Manager")
-    ArraysLead                 @map("Arrays Lead")
-    EnergyStorageLead          @map("Energy Storage Lead")
-    HighVoltageLead            @map("High Voltage Lead")
-    LowVoltageLead             @map("Low Voltage Lead")
-    ArraysTeam                 @map("Arrays Team")
-    EnergyStorageTeam          @map("Energy Storage Team")
-    HighVoltageTeam            @map("High Voltage Team")
-    LowVoltageTeam             @map("Low Voltage Team")
-    ElectricalTeamTeam         @map("Electrical Team")
+  // electrical team
+  ElectricalManager          @map("Electrical Manager")
+  ElectricalCoManager        @map("Electrical Co-Manager")
+  ElectricalTechnicalManager @map("Electrical Technical Manager")
+  ArraysLead                 @map("Arrays Lead")
+  EnergyStorageLead          @map("Energy Storage Lead")
+  HighVoltageLead            @map("High Voltage Lead")
+  LowVoltageLead             @map("Low Voltage Lead")
+  ArraysTeam                 @map("Arrays Team")
+  EnergyStorageTeam          @map("Energy Storage Team")
+  HighVoltageTeam            @map("High Voltage Team")
+  LowVoltageTeam             @map("Low Voltage Team")
+  ElectricalTeamTeam         @map("Electrical Team")
 
-    // mechanical team
-    MechanicalManager          @map("Mechanical Manager")
-    MechanicalTechnicalManager @map("Mechanical Technical Manager")
-    SuspensionAndSteeringLead  @map("Suspension \\& Steering Lead")
-    StructuresLead             @map("Structures Lead")
-    ElectricalIntegrationLead  @map("Electrical Integration Lead")
-    BodyAndChassisLead         @map("Body \\& Chassis Lead")
+  // mechanical team
+  MechanicalManager          @map("Mechanical Manager")
+  MechanicalTechnicalManager @map("Mechanical Technical Manager")
+  SuspensionAndSteeringLead  @map("Suspension \\& Steering Lead")
+  StructuresLead             @map("Structures Lead")
+  ElectricalIntegrationLead  @map("Electrical Integration Lead")
+  BodyAndChassisLead         @map("Body \\& Chassis Lead")
 
-    SuspensionAndSteeringTeam  @map("Suspension \\& Steering Team")
-    StructuresTeam             @map("Structures Team")
-    ElectricalIntegrationTeam  @map("Electrical Integration Team")
-    BodyAndChassisTeam         @map("Body \\& Chassis Team")
+  SuspensionAndSteeringTeam @map("Suspension \\& Steering Team")
+  StructuresTeam            @map("Structures Team")
+  ElectricalIntegrationTeam @map("Electrical Integration Team")
+  BodyAndChassisTeam        @map("Body \\& Chassis Team")
 
-    // multi team
-    MultiTeam @map("Multi Team")
-}
-
-model Alumni {
-  id                 Int     @id @default(autoincrement())
-  firstName          String
-  lastName           String
-  profilePictureUrl  String?
-  company            String?
-  position           String?
-  yearJoinedSolarCar String?
-  yearLeftSolarCar   String?
-  teamRole           String?
-  linkedIn           String?
+  // multi team
+  MultiTeam @map("Multi Team")
 }

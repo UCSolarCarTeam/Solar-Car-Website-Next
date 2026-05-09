@@ -42,7 +42,6 @@ export enum ManagerRoles {
   AccountingCoManager = "Accounting Co-Manager",
   AssistantAccountingManager = "Assistant Accounting Manager",
   CommunicationsManager = "Communications Manager",
-  CommunicationsCoManager = "Communications Co-Manager",
   SponsorshipManager = "Sponsorship Manager",
   SponsorshipAssistantManager = "Sponsorship Assistant Manager",
   SoftwareTeamManager = "Software Team Manager",
@@ -73,7 +72,10 @@ export enum AccountingTeam {
 }
 
 export enum CommunicationsTeam {
-  CommunicationsAssociate = "Communications Associate",
+  EventAssociate = "Event Associate",
+  MarketingAssociate = "Marketing Associate",
+  Videographer = "Videographer",
+  MarketingAndEventsAssociate = "Marketing & Events Associate",
 }
 
 export enum SponsorshipTeam {
@@ -147,4 +149,7 @@ export const userRowMetadata = {
   schoolYear: "string",
   ucid: "string",
   yearJoined: "string",
+  yearRetired: "string",
+  company: "string",
+  companyTitle: "string",
 };

@@ -167,7 +167,10 @@ const Portal = () => {
                     entries={ourWork.data ?? []}
                   />
                 ) : currentPage === PortalNavigationLinks.Alumni ? (
-                  <AlumniTable alumni={alumniList.data ?? []} />
+                  <AlumniTable
+                    alumni={alumniList.data ?? []}
+                    currentUser={user}
+                  />
                 ) : null}
               </>
             ) : (

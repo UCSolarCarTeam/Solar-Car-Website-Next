@@ -18,6 +18,12 @@ export const userFormSchema = z.object({
     .optional()
     .or(z.literal("")),
 
+  company: z
+    .string()
+    .max(100, "Company must be less than 100 characters")
+    .optional()
+    .or(z.literal("")),
+
   firstName: z
     .string()
     .min(1, "First name is required")
@@ -71,6 +77,12 @@ export const userFormSchema = z.object({
 
   teamRole: z.string().optional().or(z.literal("")),
 
+  companyTitle: z
+    .string()
+    .max(100, "Company title must be less than 100 characters")
+    .optional()
+    .or(z.literal("")),
+
   ucid: z
     .string()
     .trim()
@@ -80,6 +92,21 @@ export const userFormSchema = z.object({
     .or(z.literal(null)),
 
   yearJoined: z
+    .string()
+    .regex(/^\d{4}$/, "Year must be in YYYY format (e.g., 2024)")
+    .refine(
+      (year) => {
+        const y = parseInt(year);
+        return y >= 2000 && y <= currentYear + 1;
+      },
+      {
+        message: `Year must be between 2000 and ${currentYear + 1}`,
+      },
+    )
+    .optional()
+    .or(z.literal("")),
+
+  yearRetired: z
     .string()
     .regex(/^\d{4}$/, "Year must be in YYYY format (e.g., 2024)")
     .refine(

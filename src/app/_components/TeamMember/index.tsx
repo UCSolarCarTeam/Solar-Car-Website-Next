@@ -4,24 +4,28 @@ import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { memo } from "react";
 
 import styles from "@/app/_components/TeamMember/index.module.scss";
-import { type Alumni, type User } from "@prisma/client";
+import { type User } from "@prisma/client";
 
 import Linkedin from "../svgs/Linkedin";
 
 type TeamMemberProps = {
-  user: User | Alumni | null | undefined;
+  user: User | null | undefined;
 };
 
 const TeamMember = ({ user }: TeamMemberProps) => {
   if (!user) return null;
 
-  // team members use fieldOfStudy and description; alumni use company and position
-  const isAlumni = !("fieldOfStudy" in user);
-  const fieldOrCompany =
-    "fieldOfStudy" in user ? user.fieldOfStudy : user.company;
-  const description = "description" in user ? user.description : user.position;
+  // Determine if this is an alumnus by checking if yearRetired exists
+  const isAlumni = user.yearRetired !== null && user.yearRetired !== undefined;
 
-  const hasOverlay = fieldOrCompany ?? description ?? user.linkedIn ?? false;
+  // Use companyTitle for alumni, description for active members
+  const description = isAlumni
+    ? (user.companyTitle ?? user.description ?? null)
+    : (user.description ?? null);
+
+  // Show company for alumni, otherwise show fieldOfStudy; include description and linkedIn
+  const overlayLeft = isAlumni ? user.company : user.fieldOfStudy;
+  const hasOverlay = overlayLeft ?? description ?? user.linkedIn ?? false;
 
   return (
     <div
@@ -44,24 +48,20 @@ const TeamMember = ({ user }: TeamMemberProps) => {
         </div>
         <div className={styles.teamRole}>
           {(user.teamRole ?? "").replace(/([a-z])([A-Z])/g, "$1 $2")}
-          {"yearJoinedSolarCar" in user &&
-            user.yearJoinedSolarCar &&
-            user.yearLeftSolarCar && (
-              <>
-                <br />
-                {user.yearJoinedSolarCar} - {user.yearLeftSolarCar}
-              </>
-            )}
+          {user.yearJoined && user.yearRetired && (
+            <>
+              <br />
+              {user.yearJoined} - {user.yearRetired}
+            </>
+          )}
         </div>
       </div>
       {/* Hover overlay */}
       {hasOverlay && (
         <div className={styles.hoverOverlay}>
           <div className={styles.overlayContent}>
-            {fieldOrCompany && (
-              <div className={styles.fieldOfStudy}>
-                {isAlumni ? `Works at ${fieldOrCompany}` : fieldOrCompany}
-              </div>
+            {overlayLeft && (
+              <div className={styles.fieldOfStudy}>{overlayLeft}</div>
             )}
             {description && (
               <div className={styles.description}>{description}</div>
