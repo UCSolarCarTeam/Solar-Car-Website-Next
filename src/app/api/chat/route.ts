@@ -1,4 +1,5 @@
-import { streamText, convertToModelMessages, UIMessage } from "ai";
+import { type UIMessage, convertToModelMessages, streamText } from "ai";
+
 import { createOpenAI } from "@ai-sdk/openai";
 import { createClient } from "@supabase/supabase-js";
 
@@ -11,7 +12,8 @@ const openrouter = createOpenAI({
 // Supabase client
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY ??
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 );
 
 // ============================================================
@@ -201,104 +203,100 @@ export async function POST(req: Request) {
 
     // Extract latest user query from AI SDK v6 UIMessage parts
     const lastMessage = messages[messages.length - 1];
-    
+
     if (!lastMessage) {
-      return new Response('No messages provided', { status: 400 });
+      return new Response("No messages provided", { status: 400 });
     }
     const query: string =
-      lastMessage.content || 
       (lastMessage.parts as { type: string; text?: string }[])?.find(
         (p) => p.type === "text",
-      )?.text || "";
+      )?.text ?? "";
 
-  // 1. Embed the query using HuggingFace (same model as ingest: all-MiniLM-L6-v2)
-  let embedding: number[] | null = null;
+    // 1. Embed the query using HuggingFace (same model as ingest: all-MiniLM-L6-v2)
+    let embedding: number[] | null = null;
 
-  try {
-    const hfRes = await fetch(
-      "https://router.huggingface.co/hf-inference/models/sentence-transformers/all-MiniLM-L6-v2/pipeline/feature-extraction",
-      {
-        body: JSON.stringify({
-          inputs: [query],
-          options: { wait_for_model: true },
-        }),
-        headers: {
-          Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
-          "Content-Type": "application/json",
+    try {
+      const hfRes = await fetch(
+        "https://router.huggingface.co/hf-inference/models/sentence-transformers/all-MiniLM-L6-v2/pipeline/feature-extraction",
+        {
+          body: JSON.stringify({
+            inputs: [query],
+            options: { wait_for_model: true },
+          }),
+          headers: {
+            Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          method: "POST",
         },
-        method: "POST",
-      },
-    );
+      );
 
-    if (hfRes.ok) {
-      const hfData = (await hfRes.json()) as number[] | number[][];
-      // FIX #3: Safely handle both nested and flat array responses
-      embedding = Array.isArray(hfData[0]) ? (hfData[0] as number[]) : (hfData as number[]);
-    } else {
+      if (hfRes.ok) {
+        const hfData = (await hfRes.json()) as number[] | number[][];
+        // FIX #3: Safely handle both nested and flat array responses
+        embedding = Array.isArray(hfData[0]) ? hfData[0] : (hfData as number[]);
+      } else {
+        // eslint-disable-next-line no-console
+        console.warn("HuggingFace embedding failed:", await hfRes.text());
+      }
+    } catch (err) {
+      // FIX #9: Safe wrapper (already present, kept for clarity)
       // eslint-disable-next-line no-console
-      console.warn("HuggingFace embedding failed:", await hfRes.text());
+      console.warn("HuggingFace embedding error:", err);
     }
-  } catch (err) {
-    // FIX #9: Safe wrapper (already present, kept for clarity)
-    // eslint-disable-next-line no-console
-    console.warn("HuggingFace embedding error:", err);
-  }
 
-  // FIX #4: Explicit embedding failure handling before retrieval
-  if (!embedding || embedding.length !== 384) {
-    // eslint-disable-next-line no-console
-    console.warn("Embedding failed or wrong dimension, skipping retrieval");
-  }
+    // FIX #4: Explicit embedding failure handling before retrieval
+    if (embedding?.length !== 384) {
+      // eslint-disable-next-line no-console
+      console.warn("Embedding failed or wrong dimension, skipping retrieval");
+    }
 
-  // 2. Retrieve relevant context from Supabase pgvector
-  let contextText = "";
+    // 2. Retrieve relevant context from Supabase pgvector
+    let contextText = "";
 
-  if (embedding?.length === 384) {
-    const { data: documents, error } = await supabase.rpc("match_documents", {
-      match_count: 5,
-      match_threshold: 0.1,
-      query_embedding: embedding,
+    if (embedding?.length === 384) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const { data: documents, error } = await supabase.rpc("match_documents", {
+        match_count: 5,
+        match_threshold: 0.1,
+        query_embedding: embedding,
+      });
+
+      if (error) {
+        // eslint-disable-next-line no-console
+        console.error("Supabase match_documents error:", error);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      } else if (documents && documents.length > 0) {
+        contextText = (
+          documents as { content: string; metadata?: { source?: string } }[]
+        )
+          .map(
+            (doc, i) =>
+              `[${i + 1}]${doc.metadata?.source ? ` (${doc.metadata.source})` : ""}\n${doc.content}`,
+          )
+          .join("\n\n---\n\n");
+      }
+    }
+
+    // 3. Convert UIMessage[] → CoreMessage[] for streamText
+    const modelMessages = await convertToModelMessages(messages);
+
+    // 4. Stream response via OpenRouter
+    const result = streamText({
+      messages: [
+        { content: SYSTEM_PROMPT(contextText), role: "system" },
+        ...modelMessages.slice(-6),
+      ],
+      model: openrouter.chat("openrouter/auto"),
     });
 
-    if (error) {
-      // eslint-disable-next-line no-console
-      console.error("Supabase match_documents error:", error);
-    } else if (documents && documents.length > 0) {
-      contextText = (
-        documents as { content: string; metadata?: { source?: string } }[]
-      )
-        .map(
-          (doc, i) =>
-            `[${i + 1}]${doc.metadata?.source ? ` (${doc.metadata.source})` : ""}\n${doc.content}`,
-        )
-        .join("\n\n---\n\n");
-    }
-  }
-
-  // 3. Convert UIMessage[] → ModelMessage[] for streamText
-  const modelMessages = messages.map((m: any) => ({
-    role: m.role,
-    content: m.content || (m.parts ? m.parts.map((p: any) => p.text).join("") : ""),
-  }));
-
-  // 4. Stream response via OpenRouter
-  const result = streamText({
-    messages: [
-      { content: SYSTEM_PROMPT(contextText), role: "system" },
-      ...modelMessages.slice(-6),
-    ],
-    model: openrouter.chat("openrouter/auto"),
-  });
-
-  // Use toTextStreamResponse or toUIMessageStreamResponse based on what is available in the installed SDK version
-  if (typeof (result as any).toDataStreamResponse === 'function') {
-    return (result as any).toDataStreamResponse();
-  } else if (typeof (result as any).toUIMessageStreamResponse === 'function') {
-    return (result as any).toUIMessageStreamResponse();
-  } else {
-    return result.toTextStreamResponse();
-  }
-  } catch (err: any) {
-    return new Response('API ERROR: ' + err.message + '\n' + err.stack, { status: 500 });
+    // Using any cast to stay with toTextStreamResponse as requested
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+    return (result as any).toTextStreamResponse();
+  } catch (err: unknown) {
+    const error = err as Error;
+    return new Response(`API ERROR: ${error.message}\n${error.stack ?? ""}`, {
+      status: 500,
+    });
   }
 }
