@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 import styles from "./ChatBot.module.scss";
 
@@ -29,9 +30,10 @@ export function CarAvatar({
         repeat: Infinity,
       }}
     >
-      <img
+      <Image
         alt="Helios car"
         className={styles.avatarImage}
+        fill
         src="/assets/HeliosSideview.png"
       />
     </motion.div>

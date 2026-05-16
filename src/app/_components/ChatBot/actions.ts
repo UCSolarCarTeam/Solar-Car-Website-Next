@@ -57,6 +57,87 @@ ${context}
 - **Safety**: Do not reveal internal API keys, private member contact info, or sensitive financial data unless explicitly part of the context.
 `;
 
+async function generateEmbedding(query: string): Promise<number[]> {
+  const hfRes = await fetch(
+    "https://router.huggingface.co/hf-inference/models/sentence-transformers/all-MiniLM-L6-v2/pipeline/feature-extraction",
+    {
+      body: JSON.stringify({
+        inputs: [query],
+        options: { wait_for_model: true },
+      }),
+      headers: {
+        Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      signal: AbortSignal.timeout(8000),
+    },
+  );
+
+  if (!hfRes.ok) {
+    throw new Error(`HF Error: ${hfRes.statusText}`);
+  }
+
+  const hfData = (await hfRes.json()) as number[] | number[][];
+  const embedding = (Array.isArray(hfData[0]) ? hfData[0] : hfData) as number[];
+
+  if (embedding?.length !== 384) {
+    throw new Error("Failed to generate a valid 384-dimensional embedding");
+  }
+
+  return embedding;
+}
+
+async function searchContext(embedding: number[]): Promise<string> {
+  const { data: documents, error: searchError } = (await supabase.rpc(
+    "match_documents",
+    {
+      match_count: 5,
+      match_threshold: 0.1,
+      query_embedding: embedding,
+    },
+  )) as {
+    data: { content: string }[] | null;
+    error: { message: string } | null;
+  };
+
+  if (searchError) {
+    throw new Error(`Supabase Error: ${searchError.message}`);
+  }
+
+  return (
+    (documents as { content: string }[])
+      ?.map((doc) => doc.content)
+      .join("\n\n") ?? ""
+  );
+}
+
+function prepareModelMessages(
+  messages: UIMessage[],
+): { role: "user" | "assistant"; content: string }[] {
+  return messages
+    .filter(
+      (m): m is UIMessage & { role: "user" | "assistant" } =>
+        m.role === "user" || m.role === "assistant",
+    )
+    .map((m) => ({
+      content:
+        ((m as unknown as Record<string, unknown>).content as
+          | string
+          | undefined) ??
+        (m.parts
+          ? (m.parts as { type: string; text?: string }[])
+              .filter(
+                (p): p is { type: "text"; text: string } =>
+                  p.type === "text" && typeof p.text === "string",
+              )
+              .map((p) => p.text)
+              .join("")
+          : ""),
+      role: m.role,
+    }));
+}
+
 export async function chatAction({ messages }: { messages: UIMessage[] }) {
   try {
     if (!Array.isArray(messages) || messages.length === 0) {
@@ -83,76 +164,13 @@ export async function chatAction({ messages }: { messages: UIMessage[] }) {
     }
 
     // 1. Generate Embeddings (using HuggingFace)
-    const hfRes = await fetch(
-      "https://router.huggingface.co/hf-inference/models/sentence-transformers/all-MiniLM-L6-v2/pipeline/feature-extraction",
-      {
-        body: JSON.stringify({
-          inputs: [query],
-          options: { wait_for_model: true },
-        }),
-        headers: {
-          Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        signal: AbortSignal.timeout(8000),
-      },
-    );
-
-    if (!hfRes.ok) {
-      throw new Error(`HF Error: ${hfRes.statusText}`);
-    }
-
-    const hfData = (await hfRes.json()) as number[] | number[][];
-    const embedding = Array.isArray(hfData[0]) ? hfData[0] : hfData;
-
-    if (embedding?.length !== 384) {
-      throw new Error("Failed to generate a valid 384-dimensional embedding");
-    }
+    const embedding = await generateEmbedding(query);
 
     // 2. Search Supabase for context
-    const { data: documents, error: searchError } = (await supabase.rpc(
-      "match_documents",
-      {
-        match_count: 5,
-        match_threshold: 0.1,
-        query_embedding: embedding,
-      },
-    )) as {
-      data: { content: string }[] | null;
-      error: { message: string } | null;
-    };
-
-    if (searchError) {
-      throw new Error(`Supabase Error: ${searchError.message}`);
-    }
-
-    const context = (documents as { content: string }[])
-      ?.map((doc) => doc.content)
-      .join("\n\n");
+    const context = await searchContext(embedding);
 
     // 3. Prepare Model Messages
-    const modelMessages = messages
-      .filter(
-        (m): m is UIMessage & { role: "user" | "assistant" } =>
-          m.role === "user" || m.role === "assistant",
-      )
-      .map((m) => ({
-        content:
-          ((m as unknown as Record<string, unknown>).content as
-            | string
-            | undefined) ??
-          (m.parts
-            ? (m.parts as { type: string; text?: string }[])
-                .filter(
-                  (p): p is { type: "text"; text: string } =>
-                    p.type === "text" && typeof p.text === "string",
-                )
-                .map((p) => p.text)
-                .join("")
-            : ""),
-        role: m.role,
-      }));
+    const modelMessages = prepareModelMessages(messages);
 
     // 4. Stream Response using AI SDK
     const result = streamText({

@@ -13,7 +13,7 @@ const SUGGESTED = [
   "Who are the sponsors?",
   "What is a solar car?",
   "When are the next races?",
-  "Tell me about Vyapak",
+  "Tell me about Schulich Helios",
 ];
 
 function parseMarkdownBold(text: string) {
@@ -71,6 +71,25 @@ function Message({ msg }: { msg: UIMessage }) {
         </div>
       </div>
     </motion.div>
+  );
+}
+
+function SendIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      fill="none"
+      height="16"
+      stroke="white"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2.5"
+      viewBox="0 0 24 24"
+      width="16"
+    >
+      <line x1="22" x2="11" y1="2" y2="13" />
+      <polygon points="22 2 15 22 11 13 2 9 22 2" />
+    </svg>
   );
 }
 
@@ -271,20 +290,7 @@ export function ChatPanel({
           disabled={!input?.trim() || isLoading}
           type="submit"
         >
-          <svg
-            aria-hidden="true"
-            fill="none"
-            height="16"
-            stroke="white"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2.5"
-            viewBox="0 0 24 24"
-            width="16"
-          >
-            <line x1="22" x2="11" y1="2" y2="13" />
-            <polygon points="22 2 15 22 11 13 2 9 22 2" />
-          </svg>
+          <SendIcon />{" "}
         </button>
       </form>
     </motion.div>
