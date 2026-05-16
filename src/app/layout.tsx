@@ -5,6 +5,8 @@ import "@/styles/globals.scss";
 import { TRPCReactProvider } from "@/trpc/react";
 import { ClerkProvider } from "@clerk/nextjs";
 
+import ChatBot from "./_components/ChatBot/ChatBot";
+
 const saira = Saira({
   display: "swap",
   subsets: ["latin"],
@@ -37,7 +39,10 @@ export default function RootLayout({
       >
         <html className={`${saira.className}`} lang="en">
           <body>
-            <TRPCReactProvider>{children}</TRPCReactProvider>
+            <TRPCReactProvider>
+              {children}
+              <ChatBot />
+            </TRPCReactProvider>
           </body>
         </html>
       </ClerkProvider>
