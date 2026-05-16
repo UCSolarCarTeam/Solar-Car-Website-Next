@@ -5,7 +5,7 @@ import EditOurWorkEntryCell from "@/app/_components/PortalComponents/EditOurWork
 import DeleteOurWorkEntry from "@/app/_components/PortalComponents/EditOurWorkEntryCell/DeleteOurWorkEntry";
 import styles from "@/app/_components/PortalComponents/Portal/index.module.scss";
 import SearchBar from "@/app/_components/PortalComponents/SearchBar";
-import { type UserResource } from "@clerk/types";
+import { type UserResource } from "@clerk/nextjs/types";
 import {
   createColumnHelper,
   flexRender,

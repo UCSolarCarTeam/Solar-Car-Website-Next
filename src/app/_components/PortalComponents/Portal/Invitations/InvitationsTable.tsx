@@ -5,7 +5,7 @@ import InviteUser from "@/app/_components/PortalComponents/Portal/Invitations/In
 import RevokeUserCell from "@/app/_components/PortalComponents/Portal/Invitations/RevokeUserCell";
 import SearchBar from "@/app/_components/PortalComponents/SearchBar";
 import { type RouterOutputs } from "@/trpc/react";
-import { type UserResource } from "@clerk/types";
+import { type UserResource } from "@clerk/nextjs/types";
 import {
   createColumnHelper,
   flexRender,

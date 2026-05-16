@@ -7,7 +7,7 @@ import styles from "@/app/_components/PortalComponents/Portal/index.module.scss"
 import { PortalNavigationLinks, adminClerkRoles } from "@/app/_types";
 import { type AdminRoles } from "@/server/api/routers/portal";
 import { UserButton } from "@clerk/nextjs";
-import { type UserResource } from "@clerk/types";
+import { type UserResource } from "@clerk/nextjs/types";
 
 interface PortalPageHeaderProps {
   currentUser: UserResource | undefined | null;

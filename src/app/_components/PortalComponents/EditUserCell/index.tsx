@@ -2,7 +2,7 @@ import React, { memo, useCallback, useEffect, useState } from "react";
 
 import EditUserPopupAdmin from "@/app/_components/PortalComponents/EditUserCell/EditUserPopupAdmin";
 import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
-import { type UserResource } from "@clerk/types";
+import { type UserResource } from "@clerk/nextjs/types";
 import { type User } from "@prisma/client";
 
 import BasicButton from "../../Buttons/BasicButton";

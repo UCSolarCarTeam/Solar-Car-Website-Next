@@ -41,9 +41,9 @@ The Calgary Solar Car website leverages modern technologies to ensure a scalable
 
 _For access to Clerk and Supabase, please contact the telemetry lead._ 🙋‍♂️
 
-## ⚙️ Getting Started
+## ⚙️ Local Development
 
-Follow these steps to set up your local development environment:
+Follow these steps to set up the app, database, and Clerk auth locally.
 
 1. **Clone the Repository:**
 
@@ -58,27 +58,58 @@ Follow these steps to set up your local development environment:
    corepack enable yarn
    ```
 
-3. **Install Dependencies:**
+3. **Start the Local Database:**
+
+   The repo includes a `docker-compose.yml` with a local Postgres instance for Prisma.
+
+   ```bash
+   docker-compose up -d
+   ```
+
+4. **Create Your Local Environment File:**
+
+   Copy `.env.example` to `.env` and fill in any secrets you need for Clerk, Supabase, and webhooks.
+
+   PowerShell:
+
+   ```powershell
+   copy .env.example .env
+   ```
+
+   bash / WSL / git-bash:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+5. **Install Dependencies:**
 
    ```bash
    yarn install
    ```
 
-4. **Obtain the Environment Configuration:**
-
-   Copy the env variables from [Confluence](https://uofcsolarcar.atlassian.net/wiki/spaces/ST/pages/345931787/Solar+Car+Next+Website+Environment+Variables) or request the `.env` file from the telemetry lead.
-
-5. **Generate the Database Client:**
+6. **Generate and Apply Prisma Migrations:**
 
    ```bash
    yarn db:generate
+   yarn db:migrate-dev
    ```
 
-6. **Start the Development Server:**
+7. **Seed the Database:**
+
+   The repo includes a Faker-powered seed script for local development data.
+
+   ```bash
+   yarn db:seed
+   ```
+
+8. **Start the Development Server:**
 
    ```bash
    yarn dev
    ```
+
+If `yarn dev` fails with a Clerk middleware error, make sure `src/middleware.ts` exists and that you are using the current Clerk packages.
 
 ## 🌐 Using Webhooks Locally
 
@@ -91,6 +122,8 @@ To ensure that Clerk syncs with our Supabase database, follow these steps for th
    ```bash
    yarn dev
    ```
+
+   If this is the first time you're signing up locally, the app needs Clerk middleware to be active in `src/middleware.ts`.
 
 2. **Expose Your Localhost to the Internet:**
 
