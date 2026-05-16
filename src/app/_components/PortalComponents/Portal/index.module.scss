@@ -2,14 +2,17 @@
   position: sticky;
   top: 0;
   left: 0;
+  width: 100%;
   max-width: 100dvw;
   height: 60px;
   display: flex;
   background-color: #dddddd;
   align-items: center;
+  gap: 12px;
   padding: 0 24px;
   justify-content: space-between;
   z-index: 100;
+  overflow: hidden;
 }
 
 .active {
@@ -20,21 +23,34 @@
   gap: 20px;
   align-items: center;
   font-weight: 500;
+  flex: 1;
+  min-width: 0;
 
   a {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-shrink: 0;
   }
 
   > div {
     font-weight: 400;
-    > div {
-      cursor: pointer;
-    }
     display: flex;
     gap: 10px;
     align-items: center;
+    flex-wrap: nowrap;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    padding-bottom: 2px;
+
+    > div {
+      cursor: pointer;
+      flex-shrink: 0;
+    }
   }
 }
 
@@ -43,16 +59,28 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
+  min-width: 0;
+
+  > :first-child {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+  }
 }
 
 .tableContainer {
   overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
   border-radius: 0.5rem;
   border: 2px solid #e5e7eb;
-  width: calc(100dvw - 48px);
+  width: 100%;
+  max-width: 100%;
 
   table {
-    width: 100%;
+    width: max-content;
     min-width: 100%;
     background-color: white;
     font-size: 0.875rem;
@@ -79,11 +107,11 @@
         height: 100px;
         td {
           position: relative;
-          white-space: wrap;
+          white-space: nowrap;
           padding: 0.5rem 1rem;
           color: #374151;
 
-          max-width: 20vw;
+          max-width: none;
 
           &.font-medium {
             font-weight: 500;
@@ -103,15 +131,24 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
   font-weight: 650;
   font-size: 1.2rem;
   margin-bottom: 12px;
+
+  > :first-child {
+    white-space: nowrap;
+  }
 }
 
 .tableHeaderSponsorRight {
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  margin-left: auto;
 }
 
 .inviteUserContainer {
@@ -125,8 +162,18 @@
 .inviteUserFormContainer {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   width: 100%;
   gap: 10px;
+
+  > * {
+    flex: 1 1 200px;
+    min-width: 0;
+  }
+
+  button {
+    width: 100%;
+  }
 }
 
 .noResults {
@@ -142,4 +189,87 @@
   color: #4b5563;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   padding: 0.5rem;
+}
+
+@media (max-width: 1024px) {
+  .portalPageHeaderLayout {
+    padding: 0 16px;
+    gap: 10px;
+  }
+
+  .portalPageHeader {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .portalPageHeaderLayout {
+    padding: 0 12px;
+  }
+
+  .portalPageHeader {
+    gap: 8px;
+  }
+
+  .portalPageHeader > div {
+    gap: 8px;
+  }
+
+  .profilePicture > :first-child {
+    display: none;
+  }
+
+  .tableHeader {
+    align-items: flex-start;
+    font-size: 1rem;
+  }
+
+  .tableHeaderSponsorRight {
+    justify-content: flex-start;
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .tableContainer table {
+    font-size: 0.8125rem;
+  }
+
+  .tableContainer table thead tr th,
+  .tableContainer table tbody tr td {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .inviteUserFormContainer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .inviteUserFormContainer > * {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 320px) {
+  .portalPageHeaderLayout {
+    padding: 0 8px;
+    gap: 6px;
+  }
+
+  .portalPageHeader {
+    gap: 6px;
+  }
+
+  .portalPageHeader > div {
+    gap: 6px;
+  }
+
+  .tableContainer table {
+    font-size: 0.75rem;
+  }
+
+  .tableContainer table thead tr th,
+  .tableContainer table tbody tr td {
+    padding: 0.4rem 0.6rem;
+  }
 }

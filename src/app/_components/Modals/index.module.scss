@@ -9,6 +9,7 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  padding: 12px;
 }
 
 .modal {
@@ -17,11 +18,40 @@
   padding: 2rem;
   border-radius: 12px;
   text-align: center;
+  width: min(400px, calc(100dvw - 24px));
   max-width: 400px;
+  max-height: calc(100dvh - 24px);
+  overflow-y: auto;
 }
 
 .modalActions {
   display: flex;
   justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 0.75rem;
   margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .modalOverlay {
+    padding: 8px;
+  }
+
+  .modal {
+    width: calc(100dvw - 16px);
+    max-height: calc(100dvh - 16px);
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .modalOverlay {
+    padding: 4px;
+  }
+
+  .modal {
+    width: calc(100dvw - 8px);
+    max-height: calc(100dvh - 8px);
+    padding: 1rem;
+  }
 }
