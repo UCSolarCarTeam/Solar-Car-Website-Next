@@ -94,13 +94,15 @@ const YearSection = ({ yearData }: { yearData: TimelineYear }) => {
                 }}
                 variants={swipeVariants}
               >
-                <Image
-                  alt={month.month ?? ""}
-                  className={styles.monthImage}
-                  height={200}
-                  src={month?.image ?? ""}
-                  width={300}
-                />
+                {month.image && (
+                  <Image
+                    alt={month.month}
+                    className={styles.monthImage}
+                    height={200}
+                    src={month.image}
+                    width={300}
+                  />
+                )}
               </motion.div>
             </AnimatePresence>
           </div>
