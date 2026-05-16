@@ -4,27 +4,13 @@ import toast from "react-hot-toast";
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import { trpc } from "@/trpc/react";
 import { type UserResource } from "@clerk/types";
-import { type AllTeamRoles } from "@prisma/client";
+import type { User } from "@prisma/client";
 
 import BasicButton, { ButtonVariant } from "../../Buttons/BasicButton";
 
 export interface DeleteUserProps {
   currentUser: UserResource | undefined | null;
-  currentRow: {
-    description: string | null;
-    id: number;
-    clerkUserId: string;
-    firstName: string | null;
-    lastName: string | null;
-    fieldOfStudy: string | null;
-    teamRole: AllTeamRoles | null;
-    schoolYear: string | null;
-    yearJoined: string | null;
-    profilePictureUrl: string | null;
-    phoneNumber: string | null;
-    schoolEmail: string | null;
-    ucid: string | null;
-  };
+  currentRow: Pick<User, "id">;
 }
 
 const DeleteUser = ({ currentRow }: DeleteUserProps) => {

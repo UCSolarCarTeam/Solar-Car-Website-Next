@@ -29,6 +29,7 @@ export enum PortalNavigationLinks {
   Recruitment = "recruitment",
   Invitations = "invitations",
   OurWork = "our-work",
+  Alumni = "alumni",
 }
 
 export enum ManagerRoles {
@@ -41,6 +42,7 @@ export enum ManagerRoles {
   AccountingCoManager = "Accounting Co-Manager",
   AssistantAccountingManager = "Assistant Accounting Manager",
   CommunicationsManager = "Communications Manager",
+  CommunicationsCoManager = "Communications Co-Manager",
   SponsorshipManager = "Sponsorship Manager",
   SponsorshipAssistantManager = "Sponsorship Assistant Manager",
   SoftwareTeamManager = "Software Team Manager",
@@ -71,10 +73,7 @@ export enum AccountingTeam {
 }
 
 export enum CommunicationsTeam {
-  EventAssociate = "Event Associate",
-  MarketingAssociate = "Marketing Associate",
-  Videographer = "Videographer",
-  MarketingAndEventsAssociate = "Marketing & Events Associate",
+  CommunicationsAssociate = "Communications Associate",
 }
 
 export enum SponsorshipTeam {
@@ -142,6 +141,7 @@ export const userRowMetadata = {
   fieldOfStudy: "string",
   firstName: "string",
   lastName: "string",
+  linkedIn: "string",
   phoneNumber: "string",
   schoolEmail: "string",
   schoolYear: "string",

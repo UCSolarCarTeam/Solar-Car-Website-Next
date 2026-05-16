@@ -8,7 +8,7 @@ const PlusIcon = ({ fill, onClick, size }: SVGIconProps) => {
       fill={fill ?? "#ffffff"}
       height={size === "sm" ? "12px" : size === "md" ? "24px" : "36px"}
       onClick={onClick}
-      style={{ cursor: onClick ? "pointer" : "default" }}
+      style={{ cursor: onClick ? "pointer" : "inherit" }}
       viewBox="0 0 330 330"
       width={size === "sm" ? "12px" : size === "md" ? "24px" : "36px"}
       xmlSpace="preserve"

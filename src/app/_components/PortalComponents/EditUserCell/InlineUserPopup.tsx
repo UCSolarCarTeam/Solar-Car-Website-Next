@@ -60,11 +60,13 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
             label:
               key === "ucid"
                 ? "UCID"
-                : key === "description"
-                  ? "About Me"
-                  : key
-                      .replace(/([a-z])([A-Z])/g, "$1 $2")
-                      .replace(/^./, (match) => match.toUpperCase()),
+                : key === "linkedIn"
+                  ? "LinkedIn"
+                  : key === "description"
+                    ? "About Me"
+                    : key
+                        .replace(/([a-z])([A-Z])/g, "$1 $2")
+                        .replace(/^./, (match) => match.toUpperCase()),
             value: value,
           };
           return acc;
@@ -125,8 +127,11 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
 
   const handleSave = useCallback(async () => {
     if (touched) {
+      const processedData = { ...newRowData };
+      processedData.ucid = String(processedData.ucid);
+      processedData.linkedIn = processedData.linkedIn?.trim() ?? null;
       // validate the form's fields
-      const errors = validateUserForm(newRowData as Partial<UserFormData>);
+      const errors = validateUserForm(processedData as Partial<UserFormData>);
 
       if (Object.keys(errors).length > 0) {
         setValidationErrors(errors);

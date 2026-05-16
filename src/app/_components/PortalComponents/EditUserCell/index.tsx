@@ -3,27 +3,13 @@ import React, { memo, useCallback, useEffect, useState } from "react";
 import EditUserPopupAdmin from "@/app/_components/PortalComponents/EditUserCell/EditUserPopupAdmin";
 import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
 import { type UserResource } from "@clerk/types";
-import { type AllTeamRoles } from "@prisma/client";
+import { type User } from "@prisma/client";
 
 import BasicButton from "../../Buttons/BasicButton";
 
 export interface EditUserCellProps {
   currentUser: UserResource | undefined | null;
-  currentRow: {
-    description: string | null;
-    id: number;
-    clerkUserId: string;
-    firstName: string | null;
-    lastName: string | null;
-    fieldOfStudy: string | null;
-    teamRole: AllTeamRoles | null;
-    schoolYear: string | null;
-    yearJoined: string | null;
-    profilePictureUrl: string | null;
-    phoneNumber: string | null;
-    schoolEmail: string | null;
-    ucid: string | null;
-  };
+  currentRow: User;
 }
 
 const EditUserCell = ({ currentRow, currentUser }: EditUserCellProps) => {

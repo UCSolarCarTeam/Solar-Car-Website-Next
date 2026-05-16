@@ -5,6 +5,7 @@ import { memo, useEffect, useMemo } from "react";
 import { Toaster } from "react-hot-toast";
 
 import InlineUserPopup from "@/app/_components/PortalComponents/EditUserCell/InlineUserPopup";
+import AlumniTable from "@/app/_components/PortalComponents/Portal/AlumniTable";
 import InvitationsTable from "@/app/_components/PortalComponents/Portal/Invitations/InvitationsTable";
 import PortalPageHeader from "@/app/_components/PortalComponents/Portal/PortalPageHeader";
 import RecruitmentTable from "@/app/_components/PortalComponents/Portal/RecruitmentTable";
@@ -38,6 +39,9 @@ const Portal = () => {
     !showAdminTables || currentPage !== PortalNavigationLinks.Users
       ? skipToken
       : undefined,
+    {
+      refetchOnWindowFocus: false,
+    },
   );
   const invitedUsers = trpc.portal.getInvitedUsers.useQuery(
     !showAdminTables || currentPage !== PortalNavigationLinks.Invitations
@@ -48,21 +52,41 @@ const Portal = () => {
     !showAdminTables || currentPage !== PortalNavigationLinks.Team
       ? skipToken
       : undefined,
+    {
+      refetchOnWindowFocus: false,
+    },
   );
   const sponsors = trpc.portal.getSponsorsList.useQuery(
     !showAdminTables || currentPage !== PortalNavigationLinks.Sponsors
       ? skipToken
       : undefined,
+    {
+      refetchOnWindowFocus: false,
+    },
   );
   const forms = trpc.portal.getFormsList.useQuery(
     !showAdminTables || currentPage !== PortalNavigationLinks.Recruitment
       ? skipToken
       : undefined,
+    {
+      refetchOnWindowFocus: false,
+    },
   );
   const ourWork = trpc.portal.getOurWorkList.useQuery(
     !showAdminTables || currentPage !== PortalNavigationLinks.OurWork
       ? skipToken
       : undefined,
+    {
+      refetchOnWindowFocus: false,
+    },
+  );
+  const alumniList = trpc.portal.getAlumniList.useQuery(
+    !showAdminTables || currentPage !== PortalNavigationLinks.Alumni
+      ? skipToken
+      : undefined,
+    {
+      refetchOnWindowFocus: false,
+    },
   );
   const currentDBUser = trpc.portal.getCurrentDBUser.useQuery(
     showAdminTables ? skipToken : undefined,
@@ -80,7 +104,8 @@ const Portal = () => {
     sponsors.isFetching ||
     currentDBUser.isFetching ||
     forms.isFetching ||
-    ourWork.isFetching
+    ourWork.isFetching ||
+    alumniList.isFetching
   ) {
     return <Loader isLoading lightmode />;
   }
@@ -141,6 +166,8 @@ const Portal = () => {
                     currentUser={user}
                     entries={ourWork.data ?? []}
                   />
+                ) : currentPage === PortalNavigationLinks.Alumni ? (
+                  <AlumniTable alumni={alumniList.data ?? []} />
                 ) : null}
               </>
             ) : (

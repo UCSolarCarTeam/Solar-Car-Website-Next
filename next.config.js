@@ -33,6 +33,7 @@ const config = {
       },
     ],
   },
+  reactCompiler: true,
   reactStrictMode: true,
   transpilePackages: ["geist"],
 };
