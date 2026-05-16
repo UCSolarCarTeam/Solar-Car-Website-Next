@@ -1,4 +1,4 @@
-import { type UIMessage, convertToModelMessages, streamText } from "ai";
+import { type UIMessage, streamText } from "ai";
 
 import { createOpenAI } from "@ai-sdk/openai";
 import { createClient } from "@supabase/supabase-js";
@@ -199,18 +199,35 @@ ${context ? context : "_No specific context was retrieved for this question. Use
 
 export async function POST(req: Request) {
   try {
-    const { messages } = (await req.json()) as { messages: UIMessage[] };
+    const body = (await req.json()) as { messages?: UIMessage[] };
+    const messages = body.messages;
+
+    if (!Array.isArray(messages) || messages.length === 0) {
+      return new Response("No messages provided", { status: 400 });
+    }
 
     // Extract latest user query from AI SDK v6 UIMessage parts
     const lastMessage = messages[messages.length - 1];
 
-    if (!lastMessage) {
-      return new Response("No messages provided", { status: 400 });
+    if (lastMessage?.role !== "user") {
+      return new Response("Last message must be a user message", {
+        status: 400,
+      });
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     const query: string =
-      (lastMessage.parts as { type: string; text?: string }[])?.find(
-        (p) => p.type === "text",
-      )?.text ?? "";
+      ((lastMessage as unknown as Record<string, unknown>).content as
+        | string
+        | undefined) ??
+      (
+        lastMessage.parts as { type: string; text?: string }[] | undefined
+      )?.find((p) => p.type === "text")?.text ??
+      "";
+
+    if (!query.trim() || query.length > 4000 || messages.length > 20) {
+      return new Response("Invalid message payload", { status: 400 });
+    }
 
     // 1. Embed the query using HuggingFace (same model as ingest: all-MiniLM-L6-v2)
     let embedding: number[] | null = null;
@@ -228,6 +245,7 @@ export async function POST(req: Request) {
             "Content-Type": "application/json",
           },
           method: "POST",
+          signal: AbortSignal.timeout(8000),
         },
       );
 
@@ -279,7 +297,28 @@ export async function POST(req: Request) {
     }
 
     // 3. Convert UIMessage[] → CoreMessage[] for streamText
-    const modelMessages = await convertToModelMessages(messages);
+    const modelMessages = messages
+      .filter(
+        (m): m is UIMessage & { role: "user" | "assistant" } =>
+          m.role === "user" || m.role === "assistant",
+      )
+      .map((m) => ({
+        content:
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          ((m as unknown as Record<string, unknown>).content as
+            | string
+            | undefined) ??
+          (m.parts
+            ? (m.parts as { type: string; text?: string }[])
+                .filter(
+                  (p): p is { type: "text"; text: string } =>
+                    p.type === "text" && typeof p.text === "string",
+                )
+                .map((p) => p.text)
+                .join("")
+            : ""),
+        role: m.role,
+      }));
 
     // 4. Stream response via OpenRouter
     const result = streamText({
@@ -293,10 +332,9 @@ export async function POST(req: Request) {
     // Using any cast to stay with toTextStreamResponse as requested
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     return (result as any).toTextStreamResponse();
-  } catch (err: unknown) {
-    const error = err as Error;
-    return new Response(`API ERROR: ${error.message}\n${error.stack ?? ""}`, {
-      status: 500,
-    });
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error("Chat API error:", err);
+    return new Response("Internal server error", { status: 500 });
   }
 }
