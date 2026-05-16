@@ -1,10 +1,24 @@
+/* eslint-disable no-console */
 import { faker } from "@faker-js/faker";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, SponsorLevel } from "@prisma/client";
 
 const prisma = new PrismaClient();
+const LOCAL_DATABASE_URL =
+  "postgresql://postgres:password@localhost:5432/solar-car-website-next";
 
 async function main() {
   console.log("Starting seed...");
+
+  const databaseUrl = process.env.DATABASE_URL;
+
+  if (databaseUrl !== LOCAL_DATABASE_URL) {
+    console.error(
+      "FATAL: Refusing to seed because DATABASE_URL is not the expected local database URL.",
+    );
+    console.error(`Expected DATABASE_URL=${LOCAL_DATABASE_URL}`);
+    console.error(`Current DATABASE_URL=${databaseUrl ?? "<unset>"}`);
+    process.exit(1);
+  }
 
   // Clear existing rows (safe for local development)
   await prisma.timeline.deleteMany();
@@ -48,7 +62,7 @@ async function main() {
   }
 
   // Sponsors
-  const sponsorLevels = ["Gold", "Silver", "Bronze", "Friends"];
+  const sponsorLevels = Object.values(SponsorLevel);
   for (const level of sponsorLevels) {
     await prisma.sponsor.create({
       data: {
