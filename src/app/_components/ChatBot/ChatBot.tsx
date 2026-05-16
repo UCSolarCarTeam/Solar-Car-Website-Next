@@ -338,10 +338,7 @@ export default function SolarChatbot() {
             )}
 
             {/* Input */}
-            <form
-              className={styles.inputForm}
-              onSubmit={handleSubmit as React.FormEventHandler<HTMLFormElement>}
-            >
+            <form className={styles.inputForm} onSubmit={handleSubmit}>
               <textarea
                 aria-label="Message input"
                 className={styles.inputField}
