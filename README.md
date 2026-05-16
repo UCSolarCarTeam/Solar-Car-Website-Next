@@ -109,7 +109,7 @@ Follow these steps to set up the app, database, and Clerk auth locally.
    yarn dev
    ```
 
-If `yarn dev` fails with a Clerk middleware error, make sure `src/middleware.ts` exists and that you are using the current Clerk packages.
+If `yarn dev` fails with a Clerk middleware error, check the auth middleware entrypoint in `src/proxy.ts` and make sure you are using the current Clerk packages.
 
 ## 🌐 Using Webhooks Locally
 
@@ -123,7 +123,7 @@ To ensure that Clerk syncs with our Supabase database, follow these steps for th
    yarn dev
    ```
 
-   If this is the first time you're signing up locally, the app needs Clerk middleware to be active in `src/middleware.ts`.
+   If this is the first time you're signing up locally, the app needs Clerk middleware to be active in the auth middleware entrypoint (`src/proxy.ts`).
 
 2. **Expose Your Localhost to the Internet:**
 
