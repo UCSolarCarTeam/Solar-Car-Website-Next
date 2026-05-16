@@ -1,0 +1,5 @@
+requests
+langchain-text-splitters
+sentence-transformers
+supabase
+python-dotenv
