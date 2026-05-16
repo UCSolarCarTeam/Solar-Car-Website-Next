@@ -6,7 +6,7 @@ export async function POST(req: Request) {
   try {
     const body = (await req.json()) as { messages?: UIMessage[] };
     const messages = body.messages ?? [];
-    return (await chatAction({ messages })) as Response;
+    return await chatAction({ messages });
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error("Chat API error:", err);
