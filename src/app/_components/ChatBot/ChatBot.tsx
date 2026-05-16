@@ -33,9 +33,9 @@ function parseMarkdownBold(text: string) {
 
 function getMessageText(msg: UIMessage): string {
   if (!msg.parts) return "";
-  return msg.parts
+  return (msg.parts as { type: string; text?: string }[])
     .filter(
-      (p: any): p is { type: "text"; text: string } =>
+      (p): p is { type: "text"; text: string } =>
         p?.type === "text" && typeof p.text === "string",
     )
     .map((p) => p.text)
@@ -171,7 +171,7 @@ export default function SolarChatbot() {
     e?.preventDefault();
     (e as React.FormEvent)?.stopPropagation?.();
     if (!input.trim() || isLoading) return;
-    sendMessage({ text: input });
+    void sendMessage({ text: input });
     setInput("");
   };
 
@@ -179,7 +179,7 @@ export default function SolarChatbot() {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       if (!input.trim() || isLoading) return;
-      sendMessage({ text: input });
+      void sendMessage({ text: input });
       setInput("");
     }
   };
@@ -327,7 +327,9 @@ export default function SolarChatbot() {
                   <button
                     className={styles.suggestionButton}
                     key={s}
-                    onClick={() => sendMessage({ text: s })}
+                    onClick={() => {
+                      void sendMessage({ text: s });
+                    }}
                   >
                     {s}
                   </button>
