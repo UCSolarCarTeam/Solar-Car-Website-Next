@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import { trpc } from "@/trpc/react";
-import { type UserResource } from "@clerk/types";
+import { type UserResource } from "@clerk/nextjs/types";
 
 import BasicButton, { ButtonVariant } from "../../Buttons/BasicButton";
 

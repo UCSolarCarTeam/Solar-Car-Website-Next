@@ -16,7 +16,7 @@ import { useSessionStorage } from "@/app/_hooks/useSessionStorage";
 import styles from "@/app/portal/index.module.scss";
 import { type AdminRoles } from "@/server/api/routers/portal";
 import { trpc } from "@/trpc/react";
-import { RedirectToSignIn, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
+import { RedirectToSignIn, useUser } from "@clerk/nextjs";
 import { skipToken } from "@tanstack/react-query";
 
 import Loader from "../_components/Loader";
@@ -128,64 +128,68 @@ const Portal = () => {
   return (
     <>
       <main style={{ height: "auto" }}>
-        <SignedIn>
-          <PortalPageHeader
-            currentPage={currentPage}
-            currentUser={user}
-            setCurrentPage={setCurrentPage}
-          />
-          <div className={styles.portalContent}>
-            {adminClerkRoles.includes(
-              user.publicMetadata?.role as AdminRoles,
-            ) ? (
-              <>
-                {currentPage === PortalNavigationLinks.Team ? (
-                  <TeamTable currentUser={user} users={dbUsers.data ?? []} />
-                ) : currentPage === PortalNavigationLinks.Users ? (
-                  <UsersTable
-                    currentUser={user}
-                    users={clerkUsers.data ?? []}
-                  />
-                ) : currentPage === PortalNavigationLinks.Invitations ? (
-                  <InvitationsTable
-                    currentUser={user}
-                    invitations={invitedUsers.data ?? []}
-                  />
-                ) : currentPage === PortalNavigationLinks.Sponsors ? (
-                  <SponsorsTable
-                    currentUser={user}
-                    sponsors={sponsors.data ?? []}
-                  />
-                ) : currentPage === PortalNavigationLinks.Recruitment ? (
-                  <RecruitmentTable
-                    currentUser={user}
-                    forms={forms.data ?? []}
-                  />
-                ) : currentPage === PortalNavigationLinks.OurWork ? (
-                  <OurWorkEntriesTable
-                    currentUser={user}
-                    entries={ourWork.data ?? []}
-                  />
-                ) : currentPage === PortalNavigationLinks.Alumni ? (
-                  <AlumniTable alumni={alumniList.data ?? []} />
-                ) : null}
-              </>
-            ) : (
-              <>
-                {currentDBUser.data ? (
-                  <InlineUserPopup clerkUser={user} user={currentDBUser.data} />
-                ) : (
-                  <></>
-                )}
-              </>
-            )}
-          </div>
-        </SignedIn>
-        <SignedOut>
+        {user ? (
+          <>
+            <PortalPageHeader
+              currentPage={currentPage}
+              currentUser={user}
+              setCurrentPage={setCurrentPage}
+            />
+            <div className={styles.portalContent}>
+              {adminClerkRoles.includes(
+                user.publicMetadata?.role as AdminRoles,
+              ) ? (
+                <>
+                  {currentPage === PortalNavigationLinks.Team ? (
+                    <TeamTable currentUser={user} users={dbUsers.data ?? []} />
+                  ) : currentPage === PortalNavigationLinks.Users ? (
+                    <UsersTable
+                      currentUser={user}
+                      users={clerkUsers.data ?? []}
+                    />
+                  ) : currentPage === PortalNavigationLinks.Invitations ? (
+                    <InvitationsTable
+                      currentUser={user}
+                      invitations={invitedUsers.data ?? []}
+                    />
+                  ) : currentPage === PortalNavigationLinks.Sponsors ? (
+                    <SponsorsTable
+                      currentUser={user}
+                      sponsors={sponsors.data ?? []}
+                    />
+                  ) : currentPage === PortalNavigationLinks.Recruitment ? (
+                    <RecruitmentTable
+                      currentUser={user}
+                      forms={forms.data ?? []}
+                    />
+                  ) : currentPage === PortalNavigationLinks.OurWork ? (
+                    <OurWorkEntriesTable
+                      currentUser={user}
+                      entries={ourWork.data ?? []}
+                    />
+                  ) : currentPage === PortalNavigationLinks.Alumni ? (
+                    <AlumniTable alumni={alumniList.data ?? []} />
+                  ) : null}
+                </>
+              ) : (
+                <>
+                  {currentDBUser.data ? (
+                    <InlineUserPopup
+                      clerkUser={user}
+                      user={currentDBUser.data}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                </>
+              )}
+            </div>
+          </>
+        ) : (
           <div className={styles.signInLayout}>
             <RedirectToSignIn />
           </div>
-        </SignedOut>
+        )}
         <Toaster />
       </main>
     </>

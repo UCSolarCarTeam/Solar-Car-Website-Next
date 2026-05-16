@@ -31,6 +31,10 @@ const config = {
         hostname: "vxpityfkkkoyujulayck.supabase.co",
         protocol: "https",
       },
+      {
+        hostname: "picsum.photos",
+        protocol: "https",
+      },
     ],
   },
   reactCompiler: true,

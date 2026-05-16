@@ -11,7 +11,7 @@ import {
 } from "@/app/_lib/userValidation";
 import { teamRoleOptions, userRowMetadata } from "@/app/_types";
 import { type RouterOutputs, trpc } from "@/trpc/react";
-import { type UserResource } from "@clerk/types";
+import { type UserResource } from "@clerk/nextjs/types";
 
 import BasicButton from "../../Buttons/BasicButton";
 import DropZone from "../DropZone";
