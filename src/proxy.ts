@@ -7,6 +7,7 @@ const isPublicRoute = createRouteMatcher([
   "/api/trpc/fe.getSponsors(.*)",
   "/api/trpc/fe.getRecruitment(.*)",
   "/api/trpc/fe.getOurWork(.*)",
+  "/api/chat",
   "/",
   "/recruitment",
   "/cars",
