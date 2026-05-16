@@ -107,11 +107,12 @@
         height: 100px;
         td {
           position: relative;
-          white-space: nowrap;
+          white-space: normal;
+          word-break: break-word;
           padding: 0.5rem 1rem;
           color: #374151;
 
-          max-width: none;
+          max-width: 40ch;
 
           &.font-medium {
             font-weight: 500;
