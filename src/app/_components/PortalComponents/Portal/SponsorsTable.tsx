@@ -7,7 +7,7 @@ import DeleteSponsor from "@/app/_components/PortalComponents/EditSponsorCell/De
 import styles from "@/app/_components/PortalComponents/Portal/index.module.scss";
 import SearchBar from "@/app/_components/PortalComponents/SearchBar";
 import { type RouterOutputs } from "@/trpc/react";
-import { type UserResource } from "@clerk/types";
+import { type UserResource } from "@clerk/nextjs/types";
 import { SponsorLevel } from "@prisma/client";
 import {
   createColumnHelper,

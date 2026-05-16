@@ -8,7 +8,7 @@ import Select from "react-select";
 import { adminClerkRoles } from "@/app/_types";
 import { type AdminRoles, type UserRole } from "@/server/api/routers/portal";
 import { type RouterOutputs, trpc } from "@/trpc/react";
-import { type UserResource } from "@clerk/types";
+import { type UserResource } from "@clerk/nextjs/types";
 import {
   createColumnHelper,
   flexRender,

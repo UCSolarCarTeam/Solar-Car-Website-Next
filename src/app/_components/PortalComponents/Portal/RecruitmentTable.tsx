@@ -5,7 +5,7 @@ import EditRecruitmentFormCell from "@/app/_components/PortalComponents/EditRecr
 import styles from "@/app/_components/PortalComponents/Portal/index.module.scss";
 import SearchBar from "@/app/_components/PortalComponents/SearchBar";
 import { toLocalDateTimeString } from "@/app/_lib/toLocalDate";
-import { type UserResource } from "@clerk/types";
+import { type UserResource } from "@clerk/nextjs/types";
 import {
   createColumnHelper,
   flexRender,
