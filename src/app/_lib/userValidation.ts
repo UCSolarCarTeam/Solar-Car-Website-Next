@@ -6,6 +6,18 @@ const emailDomainRegex = /@ucalgary\.ca$/i; // UCalgary email validation
 const currentYear = new Date().getFullYear();
 
 export const userFormSchema = z.object({
+  company: z
+    .string()
+    .max(100, "Company must be less than 100 characters")
+    .optional()
+    .or(z.literal("")),
+
+  companyTitle: z
+    .string()
+    .max(100, "Company title must be less than 100 characters")
+    .optional()
+    .or(z.literal("")),
+
   description: z
     .string()
     .max(250, "Description must be less than 250 characters")
@@ -35,7 +47,6 @@ export const userFormSchema = z.object({
       /^[a-zA-Z\s'-]+$/,
       "Last name can only contain letters, spaces, hyphens, and apostrophes",
     ),
-
   linkedIn: z
     .string()
     .regex(
@@ -44,6 +55,7 @@ export const userFormSchema = z.object({
     )
     .optional()
     .or(z.literal("")),
+
   phoneNumber: z
     .string()
     .regex(phoneRegex, "Please enter a valid phone number")
@@ -82,6 +94,21 @@ export const userFormSchema = z.object({
   yearJoined: z
     .string()
     .regex(/^\d{4}$/, "Year must be in YYYY format (e.g., 2024)")
+    .refine(
+      (year) => {
+        const y = parseInt(year);
+        return y >= 2000 && y <= currentYear + 1;
+      },
+      {
+        message: `Year must be between 2000 and ${currentYear + 1}`,
+      },
+    )
+    .optional()
+    .or(z.literal("")),
+
+  yearRetired: z
+    .string()
+    .regex(/^\d{4}$/, "Year must be in YYYY format (e.g., 2026)")
     .refine(
       (year) => {
         const y = parseInt(year);
