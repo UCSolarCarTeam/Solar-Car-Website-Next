@@ -4,6 +4,7 @@ import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { memo } from "react";
 
 import styles from "@/app/_components/TeamMember/index.module.scss";
+import { formatDateOnly } from "@/app/_lib/utils";
 import { type User } from "@prisma/client";
 
 import Linkedin from "../svgs/Linkedin";
@@ -51,7 +52,8 @@ const TeamMember = ({ user }: TeamMemberProps) => {
           {user.yearJoined && user.yearRetired && (
             <>
               <br />
-              {user.yearJoined} - {user.yearRetired}
+              {formatDateOnly(user.yearJoined).slice(0, 4)} -{" "}
+              {formatDateOnly(user.yearRetired).slice(0, 4)}
             </>
           )}
         </div>

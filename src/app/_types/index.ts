@@ -150,6 +150,6 @@ export const userRowMetadata = {
   schoolEmail: "string",
   schoolYear: "string",
   ucid: "string",
-  yearJoined: "string",
-  yearRetired: "string",
-} as const satisfies Partial<Record<UserPrismaMetadata, "string">>;
+  yearJoined: "date",
+  yearRetired: "date",
+} as const satisfies Partial<Record<UserPrismaMetadata, "string" | "date">>;

@@ -396,6 +396,38 @@ export const portalRouter = createTRPCRouter({
       }
     }),
 
+  moveUserToAlumni: adminMiddleware
+    .input(
+      z.object({
+        company: z.string().nullable().optional(),
+        companyTitle: z.string().nullable().optional(),
+        id: z.number(),
+        yearRetired: z
+          .string()
+          .regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format"),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const yearRetiredDate = new Date(`${input.yearRetired}T00:00:00`);
+
+        await ctx.db.user.update({
+          data: {
+            company: input.company ?? undefined,
+            companyTitle: input.companyTitle ?? undefined,
+            yearRetired: yearRetiredDate,
+          },
+          where: { id: input.id },
+        });
+        return true;
+      } catch (error) {
+        throw new TRPCError({
+          cause: error,
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
+
   revokeUserInvitation: adminMiddleware
     .input(z.object({ invitationId: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -427,8 +459,20 @@ export const portalRouter = createTRPCRouter({
         schoolYear: z.string().nullable(),
         teamRole: z.nativeEnum(AllTeamRoles).nullable(),
         ucid: z.string().nullable(),
-        yearJoined: z.string().nullable(),
-        yearRetired: z.string().nullable(),
+        yearJoined: z
+          .union([
+            z.date(),
+            z.string().regex(/^\d{4}$/, "Year must be in YYYY format"),
+            z.null(),
+          ])
+          .nullable(),
+        yearRetired: z
+          .union([
+            z.date(),
+            z.string().regex(/^\d{4}$/, "Year must be in YYYY format"),
+            z.null(),
+          ])
+          .nullable(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -453,6 +497,16 @@ export const portalRouter = createTRPCRouter({
           });
         }
 
+        // Convert year strings to dates
+        const convertToDate = (val: unknown): Date | null => {
+          if (!val) return null;
+          if (val instanceof Date) return val;
+          if (typeof val === "string" && /^\d{4}$/.test(val)) {
+            return new Date(`${val}-01-01`);
+          }
+          return null;
+        };
+
         // Update the user regardless of whether the role is an UpperTeamRole or not
         await ctx.db.user.update({
           data: {
@@ -469,8 +523,8 @@ export const portalRouter = createTRPCRouter({
             schoolYear: input.schoolYear,
             teamRole: input.teamRole,
             ucid: input.ucid,
-            yearJoined: input.yearJoined,
-            yearRetired: input.yearRetired,
+            yearJoined: convertToDate(input.yearJoined),
+            yearRetired: convertToDate(input.yearRetired),
           },
           where: { id: input.id },
         });
@@ -483,7 +537,6 @@ export const portalRouter = createTRPCRouter({
         });
       }
     }),
-
   updateOurWorkEntry: adminMiddleware
     .input(
       z.object({
@@ -523,6 +576,7 @@ export const portalRouter = createTRPCRouter({
         });
       }
     }),
+
   updateRecruitmentForm: adminMiddleware
     .input(
       z.object({

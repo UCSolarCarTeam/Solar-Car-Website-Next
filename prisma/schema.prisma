@@ -18,8 +18,8 @@ model User {
   lastName          String?
   fieldOfStudy      String?
   schoolYear        String?
-  yearJoined        String?
-  yearRetired       String?
+  yearJoined        DateTime?     @db.Date
+  yearRetired       DateTime?     @db.Date
   company           String?
   companyTitle      String?
   profilePictureUrl String?

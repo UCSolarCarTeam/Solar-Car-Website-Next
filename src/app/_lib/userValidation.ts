@@ -4,6 +4,26 @@ import { z } from "zod";
 const phoneRegex = /^\+?[\d\s()-]{10,}$/;
 const emailDomainRegex = /@ucalgary\.ca$/i; // UCalgary email validation
 const currentYear = new Date().getFullYear();
+const yearOnlyRegex = /^\d{4}$/;
+const dateOnlyRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+const dateOnlyInputSchema = z.string().refine(
+  (value) => {
+    if (dateOnlyRegex.test(value)) {
+      return !Number.isNaN(new Date(`${value}T00:00:00Z`).getTime());
+    }
+
+    if (yearOnlyRegex.test(value)) {
+      const year = Number(value);
+      return year >= 2000 && year <= currentYear + 1;
+    }
+
+    return false;
+  },
+  {
+    message: `Date must be in YYYY-MM-DD format or a year between 2000 and ${currentYear + 1}`,
+  },
+);
 
 export const userFormSchema = z.object({
   company: z
@@ -92,32 +112,12 @@ export const userFormSchema = z.object({
     .or(z.literal(null)),
 
   yearJoined: z
-    .string()
-    .regex(/^\d{4}$/, "Year must be in YYYY format (e.g., 2024)")
-    .refine(
-      (year) => {
-        const y = parseInt(year);
-        return y >= 2000 && y <= currentYear + 1;
-      },
-      {
-        message: `Year must be between 2000 and ${currentYear + 1}`,
-      },
-    )
+    .union([z.date(), dateOnlyInputSchema])
     .optional()
     .or(z.literal("")),
 
   yearRetired: z
-    .string()
-    .regex(/^\d{4}$/, "Year must be in YYYY format (e.g., 2026)")
-    .refine(
-      (year) => {
-        const y = parseInt(year);
-        return y >= 2000 && y <= currentYear + 1;
-      },
-      {
-        message: `Year must be between 2000 and ${currentYear + 1}`,
-      },
-    )
+    .union([z.date(), dateOnlyInputSchema])
     .optional()
     .or(z.literal("")),
 });
