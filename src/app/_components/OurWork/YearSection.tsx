@@ -84,6 +84,10 @@ const YearSection = ({ yearData }: { yearData: TimelineYear }) => {
                 exit="exit"
                 initial="enter"
                 key={monthIdx}
+                style={{
+                  height: 500,
+                  width: 800,
+                }}
                 transition={{
                   opacity: { duration: 0.4 },
                   x: {
@@ -94,13 +98,15 @@ const YearSection = ({ yearData }: { yearData: TimelineYear }) => {
                 }}
                 variants={swipeVariants}
               >
-                <Image
-                  alt={month.month ?? ""}
-                  className={styles.monthImage}
-                  height={200}
-                  src={month?.image ?? ""}
-                  width={300}
-                />
+                {month.image && (
+                  <Image
+                    alt={month.month}
+                    className={styles.monthImage}
+                    height={500}
+                    src={month.image}
+                    width={800}
+                  />
+                )}
               </motion.div>
             </AnimatePresence>
           </div>
