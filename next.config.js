@@ -45,6 +45,5 @@ const config = {
 };
 
 export default withSentryConfig(config, {
-  disableLogger: true,
   silent: !process.env.CI,
 });
