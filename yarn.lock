@@ -594,6 +594,16 @@
   resolved "https://registry.yarnpkg.com/@faker-js/faker/-/faker-8.4.1.tgz#5d5e8aee8fce48f5e189bf730ebd1f758f491451"
   integrity sha512-XQ3cU+Q8Uqmrbf2e0cIC/QN43sTBSC8KF12u29Mb47tWrt2hAgBXSgpZMj4Ao8Uk0iJcU99QsOCaIL8934obCg==
 
+"@fastify/otel@0.18.0":
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/@fastify/otel/-/otel-0.18.0.tgz#d21814af7c97579856698e03aae0581beb3e734b"
+  integrity sha512-3TASCATfw+ctICSb4ymrv7iCm0qJ0N9CarB+CZ7zIJ7KqNbwI5JjyDL1/sxoC0ccTO1Zyd1iQ+oqncPg5FJXaA==
+  dependencies:
+    "@opentelemetry/core" "^2.0.0"
+    "@opentelemetry/instrumentation" "^0.212.0"
+    "@opentelemetry/semantic-conventions" "^1.28.0"
+    minimatch "^10.2.4"
+
 "@flags-sdk/vercel@1.3.0":
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/@flags-sdk/vercel/-/vercel-1.3.0.tgz#3a052899019cc42081d57c022eec0cb741dde103"
@@ -1922,7 +1932,7 @@
   resolved "https://registry.yarnpkg.com/@sentry/core/-/core-10.53.1.tgz#68bed0e5857be6a8d5009268337c4153ab87514d"
   integrity sha512-XG4ezlkyuAPjBC5+9kXC94rXXuqYTw9NRhfaDHssbTFaGnqBR8vQX2UUgZfY7ucbeelRDGfBu1sywoU+mB04uA==
 
-"@sentry/nextjs@10.53.1":
+"@sentry/nextjs@10":
   version "10.53.1"
   resolved "https://registry.yarnpkg.com/@sentry/nextjs/-/nextjs-10.53.1.tgz#a970753da67be1aa39824dc65f5b0145ce513cd2"
   integrity sha512-pkwqrpAG//LtW5W1Odud0PLLT+rnjDjodUEbScULHVaZE6/Gt+WGBMZmtzpNM+UwhsN19/4PyO7ocLTx/IFrkQ==
