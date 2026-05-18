@@ -1,5 +1,6 @@
-import { vercelAdapter } from "@flags-sdk/vercel";
 import { flag } from "flags/next";
+
+import { vercelAdapter } from "@flags-sdk/vercel";
 
 export const recruitmentOpen = flag<boolean>({
   adapter: vercelAdapter(),
