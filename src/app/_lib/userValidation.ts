@@ -10,7 +10,15 @@ const dateOnlyRegex = /^\d{4}-\d{2}-\d{2}$/;
 const dateOnlyInputSchema = z.string().refine(
   (value) => {
     if (dateOnlyRegex.test(value)) {
-      return !Number.isNaN(new Date(`${value}T00:00:00Z`).getTime());
+      const parsedDate = new Date(`${value}T00:00:00Z`);
+      const year = parsedDate.getUTCFullYear();
+
+      return (
+        !Number.isNaN(parsedDate.getTime()) &&
+        parsedDate.toISOString().slice(0, 10) === value &&
+        year >= 2000 &&
+        year <= currentYear + 1
+      );
     }
 
     if (yearOnlyRegex.test(value)) {

@@ -45,6 +45,29 @@ const EditAlumniPopupAdmin = ({
     },
   });
 
+  const createAlumniMutation = trpc.portal.createAlumni.useMutation({
+    onError: () => {
+      setSaving(false);
+      toast.error(
+        "There was an error creating the alumni. Please contact Telemetry Team.",
+      );
+    },
+    onSuccess: async () => {
+      await toast.promise(utils.portal.getAlumniList.invalidate(), {
+        error: () => {
+          setSaving(false);
+          return "Failed to refresh alumni list";
+        },
+        loading: "Saving...",
+        success: () => {
+          setSaving(false);
+          togglePopup();
+          return "Alumni created successfully!";
+        },
+      });
+    },
+  });
+
   const [newRowData, setNewRowData] = useState<Partial<User>>(
     currentRow ?? {
       company: "",
@@ -150,6 +173,28 @@ const EditAlumniPopupAdmin = ({
           yearJoined: parseDateOnly(newRowData.yearJoined),
           yearRetired: parseDateOnly(newRowData.yearRetired),
         });
+      } else {
+        // Create
+        const yearJoinedFormatted = formatDateOnly(newRowData.yearJoined);
+        const yearRetiredFormatted = formatDateOnly(newRowData.yearRetired);
+
+        if (!yearJoinedFormatted || !yearRetiredFormatted) {
+          toast.error("Year Joined and Year Left are required.");
+          setSaving(false);
+          return;
+        }
+
+        createAlumniMutation.mutate({
+          company: newRowData.company ?? null,
+          companyTitle: newRowData.companyTitle ?? null,
+          firstName: newRowData.firstName ?? "",
+          lastName: newRowData.lastName ?? "",
+          linkedIn: newRowData.linkedIn ?? null,
+          profilePictureUrl: profileUrl ?? newRowData.profilePictureUrl ?? null,
+          teamRole: newRowData.teamRole ?? null,
+          yearJoined: yearJoinedFormatted,
+          yearRetired: yearRetiredFormatted,
+        });
       }
     };
 
@@ -225,7 +270,13 @@ const EditAlumniPopupAdmin = ({
     } else {
       await saveData();
     }
-  }, [currentRow, imageFile, newRowData, updateDBUserMutation]);
+  }, [
+    currentRow,
+    imageFile,
+    newRowData,
+    updateDBUserMutation,
+    createAlumniMutation,
+  ]);
 
   const handleFileUpload = useCallback((file: File) => {
     if (file) {

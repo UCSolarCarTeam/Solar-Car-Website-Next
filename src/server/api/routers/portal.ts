@@ -26,7 +26,86 @@ const UserRoleSchema = z.enum([
   "member",
 ]);
 
+// Server-side parser/normalizer for date inputs (accepts Date, YYYY or YYYY-MM-DD strings)
+// Returns a Date set to UTC midnight or null if input is falsy/invalid
+const parseAndNormalizeDate = (val: unknown): Date | null => {
+  if (val === null || val === undefined || val === "") return null;
+
+  if (val instanceof Date) {
+    // Normalize to UTC midnight
+    return new Date(
+      Date.UTC(val.getUTCFullYear(), val.getUTCMonth(), val.getUTCDate()),
+    );
+  }
+
+  if (typeof val === "string") {
+    const s = val.trim();
+    // Year-only (YYYY)
+    if (/^\d{4}$/.test(s)) {
+      const y = Number(s);
+      return new Date(Date.UTC(y, 0, 1));
+    }
+
+    // Full ISO-like date YYYY-MM-DD
+    if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
+      const [yStr, mStr, dStr] = s.split("-");
+      const y = Number(yStr);
+      const m = Number(mStr);
+      const d = Number(dStr);
+      const dt = new Date(Date.UTC(y, m - 1, d));
+      // Validate round-trip to catch invalid dates like 2026-02-30
+      if (
+        dt.getUTCFullYear() === y &&
+        dt.getUTCMonth() === m - 1 &&
+        dt.getUTCDate() === d
+      ) {
+        return dt;
+      }
+      return null;
+    }
+  }
+
+  return null;
+};
+
 export const portalRouter = createTRPCRouter({
+  createAlumni: adminMiddleware
+    .input(
+      z.object({
+        company: z.string().nullable(),
+        companyTitle: z.string().nullable(),
+        firstName: z.string(),
+        lastName: z.string(),
+        linkedIn: z.string().nullable(),
+        profilePictureUrl: z.string().nullable(),
+        teamRole: z.nativeEnum(AllTeamRoles).nullable(),
+        yearJoined: z.preprocess((v) => parseAndNormalizeDate(v), z.date()),
+        yearRetired: z.preprocess((v) => parseAndNormalizeDate(v), z.date()),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const user = await ctx.db.user.create({
+          data: {
+            company: input.company ?? null,
+            companyTitle: input.companyTitle ?? null,
+            firstName: input.firstName,
+            lastName: input.lastName,
+            linkedIn: input.linkedIn ?? null,
+            profilePictureUrl: input.profilePictureUrl ?? null,
+            teamRole: input.teamRole ?? null,
+            yearJoined: input.yearJoined as Date | null,
+            yearRetired: input.yearRetired as Date | null,
+          },
+        });
+        return user;
+      } catch (error) {
+        throw new TRPCError({
+          cause: error,
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
   createOurWorkEntry: adminMiddleware
     .input(
       z.object({
@@ -83,6 +162,7 @@ export const portalRouter = createTRPCRouter({
         });
       }
     }),
+
   createSponsor: adminMiddleware
     .input(
       z.object({
@@ -402,20 +482,16 @@ export const portalRouter = createTRPCRouter({
         company: z.string().nullable().optional(),
         companyTitle: z.string().nullable().optional(),
         id: z.number(),
-        yearRetired: z
-          .string()
-          .regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format"),
+        yearRetired: z.preprocess((v) => parseAndNormalizeDate(v), z.date()),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       try {
-        const yearRetiredDate = new Date(`${input.yearRetired}T00:00:00`);
-
         await ctx.db.user.update({
           data: {
             company: input.company ?? undefined,
             companyTitle: input.companyTitle ?? undefined,
-            yearRetired: yearRetiredDate,
+            yearRetired: input.yearRetired,
           },
           where: { id: input.id },
         });
@@ -459,20 +535,14 @@ export const portalRouter = createTRPCRouter({
         schoolYear: z.string().nullable(),
         teamRole: z.nativeEnum(AllTeamRoles).nullable(),
         ucid: z.string().nullable(),
-        yearJoined: z
-          .union([
-            z.date(),
-            z.string().regex(/^\d{4}$/, "Year must be in YYYY format"),
-            z.null(),
-          ])
-          .nullable(),
-        yearRetired: z
-          .union([
-            z.date(),
-            z.string().regex(/^\d{4}$/, "Year must be in YYYY format"),
-            z.null(),
-          ])
-          .nullable(),
+        yearJoined: z.preprocess((v) => {
+          if (v === null || v === undefined) return null;
+          return parseAndNormalizeDate(v);
+        }, z.date().nullable()),
+        yearRetired: z.preprocess((v) => {
+          if (v === null || v === undefined) return null;
+          return parseAndNormalizeDate(v);
+        }, z.date().nullable()),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -497,15 +567,9 @@ export const portalRouter = createTRPCRouter({
           });
         }
 
-        // Convert year strings to dates
-        const convertToDate = (val: unknown): Date | null => {
-          if (!val) return null;
-          if (val instanceof Date) return val;
-          if (typeof val === "string" && /^\d{4}$/.test(val)) {
-            return new Date(`${val}-01-01`);
-          }
-          return null;
-        };
+        // Normalize any incoming year/date value to a UTC midnight Date (or null)
+        const convertToDate = (val: unknown): Date | null =>
+          parseAndNormalizeDate(val);
 
         // Update the user regardless of whether the role is an UpperTeamRole or not
         await ctx.db.user.update({

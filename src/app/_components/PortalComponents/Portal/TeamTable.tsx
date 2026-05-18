@@ -6,6 +6,7 @@ import EditTeamCell from "@/app/_components/PortalComponents/EditUserCell";
 import DeleteUser from "@/app/_components/PortalComponents/EditUserCell/DeleteUser";
 import { MoveToAlumniModal } from "@/app/_components/PortalComponents/EditUserCell/MoveToAlumniModal";
 import { type RouterOutputs } from "@/trpc/react";
+import { trpc } from "@/trpc/react";
 import { type UserResource } from "@clerk/nextjs/types";
 import {
   createColumnHelper,
@@ -23,12 +24,12 @@ const TeamTable = (props: {
   users: TeamMember[];
   currentUser: UserResource | undefined | null;
 }) => {
+  const utils = trpc.useUtils();
   const [searchValue, setSearchValue] = useState("");
   const [alumniModal, setAlumniModal] = useState<{
     userId: number;
     userName: string;
   } | null>(null);
-  const [, setRefreshKey] = useState(0);
   const dataToRender = useMemo(
     () =>
       props.users.filter((user) => {
@@ -157,8 +158,8 @@ const TeamTable = (props: {
     [columnHelper, props.currentUser],
   );
 
-  const handleRefresh = () => {
-    setRefreshKey((prev) => prev + 1);
+  const handleRefresh = async () => {
+    await utils.portal.getDBUsers.invalidate();
   };
 
   const table = useReactTable({
