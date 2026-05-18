@@ -1,7 +1,9 @@
 import * as Sentry from "@sentry/nextjs";
 
+const parsedEdgeTracesSampleRate = Number.parseFloat(process.env.SENTRY_TRACES_SAMPLE_RATE ?? "0.1");
+
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   enabled: process.env.NODE_ENV === "production",
-  tracesSampleRate: 1,
+  tracesSampleRate: Number.isNaN(parsedEdgeTracesSampleRate) ? 0.1 : parsedEdgeTracesSampleRate,
 });
