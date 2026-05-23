@@ -4,48 +4,8 @@ import { z } from "zod";
 const phoneRegex = /^\+?[\d\s()-]{10,}$/;
 const emailDomainRegex = /@ucalgary\.ca$/i; // UCalgary email validation
 const currentYear = new Date().getFullYear();
-const yearOnlyRegex = /^\d{4}$/;
-const dateOnlyRegex = /^\d{4}-\d{2}-\d{2}$/;
-
-const dateOnlyInputSchema = z.string().refine(
-  (value) => {
-    if (dateOnlyRegex.test(value)) {
-      const parsedDate = new Date(`${value}T00:00:00Z`);
-      const year = parsedDate.getUTCFullYear();
-
-      return (
-        !Number.isNaN(parsedDate.getTime()) &&
-        parsedDate.toISOString().slice(0, 10) === value &&
-        year >= 2000 &&
-        year <= currentYear + 1
-      );
-    }
-
-    if (yearOnlyRegex.test(value)) {
-      const year = Number(value);
-      return year >= 2000 && year <= currentYear + 1;
-    }
-
-    return false;
-  },
-  {
-    message: `Date must be in YYYY-MM-DD format or a year between 2000 and ${currentYear + 1}`,
-  },
-);
 
 export const userFormSchema = z.object({
-  company: z
-    .string()
-    .max(100, "Company must be less than 100 characters")
-    .optional()
-    .or(z.literal("")),
-
-  companyTitle: z
-    .string()
-    .max(100, "Company title must be less than 100 characters")
-    .optional()
-    .or(z.literal("")),
-
   description: z
     .string()
     .max(250, "Description must be less than 250 characters")
@@ -75,6 +35,7 @@ export const userFormSchema = z.object({
       /^[a-zA-Z\s'-]+$/,
       "Last name can only contain letters, spaces, hyphens, and apostrophes",
     ),
+
   linkedIn: z
     .string()
     .regex(
@@ -83,7 +44,6 @@ export const userFormSchema = z.object({
     )
     .optional()
     .or(z.literal("")),
-
   phoneNumber: z
     .string()
     .regex(phoneRegex, "Please enter a valid phone number")
@@ -120,12 +80,17 @@ export const userFormSchema = z.object({
     .or(z.literal(null)),
 
   yearJoined: z
-    .union([z.date(), dateOnlyInputSchema])
-    .optional()
-    .or(z.literal("")),
-
-  yearRetired: z
-    .union([z.date(), dateOnlyInputSchema])
+    .string()
+    .regex(/^\d{4}$/, "Year must be in YYYY format (e.g., 2024)")
+    .refine(
+      (year) => {
+        const y = parseInt(year);
+        return y >= 2000 && y <= currentYear + 1;
+      },
+      {
+        message: `Year must be between 2000 and ${currentYear + 1}`,
+      },
+    )
     .optional()
     .or(z.literal("")),
 });

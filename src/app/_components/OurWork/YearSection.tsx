@@ -1,5 +1,3 @@
-"use client";
-
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import Image from "next/image";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
@@ -84,10 +82,6 @@ const YearSection = ({ yearData }: { yearData: TimelineYear }) => {
                 exit="exit"
                 initial="enter"
                 key={monthIdx}
-                style={{
-                  height: 500,
-                  width: 800,
-                }}
                 transition={{
                   opacity: { duration: 0.4 },
                   x: {
@@ -98,15 +92,13 @@ const YearSection = ({ yearData }: { yearData: TimelineYear }) => {
                 }}
                 variants={swipeVariants}
               >
-                {month.image && (
-                  <Image
-                    alt={month.month}
-                    className={styles.monthImage}
-                    height={500}
-                    src={month.image}
-                    width={800}
-                  />
-                )}
+                <Image
+                  alt={month.month ?? ""}
+                  className={styles.monthImage}
+                  height={200}
+                  src={month?.image ?? ""}
+                  width={300}
+                />
               </motion.div>
             </AnimatePresence>
           </div>

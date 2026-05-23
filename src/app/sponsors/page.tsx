@@ -1,14 +1,18 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import backsplash from "public/assets/sponsors/backsplash.jpeg";
-import { memo } from "react";
+import { memo, useCallback, useState } from "react";
 
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 import styles from "@/app/sponsors/index.module.scss";
 import { type RouterOutputs } from "@/trpc/react";
-import { trpc } from "@/trpc/server";
+import { trpc } from "@/trpc/react";
 import { SponsorLevel } from "@prisma/client";
+
+import Loader from "../_components/Loader";
 
 type Sponsor = RouterOutputs["fe"]["getSponsors"][0];
 
@@ -41,11 +45,18 @@ const SponsorLevelImages = ({
   );
 };
 
-const Sponsors = async () => {
-  const sponsors = await trpc.fe.getSponsors();
+const Sponsors = () => {
+  const { data: sponsors, isFetching } = trpc.fe.getSponsors.useQuery();
+
+  const [isImageLoading, setIsImageLoading] = useState(true);
+
+  const handleImageLoad = useCallback(() => {
+    setIsImageLoading(false);
+  }, []);
 
   return (
     <>
+      {(isImageLoading || isFetching) && <Loader isLoading={isImageLoading} />}
       <main>
         <Navbar />
         <div className={styles.container}>
@@ -115,6 +126,7 @@ const Sponsors = async () => {
             fill
             id="backsplashImage"
             loading="eager"
+            onLoad={handleImageLoad}
             placeholder="blur"
             priority
             src={backsplash}
@@ -126,4 +138,5 @@ const Sponsors = async () => {
     </>
   );
 };
+
 export default memo(Sponsors);

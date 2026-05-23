@@ -1,5 +1,3 @@
-"use client";
-
 import classNames from "classnames";
 import Image, { type StaticImageData } from "next/image";
 import { memo, useEffect, useState } from "react";
@@ -18,6 +16,7 @@ interface CarScreenViewProps {
   className: string | undefined;
   content: string;
   footerEnabled: boolean;
+  handleImageLoad: (() => void) | undefined;
   id: string;
   image: StaticImageData;
   navbarEnabled: boolean;
@@ -29,6 +28,7 @@ const CarScreenView = ({
   className,
   content,
   footerEnabled,
+  handleImageLoad,
   id,
   image,
   navbarEnabled,
@@ -88,6 +88,7 @@ const CarScreenView = ({
           className={styles.backSplashImage}
           fill
           loading="eager"
+          onLoad={handleImageLoad}
           placeholder="blur"
           priority
           src={image}

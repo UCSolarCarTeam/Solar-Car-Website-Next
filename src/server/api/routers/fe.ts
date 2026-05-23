@@ -17,14 +17,9 @@ import { createTRPCRouter, publicProcedure } from "../trpc";
 export const feRouter = createTRPCRouter({
   getAlumni: publicProcedure.query(async ({ ctx }) => {
     try {
-      const alumni = await ctx.db.user.findMany({
+      const alumni = await ctx.db.alumni.findMany({
         orderBy: {
-          yearRetired: "desc",
-        },
-        where: {
-          yearRetired: {
-            not: null,
-          },
+          yearLeftSolarCar: "desc",
         },
       });
       return alumni;

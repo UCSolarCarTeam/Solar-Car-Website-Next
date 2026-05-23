@@ -4,29 +4,23 @@ import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { memo } from "react";
 
 import styles from "@/app/_components/TeamMember/index.module.scss";
-import { formatDateOnly } from "@/app/_lib/utils";
-import { type User } from "@prisma/client";
+import { type Alumni, type User } from "@prisma/client";
 
 import Linkedin from "../svgs/Linkedin";
 
 type TeamMemberProps = {
-  user: User | null | undefined;
+  user: User | Alumni | null | undefined;
 };
 
 const TeamMember = ({ user }: TeamMemberProps) => {
   if (!user) return null;
 
-  // Determine if this is an alumnus by checking if yearRetired exists
-  const isAlumni = user.yearRetired !== null && user.yearRetired !== undefined;
+  // team members use fieldOfStudy and description, alumni use company and position
+  const fieldOfStudy =
+    "fieldOfStudy" in user ? user.fieldOfStudy : user.company;
+  const description = "description" in user ? user.description : user.position;
 
-  // Use companyTitle for alumni, description for active members
-  const description = isAlumni
-    ? (user.companyTitle ?? user.description ?? null)
-    : (user.description ?? null);
-
-  // Show company for alumni, otherwise show fieldOfStudy; include description and linkedIn
-  const overlayLeft = isAlumni ? user.company : user.fieldOfStudy;
-  const hasOverlay = overlayLeft ?? description ?? user.linkedIn ?? false;
+  const hasOverlay = fieldOfStudy ?? description ?? user.linkedIn ?? false;
 
   return (
     <div
@@ -40,6 +34,7 @@ const TeamMember = ({ user }: TeamMemberProps) => {
           loading="eager"
           src={user.profilePictureUrl ?? defaultProfilePicture}
           style={{ objectFit: "cover" }}
+          unoptimized
         />
       </div>
 
@@ -49,21 +44,22 @@ const TeamMember = ({ user }: TeamMemberProps) => {
         </div>
         <div className={styles.teamRole}>
           {(user.teamRole ?? "").replace(/([a-z])([A-Z])/g, "$1 $2")}
-          {user.yearJoined && user.yearRetired && (
-            <>
-              <br />
-              {formatDateOnly(user.yearJoined).slice(0, 4)} -{" "}
-              {formatDateOnly(user.yearRetired).slice(0, 4)}
-            </>
-          )}
+          {"yearJoinedSolarCar" in user &&
+            user.yearJoinedSolarCar &&
+            user.yearLeftSolarCar && (
+              <>
+                <br />
+                {user.yearJoinedSolarCar} - {user.yearLeftSolarCar}
+              </>
+            )}
         </div>
       </div>
       {/* Hover overlay */}
       {hasOverlay && (
         <div className={styles.hoverOverlay}>
           <div className={styles.overlayContent}>
-            {overlayLeft && (
-              <div className={styles.fieldOfStudy}>{overlayLeft}</div>
+            {fieldOfStudy && (
+              <div className={styles.fieldOfStudy}>{fieldOfStudy}</div>
             )}
             {description && (
               <div className={styles.description}>{description}</div>

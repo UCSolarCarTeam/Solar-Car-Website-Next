@@ -9,10 +9,9 @@ import {
   type UserFormErrors,
   validateUserForm,
 } from "@/app/_lib/userValidation";
-import { formatDateOnly, parseDateOnly } from "@/app/_lib/utils";
 import { teamRoleOptions, userRowMetadata } from "@/app/_types";
 import { type RouterOutputs, trpc } from "@/trpc/react";
-import { type UserResource } from "@clerk/nextjs/types";
+import { type UserResource } from "@clerk/types";
 
 import BasicButton from "../../Buttons/BasicButton";
 import DropZone from "../DropZone";
@@ -56,15 +55,6 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
       )
       .reduce(
         (acc, [key, value]) => {
-          let displayValue: string | number | null | undefined;
-          if (userRowMetadata[key as keyof typeof userRowMetadata] === "date") {
-            displayValue = formatDateOnly(
-              value as Date | string | null | undefined,
-            );
-          } else {
-            displayValue = value as string | number | null | undefined;
-          }
-
           acc[key] = {
             id: key,
             label:
@@ -77,7 +67,7 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
                     : key
                         .replace(/([a-z])([A-Z])/g, "$1 $2")
                         .replace(/^./, (match) => match.toUpperCase()),
-            value: displayValue,
+            value: value,
           };
           return acc;
         },
@@ -137,11 +127,7 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
 
   const handleSave = useCallback(async () => {
     if (touched) {
-      const processedData = {
-        ...newRowData,
-        yearJoined: formatDateOnly(newRowData.yearJoined),
-        yearRetired: formatDateOnly(newRowData.yearRetired),
-      };
+      const processedData = { ...newRowData };
       processedData.ucid = String(processedData.ucid);
       processedData.linkedIn = processedData.linkedIn?.trim() ?? null;
       // validate the form's fields
@@ -177,8 +163,6 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
             mutateUserContent.mutate({
               ...newRowData,
               profilePictureUrl: publicUrl,
-              yearJoined: parseDateOnly(newRowData.yearJoined),
-              yearRetired: parseDateOnly(newRowData.yearRetired),
             });
           } catch (error) {
             toast.error(
@@ -191,11 +175,7 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
         const compressedFile = await compress(imageFile);
         reader.readAsDataURL(compressedFile);
       } else {
-        mutateUserContent.mutate({
-          ...newRowData,
-          yearJoined: parseDateOnly(newRowData.yearJoined),
-          yearRetired: parseDateOnly(newRowData.yearRetired),
-        });
+        mutateUserContent.mutate(newRowData);
       }
     }
   }, [imageFile, newRowData, touched, mutateUserContent]);

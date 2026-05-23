@@ -30,10 +30,38 @@
   font-weight: 450;
 }
 
+.application {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+
+  min-width: 20%;
+  max-width: 40%;
+}
+
 .applicationDescription {
   padding: 1em 0 3em 0;
   font-weight: 600;
   font-size: 1.2em;
+}
+
+.applicationContainer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 48px;
+
+  .applicationTitle {
+    font-size: 1.8em;
+    font-weight: 600;
+  }
+
+  .applicationDescription {
+    font-size: 1.1em;
+    font-weight: 400;
+  }
 }
 
 @media (max-width: 1024px) {
@@ -43,6 +71,9 @@
   .pageHeading {
     letter-spacing: 0;
     padding-top: 0.8em;
+  }
+  .application {
+    min-width: 100%;
   }
 }
 
