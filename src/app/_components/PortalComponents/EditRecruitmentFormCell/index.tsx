@@ -2,7 +2,7 @@ import { memo, useCallback, useEffect, useState } from "react";
 
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import PlusIcon from "@/app/_components/svgs/PlusIcon";
-import { type UserResource } from "@clerk/types";
+import { type UserResource } from "@clerk/nextjs/types";
 
 import BasicButton from "../../Buttons/BasicButton";
 import EditFormPopup from "./EditFormPopup";

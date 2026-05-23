@@ -1,24 +1,13 @@
-"use client";
-
 import Image from "next/image";
 import backsplash from "public/assets/home/backsplash.jpeg";
-import { memo, useCallback, useState } from "react";
 
 import Footer from "@/app/_components/Footer";
-import Loader from "@/app/_components/Loader";
 import Navbar from "@/app/_components/Navbar";
 import styles from "@/app/index.module.scss";
 
 const Home = () => {
-  const [isImageLoading, setIsImageLoading] = useState(true);
-
-  const handleImageLoad = useCallback(() => {
-    setIsImageLoading(false);
-  }, []);
-
   return (
     <>
-      {isImageLoading && <Loader isLoading={isImageLoading} />}
       <main className={styles.main}>
         <Navbar />
         <div className={styles.container}>
@@ -38,7 +27,6 @@ const Home = () => {
             fill
             id="backsplashImage"
             loading="eager"
-            onLoad={handleImageLoad}
             placeholder="blur"
             priority
             src={backsplash}
@@ -51,4 +39,4 @@ const Home = () => {
   );
 };
 
-export default memo(Home);
+export default Home;

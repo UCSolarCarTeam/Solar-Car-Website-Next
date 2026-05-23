@@ -5,14 +5,15 @@ import toast from "react-hot-toast";
 import CloseButton from "@/app/_components/Buttons/CloseButton";
 import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
 import { compress } from "@/app/_lib/compress";
+import { formatDateOnly, parseDateOnly } from "@/app/_lib/utils";
 import { trpc } from "@/trpc/react";
-import { type Alumni } from "@prisma/client";
+import { type User } from "@prisma/client";
 
 import BasicButton from "../../Buttons/BasicButton";
 import DropZone from "../DropZone";
 
 type EditAlumniPopupAdminProps = {
-  currentRow?: Alumni;
+  currentRow?: User;
   togglePopup: () => void;
 };
 
@@ -21,30 +22,7 @@ const EditAlumniPopupAdmin = ({
   togglePopup,
 }: EditAlumniPopupAdminProps) => {
   const utils = trpc.useUtils();
-  const createAlumniMutation = trpc.portal.createAlumni.useMutation({
-    onError: () => {
-      setSaving(false);
-      toast.error(
-        "There was an error creating the alumni. Please contact Telemetry Team.",
-      );
-    },
-    onSuccess: async () => {
-      await toast.promise(utils.portal.getAlumniList.invalidate(), {
-        error: () => {
-          setSaving(false);
-          return "Failed to refresh alumni list";
-        },
-        loading: "Creating...",
-        success: () => {
-          setSaving(false);
-          togglePopup();
-          return "Alumni created successfully!";
-        },
-      });
-    },
-  });
-
-  const updateAlumniMutation = trpc.portal.updateAlumni.useMutation({
+  const updateDBUserMutation = trpc.portal.updateDBUser.useMutation({
     onError: () => {
       setSaving(false);
       toast.error(
@@ -67,17 +45,40 @@ const EditAlumniPopupAdmin = ({
     },
   });
 
-  const [newRowData, setNewRowData] = useState<Partial<Alumni>>(
+  const createAlumniMutation = trpc.portal.createAlumni.useMutation({
+    onError: () => {
+      setSaving(false);
+      toast.error(
+        "There was an error creating the alumni. Please contact Telemetry Team.",
+      );
+    },
+    onSuccess: async () => {
+      await toast.promise(utils.portal.getAlumniList.invalidate(), {
+        error: () => {
+          setSaving(false);
+          return "Failed to refresh alumni list";
+        },
+        loading: "Saving...",
+        success: () => {
+          setSaving(false);
+          togglePopup();
+          return "Alumni created successfully!";
+        },
+      });
+    },
+  });
+
+  const [newRowData, setNewRowData] = useState<Partial<User>>(
     currentRow ?? {
       company: "",
+      companyTitle: "",
       firstName: "",
       lastName: "",
       linkedIn: "",
-      position: "",
       profilePictureUrl: null,
-      teamRole: "",
-      yearJoinedSolarCar: "",
-      yearLeftSolarCar: "",
+      teamRole: null,
+      yearJoined: null,
+      yearRetired: null,
     },
   );
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -88,22 +89,22 @@ const EditAlumniPopupAdmin = ({
   >({});
 
   const rowDataToRender = useMemo(() => {
+    // Helper to format date to YYYY for display
     // Fields to display in the form
     const fields = [
       { id: "firstName", label: "First Name", value: newRowData.firstName },
       { id: "lastName", label: "Last Name", value: newRowData.lastName },
-      { id: "teamRole", label: "Team Role", value: newRowData.teamRole },
       { id: "company", label: "Company", value: newRowData.company },
-      { id: "position", label: "Position", value: newRowData.position },
+      { id: "companyTitle", label: "Position", value: newRowData.companyTitle },
       {
-        id: "yearJoinedSolarCar",
-        label: "Year Joined",
-        value: newRowData.yearJoinedSolarCar,
+        id: "yearJoined",
+        label: "Date Joined",
+        value: formatDateOnly(newRowData.yearJoined),
       },
       {
-        id: "yearLeftSolarCar",
-        label: "Year Left",
-        value: newRowData.yearLeftSolarCar,
+        id: "yearRetired",
+        label: "Date Left",
+        value: formatDateOnly(newRowData.yearRetired),
       },
       {
         id: "linkedIn",
@@ -150,36 +151,50 @@ const EditAlumniPopupAdmin = ({
 
     setSaving(true);
 
-    // Prepare data directly
-    const finalData = {
-      ...newRowData,
-      // Ensure required string fields are at least empty strings if undefined
-      company: newRowData.company ?? null,
-      firstName: newRowData.firstName ?? "",
-      lastName: newRowData.lastName ?? "",
-      linkedIn: newRowData.linkedIn ?? null,
-      position: newRowData.position ?? null,
-      profilePictureUrl: newRowData.profilePictureUrl ?? null,
-      teamRole: newRowData.teamRole ?? null,
-      yearJoinedSolarCar: newRowData.yearJoinedSolarCar ?? null,
-      yearLeftSolarCar: newRowData.yearLeftSolarCar ?? null,
-    };
-
     const saveData = async (profileUrl?: string) => {
-      const payload = {
-        ...finalData,
-        profilePictureUrl: profileUrl ?? finalData.profilePictureUrl,
-      };
-
+      // Convert year strings to dates
       if (currentRow) {
         // Update
-        updateAlumniMutation.mutate({
-          ...payload,
+        updateDBUserMutation.mutate({
+          company: newRowData.company ?? null,
+          companyTitle: newRowData.companyTitle ?? null,
+          description: currentRow.description ?? null,
+          fieldOfStudy: currentRow.fieldOfStudy ?? null,
+          firstName: newRowData.firstName ?? "",
           id: currentRow.id,
+          lastName: newRowData.lastName ?? "",
+          linkedIn: newRowData.linkedIn ?? null,
+          phoneNumber: currentRow.phoneNumber ?? null,
+          profilePictureUrl: profileUrl ?? newRowData.profilePictureUrl ?? null,
+          schoolEmail: currentRow.schoolEmail ?? null,
+          schoolYear: currentRow.schoolYear ?? null,
+          teamRole: newRowData.teamRole ?? null,
+          ucid: currentRow.ucid,
+          yearJoined: parseDateOnly(newRowData.yearJoined),
+          yearRetired: parseDateOnly(newRowData.yearRetired),
         });
       } else {
         // Create
-        createAlumniMutation.mutate(payload);
+        const yearJoinedFormatted = formatDateOnly(newRowData.yearJoined);
+        const yearRetiredFormatted = formatDateOnly(newRowData.yearRetired);
+
+        if (!yearJoinedFormatted || !yearRetiredFormatted) {
+          toast.error("Year Joined and Year Left are required.");
+          setSaving(false);
+          return;
+        }
+
+        createAlumniMutation.mutate({
+          company: newRowData.company ?? null,
+          companyTitle: newRowData.companyTitle ?? null,
+          firstName: newRowData.firstName ?? "",
+          lastName: newRowData.lastName ?? "",
+          linkedIn: newRowData.linkedIn ?? null,
+          profilePictureUrl: profileUrl ?? newRowData.profilePictureUrl ?? null,
+          teamRole: newRowData.teamRole ?? null,
+          yearJoined: yearJoinedFormatted,
+          yearRetired: yearRetiredFormatted,
+        });
       }
     };
 
@@ -259,8 +274,8 @@ const EditAlumniPopupAdmin = ({
     currentRow,
     imageFile,
     newRowData,
+    updateDBUserMutation,
     createAlumniMutation,
-    updateAlumniMutation,
   ]);
 
   const handleFileUpload = useCallback((file: File) => {
@@ -319,7 +334,11 @@ const EditAlumniPopupAdmin = ({
                   name={row.label}
                   onChange={onInputChange}
                   placeholder={row.label}
-                  type="text"
+                  type={
+                    row.id === "yearJoined" || row.id === "yearRetired"
+                      ? "date"
+                      : "text"
+                  }
                   value={row.value ?? ""}
                 />
                 {validationErrors[row.id] && (

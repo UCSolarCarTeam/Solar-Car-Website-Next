@@ -1,3 +1,5 @@
+import type { Prisma } from "@prisma/client";
+
 export interface SVGIconProps {
   className?: string;
   height?: number;
@@ -42,6 +44,7 @@ export enum ManagerRoles {
   AccountingCoManager = "Accounting Co-Manager",
   AssistantAccountingManager = "Assistant Accounting Manager",
   CommunicationsManager = "Communications Manager",
+  CommunicationsCoManager = "Communications Co-Manager",
   SponsorshipManager = "Sponsorship Manager",
   SponsorshipAssistantManager = "Sponsorship Assistant Manager",
   SoftwareTeamManager = "Software Team Manager",
@@ -72,10 +75,7 @@ export enum AccountingTeam {
 }
 
 export enum CommunicationsTeam {
-  EventAssociate = "Event Associate",
-  MarketingAssociate = "Marketing Associate",
-  Videographer = "Videographer",
-  MarketingAndEventsAssociate = "Marketing & Events Associate",
+  CommunicationsAssociate = "Communications Associate",
 }
 
 export enum SponsorshipTeam {
@@ -137,8 +137,10 @@ export const teamRoleOptions = [
     options: MultiTeam,
   },
 ];
-
+type UserPrismaMetadata = Prisma.UserScalarFieldEnum;
 export const userRowMetadata = {
+  company: "string",
+  companyTitle: "string",
   description: "string",
   fieldOfStudy: "string",
   firstName: "string",
@@ -148,5 +150,6 @@ export const userRowMetadata = {
   schoolEmail: "string",
   schoolYear: "string",
   ucid: "string",
-  yearJoined: "string",
-};
+  yearJoined: "date",
+  yearRetired: "date",
+} as const satisfies Partial<Record<UserPrismaMetadata, "string" | "date">>;
