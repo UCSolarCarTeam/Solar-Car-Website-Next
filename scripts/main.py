@@ -58,7 +58,7 @@ def main():
     print("-" * 40)
     print(f"Total Execution Time: {total_duration:7.2f}s")
     print(f"Peak Memory Usage:    {memory_used:7.2f} MB")
-    print(f"Documents Processed:  {len(data):7d}")
+    print(f"Documents Processed:  {len(cleaned_data):7d}")
     print("="*40)
     print("\nAll tasks completed successfully!")
 

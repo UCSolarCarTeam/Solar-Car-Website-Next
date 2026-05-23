@@ -13,6 +13,16 @@ const openrouter = createOpenAI({
 });
 
 // Initialize Supabase
+if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  // eslint-disable-next-line no-console
+  console.warn(
+    `Warning: SUPABASE_SERVICE_ROLE_KEY is missing. Falling back to NEXT_PUBLIC_SUPABASE_ANON_KEY. This can cause permission errors for RPCs like match_documents. ` +
+      `URL: ${env.NEXT_PUBLIC_SUPABASE_URL}, ` +
+      `Service Role Key: ${process.env.SUPABASE_SERVICE_ROLE_KEY}, ` +
+      `Anon Key: ${env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+  );
+}
+
 const supabase = createClient(
   env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY ?? env.NEXT_PUBLIC_SUPABASE_ANON_KEY,

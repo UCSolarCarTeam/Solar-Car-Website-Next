@@ -23,7 +23,6 @@ if not db_url:
     print("Error: DATABASE_URL is missing. It should be set as a GitHub Actions secret containing the Supabase connection string.")
     sys.exit(1)
 
-conn = psycopg2.connect(db_url)
 
 def ingest(data):
     # 1. Text Splitter
@@ -59,11 +58,11 @@ def ingest(data):
             study = member.get('fieldOfStudy', 'Unknown Field')
             year = member.get('schoolYear', '')
             joined = member.get('yearJoined', '')
-            email = member.get('schoolEmail', '')
+            email = "redacted"
             about = member.get('about', '')
-            linkedin = member.get('linkedIn', '')
+            linkedin = "redacted"
 
-            content = f"Team Member: {name}\nRole: {role}\nField of Study: {study} (Year: {year})\nJoined Team in: {joined}\nEmail: {email}\nAbout: {about}\nLinkedIn: {linkedin}"
+            content = f"Team Member: {name}\nRole: {role}\nField of Study: {study} (Year: {year})\nJoined Team in: {joined}\nContact: {email}\nAbout: {about}\nLinkedIn: {linkedin}"
 
             chunks.append({
                 "content": content,
@@ -85,21 +84,31 @@ def ingest(data):
 
     # 3. Store in local PostgreSQL
     print("Storing vectors in local PostgreSQL...")
-    cur = conn.cursor()
+    conn = None
+    try:
+        conn = psycopg2.connect(db_url)
+        with conn.cursor() as cur:
+            try:
+                # Clear old data so re-runs don't duplicate
+                cur.execute("DELETE FROM documents")
 
-    # Clear old data so re-runs don't duplicate
-    cur.execute("DELETE FROM documents")
-
-    for i, chunk in enumerate(chunks):
-        embedding_list = embeddings[i].tolist()
-        cur.execute(
-            "INSERT INTO documents (content, metadata, embedding) VALUES (%s, %s, %s)",
-            (chunk["content"], json.dumps(chunk["metadata"]), str(embedding_list))
-        )
-
-    conn.commit()
-    cur.close()
-    print(f"Success! {len(chunks)} documents stored in local PostgreSQL.")
+                for i, chunk in enumerate(chunks):
+                    embedding_list = embeddings[i].tolist()
+                    cur.execute(
+                        "INSERT INTO documents (content, metadata, embedding) VALUES (%s, %s, %s)",
+                        (chunk["content"], json.dumps(chunk["metadata"]), str(embedding_list))
+                    )
+                conn.commit()
+            except Exception as db_err:
+                conn.rollback()
+                raise db_err
+        print(f"Success! {len(chunks)} documents stored in local PostgreSQL.")
+    except Exception as e:
+        print(f"Database operation failed: {e}")
+        raise e
+    finally:
+        if conn is not None:
+            conn.close()
 
 
 if __name__ == "__main__":

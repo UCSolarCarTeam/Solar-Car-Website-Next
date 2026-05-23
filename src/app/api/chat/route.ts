@@ -10,9 +10,6 @@ export async function POST(req: Request) {
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error("Chat API error:", err);
-    return new Response(
-      `Internal server error: ${err instanceof Error ? err.message : String(err)}\n${err instanceof Error ? err.stack : ""}`,
-      { status: 500 },
-    );
+    return new Response("Internal server error", { status: 500 });
   }
 }

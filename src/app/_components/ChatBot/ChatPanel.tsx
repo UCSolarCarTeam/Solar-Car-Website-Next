@@ -187,7 +187,12 @@ export function ChatPanel({
       </div>
 
       {/* Messages */}
-      <div className={styles.messagesContainer}>
+      <div
+        className={styles.messagesContainer}
+        aria-live="polite"
+        aria-atomic="false"
+        role="log"
+      >
         {messages.length === 0 && (
           <motion.div
             animate={{ opacity: 1, y: 0 }}
@@ -245,8 +250,10 @@ export function ChatPanel({
           {SUGGESTED.map((s) => (
             <button
               className={styles.suggestionButton}
+              disabled={isLoading}
               key={s}
               onClick={() => {
+                if (isLoading) return;
                 void sendMessage({ text: s });
               }}
             >
