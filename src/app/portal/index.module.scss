@@ -15,9 +15,10 @@
   max-width: 100dvw;
   padding: 24px;
   height: 100%;
-  overflow-x: hidden;
-  * table {
-    width: 100%;
+  overflow-x: visible;
+
+  > * {
+    min-width: 0;
   }
 }
 

@@ -1,5 +1,8 @@
 .searchBar {
   width: min(100%, 320px);
+  flex: 1 1 320px;
+  min-width: 0;
+  max-width: 100%;
 
   input {
     width: 100%;
@@ -13,6 +16,7 @@
 
   @media (max-width: 640px) {
     width: 100%;
+    flex-basis: 100%;
     font-size: 0.875rem;
     line-height: 1.25rem;
   }
