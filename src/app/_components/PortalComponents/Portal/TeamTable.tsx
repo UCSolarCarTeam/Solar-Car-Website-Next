@@ -4,7 +4,9 @@ import { memo, useMemo, useState } from "react";
 
 import EditTeamCell from "@/app/_components/PortalComponents/EditUserCell";
 import DeleteUser from "@/app/_components/PortalComponents/EditUserCell/DeleteUser";
+import { MoveToAlumniModal } from "@/app/_components/PortalComponents/EditUserCell/MoveToAlumniModal";
 import { type RouterOutputs } from "@/trpc/react";
+import { trpc } from "@/trpc/react";
 import { type UserResource } from "@clerk/nextjs/types";
 import {
   createColumnHelper,
@@ -22,7 +24,12 @@ const TeamTable = (props: {
   users: TeamMember[];
   currentUser: UserResource | undefined | null;
 }) => {
+  const utils = trpc.useUtils();
   const [searchValue, setSearchValue] = useState("");
+  const [alumniModal, setAlumniModal] = useState<{
+    userId: number;
+    userName: string;
+  } | null>(null);
   const dataToRender = useMemo(
     () =>
       props.users.filter((user) => {
@@ -116,10 +123,44 @@ const TeamTable = (props: {
         ),
         id: "delete",
       }),
+      columnHelper.display({
+        cell: (info) => {
+          const isActive = !info.row.original.yearRetired;
+          return (
+            <button
+              disabled={!isActive}
+              onClick={() => {
+                setAlumniModal({
+                  userId: info.row.original.id,
+                  userName:
+                    `${info.row.original.firstName ?? ""} ${info.row.original.lastName ?? ""}`.trim(),
+                });
+              }}
+              style={{
+                backgroundColor: isActive ? "#ff4444" : "#ccc",
+                border: "none",
+                borderRadius: "4px",
+                color: "white",
+                cursor: isActive ? "pointer" : "not-allowed",
+                fontSize: "0.875rem",
+                padding: "6px 12px",
+              }}
+              title={isActive ? "Move to Alumni" : "Already an alumni"}
+            >
+              Alumni
+            </button>
+          );
+        },
+        id: "moveToAlumni",
+      }),
     ],
 
     [columnHelper, props.currentUser],
   );
+
+  const handleRefresh = async () => {
+    await utils.portal.getDBUsers.invalidate();
+  };
 
   const table = useReactTable({
     columns,
@@ -171,6 +212,14 @@ const TeamTable = (props: {
           </tbody>
         </table>
       </div>
+      {alumniModal && (
+        <MoveToAlumniModal
+          onClose={() => setAlumniModal(null)}
+          onSuccess={handleRefresh}
+          userId={alumniModal.userId}
+          userName={alumniModal.userName}
+        />
+      )}
     </div>
   );
 };

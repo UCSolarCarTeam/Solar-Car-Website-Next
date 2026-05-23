@@ -26,37 +26,79 @@ const UserRoleSchema = z.enum([
   "member",
 ]);
 
+// Server-side parser/normalizer for date inputs (accepts Date, YYYY or YYYY-MM-DD strings)
+// Returns a Date set to UTC midnight or null if input is falsy/invalid
+const parseAndNormalizeDate = (val: unknown): Date | null => {
+  if (val === null || val === undefined || val === "") return null;
+
+  if (val instanceof Date) {
+    // Normalize to UTC midnight
+    return new Date(
+      Date.UTC(val.getUTCFullYear(), val.getUTCMonth(), val.getUTCDate()),
+    );
+  }
+
+  if (typeof val === "string") {
+    const s = val.trim();
+    // Year-only (YYYY)
+    if (/^\d{4}$/.test(s)) {
+      const y = Number(s);
+      return new Date(Date.UTC(y, 0, 1));
+    }
+
+    // Full ISO-like date YYYY-MM-DD
+    if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
+      const [yStr, mStr, dStr] = s.split("-");
+      const y = Number(yStr);
+      const m = Number(mStr);
+      const d = Number(dStr);
+      const dt = new Date(Date.UTC(y, m - 1, d));
+      // Validate round-trip to catch invalid dates like 2026-02-30
+      if (
+        dt.getUTCFullYear() === y &&
+        dt.getUTCMonth() === m - 1 &&
+        dt.getUTCDate() === d
+      ) {
+        return dt;
+      }
+      return null;
+    }
+  }
+
+  return null;
+};
+
 export const portalRouter = createTRPCRouter({
   createAlumni: adminMiddleware
     .input(
       z.object({
         company: z.string().nullable(),
+        companyTitle: z.string().nullable(),
         firstName: z.string(),
         lastName: z.string(),
         linkedIn: z.string().nullable(),
-        position: z.string().nullable(),
         profilePictureUrl: z.string().nullable(),
-        teamRole: z.string().nullable(),
-        yearJoinedSolarCar: z.string().nullable(),
-        yearLeftSolarCar: z.string().nullable(),
+        teamRole: z.nativeEnum(AllTeamRoles).nullable(),
+        yearJoined: z.preprocess((v) => parseAndNormalizeDate(v), z.date()),
+        yearRetired: z.preprocess((v) => parseAndNormalizeDate(v), z.date()),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       try {
-        await ctx.db.alumni.create({
+        const user = await ctx.db.user.create({
           data: {
-            company: input.company,
+            company: input.company ?? null,
+            companyTitle: input.companyTitle ?? null,
             firstName: input.firstName,
             lastName: input.lastName,
-            linkedIn: input.linkedIn,
-            position: input.position,
-            profilePictureUrl: input.profilePictureUrl,
-            teamRole: input.teamRole,
-            yearJoinedSolarCar: input.yearJoinedSolarCar,
-            yearLeftSolarCar: input.yearLeftSolarCar,
+            linkedIn: input.linkedIn ?? null,
+            profilePictureUrl: input.profilePictureUrl ?? null,
+            teamRole: input.teamRole ?? null,
+            yearJoined: input.yearJoined as Date | null,
+            yearRetired: input.yearRetired as Date | null,
           },
         });
-        return true;
+        return user;
       } catch (error) {
         throw new TRPCError({
           cause: error,
@@ -120,6 +162,7 @@ export const portalRouter = createTRPCRouter({
         });
       }
     }),
+
   createSponsor: adminMiddleware
     .input(
       z.object({
@@ -150,23 +193,6 @@ export const portalRouter = createTRPCRouter({
       }
     }),
 
-  deleteAlumni: adminMiddleware
-    .input(z.object({ id: z.number() }))
-    .mutation(async ({ ctx, input }) => {
-      try {
-        await ctx.db.alumni.delete({
-          where: {
-            id: input.id,
-          },
-        });
-        return true;
-      } catch (error) {
-        throw new TRPCError({
-          cause: error,
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
-    }),
   deleteClerkUser: adminMiddleware
     .input(z.object({ clerkId: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -255,7 +281,16 @@ export const portalRouter = createTRPCRouter({
 
   getAlumniList: adminMiddleware.query(async ({ ctx }) => {
     try {
-      const alumni = await ctx.db.alumni.findMany();
+      const alumni = await ctx.db.user.findMany({
+        orderBy: {
+          yearRetired: "desc",
+        },
+        where: {
+          yearRetired: {
+            not: null,
+          },
+        },
+      });
       return alumni;
     } catch (error) {
       throw new TRPCError({
@@ -441,6 +476,34 @@ export const portalRouter = createTRPCRouter({
       }
     }),
 
+  moveUserToAlumni: adminMiddleware
+    .input(
+      z.object({
+        company: z.string().nullable().optional(),
+        companyTitle: z.string().nullable().optional(),
+        id: z.number(),
+        yearRetired: z.preprocess((v) => parseAndNormalizeDate(v), z.date()),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.db.user.update({
+          data: {
+            company: input.company ?? undefined,
+            companyTitle: input.companyTitle ?? undefined,
+            yearRetired: input.yearRetired,
+          },
+          where: { id: input.id },
+        });
+        return true;
+      } catch (error) {
+        throw new TRPCError({
+          cause: error,
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }),
+
   revokeUserInvitation: adminMiddleware
     .input(z.object({ invitationId: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -455,56 +518,11 @@ export const portalRouter = createTRPCRouter({
       }
     }),
 
-  updateAlumni: adminMiddleware
-    .input(
-      z.object({
-        company: z.string().nullable(),
-        firstName: z.string().nullable(),
-        id: z.number(),
-        lastName: z.string().nullable(),
-        linkedIn: z.string().nullable(),
-        position: z.string().nullable(),
-        profilePictureUrl: z.string().nullable(),
-        teamRole: z.string().nullable(),
-        yearJoinedSolarCar: z.string().nullable(),
-        yearLeftSolarCar: z.string().nullable(),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      try {
-        // only update the fields that are non null
-        const updateData = {
-          company: input.company,
-          firstName: input.firstName,
-          lastName: input.lastName,
-          linkedIn: input.linkedIn,
-          position: input.position,
-          profilePictureUrl: input.profilePictureUrl,
-          teamRole: input.teamRole,
-          yearJoinedSolarCar: input.yearJoinedSolarCar,
-          yearLeftSolarCar: input.yearLeftSolarCar,
-        };
-        const filteredUpdateData = Object.fromEntries(
-          Object.entries(updateData).filter(([_, value]) => value !== null),
-        );
-
-        await ctx.db.alumni.update({
-          data: filteredUpdateData,
-          where: {
-            id: input.id,
-          },
-        });
-        return true;
-      } catch (error) {
-        throw new TRPCError({
-          cause: error,
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
-    }),
   updateDBUser: authedProcedure
     .input(
       z.object({
+        company: z.string().nullable(),
+        companyTitle: z.string().nullable(),
         description: z.string().nullable(),
         fieldOfStudy: z.string().nullable(),
         firstName: z.string().nullable(),
@@ -517,7 +535,14 @@ export const portalRouter = createTRPCRouter({
         schoolYear: z.string().nullable(),
         teamRole: z.nativeEnum(AllTeamRoles).nullable(),
         ucid: z.string().nullable(),
-        yearJoined: z.string().nullable(),
+        yearJoined: z.preprocess((v) => {
+          if (v === null || v === undefined) return null;
+          return parseAndNormalizeDate(v);
+        }, z.date().nullable()),
+        yearRetired: z.preprocess((v) => {
+          if (v === null || v === undefined) return null;
+          return parseAndNormalizeDate(v);
+        }, z.date().nullable()),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -531,8 +556,9 @@ export const portalRouter = createTRPCRouter({
 
         const user = await ctx.clerkClient.users.getUser(ctx.user?.id);
         const isUpperTeamRole =
-          (input.teamRole != null && input.teamRole in ManagerRoles) ||
-          (input.teamRole != null && input.teamRole in LeadRoles);
+          Object.values(ManagerRoles).includes(
+            input.teamRole as ManagerRoles,
+          ) || Object.values(LeadRoles).includes(input.teamRole as LeadRoles);
 
         if (isUpperTeamRole && user.publicMetadata?.role !== "admin") {
           throw new TRPCError({
@@ -541,9 +567,15 @@ export const portalRouter = createTRPCRouter({
           });
         }
 
+        // Normalize any incoming year/date value to a UTC midnight Date (or null)
+        const convertToDate = (val: unknown): Date | null =>
+          parseAndNormalizeDate(val);
+
         // Update the user regardless of whether the role is an UpperTeamRole or not
         await ctx.db.user.update({
           data: {
+            company: input.company,
+            companyTitle: input.companyTitle,
             description: input.description,
             fieldOfStudy: input.fieldOfStudy,
             firstName: input.firstName,
@@ -555,7 +587,8 @@ export const portalRouter = createTRPCRouter({
             schoolYear: input.schoolYear,
             teamRole: input.teamRole,
             ucid: input.ucid,
-            yearJoined: input.yearJoined,
+            yearJoined: convertToDate(input.yearJoined),
+            yearRetired: convertToDate(input.yearRetired),
           },
           where: { id: input.id },
         });
@@ -568,7 +601,6 @@ export const portalRouter = createTRPCRouter({
         });
       }
     }),
-
   updateOurWorkEntry: adminMiddleware
     .input(
       z.object({
@@ -608,6 +640,7 @@ export const portalRouter = createTRPCRouter({
         });
       }
     }),
+
   updateRecruitmentForm: adminMiddleware
     .input(
       z.object({

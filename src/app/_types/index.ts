@@ -1,3 +1,5 @@
+import type { Prisma } from "@prisma/client";
+
 export interface SVGIconProps {
   className?: string;
   height?: number;
@@ -135,8 +137,10 @@ export const teamRoleOptions = [
     options: MultiTeam,
   },
 ];
-
+type UserPrismaMetadata = Prisma.UserScalarFieldEnum;
 export const userRowMetadata = {
+  company: "string",
+  companyTitle: "string",
   description: "string",
   fieldOfStudy: "string",
   firstName: "string",
@@ -146,5 +150,6 @@ export const userRowMetadata = {
   schoolEmail: "string",
   schoolYear: "string",
   ucid: "string",
-  yearJoined: "string",
-};
+  yearJoined: "date",
+  yearRetired: "date",
+} as const satisfies Partial<Record<UserPrismaMetadata, "string" | "date">>;

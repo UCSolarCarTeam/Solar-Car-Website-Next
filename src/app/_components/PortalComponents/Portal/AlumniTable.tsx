@@ -4,6 +4,7 @@ import { memo, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
 import PlusIcon from "@/app/_components/svgs/PlusIcon";
+import { formatDateOnly } from "@/app/_lib/utils";
 import { type RouterOutputs, trpc } from "@/trpc/react";
 import {
   createColumnHelper,
@@ -28,7 +29,7 @@ const AlumniTable = (props: { alumni: AlumniMember[] }) => {
   const [editingAlumni, setEditingAlumni] = useState<AlumniMember | null>(null);
 
   const utils = trpc.useUtils();
-  const deleteAlumniMutation = trpc.portal.deleteAlumni.useMutation({
+  const deleteDBUserMutation = trpc.portal.deleteDBUser.useMutation({
     onError: () => {
       toast.error(
         "There was an error deleting the alumni. Please contact Telemetry Team.",
@@ -94,7 +95,7 @@ const AlumniTable = (props: { alumni: AlumniMember[] }) => {
         cell: (info) => info.getValue(),
         header: "Company",
       }),
-      columnHelper.accessor("position", {
+      columnHelper.accessor("companyTitle", {
         cell: (info) => info.getValue(),
         header: "Position",
       }),
@@ -105,8 +106,10 @@ const AlumniTable = (props: { alumni: AlumniMember[] }) => {
       columnHelper.display({
         cell: (info) => {
           const row = info.row.original;
-          if (!row.yearJoinedSolarCar && !row.yearLeftSolarCar) return "";
-          return `${row.yearJoinedSolarCar ?? "?"} - ${row.yearLeftSolarCar ?? "?"}`;
+          if (!row.yearJoined && !row.yearRetired) return "";
+          const joined = formatDateOnly(row.yearJoined).slice(0, 4) || "?";
+          const retired = formatDateOnly(row.yearRetired).slice(0, 4) || "?";
+          return `${joined} - ${retired}`;
         },
         header: "Tenure",
       }),
@@ -122,7 +125,7 @@ const AlumniTable = (props: { alumni: AlumniMember[] }) => {
         cell: (info) => (
           <BasicButton
             onConfirmDelete={() =>
-              deleteAlumniMutation.mutate({ id: info.row.original.id })
+              deleteDBUserMutation.mutate({ id: info.row.original.id })
             }
             variant={ButtonVariant.Delete}
           >
@@ -132,7 +135,7 @@ const AlumniTable = (props: { alumni: AlumniMember[] }) => {
         id: "delete",
       }),
     ],
-    [columnHelper, deleteAlumniMutation],
+    [columnHelper, deleteDBUserMutation],
   );
 
   const table = useReactTable({
