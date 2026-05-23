@@ -1,9 +1,6 @@
-"use client";
-
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo } from "react";
 
 import Footer from "@/app/_components/Footer";
-import Loader from "@/app/_components/Loader";
 import Navbar from "@/app/_components/Navbar";
 import Timeline from "@/app/_components/OurWork/Timeline";
 import Pagebullets from "@/app/_components/Pagebullets";
@@ -31,22 +28,16 @@ const OurWorkTimelinePage = () => {
     }
   }, [timelineData]);
 
-  const handleDotClick = useCallback((id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-    }
-  }, []);
+const OurWorkTimelinePage = async () => {
+  const timelineData = await trpc.fe.getOurWork();
 
   return (
     <>
-      {isFetching && <Loader isLoading={isFetching} />}
       <main className={styles.main}>
         <Navbar />
-        {timelineData && (
+        {timelineData && timelineData.length > 0 && (
           <Pagebullets
-            currentId={currentElement}
-            handleDotClick={handleDotClick}
+            defaultCurrentId={timelineData[0]?.year ?? "2025"}
             pageIds={timelineData.map((data) => data.year)}
           />
         )}

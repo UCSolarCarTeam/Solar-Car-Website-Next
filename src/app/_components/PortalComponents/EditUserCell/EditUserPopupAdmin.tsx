@@ -11,6 +11,7 @@ import {
   type UserFormErrors,
   validateUserForm,
 } from "@/app/_lib/userValidation";
+import { formatDateOnly, parseDateOnly } from "@/app/_lib/utils";
 import {
   LeadRoles,
   ManagerRoles,
@@ -60,6 +61,15 @@ const EditUserPopupAdmin = ({
       )
       .reduce(
         (acc, [key, value]) => {
+          let displayValue: string | number | null | undefined;
+          if (userRowMetadata[key as keyof typeof userRowMetadata] === "date") {
+            displayValue = formatDateOnly(
+              value as Date | string | null | undefined,
+            );
+          } else {
+            displayValue = value as string | number | null | undefined;
+          }
+
           acc[key] = {
             id: key,
             label:
@@ -73,7 +83,7 @@ const EditUserPopupAdmin = ({
                         .replace(/([a-z])([A-Z])/g, "$1 $2")
                         .replace(/^./, (match) => match.toUpperCase()),
 
-            value: value,
+            value: displayValue,
           };
           return acc;
         },
@@ -137,7 +147,11 @@ const EditUserPopupAdmin = ({
     const sanitizedData = Object.fromEntries(
       Object.entries(newRowData).map(([key, value]) => [
         key,
-        value == null ? "" : String(value),
+        userRowMetadata[key as keyof typeof userRowMetadata] === "date"
+          ? formatDateOnly(value as Date | string | null | undefined)
+          : value == null
+            ? ""
+            : String(value),
       ]),
     ) as Partial<UserFormData>;
     const errors = validateUserForm(sanitizedData);
@@ -158,12 +172,18 @@ const EditUserPopupAdmin = ({
             mutateUserContent.mutate({
               ...newRowData,
               profilePictureUrl,
+              yearJoined: parseDateOnly(newRowData.yearJoined),
+              yearRetired: parseDateOnly(newRowData.yearRetired),
             });
           },
         },
       );
     } else {
-      mutateUserContent.mutate(newRowData);
+      mutateUserContent.mutate({
+        ...newRowData,
+        yearJoined: parseDateOnly(newRowData.yearJoined),
+        yearRetired: parseDateOnly(newRowData.yearRetired),
+      });
     }
   }, [
     imageFile,
