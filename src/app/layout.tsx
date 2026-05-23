@@ -3,6 +3,7 @@ import { Saira } from "next/font/google";
 
 import "@/styles/globals.scss";
 import { TRPCReactProvider } from "@/trpc/react";
+import { Analytics } from "@vercel/analytics/next";
 import { ClerkProvider } from "@clerk/nextjs";
 
 import ChatBot from "./_components/ChatBot/ChatBot";
@@ -37,14 +38,15 @@ export default function RootLayout({
         signUpForceRedirectUrl="/portal"
         signUpUrl="/portal/sign-up"
       >
-        <html className={`${saira.className}`} lang="en">
-          <body>
-            <TRPCReactProvider>
-              {children}
-              <ChatBot />
-            </TRPCReactProvider>
-          </body>
-        </html>
+      <html className={`${saira.className}`} lang="en">
+        <body>
+          <TRPCReactProvider>
+            {children}
+            <ChatBot />
+          </TRPCReactProvider>
+          <Analytics />
+        </body>
+      </html>
       </ClerkProvider>
     </>
   );
