@@ -176,15 +176,23 @@ const AlumniTable = (props: { alumni: AlumniMember[] }) => {
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
+            {table.getRowModel().rows.length === 0 ? (
+              <tr>
+                <td className={styles.noResults} colSpan={columns.length}>
+                  No Alumni Found
+                </td>
               </tr>
-            ))}
+            ) : (
+              table.getRowModel().rows.map((row) => (
+                <tr key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
