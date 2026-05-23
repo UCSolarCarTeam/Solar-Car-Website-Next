@@ -43,8 +43,8 @@ export default function RootLayout({
           <TRPCReactProvider>
             {children}
             <ChatBot />
+            <Analytics />
           </TRPCReactProvider>
-          <Analytics />
         </body>
       </html>
       </ClerkProvider>
