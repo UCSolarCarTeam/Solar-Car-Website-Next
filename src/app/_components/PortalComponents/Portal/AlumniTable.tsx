@@ -21,6 +21,11 @@ import styles from "./index.module.scss";
 // Helper type for Alumni from the router
 export type AlumniMember = RouterOutputs["portal"]["getAlumniList"][number];
 
+const getProfilePictureSrc = (profilePictureUrl: string | null | undefined) =>
+  typeof profilePictureUrl === "string" && profilePictureUrl.length > 0
+    ? profilePictureUrl
+    : defaultProfilePicture;
+
 const AlumniTable = (props: { alumni: AlumniMember[] }) => {
   const [searchValue, setSearchValue] = useState("");
   const [createPopupOpen, setCreatePopupOpen] = useState(false);
@@ -62,20 +67,19 @@ const AlumniTable = (props: { alumni: AlumniMember[] }) => {
   const columnHelper = useMemo(() => createColumnHelper<AlumniMember>(), []);
   const columns = useMemo(
     () => [
-      columnHelper.accessor("profilePictureUrl", {
-        cell: (info) => {
-          return (
-            <Image
-              alt="profile image"
-              fill
-              loading="eager"
-              priority
-              src={info.getValue() ?? defaultProfilePicture}
-              style={{ objectFit: "cover" }}
-            />
-          );
-        },
+      columnHelper.display({
+        cell: (info) => (
+          <Image
+            alt="profile image"
+            fill
+            loading="eager"
+            priority
+            src={getProfilePictureSrc(info.row.original.profilePictureUrl)}
+            style={{ objectFit: "cover" }}
+          />
+        ),
         header: () => "Profile",
+        id: "profilePictureUrl",
       }),
       columnHelper.accessor("firstName", {
         cell: (info) => info.getValue(),
@@ -178,7 +182,10 @@ const AlumniTable = (props: { alumni: AlumniMember[] }) => {
           <tbody>
             {table.getRowModel().rows.length === 0 ? (
               <tr>
-                <td className={styles.noResults} colSpan={columns.length}>
+                <td
+                  className={styles.noResults}
+                  colSpan={table.getAllLeafColumns().length}
+                >
                   No Alumni Found
                 </td>
               </tr>
@@ -187,7 +194,10 @@ const AlumniTable = (props: { alumni: AlumniMember[] }) => {
                 <tr key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <td key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
                     </td>
                   ))}
                 </tr>
