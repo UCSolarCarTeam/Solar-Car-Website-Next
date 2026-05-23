@@ -3,6 +3,7 @@ import { Saira } from "next/font/google";
 
 import "@/styles/globals.scss";
 import { TRPCReactProvider } from "@/trpc/react";
+import { Analytics } from "@vercel/analytics/next";
 import { ClerkProvider } from "@clerk/nextjs";
 
 const saira = Saira({
@@ -38,6 +39,7 @@ export default function RootLayout({
         <html className={`${saira.className}`} lang="en">
           <body>
             <TRPCReactProvider>{children}</TRPCReactProvider>
+            <Analytics />
           </body>
         </html>
       </ClerkProvider>
