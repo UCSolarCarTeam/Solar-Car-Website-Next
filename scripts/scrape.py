@@ -2,7 +2,6 @@ import json
 import requests
 import os
 
-API_KEY = "fc-d48497bc351b4bb1abf1976a5587bb2e"
 
 url = "https://api.firecrawl.dev/v1/scrape"
 
@@ -29,7 +28,7 @@ def scrape():
         response = requests.post(
             url,
             headers={
-                "Authorization": f"Bearer {API_KEY}",
+                "Authorization": f"Bearer {os.getenv('FC_API_KEY')}",
                 "Content-Type": "application/json"
             },      
             json={

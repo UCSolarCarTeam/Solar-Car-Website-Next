@@ -48,3 +48,4 @@ yarn-error.log*
 # clerk configuration (can include secrets)
 /.clerk/
 *.pyc
+.vscode/settings.json

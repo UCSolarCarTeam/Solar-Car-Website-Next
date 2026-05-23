@@ -18,9 +18,9 @@ except ImportError as e:
 dotenv_path = Path(__file__).parent.parent / ".env.local"
 load_dotenv(dotenv_path)
 
-db_url = os.environ.get("LOCAL_DB_URL")
+db_url = os.environ.get("DATABASE_URL")
 if not db_url:
-    print("Error: LOCAL_DB_URL is missing in .env.local. Make sure Docker is running: docker compose up -d")
+    print("Error: DATABASE_URL is missing. It should be set as a GitHub Actions secret containing the Supabase connection string.")
     sys.exit(1)
 
 conn = psycopg2.connect(db_url)

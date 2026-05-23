@@ -1,6 +1,4 @@
-import json
 import re
-import os
 
 INPUT_PATH = "/tmp/documents.json"
 OUTPUT_PATH = "/tmp/documents_clean.json"
