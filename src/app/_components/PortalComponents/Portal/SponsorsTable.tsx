@@ -123,16 +123,12 @@ const SponsorsTable = (props: {
           {shouldShowAdminButtons && (
             <EditSponsorCell
               currentRow={{
-                name: "",
-                // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
                 description: "",
-                websiteUrl: "",
-                // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
-                sponsorLevel: SponsorLevel.Gold,
-                // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
-                logoUrl: "",
-                // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
                 id: -1,
+                logoUrl: "",
+                name: "",
+                sponsorLevel: SponsorLevel.Gold,
+                websiteUrl: "",
               }}
               currentUser={props.currentUser}
               newSponsor

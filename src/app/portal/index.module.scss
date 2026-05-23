@@ -11,11 +11,14 @@
   display: grid;
   grid-template-columns: 1fr;
   row-gap: 24px;
+  width: 100%;
   max-width: 100dvw;
   padding: 24px;
   height: 100%;
-  * table {
-    width: 100%;
+  overflow-x: visible;
+
+  > * {
+    min-width: 0;
   }
 }
 
@@ -34,5 +37,24 @@
     background-color: var(--primary-helios);
     padding: 10px 20px;
     border-radius: 5px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .portalContent {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .portalContent {
+    padding: 16px;
+    row-gap: 20px;
+  }
+}
+
+@media (max-width: 320px) {
+  .portalContent {
+    padding: 12px;
   }
 }
