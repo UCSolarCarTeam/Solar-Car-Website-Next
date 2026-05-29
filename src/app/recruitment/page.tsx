@@ -5,6 +5,8 @@ import styles from "@/app/recruitment/index.module.scss";
 import { recruitmentOpen } from "@/flags";
 import { HydrateClient } from "@/trpc/server";
 
+export const dynamic = "force-dynamic";
+
 const Recruitment = async () => {
   const isRecruitmentClosed = !(await recruitmentOpen());
   return (

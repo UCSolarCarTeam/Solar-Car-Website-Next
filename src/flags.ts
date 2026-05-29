@@ -3,7 +3,10 @@ import { flag } from "flags/next";
 import { vercelAdapter } from "@flags-sdk/vercel";
 
 export const recruitmentOpen = flag<boolean>({
-  adapter: vercelAdapter(),
+  adapter: process.env.FLAGS ? vercelAdapter() : undefined,
+  decide() {
+    return false;
+  },
   defaultValue: false,
   description: "Controls whether recruitment applications are open.",
   key: "recruitment-open",

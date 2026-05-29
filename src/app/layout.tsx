@@ -6,6 +6,8 @@ import { TRPCReactProvider } from "@/trpc/react";
 import { Analytics } from "@vercel/analytics/next";
 import { ClerkProvider } from "@clerk/nextjs";
 
+import ChatBot from "./_components/ChatBot/ChatBot";
+
 const saira = Saira({
   display: "swap",
   subsets: ["latin"],
@@ -36,12 +38,15 @@ export default function RootLayout({
         signUpForceRedirectUrl="/portal"
         signUpUrl="/portal/sign-up"
       >
-        <html className={`${saira.className}`} lang="en">
-          <body>
-            <TRPCReactProvider>{children}</TRPCReactProvider>
+      <html className={`${saira.className}`} lang="en">
+        <body>
+          <TRPCReactProvider>
+            {children}
+            <ChatBot />
             <Analytics />
-          </body>
-        </html>
+          </TRPCReactProvider>
+        </body>
+      </html>
       </ClerkProvider>
     </>
   );
