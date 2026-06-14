@@ -18,14 +18,11 @@ const isPublicRoute = createRouteMatcher([
   "/contact",
   "/our-work",
 ]);
-const isFeatureRoute = createRouteMatcher([
-  "/recruitment",
-  "/recruitment/(.*)",
-]);
+const isFeatureRoute = createRouteMatcher(["/recruitment"]);
 
 export default clerkMiddleware(async (auth, req) => {
   if (!isPublicRoute(req)) {
-    await auth.protect();
+
   }
   if (isFeatureRoute(req)) {
     const code = await precompute(recruitmentFlags);
