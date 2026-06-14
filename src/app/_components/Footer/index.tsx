@@ -3,7 +3,6 @@ import { DM_Sans } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "public/assets/logo-nav.png";
-import { memo } from "react";
 
 import styles from "@/app/_components/Footer/index.module.scss";
 
@@ -143,4 +142,4 @@ const Footer = () => {
   );
 };
 
-export default memo(Footer);
+export default Footer;
