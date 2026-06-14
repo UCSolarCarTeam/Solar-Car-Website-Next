@@ -3,9 +3,6 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 // ignore the '/api/webhooks(.*)' route
 const isPublicRoute = createRouteMatcher([
   "/api/webhooks(.*)",
-  "/api/trpc/fe.getTeamMembers(.*)",
-  "/api/trpc/fe.getSponsors(.*)",
-  "/api/trpc/fe.getRecruitment(.*)",
   "/",
   "/recruitment",
   "/cars",
