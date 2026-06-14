@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import BasicButton from "@/app/_components/Buttons/BasicButton";
-import type { RecruitmentForm } from "@/app/recruitment/actions";
+import type { RecruitmentForm } from "@/app/recruitment/[code]/actions";
 
 import styles from "./index.module.scss";
 
