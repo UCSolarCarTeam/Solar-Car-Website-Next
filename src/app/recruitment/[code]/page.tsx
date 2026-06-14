@@ -1,13 +1,20 @@
+import { generatePermutations } from "flags/next";
+
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 import RecruitmentForms from "@/app/_components/Recruitment/RecruitmentForms";
-import styles from "@/app/recruitment/index.module.scss";
-import { recruitmentOpen } from "@/flags";
+import styles from "@/app/recruitment/[code]/index.module.scss";
+import { recruitmentFlags, recruitmentOpen } from "@/flags";
 
 import { getRecruitmentForms } from "./actions";
 
-const Recruitment = async () => {
-  const isRecruitmentClosed = !(await recruitmentOpen());
+export async function generateStaticParams() {
+  const codes = await generatePermutations(recruitmentFlags);
+  return codes.map((code) => ({ code }));
+}
+const Recruitment = async (props: { params: Promise<{ code: string }> }) => {
+  const { code } = await props.params;
+  const isRecruitmentClosed = !(await recruitmentOpen(code, recruitmentFlags));
   const recruitmentForms = await getRecruitmentForms();
 
   return (
