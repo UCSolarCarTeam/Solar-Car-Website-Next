@@ -4,7 +4,6 @@ import { Saira } from "next/font/google";
 import "@/styles/globals.scss";
 import { TRPCReactProvider } from "@/trpc/react";
 import { Analytics } from "@vercel/analytics/next";
-import { ClerkProvider } from "@clerk/nextjs";
 
 const saira = Saira({
   display: "swap",
@@ -28,21 +27,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <ClerkProvider
-        dynamic
-        signInForceRedirectUrl="/portal"
-        signInUrl="/portal/sign-in"
-        signUpForceRedirectUrl="/portal"
-        signUpUrl="/portal/sign-up"
-      >
-        <html className={`${saira.className}`} lang="en">
-          <body>
-            <TRPCReactProvider>{children}</TRPCReactProvider>
-            <Analytics />
-          </body>
-        </html>
-      </ClerkProvider>
-    </>
+    <html className={`${saira.className}`} lang="en">
+      <body>
+        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <Analytics />
+      </body>
+    </html>
   );
 }
