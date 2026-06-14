@@ -10,7 +10,6 @@ import {
   SponsorshipTeam,
 } from "@/app/_types";
 import { AllTeamRoles, type User } from "@prisma/client";
-import { TRPCError } from "@trpc/server";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
@@ -27,39 +26,6 @@ export const feRouter = createTRPCRouter({
         },
       },
     });
-  }),
-  getOurWork: publicProcedure.query(async ({ ctx }) => {
-    const rows = await ctx.db.timeline.findMany({
-      orderBy: [{ year: "desc" }, { monthNum: "asc" }],
-      select: {
-        description: true,
-        imageUrl: true,
-        monthName: true,
-        monthNum: true,
-        year: true,
-      },
-      where: {
-        deletedAt: null,
-      },
-    });
-
-    const grouped = rows.reduce<Record<number, typeof rows>>((acc, row) => {
-      (acc[row.year] ??= []).push(row);
-      return acc;
-    }, {});
-
-    const timelineData = Object.entries(grouped)
-      .sort((a, b) => Number(b[0]) - Number(a[0]))
-      .map(([year, months]) => ({
-        months: months.map((m) => ({
-          description: m.description ?? "",
-          image: m.imageUrl ?? null,
-          month: m.monthName,
-        })),
-        year: String(year),
-      }));
-
-    return timelineData;
   }),
   getRecruitment: publicProcedure.query(async ({ ctx }) => {
     const forms = await ctx.db.recruitment.findMany({
