@@ -3,8 +3,9 @@ import { Saira } from "next/font/google";
 
 import "@/styles/globals.scss";
 import { TRPCReactProvider } from "@/trpc/react";
-import { Analytics } from "@vercel/analytics/next";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const saira = Saira({
   display: "swap",
@@ -40,6 +41,7 @@ export default function RootLayout({
           <body>
             <TRPCReactProvider>{children}</TRPCReactProvider>
             <Analytics />
+            <SpeedInsights />
           </body>
         </html>
       </ClerkProvider>
