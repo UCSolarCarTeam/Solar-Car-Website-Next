@@ -3,7 +3,6 @@ import { Saira } from "next/font/google";
 
 import "@/styles/globals.scss";
 import { TRPCReactProvider } from "@/trpc/react";
-import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -29,22 +28,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <ClerkProvider
-        dynamic
-        signInForceRedirectUrl="/portal"
-        signInUrl="/portal/sign-in"
-        signUpForceRedirectUrl="/portal"
-        signUpUrl="/portal/sign-up"
-      >
-        <html className={`${saira.className}`} lang="en">
-          <body>
-            <TRPCReactProvider>{children}</TRPCReactProvider>
-            <Analytics />
-            <SpeedInsights />
-          </body>
-        </html>
-      </ClerkProvider>
-    </>
+    <html className={`${saira.className}`} lang="en">
+      <body>
+        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <Analytics />
+        <SpeedInsights />
+      </body>
+    </html>
   );
 }
