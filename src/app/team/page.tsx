@@ -4,11 +4,11 @@ import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 import TeamMember from "@/app/_components/TeamMember";
 import styles from "@/app/team/index.module.scss";
-import { HydrateClient, trpc } from "@/trpc/server";
+
+import { getTeamPageData } from "./actions";
 
 const Team = async () => {
-  const teamHierarchy = await trpc.fe.getTeamMembers();
-  const alumniTeam = await trpc.fe.getAlumni();
+  const { alumniTeam, teamHierarchy } = await getTeamPageData();
 
   const {
     accountingTeam,
@@ -26,7 +26,7 @@ const Team = async () => {
   } = teamHierarchy ?? {};
 
   return (
-    <HydrateClient>
+    <>
       <main className={styles.maincontainer}>
         <Navbar />
         <div className={styles.container}>
@@ -180,7 +180,7 @@ const Team = async () => {
         </div>
       </main>
       <Footer />
-    </HydrateClient>
+    </>
   );
 };
 

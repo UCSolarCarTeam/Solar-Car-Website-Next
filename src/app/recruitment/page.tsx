@@ -3,12 +3,15 @@ import Navbar from "@/app/_components/Navbar";
 import RecruitmentForms from "@/app/_components/Recruitment/RecruitmentForms";
 import styles from "@/app/recruitment/index.module.scss";
 import { recruitmentOpen } from "@/flags";
-import { HydrateClient } from "@/trpc/server";
+
+import { getRecruitmentForms } from "./actions";
 
 const Recruitment = async () => {
   const isRecruitmentClosed = !(await recruitmentOpen());
+  const recruitmentForms = await getRecruitmentForms();
+
   return (
-    <HydrateClient>
+    <>
       <main className={styles.main}>
         <>
           <Navbar />
@@ -19,12 +22,15 @@ const Recruitment = async () => {
                 Applications close on September 13th.
               </div>
             )}
-            <RecruitmentForms isRecruitmentClosed={isRecruitmentClosed} />
+            <RecruitmentForms
+              isRecruitmentClosed={isRecruitmentClosed}
+              recruitmentForms={recruitmentForms}
+            />
           </div>
         </>
       </main>
       <Footer />
-    </HydrateClient>
+    </>
   );
 };
 

@@ -6,11 +6,11 @@ import { memo } from "react";
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 import styles from "@/app/sponsors/index.module.scss";
-import { type RouterOutputs } from "@/trpc/react";
-import { trpc } from "@/trpc/server";
 import { SponsorLevel } from "@prisma/client";
 
-type Sponsor = RouterOutputs["fe"]["getSponsors"][0];
+import { getSponsors } from "./actions";
+
+type Sponsor = Awaited<ReturnType<typeof getSponsors>>[number];
 
 const SponsorLevelImages = ({
   sponsorLevel,
@@ -42,7 +42,7 @@ const SponsorLevelImages = ({
 };
 
 const Sponsors = async () => {
-  const sponsors = await trpc.fe.getSponsors();
+  const sponsors = await getSponsors();
 
   return (
     <>
