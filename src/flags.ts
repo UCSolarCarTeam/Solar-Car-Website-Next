@@ -12,3 +12,5 @@ export const recruitmentOpen = flag<boolean>({
     { label: "Open", value: true },
   ],
 });
+
+export const recruitmentFlags = [recruitmentOpen] as const;
