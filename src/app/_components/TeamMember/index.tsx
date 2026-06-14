@@ -40,7 +40,6 @@ const TeamMember = ({ user }: TeamMemberProps) => {
           loading="eager"
           src={user.profilePictureUrl ?? defaultProfilePicture}
           style={{ objectFit: "cover" }}
-          unoptimized
         />
       </div>
 
