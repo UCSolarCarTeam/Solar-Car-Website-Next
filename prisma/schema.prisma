@@ -26,17 +26,22 @@ model User {
   description       String?
   linkedIn          String?
   teamRole          AllTeamRoles?
+  updatedAt         DateTime      @default("1970-01-01T00:00:00Z") @updatedAt
+  modifiedBy        String        @default("SYSTEM")
+  deletedAt         DateTime?
 }
 
 model Timeline {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   year        Int
   monthNum    Int
   monthName   String
   description String?
   imageUrl    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default("1970-01-01T00:00:00Z") @updatedAt
+  modifiedBy  String    @default("SYSTEM")
+  deletedAt   DateTime?
 
   @@unique([year, monthNum])
 }
@@ -48,14 +53,22 @@ model Sponsor {
   websiteUrl   String
   description  String?
   sponsorLevel SponsorLevel
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @default("1970-01-01T00:00:00Z") @updatedAt
+  modifiedBy   String       @default("SYSTEM")
+  deletedAt    DateTime?
 }
 
 model Recruitment {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   header      String
   description String
   link        String
   expiresAt   DateTime
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default("1970-01-01T00:00:00Z") @updatedAt
+  modifiedBy  String    @default("SYSTEM")
+  deletedAt   DateTime?
 }
 
 enum SponsorLevel {

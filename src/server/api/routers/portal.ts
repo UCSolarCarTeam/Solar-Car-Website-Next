@@ -84,27 +84,19 @@ export const portalRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      try {
-        const user = await ctx.db.user.create({
-          data: {
-            company: input.company ?? null,
-            companyTitle: input.companyTitle ?? null,
-            firstName: input.firstName,
-            lastName: input.lastName,
-            linkedIn: input.linkedIn ?? null,
-            profilePictureUrl: input.profilePictureUrl ?? null,
-            teamRole: input.teamRole ?? null,
-            yearJoined: input.yearJoined as Date | null,
-            yearRetired: input.yearRetired as Date | null,
-          },
-        });
-        return user;
-      } catch (error) {
-        throw new TRPCError({
-          cause: error,
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
+      return ctx.db.user.create({
+        data: {
+          company: input.company ?? null,
+          companyTitle: input.companyTitle ?? null,
+          firstName: input.firstName,
+          lastName: input.lastName,
+          linkedIn: input.linkedIn ?? null,
+          profilePictureUrl: input.profilePictureUrl ?? null,
+          teamRole: input.teamRole ?? null,
+          yearJoined: input.yearJoined as Date | null,
+          yearRetired: input.yearRetired as Date | null,
+        },
+      });
     }),
   createOurWorkEntry: adminMiddleware
     .input(
@@ -117,23 +109,15 @@ export const portalRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      try {
-        await ctx.db.timeline.create({
-          data: {
-            description: input.description,
-            imageUrl: input.imageUrl,
-            monthName: input.monthName,
-            monthNum: input.monthNum,
-            year: input.year,
-          },
-        });
-        return true;
-      } catch (error) {
-        throw new TRPCError({
-          cause: error,
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
+      return ctx.db.timeline.create({
+        data: {
+          description: input.description,
+          imageUrl: input.imageUrl,
+          monthName: input.monthName,
+          monthNum: input.monthNum,
+          year: input.year,
+        },
+      });
     }),
   createRecruitmentForm: adminMiddleware
     .input(
@@ -145,22 +129,14 @@ export const portalRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      try {
-        await ctx.db.recruitment.create({
-          data: {
-            description: input.description,
-            expiresAt: input.expiresAt,
-            header: input.header,
-            link: input.link,
-          },
-        });
-        return true;
-      } catch (error) {
-        throw new TRPCError({
-          cause: error,
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
+      return ctx.db.recruitment.create({
+        data: {
+          description: input.description,
+          expiresAt: input.expiresAt,
+          header: input.header,
+          link: input.link,
+        },
+      });
     }),
 
   createSponsor: adminMiddleware
@@ -174,252 +150,179 @@ export const portalRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      try {
-        await ctx.db.sponsor.create({
-          data: {
-            description: input.description,
-            logoUrl: input.logoUrl,
-            name: input.name,
-            sponsorLevel: input.sponsorLevel,
-            websiteUrl: input.websiteUrl,
-          },
-        });
-        return true;
-      } catch (error) {
-        throw new TRPCError({
-          cause: error,
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
+      return ctx.db.sponsor.create({
+        data: {
+          description: input.description,
+          logoUrl: input.logoUrl,
+          name: input.name,
+          sponsorLevel: input.sponsorLevel,
+          websiteUrl: input.websiteUrl,
+        },
+      });
     }),
 
   deleteClerkUser: adminMiddleware
     .input(z.object({ clerkId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      try {
-        await ctx.clerkClient.users.deleteUser(input.clerkId);
-        return true;
-      } catch (error) {
-        throw new TRPCError({
-          cause: error,
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
+      return ctx.clerkClient.users.deleteUser(input.clerkId);
     }),
 
   deleteDBUser: adminMiddleware
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      try {
-        await ctx.db.user.delete({
-          where: {
-            id: input.id,
-          },
-        });
-        return true;
-      } catch (error) {
-        throw new TRPCError({
-          cause: error,
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
+      return ctx.db.user.update({
+        data: {
+          deletedAt: new Date(),
+          modifiedBy: ctx.user?.id,
+        },
+        where: {
+          id: input.id,
+        },
+      });
     }),
 
   deleteOurWorkEntry: adminMiddleware
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      try {
-        await ctx.db.timeline.delete({
-          where: {
-            id: input.id,
-          },
-        });
-        return true;
-      } catch (error) {
-        throw new TRPCError({
-          cause: error,
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
+      await ctx.db.timeline.update({
+        data: {
+          deletedAt: new Date(),
+          modifiedBy: ctx.user?.id,
+        },
+        where: {
+          id: input.id,
+        },
+      });
+      return true;
     }),
 
   deleteRecruitmentForm: adminMiddleware
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      try {
-        await ctx.db.recruitment.delete({
-          where: {
-            id: input.id,
-          },
-        });
-        return true;
-      } catch (error) {
-        throw new TRPCError({
-          cause: error,
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
+      await ctx.db.recruitment.update({
+        data: {
+          deletedAt: new Date(),
+          modifiedBy: ctx.user?.id,
+        },
+        where: {
+          id: input.id,
+        },
+      });
+      return true;
     }),
 
   deleteSponsor: adminMiddleware
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      try {
-        await ctx.db.sponsor.delete({
-          where: {
-            id: input.id,
-          },
-        });
-        return true;
-      } catch (error) {
-        throw new TRPCError({
-          cause: error,
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
+      return ctx.db.sponsor.update({
+        data: {
+          deletedAt: new Date(),
+          modifiedBy: ctx.user?.id,
+        },
+        where: {
+          id: input.id,
+        },
+      });
     }),
 
   getAlumniList: adminMiddleware.query(async ({ ctx }) => {
-    try {
-      const alumni = await ctx.db.user.findMany({
-        orderBy: {
-          yearRetired: "desc",
+    return ctx.db.user.findMany({
+      orderBy: {
+        yearRetired: "desc",
+      },
+      where: {
+        deletedAt: null,
+        yearRetired: {
+          not: null,
         },
-        where: {
-          yearRetired: {
-            not: null,
-          },
-        },
-      });
-      return alumni;
-    } catch (error) {
-      throw new TRPCError({
-        cause: error,
-        code: "INTERNAL_SERVER_ERROR",
-      });
-    }
+      },
+    });
   }),
 
   getClerkUsers: adminMiddleware.query(async ({ ctx }) => {
-    try {
-      const users = await ctx.clerkClient.users.getUserList({
-        limit: 500,
-      });
+    const users = await ctx.clerkClient.users.getUserList({
+      limit: 500,
+    });
 
-      return users.data
-        .sort((a, b) => {
-          // Sort users with null role to the beginning
-          if (
-            a.publicMetadata?.role === null ||
-            a.publicMetadata?.role === undefined
-          )
-            return -1;
-          if (
-            b.publicMetadata?.role === null ||
-            b.publicMetadata?.role === undefined
-          )
-            return 1;
-          return 0;
-        })
-        .map((user) => ({
-          email: user.emailAddresses[0]?.emailAddress,
-          firstName: user.firstName,
-          id: user.id,
-          imageUrl: user.hasImage ? user.imageUrl : undefined,
-          lastName: user.lastName,
-          publicMetadata: user.publicMetadata,
-          role: user.publicMetadata?.role,
-          username: user.username,
-        }));
-    } catch (error) {
-      throw new TRPCError({
-        cause: error,
-        code: "INTERNAL_SERVER_ERROR",
-      });
-    }
+    return users.data
+      .sort((a, b) => {
+        // Sort users with null role to the beginning
+        if (
+          a.publicMetadata?.role === null ||
+          a.publicMetadata?.role === undefined
+        )
+          return -1;
+        if (
+          b.publicMetadata?.role === null ||
+          b.publicMetadata?.role === undefined
+        )
+          return 1;
+        return 0;
+      })
+      .map((user) => ({
+        email: user.emailAddresses[0]?.emailAddress,
+        firstName: user.firstName,
+        id: user.id,
+        imageUrl: user.hasImage ? user.imageUrl : undefined,
+        lastName: user.lastName,
+        publicMetadata: user.publicMetadata,
+        role: user.publicMetadata?.role,
+        username: user.username,
+      }));
   }),
 
   getCurrentDBUser: authedProcedure.query(async ({ ctx }) => {
-    try {
-      const user = await ctx.db.user.findUnique({
-        where: {
-          clerkUserId: ctx.user?.id,
-        },
-      });
-      return user;
-    } catch (error) {
-      throw new TRPCError({
-        cause: error,
-        code: "INTERNAL_SERVER_ERROR",
-      });
-    }
+    const user = await ctx.db.user.findUnique({
+      where: {
+        clerkUserId: ctx.user?.id,
+      },
+    });
+    return user?.deletedAt ? null : user;
   }),
 
   getDBUsers: adminMiddleware.query(async ({ ctx }) => {
-    try {
-      const users = await ctx.db.user.findMany({ orderBy: { id: "desc" } });
-      return users;
-    } catch (error) {
-      throw new TRPCError({
-        cause: error,
-        code: "INTERNAL_SERVER_ERROR",
-      });
-    }
+    return ctx.db.user.findMany({
+      orderBy: { id: "desc" },
+      where: {
+        deletedAt: null,
+      },
+    });
   }),
 
   getFormsList: adminMiddleware.query(async ({ ctx }) => {
-    try {
-      const forms = await ctx.db.recruitment.findMany();
-      return forms;
-    } catch (error) {
-      throw new TRPCError({
-        cause: error,
-        code: "INTERNAL_SERVER_ERROR",
-      });
-    }
+    return ctx.db.recruitment.findMany({
+      where: {
+        deletedAt: null,
+      },
+    });
   }),
   getInvitedUsers: adminMiddleware.query(async ({ ctx }) => {
-    try {
-      const invitations = await ctx.clerkClient.invitations.getInvitationList({
-        limit: 500,
-      });
+    const invitations = await ctx.clerkClient.invitations.getInvitationList({
+      limit: 500,
+    });
 
-      return invitations.data.map((invitation) => ({
-        createdAt: invitation.createdAt,
-        email: invitation.emailAddress,
-        id: invitation.id,
-        status: invitation.status,
-      }));
-    } catch (error) {
-      throw new TRPCError({
-        cause: error,
-        code: "INTERNAL_SERVER_ERROR",
-      });
-    }
+    return invitations.data.map((invitation) => ({
+      createdAt: invitation.createdAt,
+      email: invitation.emailAddress,
+      id: invitation.id,
+      status: invitation.status,
+    }));
   }),
 
   getOurWorkList: adminMiddleware.query(async ({ ctx }) => {
-    try {
-      const forms = await ctx.db.timeline.findMany();
-      return forms;
-    } catch (error) {
-      throw new TRPCError({
-        cause: error,
-        code: "INTERNAL_SERVER_ERROR",
-      });
-    }
+    return ctx.db.timeline.findMany({
+      where: {
+        deletedAt: null,
+      },
+    });
   }),
 
   getSponsorsList: adminMiddleware.query(async ({ ctx }) => {
-    try {
-      const sponsors = await ctx.db.sponsor.findMany();
-      return sponsors;
-    } catch (error) {
-      throw new TRPCError({
-        cause: error,
-        code: "INTERNAL_SERVER_ERROR",
-      });
-    }
+    return ctx.db.sponsor.findMany({
+      where: {
+        deletedAt: null,
+      },
+    });
   }),
 
   inviteUser: adminMiddleware
@@ -427,53 +330,44 @@ export const portalRouter = createTRPCRouter({
       z.object({ email: z.string().email(), selectedRole: UserRoleSchema }),
     )
     .mutation(async ({ ctx, input }) => {
-      try {
-        const existingInvitation =
-          await ctx.clerkClient.invitations.getInvitationList({
-            limit: 1,
-            query: input.email,
+      const existingInvitation =
+        await ctx.clerkClient.invitations.getInvitationList({
+          limit: 1,
+          query: input.email,
+        });
+
+      if (existingInvitation.data[0]) {
+        const invitation = existingInvitation.data[0];
+
+        if ((invitation.status as string) === "pending") {
+          throw new TRPCError({
+            code: "CONFLICT",
+            message:
+              "This user has already been invited. Please remind them to check their spam",
           });
-
-        if (existingInvitation.data[0]) {
-          const invitation = existingInvitation.data[0];
-
-          if ((invitation.status as string) === "pending") {
-            throw new TRPCError({
-              code: "CONFLICT",
-              message:
-                "This user has already been invited. Please remind them to check their spam",
-            });
-          }
-
-          if ((invitation.status as string) === "expired") {
-            try {
-              await ctx.clerkClient.invitations.revokeInvitation(invitation.id);
-            } catch (error) {
-              throw new TRPCError({
-                cause: error,
-                code: "INTERNAL_SERVER_ERROR",
-                message: "Failed to revoke expired invitation.",
-              });
-            }
-          }
         }
 
-        // if the invitation was either expired or revoked, create a new invitation
-        await ctx.clerkClient.invitations.createInvitation({
-          emailAddress: input.email,
-          publicMetadata: {
-            role: input.selectedRole,
-          },
-        });
-        return true;
-      } catch (error) {
-        throw new TRPCError({
-          cause: error,
-          code: "INTERNAL_SERVER_ERROR",
-          message:
-            "Failed to create invitation. Please contact the Telemetry Team",
-        });
+        if ((invitation.status as string) === "expired") {
+          try {
+            await ctx.clerkClient.invitations.revokeInvitation(invitation.id);
+          } catch (error) {
+            throw new TRPCError({
+              cause: error,
+              code: "INTERNAL_SERVER_ERROR",
+              message: "Failed to revoke expired invitation.",
+            });
+          }
+        }
       }
+
+      // if the invitation was either expired or revoked, create a new invitation
+      await ctx.clerkClient.invitations.createInvitation({
+        emailAddress: input.email,
+        publicMetadata: {
+          role: input.selectedRole,
+        },
+      });
+      return true;
     }),
 
   moveUserToAlumni: adminMiddleware
@@ -486,8 +380,28 @@ export const portalRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      try {
-        await ctx.db.user.update({
+      await ctx.db.$transaction(async (tx) => {
+        const user = await tx.user.findUnique({
+          where: {
+            id: input.id,
+          },
+        });
+
+        if (!user) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "User not found.",
+          });
+        }
+
+        if (user.deletedAt) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Deleted users cannot be moved to alumni.",
+          });
+        }
+
+        await tx.user.update({
           data: {
             company: input.company ?? undefined,
             companyTitle: input.companyTitle ?? undefined,
@@ -495,27 +409,14 @@ export const portalRouter = createTRPCRouter({
           },
           where: { id: input.id },
         });
-        return true;
-      } catch (error) {
-        throw new TRPCError({
-          cause: error,
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
+      });
+      return true;
     }),
 
   revokeUserInvitation: adminMiddleware
     .input(z.object({ invitationId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      try {
-        await ctx.clerkClient.invitations.revokeInvitation(input.invitationId);
-        return true;
-      } catch (error) {
-        throw new TRPCError({
-          cause: error,
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
+      return ctx.clerkClient.invitations.revokeInvitation(input.invitationId);
     }),
 
   updateDBUser: authedProcedure
@@ -546,33 +447,51 @@ export const portalRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      try {
-        if (!ctx.user?.id) {
+      if (!ctx.user?.id) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "User not authenticated.",
+        });
+      }
+
+      const user = await ctx.clerkClient.users.getUser(ctx.user?.id);
+      const isUpperTeamRole =
+        Object.values(ManagerRoles).includes(input.teamRole as ManagerRoles) ||
+        Object.values(LeadRoles).includes(input.teamRole as LeadRoles);
+
+      if (isUpperTeamRole && user.publicMetadata?.role !== "admin") {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You must be an admin to assign this role.",
+        });
+      }
+
+      // Normalize any incoming year/date value to a UTC midnight Date (or null)
+      const convertToDate = (val: unknown): Date | null =>
+        parseAndNormalizeDate(val);
+
+      await ctx.db.$transaction(async (tx) => {
+        const user = await tx.user.findUnique({
+          where: {
+            id: input.id,
+          },
+        });
+
+        if (!user) {
           throw new TRPCError({
-            code: "UNAUTHORIZED",
-            message: "User not authenticated.",
+            code: "NOT_FOUND",
+            message: "User not found.",
           });
         }
 
-        const user = await ctx.clerkClient.users.getUser(ctx.user?.id);
-        const isUpperTeamRole =
-          Object.values(ManagerRoles).includes(
-            input.teamRole as ManagerRoles,
-          ) || Object.values(LeadRoles).includes(input.teamRole as LeadRoles);
-
-        if (isUpperTeamRole && user.publicMetadata?.role !== "admin") {
+        if (user.deletedAt) {
           throw new TRPCError({
-            code: "UNAUTHORIZED",
-            message: "You must be an admin to assign this role.",
+            code: "BAD_REQUEST",
+            message: "Deleted users cannot be updated.",
           });
         }
 
-        // Normalize any incoming year/date value to a UTC midnight Date (or null)
-        const convertToDate = (val: unknown): Date | null =>
-          parseAndNormalizeDate(val);
-
-        // Update the user regardless of whether the role is an UpperTeamRole or not
-        await ctx.db.user.update({
+        await tx.user.update({
           data: {
             company: input.company,
             companyTitle: input.companyTitle,
@@ -592,14 +511,9 @@ export const portalRouter = createTRPCRouter({
           },
           where: { id: input.id },
         });
+      });
 
-        return true;
-      } catch (error) {
-        throw new TRPCError({
-          cause: error,
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
+      return true;
     }),
   updateOurWorkEntry: adminMiddleware
     .input(
@@ -613,32 +527,25 @@ export const portalRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      try {
-        // only update the fields that are non null
-        const updateData = {
-          description: input.description,
-          imageUrl: input.imageUrl,
-          monthName: input.monthName,
-          monthNum: input.monthNum,
-          year: input.year,
-        };
-        const filteredUpdateData = Object.fromEntries(
-          Object.entries(updateData).filter(([_, value]) => value !== null),
-        );
+      // only update the fields that are non null
+      const updateData = {
+        description: input.description,
+        imageUrl: input.imageUrl,
+        monthName: input.monthName,
+        monthNum: input.monthNum,
+        year: input.year,
+      };
+      const filteredUpdateData = Object.fromEntries(
+        Object.entries(updateData).filter(([_, value]) => value !== null),
+      );
 
-        await ctx.db.timeline.update({
-          data: filteredUpdateData,
-          where: {
-            id: input.id,
-          },
-        });
-        return true;
-      } catch (error) {
-        throw new TRPCError({
-          cause: error,
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
+      await ctx.db.timeline.update({
+        data: filteredUpdateData,
+        where: {
+          id: input.id,
+        },
+      });
+      return true;
     }),
 
   updateRecruitmentForm: adminMiddleware
@@ -652,31 +559,24 @@ export const portalRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      try {
-        // only update the fields that are non null
-        const updateData = {
-          description: input.description,
-          expiresAt: input.expiresAt,
-          header: input.header,
-          link: input.link,
-        };
-        const filteredUpdateData = Object.fromEntries(
-          Object.entries(updateData).filter(([_, value]) => value !== null),
-        );
+      // only update the fields that are non null
+      const updateData = {
+        description: input.description,
+        expiresAt: input.expiresAt,
+        header: input.header,
+        link: input.link,
+      };
+      const filteredUpdateData = Object.fromEntries(
+        Object.entries(updateData).filter(([_, value]) => value !== null),
+      );
 
-        await ctx.db.recruitment.update({
-          data: filteredUpdateData,
-          where: {
-            id: input.id,
-          },
-        });
-        return true;
-      } catch (error) {
-        throw new TRPCError({
-          cause: error,
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
+      await ctx.db.recruitment.update({
+        data: filteredUpdateData,
+        where: {
+          id: input.id,
+        },
+      });
+      return true;
     }),
 
   updateSponsor: adminMiddleware
@@ -691,32 +591,25 @@ export const portalRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      try {
-        // only update the fields that are non null
-        const updateData = {
-          description: input.description,
-          logoUrl: input.logoUrl,
-          name: input.name,
-          sponsorLevel: input.sponsorLevel,
-          websiteUrl: input.websiteUrl,
-        };
-        const filteredUpdateData = Object.fromEntries(
-          Object.entries(updateData).filter(([_, value]) => value !== null),
-        );
+      // only update the fields that are non null
+      const updateData = {
+        description: input.description,
+        logoUrl: input.logoUrl,
+        name: input.name,
+        sponsorLevel: input.sponsorLevel,
+        websiteUrl: input.websiteUrl,
+      };
+      const filteredUpdateData = Object.fromEntries(
+        Object.entries(updateData).filter(([_, value]) => value !== null),
+      );
 
-        await ctx.db.sponsor.update({
-          data: filteredUpdateData,
-          where: {
-            id: input.id,
-          },
-        });
-        return true;
-      } catch (error) {
-        throw new TRPCError({
-          cause: error,
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
+      await ctx.db.sponsor.update({
+        data: filteredUpdateData,
+        where: {
+          id: input.id,
+        },
+      });
+      return true;
     }),
 
   updateUserRole: adminMiddleware
@@ -727,20 +620,13 @@ export const portalRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      try {
-        if (input.userId) {
-          await ctx.clerkClient.users.updateUserMetadata(input.userId, {
-            publicMetadata: {
-              role: input.role,
-            },
-          });
-        }
-        return true;
-      } catch (error) {
-        throw new TRPCError({
-          cause: error,
-          code: "INTERNAL_SERVER_ERROR",
+      if (input.userId) {
+        await ctx.clerkClient.users.updateUserMetadata(input.userId, {
+          publicMetadata: {
+            role: input.role,
+          },
         });
       }
+      return true;
     }),
 });

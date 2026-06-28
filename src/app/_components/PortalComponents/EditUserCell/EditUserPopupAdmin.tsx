@@ -205,6 +205,10 @@ const EditUserPopupAdmin = ({
     }
   }, []);
 
+  const currentProfileImage = imageFile
+    ? URL.createObjectURL(imageFile)
+    : (newRowData.profilePictureUrl ?? defaultProfilePicture);
+
   return (
     <div className={styles.popup} onClick={handleOverlayClick}>
       <div className={`${styles.popupContent} ${styles.popupEnter}`}>
@@ -215,11 +219,7 @@ const EditUserPopupAdmin = ({
             <div>Profile Picture</div>
             <div className={styles.popupProfileImage}>
               <DropZone
-                currentImage={
-                  imageFile
-                    ? URL.createObjectURL(imageFile)
-                    : (newRowData.profilePictureUrl ?? defaultProfilePicture)
-                }
+                currentImage={currentProfileImage}
                 handleFileUpload={handleFileUpload}
               />
             </div>

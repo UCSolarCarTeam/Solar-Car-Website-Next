@@ -303,6 +303,9 @@ const EditAlumniPopupAdmin = ({
     };
   }, []);
 
+  const currentProfileImage =
+    newRowData.profilePictureUrl ?? defaultProfilePicture;
+
   return (
     <div className={styles.popup} onClick={handleOverlayClick}>
       <div className={`${styles.popupContent} ${styles.popupEnter}`}>
@@ -313,9 +316,7 @@ const EditAlumniPopupAdmin = ({
             <div>Profile Picture</div>
             <div className={styles.popupProfileImage}>
               <DropZone
-                currentImage={
-                  newRowData.profilePictureUrl ?? defaultProfilePicture
-                }
+                currentImage={currentProfileImage}
                 handleFileUpload={handleFileUpload}
               />
             </div>

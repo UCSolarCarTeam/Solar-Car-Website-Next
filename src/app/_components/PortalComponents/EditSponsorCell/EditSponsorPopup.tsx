@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
@@ -263,4 +263,4 @@ const EditSponsorPopup = ({
   );
 };
 
-export default memo(EditSponsorPopup);
+export default EditSponsorPopup;
