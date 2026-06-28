@@ -49,7 +49,6 @@ export async function POST(req: Request) {
           },
           update: {
             deletedAt: null,
-            deletedByClerkUserId: null,
             firstName: evt.data.first_name,
             lastName: evt.data.last_name,
           },
@@ -74,7 +73,6 @@ export async function POST(req: Request) {
           await db.user.update({
             data: {
               deletedAt: new Date(),
-              deletedByClerkUserId: null,
             },
             where: {
               id: user.id,
