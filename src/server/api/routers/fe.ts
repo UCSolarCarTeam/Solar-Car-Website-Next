@@ -16,221 +16,184 @@ import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const feRouter = createTRPCRouter({
   getAlumni: publicProcedure.query(async ({ ctx }) => {
-    try {
-      const alumni = await ctx.db.user.findMany({
-        orderBy: {
-          yearRetired: "desc",
+    return ctx.db.user.findMany({
+      orderBy: {
+        yearRetired: "desc",
+      },
+      where: {
+        deletedAt: null,
+        yearRetired: {
+          not: null,
         },
-        where: {
-          deletedAt: null,
-          yearRetired: {
-            not: null,
-          },
-        },
-      });
-      return alumni;
-    } catch (error) {
-      throw new TRPCError({
-        cause: error,
-        code: "INTERNAL_SERVER_ERROR",
-      });
-    }
+      },
+    });
   }),
   getOurWork: publicProcedure.query(async ({ ctx }) => {
-    try {
-      const rows = await ctx.db.timeline.findMany({
-        orderBy: [{ year: "desc" }, { monthNum: "asc" }],
-        select: {
-          description: true,
-          imageUrl: true,
-          monthName: true,
-          monthNum: true,
-          year: true,
-        },
-        where: {
-          deletedAt: null,
-        },
-      });
+    const rows = await ctx.db.timeline.findMany({
+      orderBy: [{ year: "desc" }, { monthNum: "asc" }],
+      select: {
+        description: true,
+        imageUrl: true,
+        monthName: true,
+        monthNum: true,
+        year: true,
+      },
+      where: {
+        deletedAt: null,
+      },
+    });
 
-      const grouped = rows.reduce<Record<number, typeof rows>>((acc, row) => {
-        (acc[row.year] ??= []).push(row);
-        return acc;
-      }, {});
+    const grouped = rows.reduce<Record<number, typeof rows>>((acc, row) => {
+      (acc[row.year] ??= []).push(row);
+      return acc;
+    }, {});
 
-      const timelineData = Object.entries(grouped)
-        .sort((a, b) => Number(b[0]) - Number(a[0]))
-        .map(([year, months]) => ({
-          months: months.map((m) => ({
-            description: m.description ?? "",
-            image: m.imageUrl ?? null,
-            month: m.monthName,
-          })),
-          year: String(year),
-        }));
+    const timelineData = Object.entries(grouped)
+      .sort((a, b) => Number(b[0]) - Number(a[0]))
+      .map(([year, months]) => ({
+        months: months.map((m) => ({
+          description: m.description ?? "",
+          image: m.imageUrl ?? null,
+          month: m.monthName,
+        })),
+        year: String(year),
+      }));
 
-      return timelineData;
-    } catch (error) {
-      throw new TRPCError({
-        cause: error,
-        code: "INTERNAL_SERVER_ERROR",
-      });
-    }
+    return timelineData;
   }),
   getRecruitment: publicProcedure.query(async ({ ctx }) => {
-    try {
-      const forms = await ctx.db.recruitment.findMany({
-        orderBy: {
-          expiresAt: "asc",
+    const forms = await ctx.db.recruitment.findMany({
+      orderBy: {
+        expiresAt: "asc",
+      },
+      where: {
+        deletedAt: null,
+        expiresAt: {
+          gte: new Date(), // greater than or equal to the current date
         },
-        where: {
-          deletedAt: null,
-          expiresAt: {
-            gte: new Date(), // greater than or equal to the current date
-          },
-        },
-      });
-      return forms.map((form) => {
-        const { description, expiresAt, header, id, link } = form;
-        return {
-          description,
-          expiresAt,
-          header,
-          id,
-          link,
-        };
-      });
-    } catch (error) {
-      throw new TRPCError({
-        cause: error,
-        code: "INTERNAL_SERVER_ERROR",
-      });
-    }
+      },
+    });
+    return forms.map((form) => {
+      const { description, expiresAt, header, id, link } = form;
+      return {
+        description,
+        expiresAt,
+        header,
+        id,
+        link,
+      };
+    });
   }),
 
   getSponsors: publicProcedure.query(async ({ ctx }) => {
-    try {
-      const sponsors = await ctx.db.sponsor.findMany({
-        where: {
-          deletedAt: null,
-        },
-      });
-      return sponsors.map((sponsor) => {
-        const { description, logoUrl, name, sponsorLevel, websiteUrl } =
-          sponsor;
-        return {
-          description,
-          logoUrl,
-          name,
-          sponsorLevel,
-          websiteUrl,
-        };
-      });
-    } catch (error) {
-      throw new TRPCError({
-        cause: error,
-        code: "INTERNAL_SERVER_ERROR",
-      });
-    }
+    const sponsors = await ctx.db.sponsor.findMany({
+      where: {
+        deletedAt: null,
+      },
+    });
+    return sponsors.map((sponsor) => {
+      const { description, logoUrl, name, sponsorLevel, websiteUrl } = sponsor;
+      return {
+        description,
+        logoUrl,
+        name,
+        sponsorLevel,
+        websiteUrl,
+      };
+    });
   }),
 
   getTeamMembers: publicProcedure.query(async ({ ctx }) => {
-    try {
-      const dbUsers = await ctx.db.user.findMany({
-        where: {
-          deletedAt: null,
-        },
-      });
-      const teamMembers = dbUsers
-        .filter((teamMember) => teamMember.teamRole !== null)
-        .filter(
-          (teamMember) =>
-            teamMember.firstName !== null || teamMember.firstName === "",
-        );
+    const dbUsers = await ctx.db.user.findMany({
+      where: {
+        deletedAt: null,
+      },
+    });
+    const teamMembers = dbUsers
+      .filter((teamMember) => teamMember.teamRole !== null)
+      .filter(
+        (teamMember) =>
+          teamMember.firstName !== null || teamMember.firstName === "",
+      );
 
-      const filterByRole = (
-        teamMembers: User[],
-        roles:
-          | typeof AccountingTeam
-          | typeof CommunicationsTeam
-          | typeof ElectricalTeam
-          | typeof MechanicalTeam
-          | typeof MultiTeam
-          | typeof SoftwareTeam
-          | typeof SponsorshipTeam,
-      ) => {
-        return teamMembers.filter((teamMember) =>
-          // we can assume that we filtered out null teamRoles already
-          Object.keys(roles).includes(teamMember.teamRole!),
-        );
-      };
+    const filterByRole = (
+      teamMembers: User[],
+      roles:
+        | typeof AccountingTeam
+        | typeof CommunicationsTeam
+        | typeof ElectricalTeam
+        | typeof MechanicalTeam
+        | typeof MultiTeam
+        | typeof SoftwareTeam
+        | typeof SponsorshipTeam,
+    ) => {
+      return teamMembers.filter((teamMember) =>
+        // we can assume that we filtered out null teamRoles already
+        Object.keys(roles).includes(teamMember.teamRole!),
+      );
+    };
 
-      const teamCaptain =
-        teamMembers.find(
-          (teamMember) => teamMember.teamRole === AllTeamRoles.TeamCaptain,
-        ) ?? null;
-      const engineeringTeamManager =
-        teamMembers.find(
-          (teamMember) =>
-            teamMember.teamRole === AllTeamRoles.EngineeringTeamManager,
-        ) ?? null;
-      const businessTeamManager =
-        teamMembers.find(
-          (teamMember) =>
-            teamMember.teamRole === AllTeamRoles.BusinessTeamManager,
-        ) ?? null;
+    const teamCaptain =
+      teamMembers.find(
+        (teamMember) => teamMember.teamRole === AllTeamRoles.TeamCaptain,
+      ) ?? null;
+    const engineeringTeamManager =
+      teamMembers.find(
+        (teamMember) =>
+          teamMember.teamRole === AllTeamRoles.EngineeringTeamManager,
+      ) ?? null;
+    const businessTeamManager =
+      teamMembers.find(
+        (teamMember) =>
+          teamMember.teamRole === AllTeamRoles.BusinessTeamManager,
+      ) ?? null;
 
-      const managerRoles = teamMembers
-        .filter(
-          (teamMember) =>
-            teamMember.teamRole !== null && teamMember.teamRole in ManagerRoles,
-        )
-        .filter(
-          (teamMember) =>
-            teamMember !== teamCaptain &&
-            teamMember !== engineeringTeamManager &&
-            teamMember !== businessTeamManager,
-        );
+    const managerRoles = teamMembers
+      .filter(
+        (teamMember) =>
+          teamMember.teamRole !== null && teamMember.teamRole in ManagerRoles,
+      )
+      .filter(
+        (teamMember) =>
+          teamMember !== teamCaptain &&
+          teamMember !== engineeringTeamManager &&
+          teamMember !== businessTeamManager,
+      );
 
-      const leadRoles = teamMembers
-        .filter(
-          (teamMember) =>
-            teamMember.teamRole !== null && teamMember.teamRole in LeadRoles,
-        )
-        .filter(
-          (teamMember) =>
-            teamMember !== teamCaptain &&
-            teamMember !== engineeringTeamManager &&
-            teamMember !== businessTeamManager &&
-            !managerRoles.includes(teamMember),
-        );
+    const leadRoles = teamMembers
+      .filter(
+        (teamMember) =>
+          teamMember.teamRole !== null && teamMember.teamRole in LeadRoles,
+      )
+      .filter(
+        (teamMember) =>
+          teamMember !== teamCaptain &&
+          teamMember !== engineeringTeamManager &&
+          teamMember !== businessTeamManager &&
+          !managerRoles.includes(teamMember),
+      );
 
-      const accountingTeam = filterByRole(teamMembers, AccountingTeam);
-      const commmunicationsTeam = filterByRole(teamMembers, CommunicationsTeam);
-      const sponsorshipTeam = filterByRole(teamMembers, SponsorshipTeam);
-      const softwareTeam = filterByRole(teamMembers, SoftwareTeam);
-      const electricalTeam = filterByRole(teamMembers, ElectricalTeam);
-      const mechanicalTeam = filterByRole(teamMembers, MechanicalTeam);
-      const multiTeam = filterByRole(teamMembers, MultiTeam);
+    const accountingTeam = filterByRole(teamMembers, AccountingTeam);
+    const commmunicationsTeam = filterByRole(teamMembers, CommunicationsTeam);
+    const sponsorshipTeam = filterByRole(teamMembers, SponsorshipTeam);
+    const softwareTeam = filterByRole(teamMembers, SoftwareTeam);
+    const electricalTeam = filterByRole(teamMembers, ElectricalTeam);
+    const mechanicalTeam = filterByRole(teamMembers, MechanicalTeam);
+    const multiTeam = filterByRole(teamMembers, MultiTeam);
 
-      return {
-        accountingTeam,
-        businessTeamManager,
-        commmunicationsTeam,
-        electricalTeam,
-        engineeringTeamManager,
-        leadRoles,
-        managerRoles,
-        mechanicalTeam,
-        multiTeam,
-        softwareTeam,
-        sponsorshipTeam,
-        teamCaptain,
-      };
-    } catch (error) {
-      throw new TRPCError({
-        cause: error,
-        code: "INTERNAL_SERVER_ERROR",
-      });
-    }
+    return {
+      accountingTeam,
+      businessTeamManager,
+      commmunicationsTeam,
+      electricalTeam,
+      engineeringTeamManager,
+      leadRoles,
+      managerRoles,
+      mechanicalTeam,
+      multiTeam,
+      softwareTeam,
+      sponsorshipTeam,
+      teamCaptain,
+    };
   }),
 });
