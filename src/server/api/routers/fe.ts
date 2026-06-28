@@ -22,6 +22,7 @@ export const feRouter = createTRPCRouter({
           yearRetired: "desc",
         },
         where: {
+          deletedAt: null,
           yearRetired: {
             not: null,
           },
@@ -45,6 +46,9 @@ export const feRouter = createTRPCRouter({
           monthName: true,
           monthNum: true,
           year: true,
+        },
+        where: {
+          deletedAt: null,
         },
       });
 
@@ -79,6 +83,7 @@ export const feRouter = createTRPCRouter({
           expiresAt: "asc",
         },
         where: {
+          deletedAt: null,
           expiresAt: {
             gte: new Date(), // greater than or equal to the current date
           },
@@ -104,7 +109,11 @@ export const feRouter = createTRPCRouter({
 
   getSponsors: publicProcedure.query(async ({ ctx }) => {
     try {
-      const sponsors = await ctx.db.sponsor.findMany();
+      const sponsors = await ctx.db.sponsor.findMany({
+        where: {
+          deletedAt: null,
+        },
+      });
       return sponsors.map((sponsor) => {
         const { description, logoUrl, name, sponsorLevel, websiteUrl } =
           sponsor;
@@ -126,7 +135,11 @@ export const feRouter = createTRPCRouter({
 
   getTeamMembers: publicProcedure.query(async ({ ctx }) => {
     try {
-      const dbUsers = await ctx.db.user.findMany();
+      const dbUsers = await ctx.db.user.findMany({
+        where: {
+          deletedAt: null,
+        },
+      });
       const teamMembers = dbUsers
         .filter((teamMember) => teamMember.teamRole !== null)
         .filter(
