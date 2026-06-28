@@ -211,7 +211,11 @@ export const portalRouter = createTRPCRouter({
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
       try {
-        await ctx.db.user.delete({
+        await ctx.db.user.update({
+          data: {
+            deletedAt: new Date(),
+            modifiedBy: ctx.user?.id,
+          },
           where: {
             id: input.id,
           },
@@ -228,44 +232,42 @@ export const portalRouter = createTRPCRouter({
   deleteOurWorkEntry: adminMiddleware
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      try {
-        await ctx.db.timeline.delete({
-          where: {
-            id: input.id,
-          },
-        });
-        return true;
-      } catch (error) {
-        throw new TRPCError({
-          cause: error,
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
+      await ctx.db.timeline.update({
+        data: {
+          deletedAt: new Date(),
+          modifiedBy: ctx.user?.id,
+        },
+        where: {
+          id: input.id,
+        },
+      });
+      return true;
     }),
 
   deleteRecruitmentForm: adminMiddleware
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      try {
-        await ctx.db.recruitment.delete({
-          where: {
-            id: input.id,
-          },
-        });
-        return true;
-      } catch (error) {
-        throw new TRPCError({
-          cause: error,
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
+      await ctx.db.recruitment.update({
+        data: {
+          deletedAt: new Date(),
+          modifiedBy: ctx.user?.id,
+        },
+        where: {
+          id: input.id,
+        },
+      });
+      return true;
     }),
 
   deleteSponsor: adminMiddleware
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
       try {
-        await ctx.db.sponsor.delete({
+        await ctx.db.sponsor.update({
+          data: {
+            deletedAt: new Date(),
+            modifiedBy: ctx.user?.id,
+          },
           where: {
             id: input.id,
           },
@@ -286,6 +288,7 @@ export const portalRouter = createTRPCRouter({
           yearRetired: "desc",
         },
         where: {
+          deletedAt: null,
           yearRetired: {
             not: null,
           },
@@ -346,7 +349,7 @@ export const portalRouter = createTRPCRouter({
           clerkUserId: ctx.user?.id,
         },
       });
-      return user;
+      return user?.deletedAt ? null : user;
     } catch (error) {
       throw new TRPCError({
         cause: error,
@@ -357,7 +360,12 @@ export const portalRouter = createTRPCRouter({
 
   getDBUsers: adminMiddleware.query(async ({ ctx }) => {
     try {
-      const users = await ctx.db.user.findMany({ orderBy: { id: "desc" } });
+      const users = await ctx.db.user.findMany({
+        orderBy: { id: "desc" },
+        where: {
+          deletedAt: null,
+        },
+      });
       return users;
     } catch (error) {
       throw new TRPCError({
@@ -369,7 +377,11 @@ export const portalRouter = createTRPCRouter({
 
   getFormsList: adminMiddleware.query(async ({ ctx }) => {
     try {
-      const forms = await ctx.db.recruitment.findMany();
+      const forms = await ctx.db.recruitment.findMany({
+        where: {
+          deletedAt: null,
+        },
+      });
       return forms;
     } catch (error) {
       throw new TRPCError({
@@ -400,7 +412,11 @@ export const portalRouter = createTRPCRouter({
 
   getOurWorkList: adminMiddleware.query(async ({ ctx }) => {
     try {
-      const forms = await ctx.db.timeline.findMany();
+      const forms = await ctx.db.timeline.findMany({
+        where: {
+          deletedAt: null,
+        },
+      });
       return forms;
     } catch (error) {
       throw new TRPCError({
@@ -412,7 +428,11 @@ export const portalRouter = createTRPCRouter({
 
   getSponsorsList: adminMiddleware.query(async ({ ctx }) => {
     try {
-      const sponsors = await ctx.db.sponsor.findMany();
+      const sponsors = await ctx.db.sponsor.findMany({
+        where: {
+          deletedAt: null,
+        },
+      });
       return sponsors;
     } catch (error) {
       throw new TRPCError({
@@ -487,13 +507,35 @@ export const portalRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       try {
-        await ctx.db.user.update({
-          data: {
-            company: input.company ?? undefined,
-            companyTitle: input.companyTitle ?? undefined,
-            yearRetired: input.yearRetired,
-          },
-          where: { id: input.id },
+        await ctx.db.$transaction(async (tx) => {
+          const user = await tx.user.findUnique({
+            where: {
+              id: input.id,
+            },
+          });
+
+          if (!user) {
+            throw new TRPCError({
+              code: "NOT_FOUND",
+              message: "User not found.",
+            });
+          }
+
+          if (user.deletedAt) {
+            throw new TRPCError({
+              code: "BAD_REQUEST",
+              message: "Deleted users cannot be moved to alumni.",
+            });
+          }
+
+          await tx.user.update({
+            data: {
+              company: input.company ?? undefined,
+              companyTitle: input.companyTitle ?? undefined,
+              yearRetired: input.yearRetired,
+            },
+            where: { id: input.id },
+          });
         });
         return true;
       } catch (error) {
@@ -571,26 +613,47 @@ export const portalRouter = createTRPCRouter({
         const convertToDate = (val: unknown): Date | null =>
           parseAndNormalizeDate(val);
 
-        // Update the user regardless of whether the role is an UpperTeamRole or not
-        await ctx.db.user.update({
-          data: {
-            company: input.company,
-            companyTitle: input.companyTitle,
-            description: input.description,
-            fieldOfStudy: input.fieldOfStudy,
-            firstName: input.firstName,
-            lastName: input.lastName,
-            linkedIn: input.linkedIn,
-            phoneNumber: input.phoneNumber,
-            profilePictureUrl: input.profilePictureUrl,
-            schoolEmail: input.schoolEmail,
-            schoolYear: input.schoolYear,
-            teamRole: input.teamRole,
-            ucid: input.ucid,
-            yearJoined: convertToDate(input.yearJoined),
-            yearRetired: convertToDate(input.yearRetired),
-          },
-          where: { id: input.id },
+        await ctx.db.$transaction(async (tx) => {
+          const user = await tx.user.findUnique({
+            where: {
+              id: input.id,
+            },
+          });
+
+          if (!user) {
+            throw new TRPCError({
+              code: "NOT_FOUND",
+              message: "User not found.",
+            });
+          }
+
+          if (user.deletedAt) {
+            throw new TRPCError({
+              code: "BAD_REQUEST",
+              message: "Deleted users cannot be updated.",
+            });
+          }
+
+          await tx.user.update({
+            data: {
+              company: input.company,
+              companyTitle: input.companyTitle,
+              description: input.description,
+              fieldOfStudy: input.fieldOfStudy,
+              firstName: input.firstName,
+              lastName: input.lastName,
+              linkedIn: input.linkedIn,
+              phoneNumber: input.phoneNumber,
+              profilePictureUrl: input.profilePictureUrl,
+              schoolEmail: input.schoolEmail,
+              schoolYear: input.schoolYear,
+              teamRole: input.teamRole,
+              ucid: input.ucid,
+              yearJoined: convertToDate(input.yearJoined),
+              yearRetired: convertToDate(input.yearRetired),
+            },
+            where: { id: input.id },
+          });
         });
 
         return true;

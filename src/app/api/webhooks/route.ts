@@ -41,29 +41,46 @@ export async function POST(req: Request) {
       const eventType = evt.type;
       if (eventType === "user.created") {
         const role = evt.data.public_metadata?.role;
-
-        // update the users entry in supabase
-        await db.user.create({
-          data: {
+        await db.user.upsert({
+          create: {
             clerkUserId: evt.data.id,
             firstName: evt.data.first_name,
             lastName: evt.data.last_name,
           },
+          update: {
+            deletedAt: null,
+            deletedByClerkUserId: null,
+            firstName: evt.data.first_name,
+            lastName: evt.data.last_name,
+          },
+          where: {
+            clerkUserId: evt.data.id,
+          },
         });
 
-        // update the users metadata with the role specified
         await clerkClient.users.updateUser(evt.data.id, {
           publicMetadata: {
             role: role,
           },
         });
       } else if (eventType === "user.deleted") {
-        // doing delete many because it wont throw an error if the user is not found or already deleted
-        await db.user.deleteMany({
+        const user = await db.user.findUnique({
           where: {
             clerkUserId: evt.data.id,
           },
         });
+
+        if (user && !user.deletedAt) {
+          await db.user.update({
+            data: {
+              deletedAt: new Date(),
+              deletedByClerkUserId: null,
+            },
+            where: {
+              id: user.id,
+            },
+          });
+        }
       } else {
         NextResponse.json({
           response: "unknown event",
