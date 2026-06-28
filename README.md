@@ -92,7 +92,7 @@ Follow these steps to set up the app, database, and Clerk auth locally.
 
    ```bash
    yarn db:generate
-   yarn db:migrate-dev
+   yarn db:migrate:dev
    ```
 
 7. **Seed the Database:**
