@@ -1,17 +1,17 @@
 import Link from "next/link";
 
 import BasicButton from "@/app/_components/Buttons/BasicButton";
-import { trpc } from "@/trpc/server";
+import type { RecruitmentForm } from "@/app/recruitment/[code]/actions";
 
 import styles from "./index.module.scss";
 
-export default async function RecruitmentForms({
+export default function RecruitmentForms({
   isRecruitmentClosed,
+  recruitmentForms,
 }: {
   isRecruitmentClosed: boolean;
+  recruitmentForms: RecruitmentForm[];
 }) {
-  const recruitmentForms = await trpc.fe.getRecruitment();
-
   return (
     <div className={styles.applicationContainer}>
       {isRecruitmentClosed ? (

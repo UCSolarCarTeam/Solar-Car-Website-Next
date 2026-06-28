@@ -1,14 +1,16 @@
+import { precompute } from "flags/next";
+import { NextResponse } from "next/server";
+
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+
+import { recruitmentFlags } from "./flags";
 
 // ignore the '/api/webhooks(.*)' route
 const isPublicRoute = createRouteMatcher([
   "/api/webhooks(.*)",
-  "/api/trpc/fe.getTeamMembers(.*)",
-  "/api/trpc/fe.getSponsors(.*)",
-  "/api/trpc/fe.getRecruitment(.*)",
-  "/api/trpc/fe.getOurWork(.*)",
   "/",
   "/recruitment",
+  "/recruitment/(.*)",
   "/cars",
   "/team",
   "/support-us",
@@ -16,10 +18,22 @@ const isPublicRoute = createRouteMatcher([
   "/contact",
   "/our-work",
 ]);
+const isFeatureRoute = createRouteMatcher([
+  "/recruitment",
+  "/recruitment/(.*)",
+]);
 
 export default clerkMiddleware(async (auth, req) => {
   if (!isPublicRoute(req)) {
     await auth.protect();
+  }
+  if (isFeatureRoute(req)) {
+    const code = await precompute(recruitmentFlags);
+    const nextUrl = new URL(
+      `${req.nextUrl.pathname}/${code}${req.nextUrl.search}`,
+      req.url,
+    );
+    return NextResponse.rewrite(nextUrl, { request: req });
   }
 });
 
