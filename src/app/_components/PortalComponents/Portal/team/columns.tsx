@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowUpDown } from "lucide-react";
 import Image from "next/image";
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 
@@ -32,11 +33,31 @@ export const columns = (
   }),
   columnHelper.accessor("firstName", {
     cell: (info) => info.getValue(),
-    header: "First Name",
+    header: ({ column }) => {
+      return (
+        <Button
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          variant="ghost"
+        >
+          First Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   }),
   columnHelper.accessor("lastName", {
     cell: (info) => info.getValue(),
-    header: "Last Name",
+    header: ({ column }) => {
+      return (
+        <Button
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          variant="ghost"
+        >
+          Last Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   }),
   columnHelper.accessor("ucid", {
     cell: (info) => info.getValue(),
@@ -44,7 +65,17 @@ export const columns = (
   }),
   columnHelper.accessor("schoolEmail", {
     cell: (info) => info.getValue(),
-    header: "School Email",
+    header: ({ column }) => {
+      return (
+        <Button
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          variant="ghost"
+        >
+          School Email
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   }),
   columnHelper.accessor("phoneNumber", {
     cell: (info) => info.getValue(),
@@ -58,7 +89,17 @@ export const columns = (
     cell: (info) => {
       return (info.getValue() ?? "").replace(/([a-z])([A-Z])/g, "$1 $2");
     },
-    header: "Team Role",
+    header: ({ column }) => {
+      return (
+        <Button
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          variant="ghost"
+        >
+          Team Role
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   }),
   columnHelper.accessor("schoolYear", {
     cell: (info) => info.getValue(),

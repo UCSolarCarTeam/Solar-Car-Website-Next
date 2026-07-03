@@ -142,7 +142,7 @@ const Portal = () => {
               ) ? (
                 <>
                   {currentPage === PortalNavigationLinks.Team ? (
-                    <TeamTable currentUser={user} users={dbUsers.data ?? []} />
+                    <TeamTable users={dbUsers.data ?? []} />
                   ) : currentPage === PortalNavigationLinks.Users ? (
                     <UsersTable
                       currentUser={user}
