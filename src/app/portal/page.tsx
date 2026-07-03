@@ -156,10 +156,7 @@ const Portal = () => {
                   ) : currentPage === PortalNavigationLinks.Sponsors ? (
                     <SponsorsTable sponsors={sponsors.data ?? []} />
                   ) : currentPage === PortalNavigationLinks.Recruitment ? (
-                    <RecruitmentTable
-                      currentUser={user}
-                      forms={forms.data ?? []}
-                    />
+                    <RecruitmentTable forms={forms.data ?? []} />
                   ) : currentPage === PortalNavigationLinks.OurWork ? (
                     <OurWorkEntriesTable entries={ourWork.data ?? []} />
                   ) : currentPage === PortalNavigationLinks.Alumni ? (

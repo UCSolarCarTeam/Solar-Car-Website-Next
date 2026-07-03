@@ -294,6 +294,13 @@ export const portalRouter = createTRPCRouter({
       where: {
         deletedAt: null,
       },
+      select: {
+        id: true,
+        header: true,
+        description: true,
+        link: true,
+        expiresAt: true,
+      },
     });
   }),
   getInvitedUsers: adminMiddleware.query(async ({ ctx }) => {
