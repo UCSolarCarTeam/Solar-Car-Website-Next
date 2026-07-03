@@ -2,14 +2,12 @@ import { memo, useCallback, useEffect, useState } from "react";
 
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import PlusIcon from "@/app/_components/svgs/PlusIcon";
-import { type UserResource } from "@clerk/nextjs/types";
 import { type SponsorLevel } from "@prisma/client";
 
 import BasicButton from "../../Buttons/BasicButton";
 import EditSponsorPopup from "./EditSponsorPopup";
 
 export interface EditSponsorCellProps {
-  currentUser: UserResource | undefined | null;
   currentRow: {
     id: number;
     name: string;
@@ -21,11 +19,7 @@ export interface EditSponsorCellProps {
   newSponsor: boolean;
 }
 
-const EditSponsorCell = ({
-  currentRow,
-  currentUser,
-  newSponsor,
-}: EditSponsorCellProps) => {
+const EditSponsorCell = ({ currentRow, newSponsor }: EditSponsorCellProps) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const togglePopup = useCallback(() => {
     setPopupOpen((prev) => !prev);
@@ -51,7 +45,6 @@ const EditSponsorCell = ({
         {popupOpen && (
           <EditSponsorPopup
             currentRow={currentRow}
-            currentUser={currentUser}
             newSponsor
             togglePopup={togglePopup}
           />
@@ -68,7 +61,6 @@ const EditSponsorCell = ({
       {popupOpen && (
         <EditSponsorPopup
           currentRow={currentRow}
-          currentUser={currentUser}
           newSponsor={false}
           togglePopup={togglePopup}
         />
