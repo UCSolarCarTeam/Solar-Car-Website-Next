@@ -17,10 +17,12 @@ import { trpc } from "@/trpc/react";
 import type { User } from "@prisma/client";
 import {
   type CellContext,
+  type SortingState,
   type VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -37,6 +39,7 @@ const TeamTable = (props: { users: TeamMember[] }) => {
     ),
     description: false,
     fieldOfStudy: false,
+    linkedIn: false,
     moveToAlumni: ["admin", "business"].includes(
       currentUser?.publicMetadata.role ?? "",
     ),
@@ -46,6 +49,7 @@ const TeamTable = (props: { users: TeamMember[] }) => {
   } satisfies Partial<Record<keyof User | ({} & string), boolean>>;
   const utils = trpc.useUtils();
   const [globalFilter, setGlobalFilters] = useState([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
   const [columnVisibility, setColumnVisibility] =
     useState<VisibilityState>(initialVisibility);
   const [alumniModal, setAlumniModal] = useState<{
@@ -69,16 +73,18 @@ const TeamTable = (props: { users: TeamMember[] }) => {
     data: users,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     globalFilterFn: "includesString",
     initialState: {
       columnVisibility: initialVisibility,
     },
     onColumnVisibilityChange: setColumnVisibility,
     onGlobalFilterChange: setGlobalFilters,
-
+    onSortingChange: setSorting,
     state: {
       columnVisibility,
       globalFilter,
+      sorting,
     },
   });
 
