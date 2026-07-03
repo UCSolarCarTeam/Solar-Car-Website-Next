@@ -12,3 +12,14 @@ export const recruitmentOpen = flag<boolean>({
     { label: "Open", value: true },
   ],
 });
+
+export const ourWorkOpen = flag<boolean>({
+  adapter: vercelAdapter(),
+  defaultValue: false,
+  description: "Controls whether the our-work page is available.",
+  key: "our-work-open",
+  options: [
+    { label: "Closed", value: false },
+    { label: "Open", value: true },
+  ],
+});

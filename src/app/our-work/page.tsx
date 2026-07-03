@@ -5,9 +5,14 @@ import Navbar from "@/app/_components/Navbar";
 import Timeline from "@/app/_components/OurWork/Timeline";
 import Pagebullets from "@/app/_components/Pagebullets";
 import styles from "@/app/our-work/index.module.scss";
+import { ourWorkOpen } from "@/flags";
 import { trpc } from "@/trpc/server";
 
 const OurWorkTimelinePage = async () => {
+  const isOurWorkOpen = await ourWorkOpen();
+  if (!isOurWorkOpen) {
+    // redirect to home page if the our-work page is closed
+  }
   const timelineData = await trpc.fe.getOurWork();
 
   return (
