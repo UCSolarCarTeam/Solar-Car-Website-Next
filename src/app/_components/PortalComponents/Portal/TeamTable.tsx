@@ -1,177 +1,84 @@
-import Image from "next/image";
-import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
-import { memo, useMemo, useState } from "react";
+"use client";
 
-import EditTeamCell from "@/app/_components/PortalComponents/EditUserCell";
-import DeleteUser from "@/app/_components/PortalComponents/EditUserCell/DeleteUser";
+import { useState } from "react";
+
 import { MoveToAlumniModal } from "@/app/_components/PortalComponents/EditUserCell/MoveToAlumniModal";
+import { useUser } from "@/app/_hooks/useUser";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import { type RouterOutputs } from "@/trpc/react";
 import { trpc } from "@/trpc/react";
-import { type UserResource } from "@clerk/nextjs/types";
+import type { User } from "@prisma/client";
 import {
-  createColumnHelper,
+  type CellContext,
+  type VisibilityState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
-import SearchBar from "../SearchBar";
+import type TeamMember from "../../TeamMember";
 import styles from "./index.module.scss";
+import { columns } from "./team/columns";
 
 export type TeamMember = RouterOutputs["portal"]["getDBUsers"][number];
-
-const TeamTable = (props: {
-  users: TeamMember[];
-  currentUser: UserResource | undefined | null;
-}) => {
+const TeamTable = (props: { users: TeamMember[] }) => {
+  const { user: currentUser } = useUser();
+  const initialVisibility: VisibilityState = {
+    delete: ["admin", "business"].includes(
+      currentUser?.publicMetadata.role ?? "",
+    ),
+    description: false,
+    fieldOfStudy: false,
+    moveToAlumni: ["admin", "business"].includes(
+      currentUser?.publicMetadata.role ?? "",
+    ),
+    schoolYear: false,
+    ucid: false,
+    yearJoined: false,
+  } satisfies Partial<Record<keyof User | ({} & string), boolean>>;
   const utils = trpc.useUtils();
-  const [searchValue, setSearchValue] = useState("");
+  const [globalFilter, setGlobalFilters] = useState([]);
+  const [columnVisibility, setColumnVisibility] =
+    useState<VisibilityState>(initialVisibility);
   const [alumniModal, setAlumniModal] = useState<{
     userId: number;
     userName: string;
   } | null>(null);
-  const dataToRender = useMemo(
-    () =>
-      props.users.filter((user) => {
-        const lowerSearch = searchValue.toLowerCase();
-        return (
-          (user.firstName ?? "").toLowerCase().includes(lowerSearch) ||
-          (user.lastName ?? "").toLowerCase().includes(lowerSearch) ||
-          searchValue.toLowerCase() === ""
-        );
-      }) ?? [],
-    [props.users, searchValue],
-  );
-  const columnHelper = useMemo(() => createColumnHelper<TeamMember>(), []);
-  const columns = useMemo(
-    () => [
-      columnHelper.accessor("profilePictureUrl", {
-        cell: (info) => {
-          return (
-            <Image
-              alt="profile image"
-              fill
-              loading="eager"
-              priority
-              src={info.getValue() ?? defaultProfilePicture}
-              style={{ objectFit: "cover" }}
-            />
-          );
-        },
-        header: () => "Profile Picture",
-      }),
-      columnHelper.accessor("firstName", {
-        cell: (info) => info.getValue(),
-        header: "First Name",
-      }),
-      columnHelper.accessor("lastName", {
-        cell: (info) => info.getValue(),
-        header: "Last Name",
-      }),
-      columnHelper.accessor("ucid", {
-        cell: (info) => info.getValue(),
-        header: "UCID",
-      }),
-      columnHelper.accessor("schoolEmail", {
-        cell: (info) => info.getValue(),
-        header: "School Email",
-      }),
-      columnHelper.accessor("phoneNumber", {
-        cell: (info) => info.getValue(),
-        header: "Phone Number",
-      }),
-      // columnHelper.accessor("fieldOfStudy", {
-      //   cell: (info) => info.getValue(),
-      //   header: "Field of Study",
-      // }),
-      columnHelper.accessor("teamRole", {
-        cell: (info) => {
-          return (info.getValue() ?? "").replace(/([a-z])([A-Z])/g, "$1 $2");
-        },
-        header: "Team Role",
-      }),
-      // columnHelper.accessor("schoolYear", {
-      //   cell: (info) => info.getValue(),
-      //   header: "School Year",
-      // }),
-      // columnHelper.accessor("yearJoined", {
-      //   header: "Year Joined",
-      // }),
-      // columnHelper.accessor("description", {
-      //   cell: (info) => info.getValue(),
-      //   header: "Description",
-      // }),
-      columnHelper.accessor("linkedIn", {
-        cell: (info) => info.getValue(),
-        header: "LinkedIn",
-      }),
-      columnHelper.display({
-        cell: (info) => (
-          <EditTeamCell
-            currentRow={info.row.original}
-            currentUser={props.currentUser}
-          />
-        ),
-        id: "edit",
-      }),
-      columnHelper.display({
-        cell: (info) => (
-          <DeleteUser
-            currentRow={info.row.original}
-            currentUser={props.currentUser}
-          />
-        ),
-        id: "delete",
-      }),
-      columnHelper.display({
-        cell: (info) => {
-          const isActive = !info.row.original.yearRetired;
-          return (
-            <button
-              disabled={!isActive}
-              onClick={() => {
-                setAlumniModal({
-                  userId: info.row.original.id,
-                  userName:
-                    `${info.row.original.firstName ?? ""} ${info.row.original.lastName ?? ""}`.trim(),
-                });
-              }}
-              style={{
-                backgroundColor: isActive ? "#ff4444" : "#ccc",
-                border: "none",
-                borderRadius: "4px",
-                color: "white",
-                cursor: isActive ? "pointer" : "not-allowed",
-                fontSize: "0.875rem",
-                padding: "6px 12px",
-              }}
-              title={isActive ? "Move to Alumni" : "Already an alumni"}
-            >
-              Alumni
-            </button>
-          );
-        },
-        id: "moveToAlumni",
-      }),
-    ],
-
-    [columnHelper, props.currentUser],
-  );
-
+  const { users } = props;
   const handleRefresh = async () => {
     await utils.portal.getDBUsers.invalidate();
   };
+  const handleAlumniClick = (info: CellContext<TeamMember, unknown>) => {
+    setAlumniModal({
+      userId: info.row.original.id,
+      userName:
+        `${info.row.original.firstName ?? ""} ${info.row.original.lastName ?? ""}`.trim(),
+    });
+  };
 
   const table = useReactTable({
-    columns,
-    data: dataToRender,
+    columns: columns(handleAlumniClick),
+    data: users,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    globalFilterFn: "includesString",
     initialState: {
-      columnVisibility: {
-        delete: ["admin", "business"].includes(
-          (props.currentUser?.publicMetadata.role as string) ?? "",
-        ),
-      },
+      columnVisibility: initialVisibility,
+    },
+    onColumnVisibilityChange: setColumnVisibility,
+    onGlobalFilterChange: setGlobalFilters,
+
+    state: {
+      columnVisibility,
+      globalFilter,
     },
   });
 
@@ -179,7 +86,41 @@ const TeamTable = (props: {
     <div id="team">
       <div className={styles.tableHeader}>
         <div>Team Members</div>
-        <SearchBar setSearchValue={setSearchValue} value={searchValue} />
+        <div className="flex items-center py-4 gap-2">
+          <Input
+            className={styles.searchBar}
+            onChange={(event) =>
+              table.setGlobalFilter(String(event.target.value))
+            }
+            placeholder="Filter emails..."
+          />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button className="ml-auto" variant="secondary">
+                Columns
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-40">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      checked={column.getIsVisible()}
+                      className="capitalize"
+                      key={column.id}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       <div className={styles.tableContainer}>
         <table>
@@ -224,4 +165,4 @@ const TeamTable = (props: {
   );
 };
 
-export default memo(TeamTable);
+export default TeamTable;
