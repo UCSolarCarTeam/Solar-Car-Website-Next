@@ -23,7 +23,7 @@ import styles from "./index.module.scss";
 
 export type EntityTableProps<T> = {
   data: T[];
-  initialVisibility: VisibilityState;
+  initialVisibility?: VisibilityState;
   columns: ColumnDef<T, unknown>[];
   children?: React.ReactNode;
   tableHeader?: React.ReactNode;
@@ -40,8 +40,9 @@ export default function EntityTable<T>(props: EntityTableProps<T>) {
   } = props;
   const [globalFilter, setGlobalFilters] = useState([]);
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnVisibility, setColumnVisibility] =
-    useState<VisibilityState>(initialVisibility);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
+    initialVisibility ?? {},
+  );
   const table = useReactTable({
     columns,
     data,

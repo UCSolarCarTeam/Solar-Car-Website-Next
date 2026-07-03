@@ -314,6 +314,15 @@ export const portalRouter = createTRPCRouter({
       where: {
         deletedAt: null,
       },
+      orderBy: [{ year: "desc" }, { monthNum: "desc" }],
+      select: {
+        description: true,
+        id: true,
+        imageUrl: true,
+        monthName: true,
+        monthNum: true,
+        year: true,
+      },
     });
   }),
 
