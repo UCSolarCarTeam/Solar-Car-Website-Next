@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { type RouterOutputs } from "@/trpc/react";
-import { trpc } from "@/trpc/react";
 import type { User } from "@prisma/client";
 import {
   type CellContext,
@@ -31,7 +30,7 @@ import styles from "./index.module.scss";
 import { columns } from "./team/columns";
 
 export type TeamMember = RouterOutputs["portal"]["getDBUsers"][number];
-const TeamTable = (props: { users: TeamMember[] }) => {
+const TeamTable = ({ users }: { users: TeamMember[] }) => {
   const { user: currentUser } = useUser();
   const initialVisibility: VisibilityState = {
     delete: ["admin", "business"].includes(
@@ -47,7 +46,6 @@ const TeamTable = (props: { users: TeamMember[] }) => {
     ucid: false,
     yearJoined: false,
   } satisfies Partial<Record<keyof User | ({} & string), boolean>>;
-  const utils = trpc.useUtils();
   const [globalFilter, setGlobalFilters] = useState([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnVisibility, setColumnVisibility] =
@@ -56,10 +54,6 @@ const TeamTable = (props: { users: TeamMember[] }) => {
     userId: number;
     userName: string;
   } | null>(null);
-  const { users } = props;
-  const handleRefresh = async () => {
-    await utils.portal.getDBUsers.invalidate();
-  };
   const handleAlumniClick = (info: CellContext<TeamMember, unknown>) => {
     setAlumniModal({
       userId: info.row.original.id,
@@ -75,9 +69,6 @@ const TeamTable = (props: { users: TeamMember[] }) => {
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     globalFilterFn: "includesString",
-    initialState: {
-      columnVisibility: initialVisibility,
-    },
     onColumnVisibilityChange: setColumnVisibility,
     onGlobalFilterChange: setGlobalFilters,
     onSortingChange: setSorting,
@@ -98,7 +89,7 @@ const TeamTable = (props: { users: TeamMember[] }) => {
             onChange={(event) =>
               table.setGlobalFilter(String(event.target.value))
             }
-            placeholder="Filter emails..."
+            placeholder="Filter team members..."
           />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -162,7 +153,6 @@ const TeamTable = (props: { users: TeamMember[] }) => {
       {alumniModal && (
         <MoveToAlumniModal
           onClose={() => setAlumniModal(null)}
-          onSuccess={handleRefresh}
           userId={alumniModal.userId}
           userName={alumniModal.userName}
         />

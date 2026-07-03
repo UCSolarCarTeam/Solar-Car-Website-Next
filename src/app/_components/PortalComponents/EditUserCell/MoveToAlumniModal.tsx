@@ -11,24 +11,25 @@ type MoveToAlumniModalProps = {
   userId: number;
   userName: string;
   onClose: () => void;
-  onSuccess: () => void;
 };
 
+const pad = (value: number) => value.toString().padStart(2, "0");
+const today = new Date();
+const currentDateInputValue = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
 export const MoveToAlumniModal = ({
   onClose,
-  onSuccess,
   userId,
   userName,
 }: MoveToAlumniModalProps) => {
   const utils = trpc.useUtils();
-  const today = new Date();
-  const pad = (value: number) => value.toString().padStart(2, "0");
-  const currentDateInputValue = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
   const [yearRetired, setYearRetired] = useState(currentDateInputValue);
   const [company, setCompany] = useState("");
   const [companyTitle, setCompanyTitle] = useState("");
   const moveToAlumniMutation = trpc.portal.moveUserToAlumni.useMutation();
 
+  const onSuccess = async () => {
+    await utils.portal.getDBUsers.invalidate();
+  };
   const handleMove = async () => {
     const retiredDate = new Date(`${yearRetired}T00:00:00`);
     if (Number.isNaN(retiredDate.getTime())) {
@@ -54,7 +55,7 @@ export const MoveToAlumniModal = ({
           success: `${userName} moved to alumni`,
         },
       );
-      onSuccess();
+      await onSuccess();
       onClose();
     } catch (error) {
       toast.error("Failed to move user to alumni");
