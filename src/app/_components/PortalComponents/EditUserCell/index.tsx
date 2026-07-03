@@ -1,19 +1,22 @@
-import React, { memo, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import EditUserPopupAdmin from "@/app/_components/PortalComponents/EditUserCell/EditUserPopupAdmin";
 import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
+import { useUser } from "@clerk/nextjs";
 import { type UserResource } from "@clerk/nextjs/types";
 import { type User } from "@prisma/client";
 
 import BasicButton from "../../Buttons/BasicButton";
 
 export interface EditUserCellProps {
-  currentUser: UserResource | undefined | null;
+  currentUser?: UserResource | undefined | null;
   currentRow: User;
 }
 
 const EditUserCell = ({ currentRow, currentUser }: EditUserCellProps) => {
   const [popupOpen, setPopupOpen] = useState(false);
+  const { user } = useUser();
+  currentUser = currentUser ?? user;
 
   const togglePopup = useCallback(() => {
     setPopupOpen((prev) => !prev);
@@ -49,4 +52,4 @@ const EditUserCell = ({ currentRow, currentUser }: EditUserCellProps) => {
   );
 };
 
-export default memo(EditUserCell);
+export default EditUserCell;

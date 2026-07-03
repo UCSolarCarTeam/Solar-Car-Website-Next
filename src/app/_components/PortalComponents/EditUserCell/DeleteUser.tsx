@@ -9,7 +9,7 @@ import type { User } from "@prisma/client";
 import BasicButton, { ButtonVariant } from "../../Buttons/BasicButton";
 
 export interface DeleteUserProps {
-  currentUser: UserResource | undefined | null;
+  currentUser?: UserResource | undefined | null;
   currentRow: Pick<User, "id">;
 }
 

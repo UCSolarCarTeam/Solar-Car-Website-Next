@@ -16,11 +16,12 @@ import { useSessionStorage } from "@/app/_hooks/useSessionStorage";
 import styles from "@/app/portal/index.module.scss";
 import { type AdminRoles } from "@/server/api/routers/portal";
 import { trpc } from "@/trpc/react";
-import { RedirectToSignIn, useUser } from "@clerk/nextjs";
+import { RedirectToSignIn } from "@clerk/nextjs";
 import { skipToken } from "@tanstack/react-query";
 
 import Loader from "../_components/Loader";
 import OurWorkEntriesTable from "../_components/PortalComponents/Portal/OurWorkEntriesTable";
+import { useUser } from "../_hooks/useUser";
 import { PortalNavigationLinks, adminClerkRoles } from "../_types";
 
 const Portal = () => {
