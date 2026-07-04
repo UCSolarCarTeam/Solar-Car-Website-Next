@@ -1,7 +1,7 @@
 import { type AdminRoles } from "@/server/api/routers/portal";
 import { useUser as useClerkUser } from "@clerk/nextjs";
 
-type ClerkUser =
+export type ClerkUser =
   | (ReturnType<typeof useClerkUser>["user"] & {
       publicMetadata?: {
         role?: AdminRoles | ({} & string);
