@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { MoveToAlumniModal } from "@/app/_components/PortalComponents/EditUserCell/MoveToAlumniModal";
 import { useUser } from "@/app/_hooks/useUser";
@@ -30,6 +30,11 @@ const TeamTable = ({ users }: { users: TeamMember[] }) => {
     ucid: false,
     yearJoined: false,
   } satisfies Partial<Record<keyof User | ({} & string), boolean>>;
+  const [columnVisibility, setColumnVisibility] =
+    useState<VisibilityState>(initialVisibility);
+  useEffect(() => {
+    setColumnVisibility(initialVisibility);
+  }, [initialVisibility]);
   const [alumniModal, setAlumniModal] = useState<{
     userId: number;
     userName: string;
@@ -50,7 +55,7 @@ const TeamTable = ({ users }: { users: TeamMember[] }) => {
       columns={teamColumns}
       data={users}
       filterPlaceholder={"Filter team members..."}
-      initialVisibility={initialVisibility}
+      initialVisibility={columnVisibility}
       tableHeader={"Filter team members..."}
     >
       {alumniModal && (
