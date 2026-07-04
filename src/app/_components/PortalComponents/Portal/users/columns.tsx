@@ -2,13 +2,13 @@ import Image from "next/image";
 import defaultProfilePictureSquare from "public/assets/DefaultProfilePicture-Square.png";
 import Select from "react-select";
 
-import { type ClerkUser } from "@/app/_hooks/useUser";
+import { ClerkUser } from "@/app/_hooks/useUser";
 import { adminClerkRoles } from "@/app/_types";
-import { type AdminRoles, type UserRole } from "@/server/portal/types";
+import { AdminRoles, UserRole } from "@/server/api/routers/portal";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import DeleteClerkUserCell from "../../DeleteClerkUserCell";
-import { type User } from "./UsersTable";
+import { User } from "./UsersTable";
 
 const dropdownOptions = [
   { label: "Admin", value: "admin" },
@@ -54,7 +54,6 @@ export const columns = (
   columnHelper.accessor("role", {
     cell: (info) => (
       <Select
-        instanceId={`portal-user-role-${info.row.original.id}`}
         isDisabled={
           !adminClerkRoles.includes(
             (clerkUser?.publicMetadata.role as AdminRoles) ?? "",
@@ -79,8 +78,8 @@ export const columns = (
     cell: (info) => {
       return <DeleteClerkUserCell clerkId={info.row.original.id} />;
     },
-    enableHiding: false,
     header: () => null,
     id: "delete",
+    enableHiding: false,
   }),
 ];

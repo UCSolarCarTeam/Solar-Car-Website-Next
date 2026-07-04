@@ -1,13 +1,11 @@
-"use client";
-
 import { useUser } from "@/app/_hooks/useUser";
-import { type Sponsor } from "@prisma/client";
+import { type RouterOutputs } from "@/trpc/react";
 import { type ColumnDef, type VisibilityState } from "@tanstack/react-table";
 
 import EntityTable from "../EntityTable";
 import { columns } from "./columns";
 
-export type { Sponsor };
+export type Sponsor = RouterOutputs["portal"]["getSponsorsList"][number];
 
 const SponsorsTable = ({ sponsors }: { sponsors: Sponsor[] }) => {
   const { user } = useUser();

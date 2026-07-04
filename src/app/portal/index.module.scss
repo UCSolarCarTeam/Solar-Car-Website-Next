@@ -1,3 +1,11 @@
+.signInLayout {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .portalContent {
   background-color: white;
   display: grid;
@@ -23,16 +31,12 @@
   flex-direction: column;
   gap: 20px;
 
-  > a,
-  > button {
+  > a {
     text-decoration: none;
     color: black;
     background-color: var(--primary-helios);
     padding: 10px 20px;
     border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    font: inherit;
   }
 }
 

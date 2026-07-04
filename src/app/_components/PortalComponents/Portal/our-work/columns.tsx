@@ -6,7 +6,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 
 import EditOurWorkEntryCell from "../../EditOurWorkEntryCell";
 import DeleteOurWorkEntry from "../../EditOurWorkEntryCell/DeleteOurWorkEntry";
-import { type OurWorkEntry } from "./OurWorkEntriesTable";
+import { OurWorkEntry } from "./OurWorkEntriesTable";
 
 const columnHelper = createColumnHelper<OurWorkEntry>();
 export const columns = [
@@ -76,8 +76,8 @@ export const columns = [
         newEntry={false}
       />
     ),
-    enableHiding: false,
     id: "edit",
+    enableHiding: false,
   }),
   columnHelper.display({
     cell: (info) => (
@@ -92,7 +92,7 @@ export const columns = [
         }}
       />
     ),
-    enableHiding: false,
     id: "delete",
+    enableHiding: false,
   }),
 ];

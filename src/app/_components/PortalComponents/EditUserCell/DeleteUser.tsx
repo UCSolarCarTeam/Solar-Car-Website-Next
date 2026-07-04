@@ -1,8 +1,8 @@
-import { useTransition } from "react";
+import { memo } from "react";
+import toast from "react-hot-toast";
 
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
-import { deleteDBUser } from "@/app/portal/actions";
-import { runPortalAction } from "@/app/portal/_lib/runAction";
+import { trpc } from "@/trpc/react";
 import { type UserResource } from "@clerk/nextjs/types";
 import type { User } from "@prisma/client";
 
@@ -14,21 +14,25 @@ export interface DeleteUserProps {
 }
 
 const DeleteUser = ({ currentRow }: DeleteUserProps) => {
-  const [, startTransition] = useTransition();
+  const utils = trpc.useUtils();
+  const deleteUserMutation = trpc.portal.deleteDBUser.useMutation({
+    onError: () => {
+      toast.error(
+        "There was an error deleting the user. Please contact Telemetry Team.",
+      );
+    },
+    onSuccess: async () => {
+      await toast.promise(utils.portal.getDBUsers.invalidate(), {
+        loading: "Deleting...",
+        success: "User deleted successfully!",
+      });
+    },
+  });
 
   return (
     <div className={styles.editSponsorCell}>
       <BasicButton
-        onConfirmDelete={() => {
-          startTransition(() => {
-            void runPortalAction(() => deleteDBUser({ id: currentRow.id }), {
-              error:
-                "There was an error deleting the user. Please contact Telemetry Team.",
-              loading: "Deleting...",
-              success: "User deleted successfully!",
-            });
-          });
-        }}
+        onConfirmDelete={() => deleteUserMutation.mutate({ id: currentRow.id })}
         variant={ButtonVariant.Delete}
       >
         Delete
@@ -37,4 +41,4 @@ const DeleteUser = ({ currentRow }: DeleteUserProps) => {
   );
 };
 
-export default DeleteUser;
+export default memo(DeleteUser);

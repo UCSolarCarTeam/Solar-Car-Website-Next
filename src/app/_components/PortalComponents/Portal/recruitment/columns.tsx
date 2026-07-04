@@ -7,7 +7,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 
 import EditRecruitmentFormCell from "../../EditRecruitmentFormCell";
 import DeleteForm from "../../EditRecruitmentFormCell/DeleteForm";
-import { type RecruitmentForm } from "./RecruitmentTable";
+import { RecruitmentForm } from "./RecruitmentTable";
 
 const columnHelper = createColumnHelper<RecruitmentForm>();
 export const columns = [
@@ -57,8 +57,8 @@ export const columns = [
         newForm={false}
       />
     ),
-    enableHiding: false,
     id: "edit",
+    enableHiding: false,
   }),
   columnHelper.display({
     cell: (info) => (
@@ -73,7 +73,7 @@ export const columns = [
         currentUser={undefined}
       />
     ),
-    enableHiding: false,
     id: "delete",
+    enableHiding: false,
   }),
 ];

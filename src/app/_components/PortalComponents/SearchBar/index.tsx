@@ -1,4 +1,4 @@
-import { type Dispatch, type SetStateAction } from "react";
+import { type Dispatch, type SetStateAction, memo } from "react";
 
 import styles from "./index.module.scss";
 
@@ -21,4 +21,4 @@ const SearchBar = ({ placeholder, setSearchValue, value }: SearchBarProps) => {
   );
 };
 
-export default SearchBar;
+export default memo(SearchBar);

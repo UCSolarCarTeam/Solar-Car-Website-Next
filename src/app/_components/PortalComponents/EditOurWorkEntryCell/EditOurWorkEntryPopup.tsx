@@ -1,15 +1,11 @@
-import { useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
 import { type EditOurWorkEntryCellProps } from "@/app/_components/PortalComponents/EditOurWorkEntryCell";
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import { compress } from "@/app/_lib/compress";
-import {
-  createOurWorkEntry,
-  updateOurWorkEntry,
-} from "@/app/portal/actions";
-import { runPortalAction } from "@/app/portal/_lib/runAction";
+import { trpc } from "@/trpc/react";
 
 import BasicButton from "../../Buttons/BasicButton";
 import DropZone from "../DropZone";
@@ -23,11 +19,68 @@ const EditOurWorkEntryPopup = ({
   newEntry,
   togglePopup,
 }: EditOurWorkEntryPopupProps) => {
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
+  const utils = trpc.useUtils();
+  const createOurWorkEntry = trpc.portal.createOurWorkEntry.useMutation({
+    onError: (error) => {
+      const errorMessage = error.message.toLowerCase();
+      if (
+        errorMessage.includes("unique") ||
+        errorMessage.includes("duplicate")
+      ) {
+        toast.error(
+          "An entry for this month and year already exists. Please select a different date or edit the existing entry.",
+        );
+      } else {
+        toast.error(
+          "There was an error saving your changes. Please contact Telemetry Team.",
+        );
+      }
+      setSaving(false);
+    },
+    onSuccess: async () => {
+      await toast.promise(utils.portal.getOurWorkList.invalidate(), {
+        loading: "Saving...",
+        success: "Timeline entry created successfully!",
+      });
+      setSaving(false);
       togglePopup();
-    }
-  };
+    },
+  });
+  const mutateOurWorkEntry = trpc.portal.updateOurWorkEntry.useMutation({
+    onError: (error) => {
+      const errorMessage = error.message.toLowerCase();
+      if (
+        errorMessage.includes("unique") ||
+        errorMessage.includes("duplicate")
+      ) {
+        toast.error(
+          "An entry for this month and year already exists. Please select a different date.",
+        );
+      } else {
+        toast.error(
+          "There was an error saving your changes. Please contact Telemetry Team.",
+        );
+      }
+      setSaving(false);
+    },
+    onSuccess: async () => {
+      await toast.promise(utils.portal.getOurWorkList.invalidate(), {
+        loading: "Saving...",
+        success: "Timeline entry updated successfully!",
+      });
+      setSaving(false);
+      togglePopup();
+    },
+  });
+
+  const handleOverlayClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (e.target === e.currentTarget) {
+        togglePopup();
+      }
+    },
+    [togglePopup],
+  );
 
   const [touched, setTouched] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -46,23 +99,25 @@ const EditOurWorkEntryPopup = ({
   });
   const [saving, setSaving] = useState(false);
 
-  const rowDataToRender = {
-    date: {
-      id: "date",
-      label: "Date (Month & Year)",
-      value: dateValue,
-    },
-    description: {
-      id: "description",
-      label: "Description",
-      value: newRowData.description,
-    },
-    imageUrl: {
-      id: "imageUrl",
-      label: "Image",
-      value: newRowData.imageUrl,
-    },
-  };
+  const rowDataToRender = useMemo(() => {
+    return {
+      date: {
+        id: "date",
+        label: "Date (Month & Year)",
+        value: dateValue,
+      },
+      description: {
+        id: "description",
+        label: "Description",
+        value: newRowData.description,
+      },
+      imageUrl: {
+        id: "imageUrl",
+        label: "Image",
+        value: newRowData.imageUrl,
+      },
+    };
+  }, [newRowData, dateValue]);
 
   const onInputChange = (
     e:
@@ -79,50 +134,22 @@ const EditOurWorkEntryPopup = ({
     }
   };
 
-  const saveEntry = async (imageUrl?: string) => {
-    const date = new Date(dateValue);
-    const year = date.getFullYear();
-    const monthNum = date.getMonth() + 1;
-    const monthName = date.toLocaleString("en-US", { month: "long" });
-
-    const payload = {
-      ...newRowData,
-      imageUrl: imageUrl ?? newRowData.imageUrl,
-      monthName,
-      monthNum,
-      year,
-    };
-
-    const messages = {
-      error:
-        "There was an error saving your changes. Please contact Telemetry Team.",
-      loading: "Saving...",
-      success: newEntry
-        ? "Timeline entry created successfully!"
-        : "Timeline entry updated successfully!",
-    };
-
-    const result = newEntry
-      ? await runPortalAction(() => createOurWorkEntry(payload), messages)
-      : await runPortalAction(() => updateOurWorkEntry(payload), messages);
-    setSaving(false);
-    if (result.success) {
-      togglePopup();
-    } else if (
-      result.error?.toLowerCase().includes("unique") ||
-      result.error?.toLowerCase().includes("duplicate")
-    ) {
-      toast.error(
-        newEntry
-          ? "An entry for this month and year already exists. Please select a different date or edit the existing entry."
-          : "An entry for this month and year already exists. Please select a different date.",
-      );
-    }
-  };
-
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     if (touched) {
       setSaving(true);
+
+      // Extract year, monthNum, monthName from date input
+      const date = new Date(dateValue);
+      const year = date.getFullYear();
+      const monthNum = date.getMonth() + 1;
+      const monthName = date.toLocaleString("en-US", { month: "long" });
+
+      const payload = {
+        ...newRowData,
+        monthName,
+        monthNum,
+        year,
+      };
 
       if (imageFile) {
         const reader = new FileReader();
@@ -143,7 +170,17 @@ const EditOurWorkEntryPopup = ({
             const { publicUrl } = (await response.json()) as {
               publicUrl: string;
             };
-            await saveEntry(publicUrl);
+            if (newEntry) {
+              createOurWorkEntry.mutate({
+                ...payload,
+                imageUrl: publicUrl,
+              });
+            } else {
+              mutateOurWorkEntry.mutate({
+                ...payload,
+                imageUrl: publicUrl,
+              });
+            }
           } catch (error) {
             toast.error(
               "There was an error saving your changes. Please contact Telemetry Team.",
@@ -156,14 +193,27 @@ const EditOurWorkEntryPopup = ({
         const compressedFile = await compress(imageFile);
         reader.readAsDataURL(compressedFile);
       } else {
-        await saveEntry();
+        if (newEntry) {
+          createOurWorkEntry.mutate(payload);
+        } else {
+          mutateOurWorkEntry.mutate(payload);
+        }
       }
     } else {
       togglePopup();
     }
-  };
+  }, [
+    createOurWorkEntry,
+    imageFile,
+    mutateOurWorkEntry,
+    newRowData,
+    newEntry,
+    togglePopup,
+    touched,
+    dateValue,
+  ]);
 
-  const handleFileUpload = (file: File) => {
+  const handleFileUpload = useCallback((file: File) => {
     setTouched(true);
     if (file) {
       setImageFile(file);
@@ -172,7 +222,7 @@ const EditOurWorkEntryPopup = ({
         imageUrl: URL.createObjectURL(file),
       }));
     }
-  };
+  }, []);
 
   return (
     <div className={styles.popup} onClick={handleOverlayClick}>
@@ -252,4 +302,4 @@ const EditOurWorkEntryPopup = ({
   );
 };
 
-export default EditOurWorkEntryPopup;
+export default memo(EditOurWorkEntryPopup);

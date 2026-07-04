@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import { MoveToAlumniModal } from "@/app/_components/PortalComponents/EditUserCell/MoveToAlumniModal";
 import { useUser } from "@/app/_hooks/useUser";
+import { type RouterOutputs } from "@/trpc/react";
 import type { User } from "@prisma/client";
 import {
   type CellContext,
@@ -14,7 +15,7 @@ import {
 import EntityTable from "../EntityTable";
 import { columns } from "./columns";
 
-export type TeamMember = User;
+export type TeamMember = RouterOutputs["portal"]["getDBUsers"][number];
 const TeamTable = ({ users }: { users: TeamMember[] }) => {
   const { user } = useUser();
   const initialVisibility: VisibilityState = {

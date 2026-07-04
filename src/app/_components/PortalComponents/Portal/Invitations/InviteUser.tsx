@@ -1,27 +1,41 @@
-import { useState, useTransition } from "react";
+import { memo, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import Select from "react-select";
 
 import BasicButton from "@/app/_components/Buttons/BasicButton";
 import SearchBar from "@/app/_components/PortalComponents/SearchBar";
-import { inviteUser as inviteUserAction } from "@/app/portal/actions";
-import { runPortalAction } from "@/app/portal/_lib/runAction";
-import { type UserRole } from "@/server/portal/types";
+import { type UserRole } from "@/server/api/routers/portal";
+import { trpc } from "@/trpc/react";
 
 import styles from "../index.module.scss";
 
-const ROLE_OPTIONS = [
-  { label: "Member", value: "member" },
-  { label: "Admin", value: "admin" },
-  { label: "Business", value: "business" },
-  { label: "Mechanical Lead", value: "mechanicallead" },
-  { label: "Electrical Lead", value: "electricallead" },
-];
-
 const InviteUser = () => {
   const [email, setEmail] = useState<string>("");
-  const [selectedRole, setSelectedRole] = useState(ROLE_OPTIONS[0]);
-  const [isPending, startTransition] = useTransition();
+
+  const dropdownOptions = useMemo(
+    () => [
+      { label: "Member", value: "member" },
+      { label: "Admin", value: "admin" },
+      { label: "Business", value: "business" },
+      { label: "Mechanical Lead", value: "mechanicallead" },
+      { label: "Electrical Lead", value: "electricallead" },
+    ],
+    [],
+  );
+  const [selectedRole, setSelectedRole] = useState(dropdownOptions[0]);
+
+  const utils = trpc.useUtils();
+  const inviteUserMutation = trpc.portal.inviteUser.useMutation({
+    onError: (error) => {
+      toast.error("Failed to invite user: " + error.message);
+    },
+    onSuccess: async () => {
+      await toast.promise(utils.portal.getInvitedUsers.invalidate(), {
+        loading: "Inviting...",
+        success: "User invited successfully!",
+      });
+    },
+  });
 
   const inviteUser = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -33,24 +47,16 @@ const InviteUser = () => {
       return;
     }
 
+    // this is a redundant check because you can't clear the select
+    // but react-select complain unless you put it here so
     if (!selectedRole) {
       toast.error("Please select a role.");
       return;
     }
 
-    startTransition(() => {
-      void runPortalAction(
-        () =>
-          inviteUserAction({
-            email,
-            selectedRole: selectedRole.value as UserRole,
-          }),
-        {
-          error: "Failed to invite user.",
-          loading: "Inviting...",
-          success: "User invited successfully!",
-        },
-      );
+    inviteUserMutation.mutate({
+      email,
+      selectedRole: selectedRole.value as UserRole,
     });
   };
 
@@ -62,7 +68,6 @@ const InviteUser = () => {
         value={email}
       />
       <Select
-        instanceId="portal-invite-user-role"
         isClearable={false}
         isDisabled={email.length === 0 ? true : false}
         isSearchable={false}
@@ -71,7 +76,9 @@ const InviteUser = () => {
             setSelectedRole(option);
           }
         }}
-        options={ROLE_OPTIONS}
+        options={dropdownOptions}
+        // if we dont want inline styles we can change this to
+        // classnames but have to look at docs
         styles={{
           control: (provided) => ({
             ...provided,
@@ -91,11 +98,14 @@ const InviteUser = () => {
         }}
         value={selectedRole}
       />
-      <BasicButton disabled={isPending || !email.trim()} onClick={inviteUser}>
-        {isPending ? "Inviting..." : "Invite"}
+      <BasicButton
+        disabled={inviteUserMutation.isPending || !email.trim()}
+        onClick={inviteUser}
+      >
+        {inviteUserMutation.isPending ? "Inviting..." : "Invite"}
       </BasicButton>
     </div>
   );
 };
 
-export default InviteUser;
+export default memo(InviteUser);

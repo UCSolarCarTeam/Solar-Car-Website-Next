@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
-import { moveUserToAlumni } from "@/app/portal/actions";
-import { runPortalAction } from "@/app/portal/_lib/runAction";
+import { trpc } from "@/trpc/react";
 
 import styles from "./index.module.scss";
 
@@ -26,39 +25,46 @@ export const MoveToAlumniModal = ({
   userId,
   userName,
 }: MoveToAlumniModalProps) => {
+  const utils = trpc.useUtils();
   const currentDateInputValue = getCurrentDateInputValue();
   const [yearRetired, setYearRetired] = useState(currentDateInputValue);
   const [company, setCompany] = useState("");
   const [companyTitle, setCompanyTitle] = useState("");
-  const [isPending, startTransition] = useTransition();
+  const moveToAlumniMutation = trpc.portal.moveUserToAlumni.useMutation();
 
-  const handleMove = () => {
+  const onSuccess = async () => {
+    await utils.portal.getDBUsers.invalidate();
+  };
+  const handleMove = async () => {
     const retiredDate = new Date(`${yearRetired}T00:00:00`);
     if (Number.isNaN(retiredDate.getTime())) {
       toast.error("Please enter a valid date");
       return;
     }
 
-    startTransition(() => {
-      void runPortalAction(
-        () =>
-          moveUserToAlumni({
-            company: company || null,
-            companyTitle: companyTitle || null,
-            id: userId,
-            yearRetired: retiredDate,
-          }),
+    try {
+      await moveToAlumniMutation.mutateAsync({
+        company: company || null,
+        companyTitle: companyTitle || null,
+        id: userId,
+        yearRetired,
+      });
+
+      await toast.promise(
+        Promise.all([
+          utils.portal.getDBUsers.invalidate(),
+          utils.portal.getAlumniList.invalidate(),
+        ]),
         {
-          error: "Failed to move user to alumni",
-          loading: "Moving to alumni...",
+          loading: "Refreshing tables...",
           success: `${userName} moved to alumni`,
         },
-      ).then((result) => {
-        if (result.success) {
-          onClose();
-        }
-      });
-    });
+      );
+      await onSuccess();
+      onClose();
+    } catch (error) {
+      toast.error("Failed to move user to alumni");
+    }
   };
 
   return (
@@ -95,17 +101,17 @@ export const MoveToAlumniModal = ({
         <div className={styles.modalActions}>
           <button
             className={styles.cancelButton}
-            disabled={isPending}
+            disabled={moveToAlumniMutation.isPending}
             onClick={onClose}
           >
             Cancel
           </button>
           <button
             className={styles.confirmButton}
-            disabled={isPending}
+            disabled={moveToAlumniMutation.isPending}
             onClick={handleMove}
           >
-            {isPending ? "Moving..." : "Move to Alumni"}
+            {moveToAlumniMutation.isPending ? "Moving..." : "Move to Alumni"}
           </button>
         </div>
       </div>

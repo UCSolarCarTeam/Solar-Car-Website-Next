@@ -1,43 +1,44 @@
-"use client";
-
 import { PlusIcon } from "lucide-react";
-import { useState, useTransition } from "react";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
-import { deleteDBUser } from "@/app/portal/actions";
-import { runPortalAction } from "@/app/portal/_lib/runAction";
-import { type User } from "@prisma/client";
-import { type ColumnDef } from "@tanstack/react-table";
+import { type RouterOutputs, trpc } from "@/trpc/react";
+import { ColumnDef } from "@tanstack/react-table";
 
 import EditAlumniPopupAdmin from "../../EditUserCell/EditAlumniPopupAdmin";
 import EntityTable from "../EntityTable";
 import { columns } from "./columns";
 
-export type AlumniMember = User;
+// Helper type for Alumni from the router
+export type AlumniMember = RouterOutputs["portal"]["getAlumniList"][number];
 
 const AlumniTable = ({ alumni: data }: { alumni: AlumniMember[] }) => {
   const [createPopupOpen, setCreatePopupOpen] = useState(false);
   const [editingAlumni, setEditingAlumni] = useState<AlumniMember | null>(null);
-  const [, startTransition] = useTransition();
 
-  const handleDelete = (id: number) => {
-    startTransition(() => {
-      void runPortalAction(() => deleteDBUser({ id }), {
-        error:
-          "There was an error deleting the alumni. Please contact Telemetry Team.",
+  const utils = trpc.useUtils();
+  const deleteDBUserMutation = trpc.portal.deleteDBUser.useMutation({
+    onError: () => {
+      toast.error(
+        "There was an error deleting the alumni. Please contact Telemetry Team.",
+      );
+    },
+    onSuccess: async () => {
+      await toast.promise(utils.portal.getAlumniList.invalidate(), {
+        error: (err: Error) =>
+          `Failed to delete alumni: ${err?.message || "Unknown error"}`,
         loading: "Deleting...",
         success: "Alumni deleted successfully!",
       });
-    });
-  };
+    },
+  });
 
   const alumniColumns = columns(
     (alumni) => setEditingAlumni(alumni),
-    handleDelete,
+    (id) => deleteDBUserMutation.mutate({ id }),
   );
-
   return (
     <EntityTable
-      columns={alumniColumns as ColumnDef<AlumniMember, unknown>[]}
       data={data}
       tableHeader={
         <div className="flex items-center gap-2 justify-between">
@@ -49,6 +50,7 @@ const AlumniTable = ({ alumni: data }: { alumni: AlumniMember[] }) => {
           />
         </div>
       }
+      columns={alumniColumns as ColumnDef<AlumniMember, unknown>[]}
     >
       {createPopupOpen && (
         <EditAlumniPopupAdmin togglePopup={() => setCreatePopupOpen(false)} />

@@ -1,12 +1,11 @@
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
 import { type EditSponsorCellProps } from "@/app/_components/PortalComponents/EditSponsorCell";
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import { compress } from "@/app/_lib/compress";
-import { createSponsor, updateSponsor } from "@/app/portal/actions";
-import { runPortalAction } from "@/app/portal/_lib/runAction";
+import { trpc } from "@/trpc/react";
 import { SponsorLevel } from "@prisma/client";
 
 import BasicButton from "../../Buttons/BasicButton";
@@ -21,11 +20,48 @@ const EditSponsorPopup = ({
   newSponsor,
   togglePopup,
 }: EditSponsorPopupProps) => {
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
+  const utils = trpc.useUtils();
+  const createSponsor = trpc.portal.createSponsor.useMutation({
+    onError: () => {
+      toast.error(
+        "There was an error saving your changes. Please contact Telemetry Team.",
+      );
+      setSaving(false);
+    },
+    onSuccess: async () => {
+      await toast.promise(utils.portal.getSponsorsList.invalidate(), {
+        loading: "Saving...",
+        success: "Sponsor created successfully!",
+      });
+      setSaving(false);
       togglePopup();
-    }
-  };
+    },
+  });
+  const mutateSponsor = trpc.portal.updateSponsor.useMutation({
+    onError: () => {
+      toast.error(
+        "There was an error saving your changes. Please contact Telemetry Team.",
+      );
+      setSaving(false);
+    },
+    onSuccess: async () => {
+      await toast.promise(utils.portal.getSponsorsList.invalidate(), {
+        loading: "Saving...",
+        success: "Sponsor updated successfully!",
+      });
+      setSaving(false);
+      togglePopup();
+    },
+  });
+
+  const handleOverlayClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (e.target === e.currentTarget) {
+        togglePopup();
+      }
+    },
+    [togglePopup],
+  );
 
   const [touched, setTouched] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -35,31 +71,33 @@ const EditSponsorPopup = ({
   });
   const [saving, setSaving] = useState(false);
 
-  const rowDataToRender = Object.entries(newRowData)
-    .filter(([key]) => !["id"].includes(key))
-    .reduce(
-      (acc, [key, value]) => {
-        acc[key] = {
-          id: key,
-          label:
-            key === "logoUrl"
-              ? "Logo"
-              : key
-                  .replace(/([a-z])([A-Z])/g, "$1 $2")
-                  .replace(/^./, (match) => match.toUpperCase()),
-          value: value,
-        };
-        return acc;
-      },
-      {} as Record<
-        string,
-        {
-          id: string;
-          label: string;
-          value: string | number | null | undefined;
-        }
-      >,
-    );
+  const rowDataToRender = useMemo(() => {
+    return Object.entries(newRowData)
+      .filter(([key]) => !["id"].includes(key))
+      .reduce(
+        (acc, [key, value]) => {
+          acc[key] = {
+            id: key,
+            label:
+              key === "logoUrl"
+                ? "Logo"
+                : key
+                    .replace(/([a-z])([A-Z])/g, "$1 $2")
+                    .replace(/^./, (match) => match.toUpperCase()),
+            value: value,
+          };
+          return acc;
+        },
+        {} as Record<
+          string,
+          {
+            id: string;
+            label: string;
+            value: string | number | null | undefined;
+          }
+        >,
+      );
+  }, [newRowData]);
 
   const onInputChange = (
     e:
@@ -71,32 +109,7 @@ const EditSponsorPopup = ({
     setNewRowData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const saveSponsor = async (logoUrl?: string) => {
-    const payload = {
-      ...newRowData,
-      logoUrl: logoUrl ?? newRowData.logoUrl,
-    };
-
-    const messages = {
-      error:
-        "There was an error saving your changes. Please contact Telemetry Team.",
-      loading: "Saving...",
-      success: newSponsor
-        ? "Sponsor created successfully!"
-        : "Sponsor updated successfully!",
-    };
-
-    const result = newSponsor
-      ? await runPortalAction(() => createSponsor(payload), messages)
-      : await runPortalAction(() => updateSponsor(payload), messages);
-
-    setSaving(false);
-    if (result.success) {
-      togglePopup();
-    }
-  };
-
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     if (touched) {
       setSaving(true);
       if (imageFile) {
@@ -118,27 +131,53 @@ const EditSponsorPopup = ({
             const { publicUrl } = (await response.json()) as {
               publicUrl: string;
             };
-            await saveSponsor(publicUrl);
+            if (newSponsor) {
+              createSponsor.mutate({
+                ...newRowData,
+                logoUrl: publicUrl,
+              });
+            } else {
+              mutateSponsor.mutate({
+                ...newRowData,
+                logoUrl: publicUrl,
+              });
+            }
           } catch (error) {
             toast.error(
               "There was an error saving your changes. Please contact Telemetry Team.",
             );
             global.console.log(error);
-            setSaving(false);
+            togglePopup();
           }
         };
 
         const compressedFile = await compress(imageFile);
         reader.readAsDataURL(compressedFile);
       } else {
-        await saveSponsor();
+        if (newSponsor) {
+          createSponsor.mutate({
+            ...newRowData,
+          });
+        } else {
+          mutateSponsor.mutate({
+            ...newRowData,
+          });
+        }
       }
     } else {
       togglePopup();
     }
-  };
+  }, [
+    createSponsor,
+    imageFile,
+    mutateSponsor,
+    newRowData,
+    newSponsor,
+    togglePopup,
+    touched,
+  ]);
 
-  const handleFileUpload = (file: File) => {
+  const handleFileUpload = useCallback((file: File) => {
     setTouched(true);
     if (file) {
       setImageFile(file);
@@ -147,7 +186,7 @@ const EditSponsorPopup = ({
         logoUrl: URL.createObjectURL(file),
       }));
     }
-  };
+  }, []);
 
   return (
     <div className={styles.popup} onClick={handleOverlayClick}>

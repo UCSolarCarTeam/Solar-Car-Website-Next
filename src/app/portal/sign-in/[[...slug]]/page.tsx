@@ -1,7 +1,9 @@
+import { memo } from "react";
+
 import { SignIn } from "@clerk/nextjs";
 
 const SignInPage = () => {
   return <SignIn withSignUp />;
 };
 
-export default SignInPage;
+export default memo(SignInPage);

@@ -1,5 +1,5 @@
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
-import { useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
@@ -18,8 +18,7 @@ import {
   teamRoleOptions,
   userRowMetadata,
 } from "@/app/_types";
-import { updateDBUser } from "@/app/portal/actions";
-import { runPortalAction } from "@/app/portal/_lib/runAction";
+import { trpc } from "@/trpc/react";
 
 import BasicButton from "../../Buttons/BasicButton";
 import DropZone from "../DropZone";
@@ -33,61 +32,80 @@ const EditUserPopupAdmin = ({
   currentUser,
   togglePopup,
 }: EditUserPopupAdminProps) => {
+  const utils = trpc.useUtils();
   const uploadProfilePicMutation = useUploadProfilePic();
+  const mutateUserContent = trpc.portal.updateDBUser.useMutation({
+    onError: () => {
+      toast.error(
+        "There was an error saving your changes. Please contact Telemetry Team.",
+      );
+    },
+    onSuccess: async () => {
+      await toast.promise(utils.portal.getDBUsers.invalidate(), {
+        loading: "Saving...",
+        success: "Profile updated successfully!",
+      });
+      togglePopup();
+    },
+  });
   const [touched, setTouched] = useState(false);
   const [newRowData, setNewRowData] = useState(currentRow);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [validationErrors, setValidationErrors] = useState<UserFormErrors>({});
-  const [saving, setSaving] = useState(false);
   const MAX_DESCRIPTION_LENGTH = 250;
 
-  const rowDataToRender = Object.entries(newRowData)
-    .filter(
-      ([key]) => !["id", "clerkUserId", "profilePictureUrl"].includes(key),
-    )
-    .reduce(
-      (acc, [key, value]) => {
-        let displayValue: string | number | null | undefined;
-        if (userRowMetadata[key as keyof typeof userRowMetadata] === "date") {
-          displayValue = formatDateOnly(
-            value as Date | string | null | undefined,
-          );
-        } else {
-          displayValue = value as string | number | null | undefined;
-        }
+  const rowDataToRender = useMemo(() => {
+    return Object.entries(newRowData)
+      .filter(
+        ([key]) => !["id", "clerkUserId", "profilePictureUrl"].includes(key),
+      )
+      .reduce(
+        (acc, [key, value]) => {
+          let displayValue: string | number | null | undefined;
+          if (userRowMetadata[key as keyof typeof userRowMetadata] === "date") {
+            displayValue = formatDateOnly(
+              value as Date | string | null | undefined,
+            );
+          } else {
+            displayValue = value as string | number | null | undefined;
+          }
 
-        acc[key] = {
-          id: key,
-          label:
-            key === "ucid"
-              ? "UCID"
-              : key === "linkedIn"
-                ? "LinkedIn"
-                : key === "description"
-                  ? "About Me"
-                  : key
-                      .replace(/([a-z])([A-Z])/g, "$1 $2")
-                      .replace(/^./, (match) => match.toUpperCase()),
+          acc[key] = {
+            id: key,
+            label:
+              key === "ucid"
+                ? "UCID"
+                : key === "linkedIn"
+                  ? "LinkedIn"
+                  : key === "description"
+                    ? "About Me"
+                    : key
+                        .replace(/([a-z])([A-Z])/g, "$1 $2")
+                        .replace(/^./, (match) => match.toUpperCase()),
 
-          value: displayValue,
-        };
-        return acc;
-      },
-      {} as Record<
-        string,
-        {
-          id: string;
-          label: string;
-          value: string | number | null | undefined;
-        }
-      >,
-    );
+            value: displayValue,
+          };
+          return acc;
+        },
+        {} as Record<
+          string,
+          {
+            id: string;
+            label: string;
+            value: string | number | null | undefined;
+          }
+        >,
+      );
+  }, [newRowData]);
 
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
-      togglePopup();
-    }
-  };
+  const handleOverlayClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (e.target === e.currentTarget) {
+        togglePopup();
+      }
+    },
+    [togglePopup],
+  );
 
   const onInputChange = (
     e:
@@ -98,6 +116,7 @@ const EditUserPopupAdmin = ({
     const { id, value } = e.target;
     setTouched(true);
 
+    // clear the field's validation errors
     setValidationErrors((prev) => {
       const newErrors = { ...prev };
       delete newErrors[id as keyof UserFormData];
@@ -111,6 +130,7 @@ const EditUserPopupAdmin = ({
       }));
       return;
     }
+    // set a max length on description field
     if (id === "description") {
       const truncated = value.slice(0, MAX_DESCRIPTION_LENGTH);
       setNewRowData((prev) => ({ ...prev, [id]: truncated }));
@@ -119,30 +139,7 @@ const EditUserPopupAdmin = ({
     setNewRowData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const saveUser = async (profilePictureUrl?: string) => {
-    setSaving(true);
-    const result = await runPortalAction(
-      () =>
-        updateDBUser({
-          ...newRowData,
-          profilePictureUrl: profilePictureUrl ?? newRowData.profilePictureUrl,
-          yearJoined: parseDateOnly(newRowData.yearJoined),
-          yearRetired: parseDateOnly(newRowData.yearRetired),
-        }),
-      {
-        error:
-          "There was an error saving your changes. Please contact Telemetry Team.",
-        loading: "Saving...",
-        success: "Profile updated successfully!",
-      },
-    );
-    setSaving(false);
-    if (result.success) {
-      togglePopup();
-    }
-  };
-
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     if (!touched) {
       togglePopup();
       return;
@@ -172,16 +169,32 @@ const EditUserPopupAdmin = ({
         { file: imageFile, fileName: imageFile.name },
         {
           onSuccess: (profilePictureUrl) => {
-            void saveUser(profilePictureUrl);
+            mutateUserContent.mutate({
+              ...newRowData,
+              profilePictureUrl,
+              yearJoined: parseDateOnly(newRowData.yearJoined),
+              yearRetired: parseDateOnly(newRowData.yearRetired),
+            });
           },
         },
       );
     } else {
-      await saveUser();
+      mutateUserContent.mutate({
+        ...newRowData,
+        yearJoined: parseDateOnly(newRowData.yearJoined),
+        yearRetired: parseDateOnly(newRowData.yearRetired),
+      });
     }
-  };
+  }, [
+    imageFile,
+    newRowData,
+    togglePopup,
+    touched,
+    mutateUserContent,
+    uploadProfilePicMutation,
+  ]);
 
-  const handleFileUpload = (file: File) => {
+  const handleFileUpload = useCallback((file: File) => {
     setTouched(true);
     if (file) {
       setImageFile(file);
@@ -190,13 +203,11 @@ const EditUserPopupAdmin = ({
         profilePictureUrl: URL.createObjectURL(file),
       }));
     }
-  };
+  }, []);
 
   const currentProfileImage = imageFile
     ? URL.createObjectURL(imageFile)
     : (newRowData.profilePictureUrl ?? defaultProfilePicture);
-
-  const isPending = uploadProfilePicMutation.isPending || saving;
 
   return (
     <div className={styles.popup} onClick={handleOverlayClick}>
@@ -309,7 +320,7 @@ const EditUserPopupAdmin = ({
           )}
         </div>
         <div className={styles.buttonContainer}>
-          {isPending ? (
+          {uploadProfilePicMutation.isPending || mutateUserContent.isPending ? (
             <p>Saving...</p>
           ) : (
             <>
@@ -328,4 +339,4 @@ const EditUserPopupAdmin = ({
   );
 };
 
-export default EditUserPopupAdmin;
+export default memo(EditUserPopupAdmin);

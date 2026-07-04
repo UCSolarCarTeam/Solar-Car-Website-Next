@@ -2,43 +2,36 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import logo from "public/assets/logo-center-black.png";
-import { useState } from "react";
+import { memo, useState } from "react";
 
 import styles from "@/app/_components/PortalComponents/Portal/index.module.scss";
 import Chevron from "@/app/_components/svgs/Chevron";
 import useViewport from "@/app/_hooks/useViewport";
-import { portalNavItems } from "@/app/_types";
+import { PortalNavigationLinks, adminClerkRoles } from "@/app/_types";
+import { type AdminRoles } from "@/server/api/routers/portal";
 import { UserButton } from "@clerk/nextjs";
+import { type UserResource } from "@clerk/nextjs/types";
 
 interface PortalPageHeaderProps {
-  isAdmin: boolean;
-  username: string;
+  currentUser: UserResource | undefined | null;
+  currentPage: string;
+  setCurrentPage: React.Dispatch<React.SetStateAction<PortalNavigationLinks>>;
 }
 
-const PortalPageHeader = ({ isAdmin, username }: PortalPageHeaderProps) => {
+const PortalPageHeader = ({
+  currentPage,
+  currentUser,
+  setCurrentPage,
+}: PortalPageHeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const pathname = usePathname();
   const { width } = useViewport();
   const isMobile = width !== undefined && width <= 640;
 
-  const closeMenu = () => setIsMenuOpen(false);
-
-  const navLinkClassName = (href: string) =>
-    pathname === href ? styles.active : undefined;
-
-  const renderNavLinks = () =>
-    portalNavItems.map(({ href, label }) => (
-      <Link
-        className={navLinkClassName(href)}
-        href={href}
-        key={href}
-        onClick={closeMenu}
-      >
-        {label}
-      </Link>
-    ));
+  const handleMenuItemClick = (page: PortalNavigationLinks) => {
+    setCurrentPage(page);
+    setIsMenuOpen(false);
+  };
 
   return (
     <>
@@ -47,35 +40,144 @@ const PortalPageHeader = ({ isAdmin, username }: PortalPageHeaderProps) => {
           <Link href="/">
             <Image alt="navlogo" height={48} src={logo} width={48} />
           </Link>
-          {isAdmin && (
+          {adminClerkRoles.includes(
+            (currentUser?.publicMetadata.role as AdminRoles) ?? "",
+          ) && (
             <>
               {!isMobile && (
-                <nav className={styles.desktopNavLinks}>{renderNavLinks()}</nav>
+                <div className={styles.desktopNavLinks}>
+                  <div
+                    className={`${currentPage === "team" ? styles.active : ""}`}
+                    onClick={() =>
+                      handleMenuItemClick(PortalNavigationLinks.Team)
+                    }
+                  >
+                    Team
+                  </div>
+                  <div
+                    className={`${currentPage === "users" ? styles.active : ""}`}
+                    onClick={() =>
+                      handleMenuItemClick(PortalNavigationLinks.Users)
+                    }
+                  >
+                    Users
+                  </div>
+                  <div
+                    className={`${currentPage === "sponsors" ? styles.active : ""}`}
+                    onClick={() =>
+                      handleMenuItemClick(PortalNavigationLinks.Sponsors)
+                    }
+                  >
+                    Sponsors
+                  </div>
+                  <div
+                    className={`${currentPage === "invitations" ? styles.active : ""}`}
+                    onClick={() =>
+                      handleMenuItemClick(PortalNavigationLinks.Invitations)
+                    }
+                  >
+                    Invitations
+                  </div>
+                  <div
+                    className={`${currentPage === "recruitment" ? styles.active : ""}`}
+                    onClick={() =>
+                      handleMenuItemClick(PortalNavigationLinks.Recruitment)
+                    }
+                  >
+                    Recruitment
+                  </div>
+                  <div
+                    className={`${currentPage === "our-work" ? styles.active : ""}`}
+                    onClick={() =>
+                      handleMenuItemClick(PortalNavigationLinks.OurWork)
+                    }
+                  >
+                    Our Work
+                  </div>
+                  <div
+                    className={`${currentPage === "alumni" ? styles.active : ""}`}
+                    onClick={() =>
+                      handleMenuItemClick(PortalNavigationLinks.Alumni)
+                    }
+                  >
+                    Alumni
+                  </div>
+                </div>
               )}
               {isMobile && (
-                <button
-                  aria-expanded={isMenuOpen}
-                  aria-label="Toggle navigation menu"
+                <div
                   className={styles.hamburgerIcon}
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  type="button"
                 >
                   <Chevron className={styles.chevronIcon} />
-                </button>
+                </div>
               )}
             </>
           )}
         </div>
         <div className={styles.profilePicture}>
-          {username}
+          {currentUser?.username}
           <UserButton />
         </div>
       </header>
-      {isMobile && isMenuOpen && isAdmin && (
-        <nav className={styles.mobileMenuDropdown}>{renderNavLinks()}</nav>
-      )}
+      {isMobile &&
+        isMenuOpen &&
+        adminClerkRoles.includes(
+          (currentUser?.publicMetadata.role as AdminRoles) ?? "",
+        ) && (
+          <div className={styles.mobileMenuDropdown}>
+            <div
+              className={`${currentPage === "team" ? styles.active : ""}`}
+              onClick={() => handleMenuItemClick(PortalNavigationLinks.Team)}
+            >
+              Team
+            </div>
+            <div
+              className={`${currentPage === "users" ? styles.active : ""}`}
+              onClick={() => handleMenuItemClick(PortalNavigationLinks.Users)}
+            >
+              Users
+            </div>
+            <div
+              className={`${currentPage === "sponsors" ? styles.active : ""}`}
+              onClick={() =>
+                handleMenuItemClick(PortalNavigationLinks.Sponsors)
+              }
+            >
+              Sponsors
+            </div>
+            <div
+              className={`${currentPage === "invitations" ? styles.active : ""}`}
+              onClick={() =>
+                handleMenuItemClick(PortalNavigationLinks.Invitations)
+              }
+            >
+              Invitations
+            </div>
+            <div
+              className={`${currentPage === "recruitment" ? styles.active : ""}`}
+              onClick={() =>
+                handleMenuItemClick(PortalNavigationLinks.Recruitment)
+              }
+            >
+              Recruitment
+            </div>
+            <div
+              className={`${currentPage === "our-work" ? styles.active : ""}`}
+              onClick={() => handleMenuItemClick(PortalNavigationLinks.OurWork)}
+            >
+              Our Work
+            </div>
+            <div
+              className={`${currentPage === "alumni" ? styles.active : ""}`}
+              onClick={() => handleMenuItemClick(PortalNavigationLinks.Alumni)}
+            >
+              Alumni
+            </div>
+          </div>
+        )}
     </>
   );
 };
 
-export default PortalPageHeader;
+export default memo(PortalPageHeader);

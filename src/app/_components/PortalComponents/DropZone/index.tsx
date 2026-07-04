@@ -1,5 +1,5 @@
 import Image, { type StaticImageData } from "next/image";
-import React from "react";
+import React, { memo, useCallback } from "react";
 
 import Upload from "../../svgs/Upload";
 import styles from "./index.module.scss";
@@ -10,38 +10,44 @@ interface DropZoneProps {
 }
 
 const DropZone = ({ currentImage, handleFileUpload }: DropZoneProps) => {
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    const files = Array.from(e.dataTransfer.files)
-      .filter(
-        (file) =>
-          file.type.startsWith("image/") ||
-          file.name.toLowerCase().endsWith("jxl"),
-      )
-      .map((file) => ({
-        file,
-      }));
-    if (files[0]?.file) {
-      handleFileUpload(files[0]?.file);
-    }
-  };
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      const files = Array.from(e.dataTransfer.files)
+        .filter(
+          (file) =>
+            file.type.startsWith("image/") ||
+            file.name.toLowerCase().endsWith("jxl"),
+        )
+        .map((file) => ({
+          file,
+        }));
+      if (files[0]?.file) {
+        handleFileUpload(files[0]?.file);
+      }
+    },
+    [handleFileUpload],
+  );
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
-  };
+  }, []);
 
-  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files ?? [])
-      .filter((file) => file.type.startsWith("image/"))
-      .map((file) => ({
-        file,
-        id: crypto.randomUUID(),
-      }));
-    if (files[0]?.file) {
-      handleFileUpload(files[0]?.file);
-    }
-    e.target.value = "";
-  };
+  const handleFileInput = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = Array.from(e.target.files ?? [])
+        .filter((file) => file.type.startsWith("image/"))
+        .map((file) => ({
+          file,
+          id: crypto.randomUUID(),
+        }));
+      if (files[0]?.file) {
+        handleFileUpload(files[0]?.file);
+      }
+      e.target.value = "";
+    },
+    [handleFileUpload],
+  );
 
   return (
     <div
@@ -77,4 +83,4 @@ const DropZone = ({ currentImage, handleFileUpload }: DropZoneProps) => {
   );
 };
 
-export default DropZone;
+export default memo(DropZone);
