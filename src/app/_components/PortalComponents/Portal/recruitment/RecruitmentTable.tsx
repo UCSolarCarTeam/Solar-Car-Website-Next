@@ -1,8 +1,8 @@
 import { Recruitment } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 
-import EntityTable from "./EntityTable";
-import { columns } from "./recruitment/columns";
+import EntityTable from "../EntityTable";
+import { columns } from "./columns";
 
 export type RecruitmentForm = Pick<
   Recruitment,

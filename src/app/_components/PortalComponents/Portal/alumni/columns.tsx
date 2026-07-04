@@ -9,7 +9,7 @@ import { formatDateOnly } from "@/app/_lib/utils";
 import { Button } from "@/components/ui/button";
 import { createColumnHelper } from "@tanstack/react-table";
 
-import { AlumniMember } from "../AlumniTable";
+import { AlumniMember } from "./AlumniTable";
 
 const columnHelper = createColumnHelper<AlumniMember>();
 

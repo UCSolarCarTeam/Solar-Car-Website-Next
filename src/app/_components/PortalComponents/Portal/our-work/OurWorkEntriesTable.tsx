@@ -1,8 +1,8 @@
 import { Timeline } from "@prisma/client";
 import { type ColumnDef } from "@tanstack/react-table";
 
-import EntityTable from "./EntityTable";
-import { columns } from "./our-work/columns";
+import EntityTable from "../EntityTable";
+import { columns } from "./columns";
 
 export type OurWorkEntry = Pick<
   Timeline,

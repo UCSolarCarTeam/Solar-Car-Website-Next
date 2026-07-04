@@ -5,8 +5,8 @@ import { type UserRole } from "@/server/api/routers/portal";
 import { type RouterOutputs, trpc } from "@/trpc/react";
 import { ColumnDef } from "@tanstack/react-table";
 
-import EntityTable from "./EntityTable";
-import { columns } from "./users/columns";
+import EntityTable from "../EntityTable";
+import { columns } from "./columns";
 
 export type User = RouterOutputs["portal"]["getClerkUsers"][number];
 
