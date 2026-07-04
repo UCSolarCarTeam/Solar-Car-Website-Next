@@ -62,7 +62,7 @@ export default function EntityTable<T>(props: EntityTableProps<T>) {
   return (
     <div>
       <div className={styles.tableHeader}>
-        <div>{tableHeader}</div>
+        {tableHeader}
         <div className="flex items-center py-4 gap-2">
           <Input
             className={styles.searchBar}
