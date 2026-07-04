@@ -12,9 +12,9 @@ import {
   type VisibilityState,
 } from "@tanstack/react-table";
 
-import type TeamMember from "../../TeamMember";
-import EntityTable from "./EntityTable";
-import { columns } from "./team/columns";
+import type TeamMember from "../../../TeamMember";
+import EntityTable from "../EntityTable";
+import { columns } from "./columns";
 
 export type TeamMember = RouterOutputs["portal"]["getDBUsers"][number];
 const TeamTable = ({ users }: { users: TeamMember[] }) => {

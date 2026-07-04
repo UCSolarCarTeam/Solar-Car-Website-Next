@@ -6,7 +6,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 
 import EditOurWorkEntryCell from "../../EditOurWorkEntryCell";
 import DeleteOurWorkEntry from "../../EditOurWorkEntryCell/DeleteOurWorkEntry";
-import { type OurWorkEntry } from "../OurWorkEntriesTable";
+import { OurWorkEntry } from "./OurWorkEntriesTable";
 
 const columnHelper = createColumnHelper<OurWorkEntry>();
 export const columns = [

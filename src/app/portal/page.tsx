@@ -5,13 +5,11 @@ import { memo, useEffect, useMemo } from "react";
 import { Toaster } from "react-hot-toast";
 
 import InlineUserPopup from "@/app/_components/PortalComponents/EditUserCell/InlineUserPopup";
-import AlumniTable from "@/app/_components/PortalComponents/Portal/AlumniTable";
 import InvitationsTable from "@/app/_components/PortalComponents/Portal/Invitations/InvitationsTable";
 import PortalPageHeader from "@/app/_components/PortalComponents/Portal/PortalPageHeader";
-import RecruitmentTable from "@/app/_components/PortalComponents/Portal/RecruitmentTable";
-import SponsorsTable from "@/app/_components/PortalComponents/Portal/SponsorsTable";
-import TeamTable from "@/app/_components/PortalComponents/Portal/TeamTable";
-import UsersTable from "@/app/_components/PortalComponents/Portal/UsersTable";
+import AlumniTable from "@/app/_components/PortalComponents/Portal/alumni/AlumniTable";
+import TeamTable from "@/app/_components/PortalComponents/Portal/team/TeamTable";
+import UsersTable from "@/app/_components/PortalComponents/Portal/users/UsersTable";
 import { useSessionStorage } from "@/app/_hooks/useSessionStorage";
 import styles from "@/app/portal/index.module.scss";
 import { type AdminRoles } from "@/server/api/routers/portal";
@@ -20,7 +18,9 @@ import { RedirectToSignIn } from "@clerk/nextjs";
 import { skipToken } from "@tanstack/react-query";
 
 import Loader from "../_components/Loader";
-import OurWorkEntriesTable from "../_components/PortalComponents/Portal/OurWorkEntriesTable";
+import OurWorkEntriesTable from "../_components/PortalComponents/Portal/our-work/OurWorkEntriesTable";
+import RecruitmentTable from "../_components/PortalComponents/Portal/recruitment/RecruitmentTable";
+import SponsorsTable from "../_components/PortalComponents/Portal/sponsors/SponsorsTable";
 import { useUser } from "../_hooks/useUser";
 import { PortalNavigationLinks, adminClerkRoles } from "../_types";
 

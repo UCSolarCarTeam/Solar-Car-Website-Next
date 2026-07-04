@@ -8,7 +8,7 @@ import { AdminRoles, UserRole } from "@/server/api/routers/portal";
 import { CellContext, createColumnHelper } from "@tanstack/react-table";
 
 import DeleteClerkUserCell from "../../DeleteClerkUserCell";
-import { User } from "../UsersTable";
+import { User } from "./UsersTable";
 
 const dropdownOptions = [
   { label: "Admin", value: "admin" },

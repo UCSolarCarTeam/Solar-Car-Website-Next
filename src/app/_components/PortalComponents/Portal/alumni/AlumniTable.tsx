@@ -5,9 +5,9 @@ import toast from "react-hot-toast";
 import { type RouterOutputs, trpc } from "@/trpc/react";
 import { ColumnDef } from "@tanstack/react-table";
 
-import EditAlumniPopupAdmin from "../EditUserCell/EditAlumniPopupAdmin";
-import EntityTable from "./EntityTable";
-import { columns } from "./alumni/columns";
+import EditAlumniPopupAdmin from "../../EditUserCell/EditAlumniPopupAdmin";
+import EntityTable from "../EntityTable";
+import { columns } from "./columns";
 
 // Helper type for Alumni from the router
 export type AlumniMember = RouterOutputs["portal"]["getAlumniList"][number];

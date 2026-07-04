@@ -9,7 +9,7 @@ import DeleteUser from "@/app/_components/PortalComponents/EditUserCell/DeleteUs
 import { Button } from "@/components/ui/button";
 import { type CellContext, createColumnHelper } from "@tanstack/react-table";
 
-import { type TeamMember } from "../TeamTable";
+import { type TeamMember } from "./TeamTable";
 
 const columnHelper = createColumnHelper<TeamMember>();
 export const columns = (
