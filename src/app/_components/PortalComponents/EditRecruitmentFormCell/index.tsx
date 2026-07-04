@@ -1,14 +1,12 @@
-import { memo, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import PlusIcon from "@/app/_components/svgs/PlusIcon";
-import { type UserResource } from "@clerk/nextjs/types";
 
 import BasicButton from "../../Buttons/BasicButton";
 import EditFormPopup from "./EditFormPopup";
 
 export interface EditRecruitmentFormCellProps {
-  currentUser: UserResource | undefined | null;
   currentRow: {
     id: number;
     header: string;
@@ -21,7 +19,6 @@ export interface EditRecruitmentFormCellProps {
 
 const EditRecruitmentFormCell = ({
   currentRow,
-  currentUser,
   newForm,
 }: EditRecruitmentFormCellProps) => {
   const [popupOpen, setPopupOpen] = useState(false);
@@ -49,7 +46,6 @@ const EditRecruitmentFormCell = ({
         {popupOpen && (
           <EditFormPopup
             currentRow={currentRow}
-            currentUser={currentUser}
             newForm
             togglePopup={togglePopup}
           />
@@ -66,7 +62,6 @@ const EditRecruitmentFormCell = ({
       {popupOpen && (
         <EditFormPopup
           currentRow={currentRow}
-          currentUser={currentUser}
           newForm={false}
           togglePopup={togglePopup}
         />
@@ -75,4 +70,4 @@ const EditRecruitmentFormCell = ({
   );
 };
 
-export default memo(EditRecruitmentFormCell);
+export default EditRecruitmentFormCell;

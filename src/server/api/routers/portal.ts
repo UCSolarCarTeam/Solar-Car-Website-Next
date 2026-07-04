@@ -294,6 +294,13 @@ export const portalRouter = createTRPCRouter({
       where: {
         deletedAt: null,
       },
+      select: {
+        id: true,
+        header: true,
+        description: true,
+        link: true,
+        expiresAt: true,
+      },
     });
   }),
   getInvitedUsers: adminMiddleware.query(async ({ ctx }) => {
@@ -313,6 +320,15 @@ export const portalRouter = createTRPCRouter({
     return ctx.db.timeline.findMany({
       where: {
         deletedAt: null,
+      },
+      orderBy: [{ year: "desc" }, { monthNum: "desc" }],
+      select: {
+        description: true,
+        id: true,
+        imageUrl: true,
+        monthName: true,
+        monthNum: true,
+        year: true,
       },
     });
   }),

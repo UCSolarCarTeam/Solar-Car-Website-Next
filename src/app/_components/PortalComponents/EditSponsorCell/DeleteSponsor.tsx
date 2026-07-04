@@ -1,14 +1,11 @@
-import { memo } from "react";
 import toast from "react-hot-toast";
 
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import { trpc } from "@/trpc/react";
-import { type UserResource } from "@clerk/nextjs/types";
 
 import BasicButton, { ButtonVariant } from "../../Buttons/BasicButton";
 
-export interface DeleteSponsorProps {
-  currentUser: UserResource | undefined | null;
+interface DeleteSponsorProps {
   currentRow: {
     id: number;
     name: string;
@@ -48,4 +45,4 @@ const DeleteSponsor = ({ currentRow }: DeleteSponsorProps) => {
   );
 };
 
-export default memo(DeleteSponsor);
+export default DeleteSponsor;

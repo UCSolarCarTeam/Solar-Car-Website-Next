@@ -2,13 +2,11 @@ import { memo, useCallback, useEffect, useState } from "react";
 
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import PlusIcon from "@/app/_components/svgs/PlusIcon";
-import { type UserResource } from "@clerk/nextjs/types";
 
 import BasicButton from "../../Buttons/BasicButton";
 import EditOurWorkEntryPopup from "./EditOurWorkEntryPopup";
 
 export interface EditOurWorkEntryCellProps {
-  currentUser: UserResource | undefined | null;
   currentRow: {
     id: number;
     year: number;
@@ -22,7 +20,6 @@ export interface EditOurWorkEntryCellProps {
 
 const EditOurWorkEntryCell = ({
   currentRow,
-  currentUser,
   newEntry,
 }: EditOurWorkEntryCellProps) => {
   const [popupOpen, setPopupOpen] = useState(false);
@@ -50,7 +47,6 @@ const EditOurWorkEntryCell = ({
         {popupOpen && (
           <EditOurWorkEntryPopup
             currentRow={currentRow}
-            currentUser={currentUser}
             newEntry
             togglePopup={togglePopup}
           />
@@ -67,7 +63,6 @@ const EditOurWorkEntryCell = ({
       {popupOpen && (
         <EditOurWorkEntryPopup
           currentRow={currentRow}
-          currentUser={currentUser}
           newEntry={false}
           togglePopup={togglePopup}
         />
