@@ -34,6 +34,40 @@ export enum PortalNavigationLinks {
   Alumni = "alumni",
 }
 
+export const portalNavItems = [
+  { href: "/portal/team", label: "Team", segment: PortalNavigationLinks.Team },
+  {
+    href: "/portal/users",
+    label: "Users",
+    segment: PortalNavigationLinks.Users,
+  },
+  {
+    href: "/portal/sponsors",
+    label: "Sponsors",
+    segment: PortalNavigationLinks.Sponsors,
+  },
+  {
+    href: "/portal/invitations",
+    label: "Invitations",
+    segment: PortalNavigationLinks.Invitations,
+  },
+  {
+    href: "/portal/recruitment",
+    label: "Recruitment",
+    segment: PortalNavigationLinks.Recruitment,
+  },
+  {
+    href: "/portal/our-work",
+    label: "Our Work",
+    segment: PortalNavigationLinks.OurWork,
+  },
+  {
+    href: "/portal/alumni",
+    label: "Alumni",
+    segment: PortalNavigationLinks.Alumni,
+  },
+] as const;
+
 export enum ManagerRoles {
   TeamCaptain = "Team Captain",
   EngineeringTeamManager = "Engineering Team Manager",

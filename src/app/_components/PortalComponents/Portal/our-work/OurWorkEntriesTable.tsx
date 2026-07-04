@@ -1,3 +1,5 @@
+"use client";
+
 import { Timeline } from "@prisma/client";
 import { type ColumnDef } from "@tanstack/react-table";
 

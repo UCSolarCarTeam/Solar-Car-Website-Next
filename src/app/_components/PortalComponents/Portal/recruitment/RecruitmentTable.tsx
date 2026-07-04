@@ -1,3 +1,5 @@
+"use client";
+
 import { Recruitment } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 

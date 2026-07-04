@@ -1,11 +1,11 @@
-import { useMemo, useState } from "react";
-import { memo } from "react";
+"use client";
+
+import { memo, useMemo, useState } from "react";
 
 import InviteUser from "@/app/_components/PortalComponents/Portal/Invitations/InviteUser";
 import RevokeUserCell from "@/app/_components/PortalComponents/Portal/Invitations/RevokeUserCell";
 import SearchBar from "@/app/_components/PortalComponents/SearchBar";
 import { type RouterOutputs } from "@/trpc/react";
-import { type UserResource } from "@clerk/nextjs/types";
 import {
   createColumnHelper,
   flexRender,
@@ -17,10 +17,7 @@ import styles from "../index.module.scss";
 
 type Invitation = RouterOutputs["portal"]["getInvitedUsers"][number];
 
-const InvitationsTable = (props: {
-  invitations: Invitation[];
-  currentUser: UserResource | undefined | null;
-}) => {
+const InvitationsTable = (props: { invitations: Invitation[] }) => {
   const [searchValue, setSearchValue] = useState("");
   const dataToRender = useMemo(
     () =>

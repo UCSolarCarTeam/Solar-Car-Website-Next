@@ -1,3 +1,5 @@
+"use client";
+
 import { useUser } from "@/app/_hooks/useUser";
 import { type RouterOutputs } from "@/trpc/react";
 import { type ColumnDef, type VisibilityState } from "@tanstack/react-table";

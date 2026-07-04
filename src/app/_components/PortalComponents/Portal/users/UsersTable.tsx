@@ -1,3 +1,5 @@
+"use client";
+
 import toast from "react-hot-toast";
 
 import { useUser } from "@/app/_hooks/useUser";
