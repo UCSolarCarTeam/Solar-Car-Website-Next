@@ -9,7 +9,7 @@ import { formatDateOnly } from "@/app/_lib/utils";
 import { Button } from "@/components/ui/button";
 import { createColumnHelper } from "@tanstack/react-table";
 
-import { AlumniMember } from "./AlumniTable";
+import { type AlumniMember } from "./AlumniTable";
 
 const columnHelper = createColumnHelper<AlumniMember>();
 
@@ -118,8 +118,8 @@ export const columns = (
     cell: (info) => (
       <Button onClick={() => handleEdit(info.row.original)}>Edit</Button>
     ),
-    id: "edit",
     enableHiding: false,
+    id: "edit",
   }),
   columnHelper.display({
     cell: (info) => (
@@ -130,7 +130,7 @@ export const columns = (
         Delete
       </BasicButton>
     ),
-    id: "delete",
     enableHiding: false,
+    id: "delete",
   }),
 ];

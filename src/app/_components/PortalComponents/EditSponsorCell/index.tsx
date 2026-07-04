@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import PlusIcon from "@/app/_components/svgs/PlusIcon";
@@ -21,9 +21,9 @@ export interface EditSponsorCellProps {
 
 const EditSponsorCell = ({ currentRow, newSponsor }: EditSponsorCellProps) => {
   const [popupOpen, setPopupOpen] = useState(false);
-  const togglePopup = useCallback(() => {
+  const togglePopup = () => {
     setPopupOpen((prev) => !prev);
-  }, []);
+  };
   useEffect(() => {
     const closePopup = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -69,4 +69,4 @@ const EditSponsorCell = ({ currentRow, newSponsor }: EditSponsorCellProps) => {
   );
 };
 
-export default memo(EditSponsorCell);
+export default EditSponsorCell;

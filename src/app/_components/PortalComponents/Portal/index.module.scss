@@ -34,7 +34,8 @@
     flex-shrink: 0;
   }
 
-  > div {
+  > div,
+  > nav {
     font-weight: 400;
     display: flex;
     gap: 10px;
@@ -48,9 +49,15 @@
     scrollbar-width: thin;
     padding-bottom: 2px;
 
-    > div {
+    > div,
+    > a {
       cursor: pointer;
       flex-shrink: 0;
+    }
+
+    > a {
+      text-decoration: none;
+      color: inherit;
     }
   }
 }
@@ -292,11 +299,14 @@
     overflow-y: auto;
     animation: slideDown 0.3s ease;
 
-    > div {
+    > div,
+    > a {
       cursor: pointer;
       padding: 12px 0;
       border-bottom: 1px solid #ccc;
       font-weight: 400;
+      text-decoration: none;
+      color: inherit;
 
       &:last-child {
         border-bottom: none;
@@ -355,7 +365,8 @@
   .mobileMenuDropdown {
     padding: 6px 12px;
 
-    > div {
+    > div,
+    > a {
       padding: 10px 0;
 
       &:hover {

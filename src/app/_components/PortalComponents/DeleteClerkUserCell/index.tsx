@@ -1,8 +1,8 @@
-import { memo, useState } from "react";
-import toast from "react-hot-toast";
+import { useState, useTransition } from "react";
 
 import styles from "@/app/_components/PortalComponents/DeleteClerkUserCell/index.module.scss";
-import { trpc } from "@/trpc/react";
+import { deleteClerkUser } from "@/app/portal/actions";
+import { runPortalAction } from "@/app/portal/_lib/runAction";
 
 import BasicButton from "../../Buttons/BasicButton";
 import ConfirmModal from "../../Modals/ConfirmModal";
@@ -13,21 +13,7 @@ export interface DeleteClerkUserProps {
 
 const DeleteClerkUser = ({ clerkId }: DeleteClerkUserProps) => {
   const [showConfirm, setShowConfirm] = useState(false);
-
-  const utils = trpc.useUtils();
-  const deleteUser = trpc.portal.deleteClerkUser.useMutation({
-    onError: () => {
-      toast.error(
-        "There was an error deleting the clerk user. Please contact Telemetry Team.",
-      );
-    },
-    onSuccess: async () => {
-      await toast.promise(utils.portal.getClerkUsers.invalidate(), {
-        loading: "Deleting...",
-        success: "Clerk user deleted successfully!",
-      });
-    },
-  });
+  const [, startTransition] = useTransition();
 
   return (
     <div
@@ -47,7 +33,14 @@ const DeleteClerkUser = ({ clerkId }: DeleteClerkUserProps) => {
         message="Are you sure you want to delete this clerk user?"
         onClose={() => setShowConfirm(false)}
         onConfirm={() => {
-          deleteUser.mutate({ clerkId });
+          startTransition(() => {
+            void runPortalAction(() => deleteClerkUser({ clerkId }), {
+              error:
+                "There was an error deleting the clerk user. Please contact Telemetry Team.",
+              loading: "Deleting...",
+              success: "Clerk user deleted successfully!",
+            });
+          });
           setShowConfirm(false);
         }}
         open={showConfirm}
@@ -57,4 +50,4 @@ const DeleteClerkUser = ({ clerkId }: DeleteClerkUserProps) => {
   );
 };
 
-export default memo(DeleteClerkUser);
+export default DeleteClerkUser;

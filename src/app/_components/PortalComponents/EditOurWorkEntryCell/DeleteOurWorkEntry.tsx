@@ -1,8 +1,8 @@
-import { memo } from "react";
-import toast from "react-hot-toast";
+import { useTransition } from "react";
 
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
-import { trpc } from "@/trpc/react";
+import { deleteOurWorkEntry } from "@/app/portal/actions";
+import { runPortalAction } from "@/app/portal/_lib/runAction";
 
 import BasicButton, { ButtonVariant } from "../../Buttons/BasicButton";
 
@@ -18,27 +18,24 @@ export interface DeleteOurWorkEntryProps {
 }
 
 const DeleteOurWorkEntry = ({ currentRow }: DeleteOurWorkEntryProps) => {
-  const utils = trpc.useUtils();
-  const deleteEntryMutation = trpc.portal.deleteOurWorkEntry.useMutation({
-    onError: () => {
-      toast.error(
-        "There was an error deleting the entry. Please contact Telemetry Team.",
-      );
-    },
-    onSuccess: async () => {
-      await toast.promise(utils.portal.getOurWorkList.invalidate(), {
-        loading: "Deleting...",
-        success: "Timeline entry deleted successfully!",
-      });
-    },
-  });
+  const [, startTransition] = useTransition();
 
   return (
     <div className={styles.editSponsorCell}>
       <BasicButton
-        onConfirmDelete={() =>
-          deleteEntryMutation.mutate({ id: currentRow.id })
-        }
+        onConfirmDelete={() => {
+          startTransition(() => {
+            void runPortalAction(
+              () => deleteOurWorkEntry({ id: currentRow.id }),
+              {
+                error:
+                  "There was an error deleting the entry. Please contact Telemetry Team.",
+                loading: "Deleting...",
+                success: "Timeline entry deleted successfully!",
+              },
+            );
+          });
+        }}
         variant={ButtonVariant.Delete}
       >
         Delete
@@ -47,4 +44,4 @@ const DeleteOurWorkEntry = ({ currentRow }: DeleteOurWorkEntryProps) => {
   );
 };
 
-export default memo(DeleteOurWorkEntry);
+export default DeleteOurWorkEntry;

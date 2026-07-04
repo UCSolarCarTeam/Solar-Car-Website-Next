@@ -1,11 +1,14 @@
-import { memo, useCallback, useMemo, useState } from "react";
-import toast from "react-hot-toast";
+import { useState } from "react";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
 import { type EditRecruitmentFormCellProps } from "@/app/_components/PortalComponents/EditRecruitmentFormCell";
 import styles from "@/app/_components/PortalComponents/EditRecruitmentFormCell/index.module.scss";
 import { toLocalDateTimeString } from "@/app/_lib/toLocalDate";
-import { trpc } from "@/trpc/react";
+import {
+  createRecruitmentForm,
+  updateRecruitmentForm,
+} from "@/app/portal/actions";
+import { runPortalAction } from "@/app/portal/_lib/runAction";
 
 import BasicButton from "../../Buttons/BasicButton";
 
@@ -18,48 +21,11 @@ const EditFormPopup = ({
   newForm,
   togglePopup,
 }: EditRecruitmentFormPopupProps) => {
-  const utils = trpc.useUtils();
-  const createRecruitmentForm = trpc.portal.createRecruitmentForm.useMutation({
-    onError: () => {
-      toast.error(
-        "There was an error saving your changes. Please contact Telemetry Team.",
-      );
-      setSaving(false);
-    },
-    onSuccess: async () => {
-      await toast.promise(utils.portal.getFormsList.invalidate(), {
-        loading: "Saving...",
-        success: "Recruitment form created successfully!",
-      });
-      setSaving(false);
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
       togglePopup();
-    },
-  });
-  const mutateRecruitmentForm = trpc.portal.updateRecruitmentForm.useMutation({
-    onError: () => {
-      toast.error(
-        "There was an error saving your changes. Please contact Telemetry Team.",
-      );
-      setSaving(false);
-    },
-    onSuccess: async () => {
-      await toast.promise(utils.portal.getFormsList.invalidate(), {
-        loading: "Saving...",
-        success: "Recruitment form updated successfully!",
-      });
-      setSaving(false);
-      togglePopup();
-    },
-  });
-
-  const handleOverlayClick = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (e.target === e.currentTarget) {
-        togglePopup();
-      }
-    },
-    [togglePopup],
-  );
+    }
+  };
 
   const [touched, setTouched] = useState(false);
   const [newRowData, setNewRowData] = useState({
@@ -67,37 +33,33 @@ const EditFormPopup = ({
   });
   const [saving, setSaving] = useState(false);
 
-  const rowDataToRender = useMemo(() => {
-    const fields = [
-      { id: "header", label: "Header" },
-      { id: "description", label: "Description" },
-      { id: "link", label: "Link" },
-      { id: "expiresAt", label: "Expires At" }, // Add expiresAt field
-    ];
-    return fields.reduce(
-      (acc, { id, label }) => {
-        let value = newRowData[id as keyof typeof newRowData] ?? "";
-        if (id === "expiresAt" && value) {
-          try {
-            const date = new Date(value);
-            value = toLocalDateTimeString(date);
-          } catch {
-            value = "";
-          }
+  const fields = [
+    { id: "header", label: "Header" },
+    { id: "description", label: "Description" },
+    { id: "link", label: "Link" },
+    { id: "expiresAt", label: "Expires At" },
+  ];
+
+  const rowDataToRender = fields.reduce(
+    (acc, { id, label }) => {
+      let value = newRowData[id as keyof typeof newRowData] ?? "";
+      if (id === "expiresAt" && value) {
+        try {
+          const date = new Date(value);
+          value = toLocalDateTimeString(date);
+        } catch {
+          value = "";
         }
-        acc[id] = {
-          id,
-          label,
-          value,
-        };
-        return acc;
-      },
-      {} as Record<
-        string,
-        { id: string; label: string; value: string | number }
-      >,
-    );
-  }, [newRowData]);
+      }
+      acc[id] = {
+        id,
+        label,
+        value,
+      };
+      return acc;
+    },
+    {} as Record<string, { id: string; label: string; value: string | number }>,
+  );
 
   const onInputChange = (
     e:
@@ -112,29 +74,34 @@ const EditFormPopup = ({
     });
   };
 
-  const handleSave = useCallback(async () => {
+  const handleSave = async () => {
     if (touched) {
       setSaving(true);
       const payload = {
         ...newRowData,
         expiresAt: new Date(newRowData.expiresAt).toISOString(),
       };
-      if (newForm) {
-        createRecruitmentForm.mutate(payload);
-      } else {
-        mutateRecruitmentForm.mutate(payload);
+
+      const messages = {
+        error:
+          "There was an error saving your changes. Please contact Telemetry Team.",
+        loading: "Saving...",
+        success: newForm
+          ? "Recruitment form created successfully!"
+          : "Recruitment form updated successfully!",
+      };
+
+      const result = newForm
+        ? await runPortalAction(() => createRecruitmentForm(payload), messages)
+        : await runPortalAction(() => updateRecruitmentForm(payload), messages);
+      setSaving(false);
+      if (result.success) {
+        togglePopup();
       }
     } else {
       togglePopup();
     }
-  }, [
-    touched,
-    newForm,
-    createRecruitmentForm,
-    newRowData,
-    mutateRecruitmentForm,
-    togglePopup,
-  ]);
+  };
 
   return (
     <div className={styles.popup} onClick={handleOverlayClick}>
@@ -201,4 +168,4 @@ const EditFormPopup = ({
   );
 };
 
-export default memo(EditFormPopup);
+export default EditFormPopup;

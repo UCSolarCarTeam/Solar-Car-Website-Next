@@ -1,5 +1,7 @@
-import { Recruitment } from "@prisma/client";
-import { ColumnDef } from "@tanstack/react-table";
+"use client";
+
+import { type Recruitment } from "@prisma/client";
+import { type ColumnDef } from "@tanstack/react-table";
 
 import EntityTable from "../EntityTable";
 import { columns } from "./columns";
@@ -12,9 +14,9 @@ export type RecruitmentForm = Pick<
 const RecruitmentTable = ({ forms }: { forms: RecruitmentForm[] }) => {
   return (
     <EntityTable
-      tableHeader="Recruitment"
-      data={forms}
       columns={columns as ColumnDef<RecruitmentForm, unknown>[]}
+      data={forms}
+      tableHeader="Recruitment"
     />
   );
 };
