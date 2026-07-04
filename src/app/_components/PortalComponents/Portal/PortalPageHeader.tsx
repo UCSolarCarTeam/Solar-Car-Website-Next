@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import logo from "public/assets/logo-center-black.png";
-import { memo, useState } from "react";
+import { useState } from "react";
 
 import styles from "@/app/_components/PortalComponents/Portal/index.module.scss";
 import Chevron from "@/app/_components/svgs/Chevron";
@@ -180,4 +180,4 @@ const PortalPageHeader = ({
   );
 };
 
-export default memo(PortalPageHeader);
+export default PortalPageHeader;
