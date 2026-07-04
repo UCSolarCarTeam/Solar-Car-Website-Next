@@ -1,11 +1,11 @@
-"use server";
-
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 import TeamMember from "@/app/_components/TeamMember";
 import styles from "@/app/team/index.module.scss";
 
 import { getTeamPageData } from "./actions";
+
+export const dynamic = "force-dynamic";
 
 const Team = async () => {
   const { alumniTeam, teamHierarchy } = await getTeamPageData();

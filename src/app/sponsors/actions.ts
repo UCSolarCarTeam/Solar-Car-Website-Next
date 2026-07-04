@@ -20,6 +20,9 @@ export async function getSponsors(): Promise<SponsorCard[]> {
       sponsorLevel: true,
       websiteUrl: true,
     },
+    where: {
+      deletedAt: null,
+    },
   });
 
   return sponsors;

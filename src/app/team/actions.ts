@@ -114,6 +114,7 @@ export async function getTeamPageData(): Promise<TeamPageData> {
       yearRetired: {
         not: null,
       },
+      deletedAt: null,
     },
   });
 

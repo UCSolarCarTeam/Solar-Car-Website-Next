@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { LeadRoles, ManagerRoles } from "@/app/_types";
@@ -170,7 +171,7 @@ export const portalRouter = createTRPCRouter({
   deleteDBUser: adminMiddleware
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.user.update({
+      const user = ctx.db.user.update({
         data: {
           deletedAt: new Date(),
           modifiedBy: ctx.user?.id,
@@ -179,6 +180,8 @@ export const portalRouter = createTRPCRouter({
           id: input.id,
         },
       });
+      revalidatePath("/team");
+      return user;
     }),
 
   deleteOurWorkEntry: adminMiddleware
@@ -409,6 +412,7 @@ export const portalRouter = createTRPCRouter({
           },
           where: { id: input.id },
         });
+        revalidatePath("/team");
       });
       return true;
     }),
@@ -512,6 +516,7 @@ export const portalRouter = createTRPCRouter({
           where: { id: input.id },
         });
       });
+      revalidatePath("/team");
 
       return true;
     }),

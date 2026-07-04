@@ -26,6 +26,7 @@ export async function getRecruitmentForms(): Promise<RecruitmentForm[]> {
       expiresAt: {
         gte: new Date(),
       },
+      deletedAt: null,
     },
   });
 
