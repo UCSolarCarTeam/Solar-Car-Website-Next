@@ -30,7 +30,7 @@ export default function RootLayout({
 }) {
   return (
     <html className={`${saira.className}`} lang="en">
-      <body>
+      <body className="bg-[#121212]">
         <TRPCReactProvider>{children}</TRPCReactProvider>
         <Analytics />
         <SpeedInsights />
