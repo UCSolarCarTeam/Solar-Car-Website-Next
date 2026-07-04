@@ -16,7 +16,13 @@ export default function PortalShell({
   username: string;
 }) {
   useEffect(() => {
+    const previousBackgroundColor =
+      document.documentElement.style.backgroundColor;
     document.documentElement.style.backgroundColor = "white";
+
+    return () => {
+      document.documentElement.style.backgroundColor = previousBackgroundColor;
+    };
   }, []);
 
   return (

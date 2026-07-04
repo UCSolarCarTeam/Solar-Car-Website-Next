@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect } from "react";
 
 import styles from "@/app/portal/index.module.scss";
 
@@ -11,10 +12,15 @@ export default function PortalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  useEffect(() => {
+    // eslint-disable-next-line no-console -- error boundaries should log for monitoring
+    console.error(error);
+  }, [error]);
+
   return (
     <div className={styles.unverifiedPage}>
       <div>Something went wrong loading the portal.</div>
-      {error.message && <div>{error.message}</div>}
+      {error.digest && <div>Reference: {error.digest}</div>}
       <button onClick={reset} type="button">
         Try again
       </button>

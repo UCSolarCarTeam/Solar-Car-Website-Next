@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import PlusIcon from "@/app/_components/svgs/PlusIcon";
@@ -71,4 +71,4 @@ const EditOurWorkEntryCell = ({
   );
 };
 
-export default memo(EditOurWorkEntryCell);
+export default EditOurWorkEntryCell;

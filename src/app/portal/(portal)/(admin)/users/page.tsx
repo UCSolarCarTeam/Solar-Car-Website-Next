@@ -1,16 +1,11 @@
 import UsersTable from "@/app/_components/PortalComponents/Portal/users/UsersTable";
-import { HydrateClient, trpc } from "@/trpc/server";
+import { getClerkUsers } from "@/app/portal/_actions/queries";
 
 export const metadata = {
   title: "Users - Portal",
 };
 
 export default async function UsersPage() {
-  const users = await trpc.portal.getClerkUsers();
-
-  return (
-    <HydrateClient>
-      <UsersTable data={users} />
-    </HydrateClient>
-  );
+  const users = await getClerkUsers();
+  return <UsersTable data={users} />;
 }

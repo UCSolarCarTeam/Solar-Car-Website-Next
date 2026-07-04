@@ -1,5 +1,5 @@
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
-import { memo, useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
 
 import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
@@ -11,13 +11,13 @@ import {
 } from "@/app/_lib/userValidation";
 import { formatDateOnly, parseDateOnly } from "@/app/_lib/utils";
 import { teamRoleOptions, userRowMetadata } from "@/app/_types";
-import { type RouterOutputs, trpc } from "@/trpc/react";
+import { updateDBUser } from "@/app/portal/_actions/mutations";
+import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { type UserResource } from "@clerk/nextjs/types";
+import { type User } from "@prisma/client";
 
 import BasicButton from "../../Buttons/BasicButton";
 import DropZone from "../DropZone";
-
-type User = RouterOutputs["portal"]["getCurrentDBUser"];
 
 interface InlineUserPopupProps {
   user: NonNullable<User>;
@@ -25,7 +25,6 @@ interface InlineUserPopupProps {
 }
 
 const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
-  const utils = trpc.useUtils();
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [touched, setTouched] = useState(false);
   const [newRowData, setNewRowData] = useState(user);
@@ -33,64 +32,46 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
   const [validationErrors, setValidationErrors] = useState<UserFormErrors>({});
   const MAX_DESCRIPTION_LENGTH = 250;
 
-  const mutateUserContent = trpc.portal.updateDBUser.useMutation({
-    onError: () => {
-      setSaving(false);
-      toast.error(
-        "There was an error saving your changes. Please contact Telemetry Team.",
-      );
-    },
-    onSuccess: async () => {
-      await toast.promise(utils.portal.getDBUsers.invalidate(), {
-        loading: "Saving...",
-        success: "Profile updated successfully!",
-      });
-      setSaving(false);
-    },
-  });
+  const rowDataToRender = Object.entries(newRowData)
+    .filter(
+      ([key]) => !["id", "clerkUserId", "profilePictureUrl"].includes(key),
+    )
+    .reduce(
+      (acc, [key, value]) => {
+        let displayValue: string | number | null | undefined;
+        if (userRowMetadata[key as keyof typeof userRowMetadata] === "date") {
+          displayValue = formatDateOnly(
+            value as Date | string | null | undefined,
+          );
+        } else {
+          displayValue = value as string | number | null | undefined;
+        }
 
-  const rowDataToRender = useMemo(() => {
-    return Object.entries(newRowData)
-      .filter(
-        ([key]) => !["id", "clerkUserId", "profilePictureUrl"].includes(key),
-      )
-      .reduce(
-        (acc, [key, value]) => {
-          let displayValue: string | number | null | undefined;
-          if (userRowMetadata[key as keyof typeof userRowMetadata] === "date") {
-            displayValue = formatDateOnly(
-              value as Date | string | null | undefined,
-            );
-          } else {
-            displayValue = value as string | number | null | undefined;
-          }
-
-          acc[key] = {
-            id: key,
-            label:
-              key === "ucid"
-                ? "UCID"
-                : key === "linkedIn"
-                  ? "LinkedIn"
-                  : key === "description"
-                    ? "About Me"
-                    : key
-                        .replace(/([a-z])([A-Z])/g, "$1 $2")
-                        .replace(/^./, (match) => match.toUpperCase()),
-            value: displayValue,
-          };
-          return acc;
-        },
-        {} as Record<
-          string,
-          {
-            id: string;
-            label: string;
-            value: string | number | null | undefined;
-          }
-        >,
-      );
-  }, [newRowData]);
+        acc[key] = {
+          id: key,
+          label:
+            key === "ucid"
+              ? "UCID"
+              : key === "linkedIn"
+                ? "LinkedIn"
+                : key === "description"
+                  ? "About Me"
+                  : key
+                      .replace(/([a-z])([A-Z])/g, "$1 $2")
+                      .replace(/^./, (match) => match.toUpperCase()),
+          value: displayValue,
+        };
+        return acc;
+      },
+      {} as Record<
+        string,
+        {
+          id: string;
+          label: string;
+          value: string | number | null | undefined;
+        }
+      >,
+    );
 
   const handleFileUpload = useCallback((file: File) => {
     setTouched(true);
@@ -112,7 +93,6 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
     const { id, value } = e.target;
     setTouched(true);
 
-    // clear the field's validation errors
     setValidationErrors((prev) => {
       const newErrors = { ...prev };
       delete newErrors[id as keyof UserFormData];
@@ -126,7 +106,6 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
       }));
       return;
     }
-    // set a max length on description field
     if (id === "description") {
       const truncated = value.slice(0, MAX_DESCRIPTION_LENGTH);
       setNewRowData((prev) => ({ ...prev, [id]: truncated }));
@@ -135,70 +114,82 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
     setNewRowData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleSave = useCallback(async () => {
-    if (touched) {
-      const processedData = {
-        ...newRowData,
-        yearJoined: formatDateOnly(newRowData.yearJoined),
-        yearRetired: formatDateOnly(newRowData.yearRetired),
-      };
-      processedData.ucid = String(processedData.ucid);
-      processedData.linkedIn = processedData.linkedIn?.trim() ?? null;
-      // validate the form's fields
-      const errors = validateUserForm(processedData as Partial<UserFormData>);
-
-      if (Object.keys(errors).length > 0) {
-        setValidationErrors(errors);
-        toast.error("Please fix the validation errors before saving.");
-        return;
-      }
-
-      setSaving(true);
-      if (imageFile) {
-        const reader = new FileReader();
-
-        reader.onload = async (e) => {
-          const fileContent = e.target?.result; // Binary string or base64
-          try {
-            const response = await fetch("/api/uploadProfilePic", {
-              body: JSON.stringify({
-                fileContent, // Base64 or binary
-                fileName: imageFile.name,
-                fileType: imageFile.type,
-              }),
-              headers: {
-                "Content-Type": "application/json",
-              },
-              method: "POST",
-            });
-            const { publicUrl } = (await response.json()) as {
-              publicUrl: string;
-            };
-            mutateUserContent.mutate({
-              ...newRowData,
-              profilePictureUrl: publicUrl,
-              yearJoined: parseDateOnly(newRowData.yearJoined),
-              yearRetired: parseDateOnly(newRowData.yearRetired),
-            });
-          } catch (error) {
-            toast.error(
-              "There was an error saving your changes. Please contact Telemetry Team.",
-            );
-            global.console.log(error);
-          }
-        };
-
-        const compressedFile = await compress(imageFile);
-        reader.readAsDataURL(compressedFile);
-      } else {
-        mutateUserContent.mutate({
+  const saveUser = async (profilePictureUrl?: string) => {
+    const result = await runPortalAction(
+      () =>
+        updateDBUser({
           ...newRowData,
+          profilePictureUrl: profilePictureUrl ?? newRowData.profilePictureUrl,
           yearJoined: parseDateOnly(newRowData.yearJoined),
           yearRetired: parseDateOnly(newRowData.yearRetired),
-        });
-      }
+        }),
+      {
+        error:
+          "There was an error saving your changes. Please contact Telemetry Team.",
+        loading: "Saving...",
+        success: "Profile updated successfully!",
+      },
+    );
+    setSaving(false);
+    return result;
+  };
+
+  const handleSave = useCallback(async () => {
+    if (!touched) return;
+
+    const processedData = {
+      ...newRowData,
+      yearJoined: formatDateOnly(newRowData.yearJoined),
+      yearRetired: formatDateOnly(newRowData.yearRetired),
+    };
+    processedData.ucid = String(processedData.ucid);
+    processedData.linkedIn = processedData.linkedIn?.trim() ?? null;
+    const errors = validateUserForm(processedData as Partial<UserFormData>);
+
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      toast.error("Please fix the validation errors before saving.");
+      return;
     }
-  }, [imageFile, newRowData, touched, mutateUserContent]);
+
+    setSaving(true);
+
+    if (imageFile) {
+      const reader = new FileReader();
+
+      reader.onload = async (e) => {
+        const fileContent = e.target?.result;
+        try {
+          const response = await fetch("/api/uploadProfilePic", {
+            body: JSON.stringify({
+              fileContent,
+              fileName: imageFile.name,
+              fileType: imageFile.type,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+            method: "POST",
+          });
+          const { publicUrl } = (await response.json()) as {
+            publicUrl: string;
+          };
+          await saveUser(publicUrl);
+        } catch (error) {
+          setSaving(false);
+          toast.error(
+            "There was an error saving your changes. Please contact Telemetry Team.",
+          );
+          global.console.log(error);
+        }
+      };
+
+      const compressedFile = await compress(imageFile);
+      reader.readAsDataURL(compressedFile);
+    } else {
+      await saveUser();
+    }
+  }, [imageFile, newRowData, touched]);
 
   if (!user) return null;
 
@@ -314,4 +305,4 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
   );
 };
 
-export default memo(InlineUserPopup);
+export default InlineUserPopup;

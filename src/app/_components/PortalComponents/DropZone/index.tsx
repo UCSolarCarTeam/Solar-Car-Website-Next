@@ -1,5 +1,5 @@
 import Image, { type StaticImageData } from "next/image";
-import React, { memo, useCallback } from "react";
+import React, { useCallback } from "react";
 
 import Upload from "../../svgs/Upload";
 import styles from "./index.module.scss";
@@ -83,4 +83,4 @@ const DropZone = ({ currentImage, handleFileUpload }: DropZoneProps) => {
   );
 };
 
-export default memo(DropZone);
+export default DropZone;

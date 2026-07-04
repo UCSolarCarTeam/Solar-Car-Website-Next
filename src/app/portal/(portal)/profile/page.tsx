@@ -1,16 +1,11 @@
+import { getCurrentDBUser } from "@/app/portal/_actions/queries";
 import ProfileContent from "@/app/portal/_components/ProfileContent";
-import { HydrateClient, trpc } from "@/trpc/server";
 
 export const metadata = {
   title: "Profile - Portal",
 };
 
 export default async function ProfilePage() {
-  const dbUser = await trpc.portal.getCurrentDBUser();
-
-  return (
-    <HydrateClient>
-      <ProfileContent dbUser={dbUser} />
-    </HydrateClient>
-  );
+  const dbUser = await getCurrentDBUser();
+  return <ProfileContent dbUser={dbUser} />;
 }

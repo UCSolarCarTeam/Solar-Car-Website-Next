@@ -1,12 +1,13 @@
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
 import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
 import { compress } from "@/app/_lib/compress";
 import { formatDateOnly, parseDateOnly } from "@/app/_lib/utils";
-import { trpc } from "@/trpc/react";
+import { createAlumni, updateDBUser } from "@/app/portal/_actions/mutations";
+import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { type User } from "@prisma/client";
 
 import BasicButton from "../../Buttons/BasicButton";
@@ -21,53 +22,6 @@ const EditAlumniPopupAdmin = ({
   currentRow,
   togglePopup,
 }: EditAlumniPopupAdminProps) => {
-  const utils = trpc.useUtils();
-  const updateDBUserMutation = trpc.portal.updateDBUser.useMutation({
-    onError: () => {
-      setSaving(false);
-      toast.error(
-        "There was an error saving your changes. Please contact Telemetry Team.",
-      );
-    },
-    onSuccess: async () => {
-      await toast.promise(utils.portal.getAlumniList.invalidate(), {
-        error: () => {
-          setSaving(false);
-          return "Failed to refresh alumni list";
-        },
-        loading: "Saving...",
-        success: () => {
-          setSaving(false);
-          togglePopup();
-          return "Alumni updated successfully!";
-        },
-      });
-    },
-  });
-
-  const createAlumniMutation = trpc.portal.createAlumni.useMutation({
-    onError: () => {
-      setSaving(false);
-      toast.error(
-        "There was an error creating the alumni. Please contact Telemetry Team.",
-      );
-    },
-    onSuccess: async () => {
-      await toast.promise(utils.portal.getAlumniList.invalidate(), {
-        error: () => {
-          setSaving(false);
-          return "Failed to refresh alumni list";
-        },
-        loading: "Saving...",
-        success: () => {
-          setSaving(false);
-          togglePopup();
-          return "Alumni created successfully!";
-        },
-      });
-    },
-  });
-
   const [newRowData, setNewRowData] = useState<Partial<User>>(
     currentRow ?? {
       company: "",
@@ -88,32 +42,27 @@ const EditAlumniPopupAdmin = ({
     Record<string, string>
   >({});
 
-  const rowDataToRender = useMemo(() => {
-    // Helper to format date to YYYY for display
-    // Fields to display in the form
-    const fields = [
-      { id: "firstName", label: "First Name", value: newRowData.firstName },
-      { id: "lastName", label: "Last Name", value: newRowData.lastName },
-      { id: "company", label: "Company", value: newRowData.company },
-      { id: "companyTitle", label: "Position", value: newRowData.companyTitle },
-      {
-        id: "yearJoined",
-        label: "Date Joined",
-        value: formatDateOnly(newRowData.yearJoined),
-      },
-      {
-        id: "yearRetired",
-        label: "Date Left",
-        value: formatDateOnly(newRowData.yearRetired),
-      },
-      {
-        id: "linkedIn",
-        label: "LinkedIn",
-        value: newRowData.linkedIn,
-      },
-    ];
-    return fields;
-  }, [newRowData]);
+  const rowDataToRender = [
+    { id: "firstName", label: "First Name", value: newRowData.firstName },
+    { id: "lastName", label: "Last Name", value: newRowData.lastName },
+    { id: "company", label: "Company", value: newRowData.company },
+    { id: "companyTitle", label: "Position", value: newRowData.companyTitle },
+    {
+      id: "yearJoined",
+      label: "Date Joined",
+      value: formatDateOnly(newRowData.yearJoined),
+    },
+    {
+      id: "yearRetired",
+      label: "Date Left",
+      value: formatDateOnly(newRowData.yearRetired),
+    },
+    {
+      id: "linkedIn",
+      label: "LinkedIn",
+      value: newRowData.linkedIn,
+    },
+  ];
 
   const handleOverlayClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -127,7 +76,6 @@ const EditAlumniPopupAdmin = ({
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
 
-    // clear the field's validation errors
     setValidationErrors((prev) => {
       const newErrors = { ...prev };
       delete newErrors[id];
@@ -137,8 +85,79 @@ const EditAlumniPopupAdmin = ({
     setNewRowData((prev) => ({ ...prev, [id]: value }));
   };
 
+  const saveData = async (profileUrl?: string) => {
+    if (currentRow) {
+      const result = await runPortalAction(
+        () =>
+          updateDBUser({
+            company: newRowData.company ?? null,
+            companyTitle: newRowData.companyTitle ?? null,
+            description: currentRow.description ?? null,
+            fieldOfStudy: currentRow.fieldOfStudy ?? null,
+            firstName: newRowData.firstName ?? "",
+            id: currentRow.id,
+            lastName: newRowData.lastName ?? "",
+            linkedIn: newRowData.linkedIn ?? null,
+            phoneNumber: currentRow.phoneNumber ?? null,
+            profilePictureUrl:
+              profileUrl ?? newRowData.profilePictureUrl ?? null,
+            schoolEmail: currentRow.schoolEmail ?? null,
+            schoolYear: currentRow.schoolYear ?? null,
+            teamRole: newRowData.teamRole ?? null,
+            ucid: currentRow.ucid,
+            yearJoined: parseDateOnly(newRowData.yearJoined),
+            yearRetired: parseDateOnly(newRowData.yearRetired),
+          }),
+        {
+          error:
+            "There was an error saving your changes. Please contact Telemetry Team.",
+          loading: "Saving...",
+          success: "Alumni updated successfully!",
+        },
+      );
+      setSaving(false);
+      if (result.success) {
+        togglePopup();
+      }
+    } else {
+      const yearJoinedDate = parseDateOnly(newRowData.yearJoined);
+      const yearRetiredDate = parseDateOnly(newRowData.yearRetired);
+
+      if (!yearJoinedDate || !yearRetiredDate) {
+        toast.error("Year Joined and Year Left are required.");
+        setSaving(false);
+        return;
+      }
+
+      const result = await runPortalAction(
+        () =>
+          createAlumni({
+            company: newRowData.company ?? null,
+            companyTitle: newRowData.companyTitle ?? null,
+            firstName: newRowData.firstName ?? "",
+            lastName: newRowData.lastName ?? "",
+            linkedIn: newRowData.linkedIn ?? null,
+            profilePictureUrl:
+              profileUrl ?? newRowData.profilePictureUrl ?? null,
+            teamRole: newRowData.teamRole ?? null,
+            yearJoined: yearJoinedDate,
+            yearRetired: yearRetiredDate,
+          }),
+        {
+          error:
+            "There was an error creating the alumni. Please contact Telemetry Team.",
+          loading: "Saving...",
+          success: "Alumni created successfully!",
+        },
+      );
+      setSaving(false);
+      if (result.success) {
+        togglePopup();
+      }
+    }
+  };
+
   const handleSave = useCallback(async () => {
-    // Simple validation
     const errors: Record<string, string> = {};
     if (!newRowData.firstName) errors.firstName = "First Name is required";
     if (!newRowData.lastName) errors.lastName = "Last Name is required";
@@ -150,53 +169,6 @@ const EditAlumniPopupAdmin = ({
     }
 
     setSaving(true);
-
-    const saveData = async (profileUrl?: string) => {
-      // Convert year strings to dates
-      if (currentRow) {
-        // Update
-        updateDBUserMutation.mutate({
-          company: newRowData.company ?? null,
-          companyTitle: newRowData.companyTitle ?? null,
-          description: currentRow.description ?? null,
-          fieldOfStudy: currentRow.fieldOfStudy ?? null,
-          firstName: newRowData.firstName ?? "",
-          id: currentRow.id,
-          lastName: newRowData.lastName ?? "",
-          linkedIn: newRowData.linkedIn ?? null,
-          phoneNumber: currentRow.phoneNumber ?? null,
-          profilePictureUrl: profileUrl ?? newRowData.profilePictureUrl ?? null,
-          schoolEmail: currentRow.schoolEmail ?? null,
-          schoolYear: currentRow.schoolYear ?? null,
-          teamRole: newRowData.teamRole ?? null,
-          ucid: currentRow.ucid,
-          yearJoined: parseDateOnly(newRowData.yearJoined),
-          yearRetired: parseDateOnly(newRowData.yearRetired),
-        });
-      } else {
-        // Create
-        const yearJoinedFormatted = formatDateOnly(newRowData.yearJoined);
-        const yearRetiredFormatted = formatDateOnly(newRowData.yearRetired);
-
-        if (!yearJoinedFormatted || !yearRetiredFormatted) {
-          toast.error("Year Joined and Year Left are required.");
-          setSaving(false);
-          return;
-        }
-
-        createAlumniMutation.mutate({
-          company: newRowData.company ?? null,
-          companyTitle: newRowData.companyTitle ?? null,
-          firstName: newRowData.firstName ?? "",
-          lastName: newRowData.lastName ?? "",
-          linkedIn: newRowData.linkedIn ?? null,
-          profilePictureUrl: profileUrl ?? newRowData.profilePictureUrl ?? null,
-          teamRole: newRowData.teamRole ?? null,
-          yearJoined: yearJoinedFormatted,
-          yearRetired: yearRetiredFormatted,
-        });
-      }
-    };
 
     if (imageFile) {
       const reader = new FileReader();
@@ -234,7 +206,6 @@ const EditAlumniPopupAdmin = ({
                 };
                 errorMessage = errorBody.error ?? errorBody.message ?? textBody;
               } catch {
-                // if JSON parsing fails, use raw text
                 errorMessage = textBody;
               }
             }
@@ -270,17 +241,10 @@ const EditAlumniPopupAdmin = ({
     } else {
       await saveData();
     }
-  }, [
-    currentRow,
-    imageFile,
-    newRowData,
-    updateDBUserMutation,
-    createAlumniMutation,
-  ]);
+  }, [currentRow, imageFile, newRowData, togglePopup]);
 
   const handleFileUpload = useCallback((file: File) => {
     if (file) {
-      // Revoke previous blob URL to prevent memory leak
       if (blobUrlRef.current) {
         URL.revokeObjectURL(blobUrlRef.current);
       }
@@ -294,7 +258,6 @@ const EditAlumniPopupAdmin = ({
     }
   }, []);
 
-  // Cleanup blob URL on unmount
   useEffect(() => {
     return () => {
       if (blobUrlRef.current) {
@@ -371,4 +334,4 @@ const EditAlumniPopupAdmin = ({
   );
 };
 
-export default memo(EditAlumniPopupAdmin);
+export default EditAlumniPopupAdmin;

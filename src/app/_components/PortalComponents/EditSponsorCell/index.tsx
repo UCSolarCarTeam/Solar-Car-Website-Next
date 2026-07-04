@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import PlusIcon from "@/app/_components/svgs/PlusIcon";
@@ -69,4 +69,4 @@ const EditSponsorCell = ({ currentRow, newSponsor }: EditSponsorCellProps) => {
   );
 };
 
-export default memo(EditSponsorCell);
+export default EditSponsorCell;

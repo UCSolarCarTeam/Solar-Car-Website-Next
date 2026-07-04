@@ -1,11 +1,11 @@
 "use client";
 
-import { memo, useMemo, useState } from "react";
+import { useState } from "react";
 
 import InviteUser from "@/app/_components/PortalComponents/Portal/Invitations/InviteUser";
 import RevokeUserCell from "@/app/_components/PortalComponents/Portal/Invitations/RevokeUserCell";
 import SearchBar from "@/app/_components/PortalComponents/SearchBar";
-import { type RouterOutputs } from "@/trpc/react";
+import { type PortalInvitation } from "@/server/portal/types";
 import {
   createColumnHelper,
   flexRender,
@@ -15,59 +15,52 @@ import {
 
 import styles from "../index.module.scss";
 
-type Invitation = RouterOutputs["portal"]["getInvitedUsers"][number];
+const columnHelper = createColumnHelper<PortalInvitation>();
 
-const InvitationsTable = (props: { invitations: Invitation[] }) => {
+const columns = [
+  columnHelper.accessor("email", {
+    cell: (info) => info.getValue(),
+    header: "Email",
+  }),
+  columnHelper.accessor("createdAt", {
+    cell: (info) => {
+      const date = new Date(info.getValue());
+      return date.toLocaleDateString("en-US", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
+    },
+    header: "Invited At",
+  }),
+  columnHelper.accessor("status", {
+    cell: (info) => info.getValue().toLocaleUpperCase(),
+    header: "Status",
+  }),
+  columnHelper.display({
+    cell: (info) => {
+      const status = info.row.original.status?.toLowerCase();
+      if (status === "accepted") {
+        return null;
+      }
+      return <RevokeUserCell invitationId={info.row.original.id} />;
+    },
+    header: () => null,
+    id: "revoke",
+  }),
+];
+
+const InvitationsTable = (props: { invitations: PortalInvitation[] }) => {
   const [searchValue, setSearchValue] = useState("");
-  const dataToRender = useMemo(
-    () =>
-      props.invitations.filter((invitation) => {
-        const lowerSearch = searchValue.toLowerCase();
-        return (
-          (invitation.email ?? "").toLowerCase().includes(lowerSearch) ||
-          (invitation.status ?? "").toLowerCase().includes(lowerSearch) ||
-          searchValue.toLowerCase() === ""
-        );
-      }) ?? [],
-    [props.invitations, searchValue],
-  );
-
-  const columnHelper = useMemo(() => createColumnHelper<Invitation>(), []);
-  const columns = useMemo(
-    () => [
-      columnHelper.accessor("email", {
-        cell: (info) => info.getValue(),
-        header: "Email",
-      }),
-      columnHelper.accessor("createdAt", {
-        cell: (info) => {
-          const date = new Date(info.getValue());
-          return date.toLocaleDateString("en-US", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-          });
-        },
-        header: "Invited At",
-      }),
-      columnHelper.accessor("status", {
-        cell: (info) => info.getValue().toLocaleUpperCase(),
-        header: "Status",
-      }),
-      columnHelper.display({
-        cell: (info) => {
-          const status = info.row.original.status?.toLowerCase();
-          if (status === "accepted") {
-            return null;
-          }
-          return <RevokeUserCell invitationId={info.row.original.id} />;
-        },
-        header: () => null,
-        id: "revoke",
-      }),
-    ],
-    [columnHelper],
-  );
+  const dataToRender =
+    props.invitations.filter((invitation) => {
+      const lowerSearch = searchValue.toLowerCase();
+      return (
+        (invitation.email ?? "").toLowerCase().includes(lowerSearch) ||
+        (invitation.status ?? "").toLowerCase().includes(lowerSearch) ||
+        searchValue.toLowerCase() === ""
+      );
+    }) ?? [];
 
   const table = useReactTable({
     columns,
@@ -123,4 +116,4 @@ const InvitationsTable = (props: { invitations: Invitation[] }) => {
   );
 };
 
-export default memo(InvitationsTable);
+export default InvitationsTable;

@@ -1,7 +1,8 @@
-import toast from "react-hot-toast";
+import { useTransition } from "react";
 
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
-import { trpc } from "@/trpc/react";
+import { deleteSponsor } from "@/app/portal/_actions/mutations";
+import { runPortalAction } from "@/app/portal/_lib/runAction";
 
 import BasicButton, { ButtonVariant } from "../../Buttons/BasicButton";
 
@@ -16,27 +17,21 @@ interface DeleteSponsorProps {
 }
 
 const DeleteSponsor = ({ currentRow }: DeleteSponsorProps) => {
-  const utils = trpc.useUtils();
-  const deleteSponsorMutation = trpc.portal.deleteSponsor.useMutation({
-    onError: () => {
-      toast.error(
-        "There was an error deleting the sponsor. Please contact Telemetry Team.",
-      );
-    },
-    onSuccess: async () => {
-      await toast.promise(utils.portal.getSponsorsList.invalidate(), {
-        loading: "Deleting...",
-        success: "Sponsor deleted successfully!",
-      });
-    },
-  });
+  const [, startTransition] = useTransition();
 
   return (
     <div className={styles.editSponsorCell}>
       <BasicButton
-        onConfirmDelete={() =>
-          deleteSponsorMutation.mutate({ id: currentRow.id })
-        }
+        onConfirmDelete={() => {
+          startTransition(() => {
+            void runPortalAction(() => deleteSponsor({ id: currentRow.id }), {
+              error:
+                "There was an error deleting the sponsor. Please contact Telemetry Team.",
+              loading: "Deleting...",
+              success: "Sponsor deleted successfully!",
+            });
+          });
+        }}
         variant={ButtonVariant.Delete}
       >
         Delete

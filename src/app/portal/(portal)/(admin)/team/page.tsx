@@ -1,16 +1,11 @@
 import TeamTable from "@/app/_components/PortalComponents/Portal/team/TeamTable";
-import { HydrateClient, trpc } from "@/trpc/server";
+import { getDBUsers } from "@/app/portal/_actions/queries";
 
 export const metadata = {
   title: "Team - Portal",
 };
 
 export default async function TeamPage() {
-  const users = await trpc.portal.getDBUsers();
-
-  return (
-    <HydrateClient>
-      <TeamTable users={users} />
-    </HydrateClient>
-  );
+  const users = await getDBUsers();
+  return <TeamTable users={users} />;
 }

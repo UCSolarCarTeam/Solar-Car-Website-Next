@@ -1,11 +1,12 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
 import { type EditSponsorCellProps } from "@/app/_components/PortalComponents/EditSponsorCell";
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import { compress } from "@/app/_lib/compress";
-import { trpc } from "@/trpc/react";
+import { createSponsor, updateSponsor } from "@/app/portal/_actions/mutations";
+import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { SponsorLevel } from "@prisma/client";
 
 import BasicButton from "../../Buttons/BasicButton";
@@ -20,40 +21,6 @@ const EditSponsorPopup = ({
   newSponsor,
   togglePopup,
 }: EditSponsorPopupProps) => {
-  const utils = trpc.useUtils();
-  const createSponsor = trpc.portal.createSponsor.useMutation({
-    onError: () => {
-      toast.error(
-        "There was an error saving your changes. Please contact Telemetry Team.",
-      );
-      setSaving(false);
-    },
-    onSuccess: async () => {
-      await toast.promise(utils.portal.getSponsorsList.invalidate(), {
-        loading: "Saving...",
-        success: "Sponsor created successfully!",
-      });
-      setSaving(false);
-      togglePopup();
-    },
-  });
-  const mutateSponsor = trpc.portal.updateSponsor.useMutation({
-    onError: () => {
-      toast.error(
-        "There was an error saving your changes. Please contact Telemetry Team.",
-      );
-      setSaving(false);
-    },
-    onSuccess: async () => {
-      await toast.promise(utils.portal.getSponsorsList.invalidate(), {
-        loading: "Saving...",
-        success: "Sponsor updated successfully!",
-      });
-      setSaving(false);
-      togglePopup();
-    },
-  });
-
   const handleOverlayClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       if (e.target === e.currentTarget) {
@@ -71,33 +38,31 @@ const EditSponsorPopup = ({
   });
   const [saving, setSaving] = useState(false);
 
-  const rowDataToRender = useMemo(() => {
-    return Object.entries(newRowData)
-      .filter(([key]) => !["id"].includes(key))
-      .reduce(
-        (acc, [key, value]) => {
-          acc[key] = {
-            id: key,
-            label:
-              key === "logoUrl"
-                ? "Logo"
-                : key
-                    .replace(/([a-z])([A-Z])/g, "$1 $2")
-                    .replace(/^./, (match) => match.toUpperCase()),
-            value: value,
-          };
-          return acc;
-        },
-        {} as Record<
-          string,
-          {
-            id: string;
-            label: string;
-            value: string | number | null | undefined;
-          }
-        >,
-      );
-  }, [newRowData]);
+  const rowDataToRender = Object.entries(newRowData)
+    .filter(([key]) => !["id"].includes(key))
+    .reduce(
+      (acc, [key, value]) => {
+        acc[key] = {
+          id: key,
+          label:
+            key === "logoUrl"
+              ? "Logo"
+              : key
+                  .replace(/([a-z])([A-Z])/g, "$1 $2")
+                  .replace(/^./, (match) => match.toUpperCase()),
+          value: value,
+        };
+        return acc;
+      },
+      {} as Record<
+        string,
+        {
+          id: string;
+          label: string;
+          value: string | number | null | undefined;
+        }
+      >,
+    );
 
   const onInputChange = (
     e:
@@ -107,6 +72,31 @@ const EditSponsorPopup = ({
     const { id, value } = e.target;
     setTouched(true);
     setNewRowData((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const saveSponsor = async (logoUrl?: string) => {
+    const payload = {
+      ...newRowData,
+      logoUrl: logoUrl ?? newRowData.logoUrl,
+    };
+
+    const messages = {
+      error:
+        "There was an error saving your changes. Please contact Telemetry Team.",
+      loading: "Saving...",
+      success: newSponsor
+        ? "Sponsor created successfully!"
+        : "Sponsor updated successfully!",
+    };
+
+    const result = newSponsor
+      ? await runPortalAction(() => createSponsor(payload), messages)
+      : await runPortalAction(() => updateSponsor(payload), messages);
+
+    setSaving(false);
+    if (result.success) {
+      togglePopup();
+    }
   };
 
   const handleSave = useCallback(async () => {
@@ -131,51 +121,25 @@ const EditSponsorPopup = ({
             const { publicUrl } = (await response.json()) as {
               publicUrl: string;
             };
-            if (newSponsor) {
-              createSponsor.mutate({
-                ...newRowData,
-                logoUrl: publicUrl,
-              });
-            } else {
-              mutateSponsor.mutate({
-                ...newRowData,
-                logoUrl: publicUrl,
-              });
-            }
+            await saveSponsor(publicUrl);
           } catch (error) {
             toast.error(
               "There was an error saving your changes. Please contact Telemetry Team.",
             );
             global.console.log(error);
-            togglePopup();
+            setSaving(false);
           }
         };
 
         const compressedFile = await compress(imageFile);
         reader.readAsDataURL(compressedFile);
       } else {
-        if (newSponsor) {
-          createSponsor.mutate({
-            ...newRowData,
-          });
-        } else {
-          mutateSponsor.mutate({
-            ...newRowData,
-          });
-        }
+        await saveSponsor();
       }
     } else {
       togglePopup();
     }
-  }, [
-    createSponsor,
-    imageFile,
-    mutateSponsor,
-    newRowData,
-    newSponsor,
-    togglePopup,
-    touched,
-  ]);
+  }, [imageFile, newRowData, newSponsor, togglePopup, touched]);
 
   const handleFileUpload = useCallback((file: File) => {
     setTouched(true);

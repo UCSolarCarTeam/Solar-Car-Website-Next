@@ -1,8 +1,8 @@
-import { memo } from "react";
-import toast from "react-hot-toast";
+import { useTransition } from "react";
 
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
-import { trpc } from "@/trpc/react";
+import { deleteRecruitmentForm } from "@/app/portal/_actions/mutations";
+import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { type UserResource } from "@clerk/nextjs/types";
 
 import BasicButton, { ButtonVariant } from "../../Buttons/BasicButton";
@@ -19,25 +19,24 @@ export interface DeleteFormProps {
 }
 
 const DeleteForm = ({ currentRow }: DeleteFormProps) => {
-  const utils = trpc.useUtils();
-  const deleteFormMutation = trpc.portal.deleteRecruitmentForm.useMutation({
-    onError: () => {
-      toast.error(
-        "There was an error deleting the form. Please contact Telemetry Team.",
-      );
-    },
-    onSuccess: async () => {
-      await toast.promise(utils.portal.getFormsList.invalidate(), {
-        loading: "Deleting...",
-        success: "Form deleted successfully!",
-      });
-    },
-  });
+  const [, startTransition] = useTransition();
 
   return (
     <div className={styles.editSponsorCell}>
       <BasicButton
-        onConfirmDelete={() => deleteFormMutation.mutate({ id: currentRow.id })}
+        onConfirmDelete={() => {
+          startTransition(() => {
+            void runPortalAction(
+              () => deleteRecruitmentForm({ id: currentRow.id }),
+              {
+                error:
+                  "There was an error deleting the form. Please contact Telemetry Team.",
+                loading: "Deleting...",
+                success: "Form deleted successfully!",
+              },
+            );
+          });
+        }}
         variant={ButtonVariant.Delete}
       >
         Delete
@@ -46,4 +45,4 @@ const DeleteForm = ({ currentRow }: DeleteFormProps) => {
   );
 };
 
-export default memo(DeleteForm);
+export default DeleteForm;

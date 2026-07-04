@@ -1,4 +1,4 @@
-import { type AdminRoles } from "@/server/api/routers/portal";
+import { type AdminRoles } from "@/server/portal/types";
 import { useUser as useClerkUser } from "@clerk/nextjs";
 
 export type ClerkUser =

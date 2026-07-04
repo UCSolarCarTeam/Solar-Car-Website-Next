@@ -1,16 +1,11 @@
 import AlumniTable from "@/app/_components/PortalComponents/Portal/alumni/AlumniTable";
-import { HydrateClient, trpc } from "@/trpc/server";
+import { getAlumniList } from "@/app/portal/_actions/queries";
 
 export const metadata = {
   title: "Alumni - Portal",
 };
 
 export default async function AlumniPage() {
-  const alumni = await trpc.portal.getAlumniList();
-
-  return (
-    <HydrateClient>
-      <AlumniTable alumni={alumni} />
-    </HydrateClient>
-  );
+  const alumni = await getAlumniList();
+  return <AlumniTable alumni={alumni} />;
 }
