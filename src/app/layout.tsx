@@ -1,6 +1,7 @@
 import { type Metadata } from "next";
 import { Saira } from "next/font/google";
 
+import "@/styles/globals.css";
 import "@/styles/globals.scss";
 import { TRPCReactProvider } from "@/trpc/react";
 import { Analytics } from "@vercel/analytics/next";
@@ -29,7 +30,7 @@ export default function RootLayout({
 }) {
   return (
     <html className={`${saira.className}`} lang="en">
-      <body>
+      <body className="bg-[#121212]">
         <TRPCReactProvider>{children}</TRPCReactProvider>
         <Analytics />
         <SpeedInsights />
