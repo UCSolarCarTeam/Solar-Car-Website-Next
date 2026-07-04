@@ -1,11 +1,11 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
 import { type EditSponsorCellProps } from "@/app/_components/PortalComponents/EditSponsorCell";
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import { compress } from "@/app/_lib/compress";
-import { createSponsor, updateSponsor } from "@/app/portal/_actions/mutations";
+import { createSponsor, updateSponsor } from "@/app/portal/actions";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { SponsorLevel } from "@prisma/client";
 
@@ -21,14 +21,11 @@ const EditSponsorPopup = ({
   newSponsor,
   togglePopup,
 }: EditSponsorPopupProps) => {
-  const handleOverlayClick = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (e.target === e.currentTarget) {
-        togglePopup();
-      }
-    },
-    [togglePopup],
-  );
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      togglePopup();
+    }
+  };
 
   const [touched, setTouched] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -99,7 +96,7 @@ const EditSponsorPopup = ({
     }
   };
 
-  const handleSave = useCallback(async () => {
+  const handleSave = async () => {
     if (touched) {
       setSaving(true);
       if (imageFile) {
@@ -139,9 +136,9 @@ const EditSponsorPopup = ({
     } else {
       togglePopup();
     }
-  }, [imageFile, newRowData, newSponsor, togglePopup, touched]);
+  };
 
-  const handleFileUpload = useCallback((file: File) => {
+  const handleFileUpload = (file: File) => {
     setTouched(true);
     if (file) {
       setImageFile(file);
@@ -150,7 +147,7 @@ const EditSponsorPopup = ({
         logoUrl: URL.createObjectURL(file),
       }));
     }
-  }, []);
+  };
 
   return (
     <div className={styles.popup} onClick={handleOverlayClick}>

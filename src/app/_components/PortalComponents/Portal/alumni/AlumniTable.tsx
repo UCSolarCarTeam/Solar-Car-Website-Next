@@ -3,7 +3,7 @@
 import { PlusIcon } from "lucide-react";
 import { useState, useTransition } from "react";
 
-import { deleteDBUser } from "@/app/portal/_actions/mutations";
+import { deleteDBUser } from "@/app/portal/actions";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { type User } from "@prisma/client";
 import { type ColumnDef } from "@tanstack/react-table";

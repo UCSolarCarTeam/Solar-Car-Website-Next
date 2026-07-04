@@ -1,5 +1,5 @@
 import OurWorkEntriesTable from "@/app/_components/PortalComponents/Portal/our-work/OurWorkEntriesTable";
-import { getOurWorkList } from "@/app/portal/_actions/queries";
+import { getOurWorkList } from "@/app/portal/actions";
 
 export const metadata = {
   title: "Our Work - Portal",

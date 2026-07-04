@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import EditUserPopupAdmin from "@/app/_components/PortalComponents/EditUserCell/EditUserPopupAdmin";
 import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
@@ -18,9 +18,9 @@ const EditUserCell = ({ currentRow, currentUser }: EditUserCellProps) => {
   const { user } = useUser();
   currentUser = currentUser ?? user;
 
-  const togglePopup = useCallback(() => {
+  const togglePopup = () => {
     setPopupOpen((prev) => !prev);
-  }, []);
+  };
 
   useEffect(() => {
     const closePopup = (e: KeyboardEvent) => {

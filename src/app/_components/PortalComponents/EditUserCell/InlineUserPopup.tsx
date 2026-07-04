@@ -1,5 +1,5 @@
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
@@ -11,7 +11,7 @@ import {
 } from "@/app/_lib/userValidation";
 import { formatDateOnly, parseDateOnly } from "@/app/_lib/utils";
 import { teamRoleOptions, userRowMetadata } from "@/app/_types";
-import { updateDBUser } from "@/app/portal/_actions/mutations";
+import { updateDBUser } from "@/app/portal/actions";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { type UserResource } from "@clerk/nextjs/types";
 import { type User } from "@prisma/client";
@@ -73,7 +73,7 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
       >,
     );
 
-  const handleFileUpload = useCallback((file: File) => {
+  const handleFileUpload = (file: File) => {
     setTouched(true);
     if (file) {
       setImageFile(file);
@@ -82,7 +82,7 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
         profilePictureUrl: URL.createObjectURL(file),
       }));
     }
-  }, []);
+  };
 
   const onInputChange = (
     e:
@@ -134,7 +134,7 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
     return result;
   };
 
-  const handleSave = useCallback(async () => {
+  const handleSave = async () => {
     if (!touched) return;
 
     const processedData = {
@@ -189,7 +189,7 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
     } else {
       await saveUser();
     }
-  }, [imageFile, newRowData, touched]);
+  };
 
   if (!user) return null;
 

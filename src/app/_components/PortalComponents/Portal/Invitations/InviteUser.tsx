@@ -4,7 +4,7 @@ import Select from "react-select";
 
 import BasicButton from "@/app/_components/Buttons/BasicButton";
 import SearchBar from "@/app/_components/PortalComponents/SearchBar";
-import { inviteUser as inviteUserAction } from "@/app/portal/_actions/mutations";
+import { inviteUser as inviteUserAction } from "@/app/portal/actions";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { type UserRole } from "@/server/portal/types";
 

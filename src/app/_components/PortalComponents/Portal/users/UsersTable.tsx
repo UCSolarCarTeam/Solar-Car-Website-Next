@@ -3,7 +3,7 @@
 import { useTransition } from "react";
 
 import { useUser } from "@/app/_hooks/useUser";
-import { updateUserRole } from "@/app/portal/_actions/mutations";
+import { updateUserRole } from "@/app/portal/actions";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { type ClerkPortalUser, type UserRole } from "@/server/portal/types";
 import { type ColumnDef } from "@tanstack/react-table";

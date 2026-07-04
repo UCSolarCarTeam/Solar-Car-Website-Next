@@ -1,5 +1,5 @@
 import SponsorsTable from "@/app/_components/PortalComponents/Portal/sponsors/SponsorsTable";
-import { getSponsorsList } from "@/app/portal/_actions/queries";
+import { getSponsorsList } from "@/app/portal/actions";
 
 export const metadata = {
   title: "Sponsors - Portal",

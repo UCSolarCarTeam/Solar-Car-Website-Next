@@ -1,4 +1,4 @@
-import { getCurrentDBUser } from "@/app/portal/_actions/queries";
+import { getCurrentDBUser } from "@/app/portal/actions";
 import ProfileContent from "@/app/portal/_components/ProfileContent";
 
 export const metadata = {

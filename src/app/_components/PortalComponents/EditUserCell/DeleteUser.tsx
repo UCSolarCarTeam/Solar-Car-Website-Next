@@ -1,7 +1,7 @@
 import { useTransition } from "react";
 
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
-import { deleteDBUser } from "@/app/portal/_actions/mutations";
+import { deleteDBUser } from "@/app/portal/actions";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { type UserResource } from "@clerk/nextjs/types";
 import type { User } from "@prisma/client";

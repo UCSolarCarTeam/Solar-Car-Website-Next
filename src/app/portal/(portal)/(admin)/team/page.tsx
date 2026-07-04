@@ -1,5 +1,5 @@
 import TeamTable from "@/app/_components/PortalComponents/Portal/team/TeamTable";
-import { getDBUsers } from "@/app/portal/_actions/queries";
+import { getDBUsers } from "@/app/portal/actions";
 
 export const metadata = {
   title: "Team - Portal",

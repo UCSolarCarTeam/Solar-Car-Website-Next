@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
 import { type EditRecruitmentFormCellProps } from "@/app/_components/PortalComponents/EditRecruitmentFormCell";
@@ -7,7 +7,7 @@ import { toLocalDateTimeString } from "@/app/_lib/toLocalDate";
 import {
   createRecruitmentForm,
   updateRecruitmentForm,
-} from "@/app/portal/_actions/mutations";
+} from "@/app/portal/actions";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 
 import BasicButton from "../../Buttons/BasicButton";
@@ -21,14 +21,11 @@ const EditFormPopup = ({
   newForm,
   togglePopup,
 }: EditRecruitmentFormPopupProps) => {
-  const handleOverlayClick = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (e.target === e.currentTarget) {
-        togglePopup();
-      }
-    },
-    [togglePopup],
-  );
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      togglePopup();
+    }
+  };
 
   const [touched, setTouched] = useState(false);
   const [newRowData, setNewRowData] = useState({
@@ -77,7 +74,7 @@ const EditFormPopup = ({
     });
   };
 
-  const handleSave = useCallback(async () => {
+  const handleSave = async () => {
     if (touched) {
       setSaving(true);
       const payload = {
@@ -104,7 +101,7 @@ const EditFormPopup = ({
     } else {
       togglePopup();
     }
-  }, [touched, newForm, newRowData, togglePopup]);
+  };
 
   return (
     <div className={styles.popup} onClick={handleOverlayClick}>

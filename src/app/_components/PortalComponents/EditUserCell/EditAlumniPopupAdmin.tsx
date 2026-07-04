@@ -1,12 +1,12 @@
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
 import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
 import { compress } from "@/app/_lib/compress";
 import { formatDateOnly, parseDateOnly } from "@/app/_lib/utils";
-import { createAlumni, updateDBUser } from "@/app/portal/_actions/mutations";
+import { createAlumni, updateDBUser } from "@/app/portal/actions";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { type User } from "@prisma/client";
 
@@ -64,14 +64,11 @@ const EditAlumniPopupAdmin = ({
     },
   ];
 
-  const handleOverlayClick = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (e.target === e.currentTarget) {
-        togglePopup();
-      }
-    },
-    [togglePopup],
-  );
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      togglePopup();
+    }
+  };
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -157,7 +154,7 @@ const EditAlumniPopupAdmin = ({
     }
   };
 
-  const handleSave = useCallback(async () => {
+  const handleSave = async () => {
     const errors: Record<string, string> = {};
     if (!newRowData.firstName) errors.firstName = "First Name is required";
     if (!newRowData.lastName) errors.lastName = "Last Name is required";
@@ -241,9 +238,9 @@ const EditAlumniPopupAdmin = ({
     } else {
       await saveData();
     }
-  }, [currentRow, imageFile, newRowData, togglePopup]);
+  };
 
-  const handleFileUpload = useCallback((file: File) => {
+  const handleFileUpload = (file: File) => {
     if (file) {
       if (blobUrlRef.current) {
         URL.revokeObjectURL(blobUrlRef.current);
@@ -256,7 +253,7 @@ const EditAlumniPopupAdmin = ({
         profilePictureUrl: newBlobUrl,
       }));
     }
-  }, []);
+  };
 
   useEffect(() => {
     return () => {

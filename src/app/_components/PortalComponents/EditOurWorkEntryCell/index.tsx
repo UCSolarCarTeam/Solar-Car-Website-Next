@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import PlusIcon from "@/app/_components/svgs/PlusIcon";
@@ -23,9 +23,9 @@ const EditOurWorkEntryCell = ({
   newEntry,
 }: EditOurWorkEntryCellProps) => {
   const [popupOpen, setPopupOpen] = useState(false);
-  const togglePopup = useCallback(() => {
+  const togglePopup = () => {
     setPopupOpen((prev) => !prev);
-  }, []);
+  };
   useEffect(() => {
     const closePopup = (e: KeyboardEvent) => {
       if (e.key === "Escape") {

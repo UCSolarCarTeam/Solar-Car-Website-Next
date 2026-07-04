@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
@@ -8,7 +8,7 @@ import { compress } from "@/app/_lib/compress";
 import {
   createOurWorkEntry,
   updateOurWorkEntry,
-} from "@/app/portal/_actions/mutations";
+} from "@/app/portal/actions";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 
 import BasicButton from "../../Buttons/BasicButton";
@@ -23,14 +23,11 @@ const EditOurWorkEntryPopup = ({
   newEntry,
   togglePopup,
 }: EditOurWorkEntryPopupProps) => {
-  const handleOverlayClick = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (e.target === e.currentTarget) {
-        togglePopup();
-      }
-    },
-    [togglePopup],
-  );
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      togglePopup();
+    }
+  };
 
   const [touched, setTouched] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -123,7 +120,7 @@ const EditOurWorkEntryPopup = ({
     }
   };
 
-  const handleSave = useCallback(async () => {
+  const handleSave = async () => {
     if (touched) {
       setSaving(true);
 
@@ -164,9 +161,9 @@ const EditOurWorkEntryPopup = ({
     } else {
       togglePopup();
     }
-  }, [imageFile, newRowData, newEntry, togglePopup, touched, dateValue]);
+  };
 
-  const handleFileUpload = useCallback((file: File) => {
+  const handleFileUpload = (file: File) => {
     setTouched(true);
     if (file) {
       setImageFile(file);
@@ -175,7 +172,7 @@ const EditOurWorkEntryPopup = ({
         imageUrl: URL.createObjectURL(file),
       }));
     }
-  }, []);
+  };
 
   return (
     <div className={styles.popup} onClick={handleOverlayClick}>

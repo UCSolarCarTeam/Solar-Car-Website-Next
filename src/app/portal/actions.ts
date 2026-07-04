@@ -7,6 +7,7 @@ import {
   requireAdminContext,
   requireAuthedContext,
 } from "@/server/portal/context";
+import { PortalError } from "@/server/portal/errors";
 import {
   createAlumni as createAlumniService,
   createOurWorkEntry as createOurWorkEntryService,
@@ -17,6 +18,14 @@ import {
   deleteOurWorkEntry as deleteOurWorkEntryService,
   deleteRecruitmentForm as deleteRecruitmentFormService,
   deleteSponsor as deleteSponsorService,
+  getAlumniList as getAlumniListService,
+  getClerkUsers as getClerkUsersService,
+  getCurrentDBUser as getCurrentDBUserService,
+  getDBUsers as getDBUsersService,
+  getFormsList as getFormsListService,
+  getInvitedUsers as getInvitedUsersService,
+  getOurWorkList as getOurWorkListService,
+  getSponsorsList as getSponsorsListService,
   inviteUser as inviteUserService,
   moveUserToAlumni as moveUserToAlumniService,
   parseAndNormalizeDate,
@@ -29,7 +38,23 @@ import {
 } from "@/server/portal/service";
 import { AllTeamRoles, SponsorLevel } from "@prisma/client";
 
-import { type ActionResult, actionError, actionSuccess } from "./utils";
+export type ActionResult<T = void> =
+  | { success: true; data: T }
+  | { success: false; error: string };
+
+function actionSuccess<T>(data: T): ActionResult<T> {
+  return { data, success: true };
+}
+
+function actionError(error: unknown): ActionResult<never> {
+  if (error instanceof PortalError) {
+    return { error: error.message, success: false };
+  }
+  if (error instanceof Error) {
+    return { error: error.message, success: false };
+  }
+  return { error: "An unexpected error occurred.", success: false };
+}
 
 const UserRoleSchema = z.enum([
   "admin",
@@ -38,6 +63,46 @@ const UserRoleSchema = z.enum([
   "electricallead",
   "member",
 ]);
+
+export async function getDBUsers() {
+  const ctx = await requireAdminContext();
+  return getDBUsersService(ctx);
+}
+
+export async function getClerkUsers() {
+  const ctx = await requireAdminContext();
+  return getClerkUsersService(ctx);
+}
+
+export async function getSponsorsList() {
+  const ctx = await requireAdminContext();
+  return getSponsorsListService(ctx);
+}
+
+export async function getFormsList() {
+  const ctx = await requireAdminContext();
+  return getFormsListService(ctx);
+}
+
+export async function getInvitedUsers() {
+  const ctx = await requireAdminContext();
+  return getInvitedUsersService(ctx);
+}
+
+export async function getOurWorkList() {
+  const ctx = await requireAdminContext();
+  return getOurWorkListService(ctx);
+}
+
+export async function getAlumniList() {
+  const ctx = await requireAdminContext();
+  return getAlumniListService(ctx);
+}
+
+export async function getCurrentDBUser() {
+  const ctx = await requireAuthedContext();
+  return getCurrentDBUserService(ctx);
+}
 
 export async function createAlumni(
   input: z.infer<typeof createAlumniSchema>,

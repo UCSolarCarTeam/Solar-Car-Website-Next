@@ -1,5 +1,5 @@
 import AlumniTable from "@/app/_components/PortalComponents/Portal/alumni/AlumniTable";
-import { getAlumniList } from "@/app/portal/_actions/queries";
+import { getAlumniList } from "@/app/portal/actions";
 
 export const metadata = {
   title: "Alumni - Portal",

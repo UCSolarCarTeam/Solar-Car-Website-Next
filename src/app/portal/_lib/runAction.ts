@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 
-import { type ActionResult } from "@/app/portal/_actions/utils";
+import { type ActionResult } from "@/app/portal/actions";
 
 export async function runPortalAction<T>(
   action: () => Promise<ActionResult<T>>,

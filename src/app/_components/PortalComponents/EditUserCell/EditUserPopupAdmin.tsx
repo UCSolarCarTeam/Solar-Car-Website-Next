@@ -1,5 +1,5 @@
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
@@ -18,7 +18,7 @@ import {
   teamRoleOptions,
   userRowMetadata,
 } from "@/app/_types";
-import { updateDBUser } from "@/app/portal/_actions/mutations";
+import { updateDBUser } from "@/app/portal/actions";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 
 import BasicButton from "../../Buttons/BasicButton";
@@ -83,14 +83,11 @@ const EditUserPopupAdmin = ({
       >,
     );
 
-  const handleOverlayClick = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (e.target === e.currentTarget) {
-        togglePopup();
-      }
-    },
-    [togglePopup],
-  );
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      togglePopup();
+    }
+  };
 
   const onInputChange = (
     e:
@@ -145,7 +142,7 @@ const EditUserPopupAdmin = ({
     }
   };
 
-  const handleSave = useCallback(async () => {
+  const handleSave = async () => {
     if (!touched) {
       togglePopup();
       return;
@@ -182,9 +179,9 @@ const EditUserPopupAdmin = ({
     } else {
       await saveUser();
     }
-  }, [imageFile, newRowData, togglePopup, touched, uploadProfilePicMutation]);
+  };
 
-  const handleFileUpload = useCallback((file: File) => {
+  const handleFileUpload = (file: File) => {
     setTouched(true);
     if (file) {
       setImageFile(file);
@@ -193,7 +190,7 @@ const EditUserPopupAdmin = ({
         profilePictureUrl: URL.createObjectURL(file),
       }));
     }
-  }, []);
+  };
 
   const currentProfileImage = imageFile
     ? URL.createObjectURL(imageFile)
