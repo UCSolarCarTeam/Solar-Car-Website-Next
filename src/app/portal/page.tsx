@@ -44,6 +44,7 @@ const Portal = () => {
       refetchOnWindowFocus: false,
     },
   );
+  console.log({ clerkUsers });
   const invitedUsers = trpc.portal.getInvitedUsers.useQuery(
     !showAdminTables || currentPage !== PortalNavigationLinks.Invitations
       ? skipToken
@@ -144,10 +145,7 @@ const Portal = () => {
                   {currentPage === PortalNavigationLinks.Team ? (
                     <TeamTable users={dbUsers.data ?? []} />
                   ) : currentPage === PortalNavigationLinks.Users ? (
-                    <UsersTable
-                      currentUser={user}
-                      users={clerkUsers.data ?? []}
-                    />
+                    <UsersTable data={clerkUsers.data ?? []} />
                   ) : currentPage === PortalNavigationLinks.Invitations ? (
                     <InvitationsTable
                       currentUser={user}
