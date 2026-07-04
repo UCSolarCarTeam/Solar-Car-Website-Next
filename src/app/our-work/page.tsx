@@ -1,14 +1,13 @@
-import { memo } from "react";
-
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 import Timeline from "@/app/_components/OurWork/Timeline";
 import Pagebullets from "@/app/_components/Pagebullets";
 import styles from "@/app/our-work/index.module.scss";
-import { trpc } from "@/trpc/server";
+
+import { getOurWork } from "./actions";
 
 const OurWorkTimelinePage = async () => {
-  const timelineData = await trpc.fe.getOurWork();
+  const timelineData = await getOurWork();
 
   return (
     <>
@@ -34,4 +33,4 @@ const OurWorkTimelinePage = async () => {
   );
 };
 
-export default memo(OurWorkTimelinePage);
+export default OurWorkTimelinePage;
