@@ -62,6 +62,7 @@ const InviteUser = () => {
         value={email}
       />
       <Select
+        instanceId="portal-invite-user-role"
         isClearable={false}
         isDisabled={email.length === 0 ? true : false}
         isSearchable={false}

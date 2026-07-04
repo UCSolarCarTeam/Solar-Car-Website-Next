@@ -54,6 +54,7 @@ export const columns = (
   columnHelper.accessor("role", {
     cell: (info) => (
       <Select
+        instanceId={`portal-user-role-${info.row.original.id}`}
         isDisabled={
           !adminClerkRoles.includes(
             (clerkUser?.publicMetadata.role as AdminRoles) ?? "",
