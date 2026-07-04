@@ -5,7 +5,7 @@ import Select from "react-select";
 import { ClerkUser } from "@/app/_hooks/useUser";
 import { adminClerkRoles } from "@/app/_types";
 import { AdminRoles, UserRole } from "@/server/api/routers/portal";
-import { CellContext, createColumnHelper } from "@tanstack/react-table";
+import { createColumnHelper } from "@tanstack/react-table";
 
 import DeleteClerkUserCell from "../../DeleteClerkUserCell";
 import { User } from "./UsersTable";
@@ -80,5 +80,6 @@ export const columns = (
     },
     header: () => null,
     id: "delete",
+    enableHiding: false,
   }),
 ];

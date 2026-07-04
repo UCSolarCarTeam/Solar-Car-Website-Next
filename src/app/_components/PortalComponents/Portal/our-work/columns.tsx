@@ -77,6 +77,7 @@ export const columns = [
       />
     ),
     id: "edit",
+    enableHiding: false,
   }),
   columnHelper.display({
     cell: (info) => (
@@ -92,5 +93,6 @@ export const columns = [
       />
     ),
     id: "delete",
+    enableHiding: false,
   }),
 ];
