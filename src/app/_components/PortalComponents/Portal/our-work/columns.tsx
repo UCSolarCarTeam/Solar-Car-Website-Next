@@ -10,8 +10,8 @@ import { OurWorkEntry } from "./OurWorkEntriesTable";
 
 const columnHelper = createColumnHelper<OurWorkEntry>();
 export const columns = [
-  columnHelper.accessor((row) => `${row.monthName} ${row.year}`, {
-    cell: (info) => info.getValue(),
+  columnHelper.accessor((row) => row.year * 100 + row.monthNum, {
+    cell: (info) => `${info.row.original.monthName} ${info.row.original.year}`,
     header: ({ column }) => {
       return (
         <Button

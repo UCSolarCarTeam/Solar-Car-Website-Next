@@ -1,3 +1,4 @@
+import { ArrowUpDown } from "lucide-react";
 import Link from "next/link";
 
 import { toLocalDateTimeString } from "@/app/_lib/toLocalDate";
@@ -12,7 +13,17 @@ const columnHelper = createColumnHelper<RecruitmentForm>();
 export const columns = [
   columnHelper.accessor("header", {
     cell: (info) => info.getValue(),
-    header: "Header",
+    header: ({ column }) => {
+      return (
+        <Button
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          variant="ghost"
+        >
+          Header
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   }),
   columnHelper.accessor("description", {
     cell: (info) => info.getValue(),

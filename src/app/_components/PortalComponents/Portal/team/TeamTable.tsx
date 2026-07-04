@@ -12,7 +12,6 @@ import {
   type VisibilityState,
 } from "@tanstack/react-table";
 
-import type TeamMember from "../../../TeamMember";
 import EntityTable from "../EntityTable";
 import { columns } from "./columns";
 

@@ -14,14 +14,19 @@ type MoveToAlumniModalProps = {
 };
 
 const pad = (value: number) => value.toString().padStart(2, "0");
-const today = new Date();
-const currentDateInputValue = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
+
+const getCurrentDateInputValue = () => {
+  const today = new Date();
+  return `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
+};
+
 export const MoveToAlumniModal = ({
   onClose,
   userId,
   userName,
 }: MoveToAlumniModalProps) => {
   const utils = trpc.useUtils();
+  const currentDateInputValue = getCurrentDateInputValue();
   const [yearRetired, setYearRetired] = useState(currentDateInputValue);
   const [company, setCompany] = useState("");
   const [companyTitle, setCompanyTitle] = useState("");

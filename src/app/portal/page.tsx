@@ -44,7 +44,6 @@ const Portal = () => {
       refetchOnWindowFocus: false,
     },
   );
-  console.log({ clerkUsers });
   const invitedUsers = trpc.portal.getInvitedUsers.useQuery(
     !showAdminTables || currentPage !== PortalNavigationLinks.Invitations
       ? skipToken
