@@ -6,16 +6,16 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import superjson from "superjson";
-import { ZodError } from "zod";
 
-import { adminClerkRoles } from "@/app/_types";
-import { type AdminRoles } from "@/server/portal/types";
-import { db } from "@/server/db";
-import { type User, createClerkClient } from "@clerk/backend";
+import { createClerkClient, type User } from "@clerk/backend";
 import { currentUser } from "@clerk/nextjs/server";
 import { createClient } from "@supabase/supabase-js";
-import { TRPCError, initTRPC } from "@trpc/server";
+import { initTRPC, TRPCError } from "@trpc/server";
+import superjson from "superjson";
+import { ZodError } from "zod";
+import { adminClerkRoles } from "@/app/_types";
+import { db } from "@/server/db";
+import type { AdminRoles } from "@/server/portal/types";
 
 export const clerkClient = createClerkClient({
   secretKey: process.env.CLERK_SECRET_KEY,
@@ -114,7 +114,7 @@ export const createTRPCRouter = t.router;
  * You can remove this if you don't like it, but it can help catch unwanted waterfalls by simulating
  * network latency that would occur in production but not in local development.
  */
-const timingMiddleware = t.middleware(async ({ next, path }) => {
+const _timingMiddleware = t.middleware(async ({ next, path }) => {
   const start = Date.now();
 
   if (t._config.isDev) {

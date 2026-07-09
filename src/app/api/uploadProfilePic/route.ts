@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { env } from "@/env";
 import { supabase } from "@/server/supabase";
 
-import { type UploadFilePicBody } from "../uploadSponsorPic/route";
+import type { UploadFilePicBody } from "../uploadSponsorPic/route";
 
 export async function POST(req: Request) {
   try {

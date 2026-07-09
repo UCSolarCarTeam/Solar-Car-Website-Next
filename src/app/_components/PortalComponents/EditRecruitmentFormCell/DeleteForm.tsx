@@ -1,9 +1,8 @@
+import type { UserResource } from "@clerk/nextjs/types";
 import { useTransition } from "react";
-
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
-import { deleteRecruitmentForm } from "@/app/portal/actions";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
-import { type UserResource } from "@clerk/nextjs/types";
+import { deleteRecruitmentForm } from "@/app/portal/actions";
 
 import BasicButton, { ButtonVariant } from "../../Buttons/BasicButton";
 

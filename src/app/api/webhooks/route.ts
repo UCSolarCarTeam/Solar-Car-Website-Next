@@ -1,11 +1,10 @@
+import type { WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { Webhook } from "svix";
-
 import { env } from "@/env";
 import { clerkClient } from "@/server/api/trpc";
 import { db } from "@/server/db";
-import { type WebhookEvent } from "@clerk/nextjs/server";
 
 export async function POST(req: Request) {
   if (!env.WEBHOOK_SECRET) {

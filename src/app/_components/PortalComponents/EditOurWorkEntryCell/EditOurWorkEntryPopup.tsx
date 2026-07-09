@@ -2,14 +2,11 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
-import { type EditOurWorkEntryCellProps } from "@/app/_components/PortalComponents/EditOurWorkEntryCell";
+import type { EditOurWorkEntryCellProps } from "@/app/_components/PortalComponents/EditOurWorkEntryCell";
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import { compress } from "@/app/_lib/compress";
-import {
-  createOurWorkEntry,
-  updateOurWorkEntry,
-} from "@/app/portal/actions";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
+import { createOurWorkEntry, updateOurWorkEntry } from "@/app/portal/actions";
 
 import BasicButton from "../../Buttons/BasicButton";
 import DropZone from "../DropZone";

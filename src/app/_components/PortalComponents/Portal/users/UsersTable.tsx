@@ -1,12 +1,11 @@
 "use client";
 
+import type { ColumnDef } from "@tanstack/react-table";
 import { useTransition } from "react";
-
 import { useUser } from "@/app/_hooks/useUser";
-import { updateUserRole } from "@/app/portal/actions";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
-import { type ClerkPortalUser, type UserRole } from "@/server/portal/types";
-import { type ColumnDef } from "@tanstack/react-table";
+import { updateUserRole } from "@/app/portal/actions";
+import type { ClerkPortalUser, UserRole } from "@/server/portal/types";
 
 import EntityTable from "../EntityTable";
 import { columns } from "./columns";

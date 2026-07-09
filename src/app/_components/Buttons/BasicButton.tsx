@@ -1,6 +1,6 @@
 "use client";
 
-import { type PropsWithChildren, memo, useState } from "react";
+import { memo, type PropsWithChildren, useState } from "react";
 
 import styles from "@/app/_components/Buttons/index.module.scss";
 import ConfirmModal from "@/app/_components/Modals/ConfirmModal";

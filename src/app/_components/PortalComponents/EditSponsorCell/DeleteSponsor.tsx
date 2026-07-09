@@ -1,8 +1,8 @@
 import { useTransition } from "react";
 
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
-import { deleteSponsor } from "@/app/portal/actions";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
+import { deleteSponsor } from "@/app/portal/actions";
 
 import BasicButton, { ButtonVariant } from "../../Buttons/BasicButton";
 

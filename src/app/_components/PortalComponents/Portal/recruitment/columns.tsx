@@ -1,13 +1,12 @@
+import { createColumnHelper } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import Link from "next/link";
-
 import { toLocalDateTimeString } from "@/app/_lib/toLocalDate";
 import { Button } from "@/components/ui/button";
-import { createColumnHelper } from "@tanstack/react-table";
 
 import EditRecruitmentFormCell from "../../EditRecruitmentFormCell";
 import DeleteForm from "../../EditRecruitmentFormCell/DeleteForm";
-import { type RecruitmentForm } from "./RecruitmentTable";
+import type { RecruitmentForm } from "./RecruitmentTable";
 
 const columnHelper = createColumnHelper<RecruitmentForm>();
 export const columns = [
@@ -40,7 +39,7 @@ export const columns = [
   columnHelper.accessor("expiresAt", {
     cell: (info) => {
       const date = new Date(info.getValue());
-      return date.toLocaleDateString() + " " + date.toLocaleTimeString();
+      return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
     },
     header: "Expires At",
   }),

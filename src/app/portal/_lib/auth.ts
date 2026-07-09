@@ -1,8 +1,7 @@
+import { currentUser, type User } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-
 import { adminClerkRoles } from "@/app/_types";
-import { type AdminRoles } from "@/server/portal/types";
-import { type User, currentUser } from "@clerk/nextjs/server";
+import type { AdminRoles } from "@/server/portal/types";
 
 export type PortalRole = AdminRoles | "member" | "unverified";
 

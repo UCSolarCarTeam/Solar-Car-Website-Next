@@ -1,11 +1,11 @@
+import type { User } from "@clerk/backend";
+import { currentUser } from "@clerk/nextjs/server";
 import { adminClerkRoles } from "@/app/_types";
 import { clerkClient } from "@/server/api/trpc";
 import { db } from "@/server/db";
-import { type User } from "@clerk/backend";
-import { currentUser } from "@clerk/nextjs/server";
 
 import { PortalError } from "./errors";
-import { type AdminRoles } from "./types";
+import type { AdminRoles } from "./types";
 
 export type PortalContext = {
   user: User | null;

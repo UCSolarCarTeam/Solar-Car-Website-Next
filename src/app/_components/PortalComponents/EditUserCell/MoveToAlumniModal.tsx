@@ -2,9 +2,8 @@
 
 import { useState, useTransition } from "react";
 import toast from "react-hot-toast";
-
-import { moveUserToAlumni } from "@/app/portal/actions";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
+import { moveUserToAlumni } from "@/app/portal/actions";
 
 import styles from "./index.module.scss";
 

@@ -48,7 +48,7 @@ const Navbar = () => {
 
   useEffect(() => {
     setHamburgerMenuOpen(false);
-  }, [width]);
+  }, []);
 
   return (
     <>
@@ -74,23 +74,21 @@ const Navbar = () => {
             width={350}
           />
         </div>
-        {width && width > 1024 && (
-          <>
-            {links.map((link) => (
-              <Link
-                className={
-                  isActive(link.href)
-                    ? cx(styles.active, styles.link)
-                    : styles.link
-                }
-                href={link.href}
-                key={link.href}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </>
-        )}
+        {width &&
+          width > 1024 &&
+          links.map((link) => (
+            <Link
+              className={
+                isActive(link.href)
+                  ? cx(styles.active, styles.link)
+                  : styles.link
+              }
+              href={link.href}
+              key={link.href}
+            >
+              {link.label}
+            </Link>
+          ))}
         {width && width <= 1024 && (
           <div onClick={toggleHambugerMenu}>
             <Chevron className={styles.chevron} />

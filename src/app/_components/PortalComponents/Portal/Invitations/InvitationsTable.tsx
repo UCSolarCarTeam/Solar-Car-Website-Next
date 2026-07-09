@@ -1,17 +1,16 @@
 "use client";
 
-import { useState } from "react";
-
-import InviteUser from "@/app/_components/PortalComponents/Portal/Invitations/InviteUser";
-import RevokeUserCell from "@/app/_components/PortalComponents/Portal/Invitations/RevokeUserCell";
-import SearchBar from "@/app/_components/PortalComponents/SearchBar";
-import { type PortalInvitation } from "@/server/portal/types";
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { useState } from "react";
+import InviteUser from "@/app/_components/PortalComponents/Portal/Invitations/InviteUser";
+import RevokeUserCell from "@/app/_components/PortalComponents/Portal/Invitations/RevokeUserCell";
+import SearchBar from "@/app/_components/PortalComponents/SearchBar";
+import type { PortalInvitation } from "@/server/portal/types";
 
 import styles from "../index.module.scss";
 

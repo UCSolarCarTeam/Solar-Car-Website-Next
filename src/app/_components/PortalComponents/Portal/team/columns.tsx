@@ -1,15 +1,14 @@
 "use client";
 
+import { type CellContext, createColumnHelper } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import Image from "next/image";
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
-
 import EditTeamCell from "@/app/_components/PortalComponents/EditUserCell";
 import DeleteUser from "@/app/_components/PortalComponents/EditUserCell/DeleteUser";
 import { Button } from "@/components/ui/button";
-import { type CellContext, createColumnHelper } from "@tanstack/react-table";
 
-import { type TeamMember } from "./TeamTable";
+import type { TeamMember } from "./TeamTable";
 
 const columnHelper = createColumnHelper<TeamMember>();
 export const columns = (

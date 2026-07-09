@@ -4,9 +4,9 @@ import Select from "react-select";
 
 import BasicButton from "@/app/_components/Buttons/BasicButton";
 import SearchBar from "@/app/_components/PortalComponents/SearchBar";
-import { inviteUser as inviteUserAction } from "@/app/portal/actions";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
-import { type UserRole } from "@/server/portal/types";
+import { inviteUser as inviteUserAction } from "@/app/portal/actions";
+import type { UserRole } from "@/server/portal/types";
 
 import styles from "../index.module.scss";
 
@@ -64,7 +64,7 @@ const InviteUser = () => {
       <Select
         instanceId="portal-invite-user-role"
         isClearable={false}
-        isDisabled={email.length === 0 ? true : false}
+        isDisabled={email.length === 0}
         isSearchable={false}
         onChange={(option) => {
           if (option) {

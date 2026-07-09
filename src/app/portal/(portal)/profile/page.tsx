@@ -1,5 +1,5 @@
-import { getCurrentDBUser } from "@/app/portal/actions";
 import ProfileContent from "@/app/portal/_components/ProfileContent";
+import { getCurrentDBUser } from "@/app/portal/actions";
 
 export const metadata = {
   title: "Profile - Portal",

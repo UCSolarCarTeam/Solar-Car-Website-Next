@@ -6,7 +6,6 @@ import backsplash5 from "public/assets/cars/backsplash5.jpeg";
 import backsplash6 from "public/assets/cars/backsplash6.jpeg";
 
 export const pageIds = {
-  // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
   Helios: {
     content: `Schulich Helios, the current project in the making by the University 
         of Calgary Solar Car Team, embodies the future of renewable automotive technology. 
@@ -18,7 +17,6 @@ export const pageIds = {
     position: "left",
     title: "Schulich Helios",
   },
-  // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
   Elysia: {
     content: `Schulich Elysia started it’s design phase in 2016 and this catamaran 
         style cruise car was completed in 2019. This design was implemented to improve 
@@ -30,7 +28,6 @@ export const pageIds = {
     position: "left",
     title: "Schulich Elysia",
   },
-  // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
   Delta: {
     content: `The Schulich Delta, Canada's first cruiser-class solar car, was built
           by the University of Calgary Solar Car Team from 2012 to 2015. It
@@ -43,7 +40,6 @@ export const pageIds = {
     position: "left",
     title: "Schulich Delta",
   },
-  // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
   Axiom: {
     content: `Schulich Axiom was the University of Calgary Solar Car Team's last
           Challenger class car. In 2010, it finished 6th at the Formula Sun
@@ -56,7 +52,6 @@ export const pageIds = {
     position: "left",
     title: "Schulich Axiom",
   },
-  // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
   "Schulich 1": {
     content: `The Schulich I debuted at the 2007 Panasonic World Solar Challenge,
           finishing 8th and completing 2999 km in 51 hr, 43 min as the top
@@ -69,7 +64,6 @@ export const pageIds = {
     position: "right",
     title: "Schulich 1",
   },
-  // eslint-disable-next-line sort-keys/sort-keys-fix, sort-keys
   Soleon: {
     content: `The University of Calgary Solar Car Team built Soleon in 2004 for the 
           inaugural North American Solar Challenge (2005), finishing 13th with a total driving 

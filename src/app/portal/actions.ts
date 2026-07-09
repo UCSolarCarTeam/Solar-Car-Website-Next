@@ -1,8 +1,8 @@
 "use server";
 
+import { AllTeamRoles, SponsorLevel } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-
 import {
   requireAdminContext,
   requireAuthedContext,
@@ -36,7 +36,6 @@ import {
   updateSponsor as updateSponsorService,
   updateUserRole as updateUserRoleService,
 } from "@/server/portal/service";
-import { AllTeamRoles, SponsorLevel } from "@prisma/client";
 
 export type ActionResult<T = void> =
   | { success: true; data: T }

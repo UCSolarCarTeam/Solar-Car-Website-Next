@@ -1,12 +1,11 @@
+import { createColumnHelper } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import Image from "next/image";
-
 import { Button } from "@/components/ui/button";
-import { createColumnHelper } from "@tanstack/react-table";
 
 import EditOurWorkEntryCell from "../../EditOurWorkEntryCell";
 import DeleteOurWorkEntry from "../../EditOurWorkEntryCell/DeleteOurWorkEntry";
-import { type OurWorkEntry } from "./OurWorkEntriesTable";
+import type { OurWorkEntry } from "./OurWorkEntriesTable";
 
 const columnHelper = createColumnHelper<OurWorkEntry>();
 export const columns = [

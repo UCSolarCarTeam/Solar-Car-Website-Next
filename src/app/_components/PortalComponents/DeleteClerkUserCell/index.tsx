@@ -1,8 +1,8 @@
 import { useState, useTransition } from "react";
 
 import styles from "@/app/_components/PortalComponents/DeleteClerkUserCell/index.module.scss";
-import { deleteClerkUser } from "@/app/portal/actions";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
+import { deleteClerkUser } from "@/app/portal/actions";
 
 import BasicButton from "../../Buttons/BasicButton";
 import ConfirmModal from "../../Modals/ConfirmModal";
