@@ -1,6 +1,6 @@
 import { memo } from "react";
 
-import { type SVGIconProps } from "@/app/_types";
+import type { SVGIconProps } from "@/app/_types";
 
 const Facebook = ({ className }: SVGIconProps) => {
   return (

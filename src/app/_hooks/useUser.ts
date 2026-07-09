@@ -1,5 +1,5 @@
-import { type AdminRoles } from "@/server/portal/types";
 import { useUser as useClerkUser } from "@clerk/nextjs";
+import type { AdminRoles } from "@/server/portal/types";
 
 export type ClerkUser =
   | (ReturnType<typeof useClerkUser>["user"] & {

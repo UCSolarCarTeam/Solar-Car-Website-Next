@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/** biome-ignore-all lint/suspicious/noConsole: local seed script */
 import { faker } from "@faker-js/faker";
 import { PrismaClient, SponsorLevel } from "@prisma/client";
 

@@ -1,8 +1,8 @@
 "use client";
 
+import type { Sponsor } from "@prisma/client";
+import type { ColumnDef, VisibilityState } from "@tanstack/react-table";
 import { useUser } from "@/app/_hooks/useUser";
-import { type Sponsor } from "@prisma/client";
-import { type ColumnDef, type VisibilityState } from "@tanstack/react-table";
 
 import EntityTable from "../EntityTable";
 import { columns } from "./columns";

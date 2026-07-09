@@ -1,5 +1,5 @@
 import Image, { type StaticImageData } from "next/image";
-import React from "react";
+import type React from "react";
 
 import Upload from "../../svgs/Upload";
 import styles from "./index.module.scss";

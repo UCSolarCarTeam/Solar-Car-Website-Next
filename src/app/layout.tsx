@@ -1,11 +1,11 @@
-import { type Metadata } from "next";
+import type { Metadata } from "next";
 import { Saira } from "next/font/google";
 
 import "@/styles/globals.css";
 import "@/styles/globals.scss";
-import { TRPCReactProvider } from "@/trpc/react";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { TRPCReactProvider } from "@/trpc/react";
 
 const saira = Saira({
   display: "swap",

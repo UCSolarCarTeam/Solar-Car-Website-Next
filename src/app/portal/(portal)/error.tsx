@@ -13,7 +13,7 @@ export default function PortalError({
   reset: () => void;
 }) {
   useEffect(() => {
-    // eslint-disable-next-line no-console -- error boundaries should log for monitoring
+    // biome-ignore lint/suspicious/noConsole: error boundaries should log for monitoring
     console.error(error);
   }, [error]);
 

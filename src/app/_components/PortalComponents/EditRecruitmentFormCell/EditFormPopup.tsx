@@ -1,14 +1,14 @@
 import { useState } from "react";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
-import { type EditRecruitmentFormCellProps } from "@/app/_components/PortalComponents/EditRecruitmentFormCell";
+import type { EditRecruitmentFormCellProps } from "@/app/_components/PortalComponents/EditRecruitmentFormCell";
 import styles from "@/app/_components/PortalComponents/EditRecruitmentFormCell/index.module.scss";
 import { toLocalDateTimeString } from "@/app/_lib/toLocalDate";
+import { runPortalAction } from "@/app/portal/_lib/runAction";
 import {
   createRecruitmentForm,
   updateRecruitmentForm,
 } from "@/app/portal/actions";
-import { runPortalAction } from "@/app/portal/_lib/runAction";
 
 import BasicButton from "../../Buttons/BasicButton";
 

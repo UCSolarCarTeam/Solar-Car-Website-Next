@@ -1,6 +1,6 @@
 import { memo } from "react";
 
-import { type SVGIconProps } from "@/app/_types";
+import type { SVGIconProps } from "@/app/_types";
 
 const Chevron = ({ className }: SVGIconProps) => {
   return (
@@ -11,9 +11,9 @@ const Chevron = ({ className }: SVGIconProps) => {
       version="1.1"
       viewBox="0 0 185.343 185.343"
       width="25px"
-      xmlSpace="preserve"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
+      xmlSpace="preserve"
     >
       <g id="SVGRepo_bgCarrier" strokeWidth="0" />
       <g

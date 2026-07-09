@@ -1,14 +1,13 @@
+import { createColumnHelper } from "@tanstack/react-table";
 import Image from "next/image";
 import defaultProfilePictureSquare from "public/assets/DefaultProfilePicture-Square.png";
 import Select from "react-select";
-
-import { type ClerkUser } from "@/app/_hooks/useUser";
+import type { ClerkUser } from "@/app/_hooks/useUser";
 import { adminClerkRoles } from "@/app/_types";
-import { type AdminRoles, type UserRole } from "@/server/portal/types";
-import { createColumnHelper } from "@tanstack/react-table";
+import type { AdminRoles, UserRole } from "@/server/portal/types";
 
 import DeleteClerkUserCell from "../../DeleteClerkUserCell";
-import { type User } from "./UsersTable";
+import type { User } from "./UsersTable";
 
 const dropdownOptions = [
   { label: "Admin", value: "admin" },

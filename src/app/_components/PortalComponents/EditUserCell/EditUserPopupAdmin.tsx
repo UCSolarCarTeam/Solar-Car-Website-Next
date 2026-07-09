@@ -3,7 +3,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
-import { type EditUserCellProps } from "@/app/_components/PortalComponents/EditUserCell";
+import type { EditUserCellProps } from "@/app/_components/PortalComponents/EditUserCell";
 import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
 import { useUploadProfilePic } from "@/app/_hooks/useUploadProfilePic";
 import {
@@ -18,8 +18,8 @@ import {
   teamRoleOptions,
   userRowMetadata,
 } from "@/app/_types";
-import { updateDBUser } from "@/app/portal/actions";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
+import { updateDBUser } from "@/app/portal/actions";
 
 import BasicButton from "../../Buttons/BasicButton";
 import DropZone from "../DropZone";

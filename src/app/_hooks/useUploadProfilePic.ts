@@ -1,10 +1,9 @@
 "use client";
 
+import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-
 import { compress } from "@/app/_lib/compress";
 import { tryCatch } from "@/app/_lib/utils";
-import { useMutation } from "@tanstack/react-query";
 
 interface UploadProfilePicParams {
   file: File;

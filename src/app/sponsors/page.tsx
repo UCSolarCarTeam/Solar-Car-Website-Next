@@ -1,14 +1,13 @@
+import { SponsorLevel } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import backsplash from "public/assets/sponsors/backsplash.jpeg";
 import { memo } from "react";
-
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 import styles from "@/app/sponsors/index.module.scss";
-import { type RouterOutputs } from "@/trpc/react";
+import type { RouterOutputs } from "@/trpc/react";
 import { trpc } from "@/trpc/server";
-import { SponsorLevel } from "@prisma/client";
 
 type Sponsor = RouterOutputs["fe"]["getSponsors"][0];
 
@@ -98,16 +97,14 @@ const Sponsors = async () => {
                 sponsors={sponsors ?? []}
               />
             </div>
-            <>
-              <div className={styles.pageHeading}>Friends of Solar Car</div>
-              <div className={styles.descriptionTitle}>
-                {`Thank you for helping us continue to innovate!`}
-              </div>
-              <SponsorLevelImages
-                sponsorLevel={SponsorLevel.Friends}
-                sponsors={sponsors ?? []}
-              />
-            </>
+            <div className={styles.pageHeading}>Friends of Solar Car</div>
+            <div className={styles.descriptionTitle}>
+              {`Thank you for helping us continue to innovate!`}
+            </div>
+            <SponsorLevelImages
+              sponsorLevel={SponsorLevel.Friends}
+              sponsors={sponsors ?? []}
+            />
             <div className={styles.seperator} />
           </div>
           <Image

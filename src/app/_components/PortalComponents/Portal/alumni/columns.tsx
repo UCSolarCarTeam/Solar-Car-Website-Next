@@ -1,15 +1,14 @@
+import { createColumnHelper } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import Image from "next/image";
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
-
 import BasicButton, {
   ButtonVariant,
 } from "@/app/_components/Buttons/BasicButton";
 import { formatDateOnly } from "@/app/_lib/utils";
 import { Button } from "@/components/ui/button";
-import { createColumnHelper } from "@tanstack/react-table";
 
-import { type AlumniMember } from "./AlumniTable";
+import type { AlumniMember } from "./AlumniTable";
 
 const columnHelper = createColumnHelper<AlumniMember>();
 
