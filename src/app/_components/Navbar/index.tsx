@@ -107,30 +107,21 @@ const Navbar = () => {
             }}
           />
         </div>
-
-        {width && width > 1024 && (
-          <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
-            {links.map((link) => (
-              <Link
-                className="sc-mono"
-                href={link.href}
-                key={link.href}
-                style={{
-                  fontSize: "0.85rem",
-                  color: isActive(link.href)
-                    ? "var(--sc-red)"
-                    : "var(--sc-white)",
-                  textDecoration: "none",
-                  fontWeight: isActive(link.href) ? 600 : 400,
-                  transition: "color 0.2s",
-                }}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-        )}
-
+        {width &&
+          width > 1024 &&
+          links.map((link) => (
+            <Link
+              className={
+                isActive(link.href)
+                  ? cx(styles.active, styles.link)
+                  : styles.link
+              }
+              href={link.href}
+              key={link.href}
+            >
+              {link.label}
+            </Link>
+          ))}
         {width && width <= 1024 && (
           <div
             onClick={toggleHambugerMenu}
