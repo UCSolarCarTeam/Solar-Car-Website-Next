@@ -4,15 +4,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
+import { useEffect } from "react";
 
 import useReducedMotion from "@/app/_hooks/useReducedMotion";
 
@@ -43,12 +35,9 @@ export default function SmoothScrollProvider({
   children: ReactNode;
 }) {
   const prefersReduced = useReducedMotion();
-  const lenisRef = useRef<Lenis | null>(null);
-  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     if (prefersReduced) {
-      setReady(true);
       return;
     }
 
@@ -58,9 +47,6 @@ export default function SmoothScrollProvider({
       orientation: "vertical",
       smoothWheel: true,
     });
-
-    lenisRef.current = lenis;
-    setReady(true);
 
     lenis.on("scroll", ScrollTrigger.update);
 

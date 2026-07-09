@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import MotionProvider from "@/components/providers/MotionProvider";
 import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
+import MotionProvider from "@/components/providers/MotionProvider";
 import { TRPCReactProvider } from "@/trpc/react";
 
 const spaceGrotesk = Space_Grotesk({
