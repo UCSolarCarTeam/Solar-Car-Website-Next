@@ -1,4 +1,5 @@
 import type { UserResource } from "@clerk/nextjs/types";
+import type { User } from "@prisma/client";
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -13,7 +14,6 @@ import { formatDateOnly, parseDateOnly } from "@/app/_lib/utils";
 import { teamRoleOptions, userRowMetadata } from "@/app/_types";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { updateDBUser } from "@/app/portal/actions";
-import type { User } from "@/generated/prisma/browser";
 
 import BasicButton from "../../Buttons/BasicButton";
 import DropZone from "../DropZone";

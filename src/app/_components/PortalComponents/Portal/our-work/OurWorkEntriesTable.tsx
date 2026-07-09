@@ -1,7 +1,7 @@
 "use client";
 
+import type { Timeline } from "@prisma/client";
 import type { ColumnDef } from "@tanstack/react-table";
-import type { Timeline } from "@/generated/prisma/browser";
 
 import EntityTable from "../EntityTable";
 import { columns } from "./columns";

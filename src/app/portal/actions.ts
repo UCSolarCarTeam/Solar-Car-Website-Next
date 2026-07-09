@@ -1,8 +1,8 @@
 "use server";
 
+import { AllTeamRoles, SponsorLevel } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { AllTeamRoles, SponsorLevel } from "@/generated/prisma/browser";
 import {
   requireAdminContext,
   requireAuthedContext,

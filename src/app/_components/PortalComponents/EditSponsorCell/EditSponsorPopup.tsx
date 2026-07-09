@@ -1,3 +1,4 @@
+import { SponsorLevel } from "@prisma/client";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import CloseButton from "@/app/_components/Buttons/CloseButton";
@@ -6,7 +7,6 @@ import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.mod
 import { compress } from "@/app/_lib/compress";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { createSponsor, updateSponsor } from "@/app/portal/actions";
-import { SponsorLevel } from "@/generated/prisma/browser";
 
 import BasicButton from "../../Buttons/BasicButton";
 import DropZone from "../DropZone";

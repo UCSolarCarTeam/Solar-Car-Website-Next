@@ -1,3 +1,4 @@
+import type { User } from "@prisma/client";
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
@@ -7,7 +8,6 @@ import { compress } from "@/app/_lib/compress";
 import { formatDateOnly, parseDateOnly } from "@/app/_lib/utils";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { createAlumni, updateDBUser } from "@/app/portal/actions";
-import type { User } from "@/generated/prisma/browser";
 
 import BasicButton from "../../Buttons/BasicButton";
 import DropZone from "../DropZone";

@@ -6,7 +6,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import logo from "public/assets/logo-center-black.png";
 import { useState } from "react";
-import { FaChevronRight } from "react-icons/fa6";
 import styles from "@/app/_components/PortalComponents/Portal/index.module.scss";
 import useViewport from "@/app/_hooks/useViewport";
 import { portalNavItems } from "@/app/_types";

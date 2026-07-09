@@ -1,4 +1,15 @@
-import { getPublicAlumni, getPublicTeamMembers } from "@/app/team/actions";
+import { AllTeamRoles, type User } from "@prisma/client";
+import {
+  AccountingTeam,
+  CommunicationsTeam,
+  ElectricalTeam,
+  LeadRoles,
+  ManagerRoles,
+  MechanicalTeam,
+  MultiTeam,
+  SoftwareTeam,
+  SponsorshipTeam,
+} from "@/app/_types";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
 

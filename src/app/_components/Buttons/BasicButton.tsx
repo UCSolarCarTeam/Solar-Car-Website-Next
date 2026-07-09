@@ -1,6 +1,6 @@
 "use client";
 
-import { type PropsWithChildren, useState } from "react";
+import { memo, type PropsWithChildren, useState } from "react";
 
 import ConfirmModal from "@/app/_components/Modals/ConfirmModal";
 import { cn } from "@/lib/utils";

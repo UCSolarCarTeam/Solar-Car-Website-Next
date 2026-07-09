@@ -1,9 +1,9 @@
 import type { UserResource } from "@clerk/nextjs/types";
+import type { User } from "@prisma/client";
 import { useTransition } from "react";
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { deleteDBUser } from "@/app/portal/actions";
-import type { User } from "@/generated/prisma/browser";
 
 import BasicButton, { ButtonVariant } from "../../Buttons/BasicButton";
 

@@ -1,21 +1,13 @@
-import type { Metadata } from "next";
+import { SponsorLevel } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import backsplash from "public/assets/sponsors/backsplash.jpeg";
+import { memo } from "react";
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
-import MagneticButton from "@/components/ui/MagneticButton";
-import SectionReveal from "@/components/ui/SectionReveal";
-import { SponsorLevel } from "@/generated/prisma/browser";
+import styles from "@/app/sponsors/index.module.scss";
 import type { RouterOutputs } from "@/trpc/react";
-import { HydrateClient, trpc } from "@/trpc/server";
-import { LeadSponsorCard, SponsorCard } from "./SponsorCards";
-
-export const metadata: Metadata = {
-  title: "Sponsors | Calgary Solar Car",
-  description:
-    "Meet the partners and sponsors who power the University of Calgary Solar Car Team.",
-};
+import { trpc } from "@/trpc/server";
 
 type Sponsor = RouterOutputs["fe"]["getSponsors"][0];
 
@@ -83,19 +75,49 @@ const Sponsors = async () => {
             />
             <div className="absolute inset-0 bg-linear-to-b from-transparent to-sc-bg" />
           </div>
-
-          <div className="relative z-10 px-5 text-center">
-            <SectionReveal delay={0.2}>
-              <div className="sc-label mb-4 text-sc-amber">OUR PARTNERS</div>
-              <h1 className="sc-heading m-0 text-[clamp(3.5rem,8vw,6rem)] drop-shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
-                Fueling Innovation.
-              </h1>
-              <p className="mx-auto mt-6 max-w-162.5 text-xl leading-relaxed text-sc-grey-light">
-                Our work is made possible by the generous support of our
-                sponsors. They provide the resources we need to push the
-                boundaries of renewable energy.
-              </p>
-            </SectionReveal>
+          <div className={styles.otherSponsors}>
+            <div>
+              <div className={styles.pageHeading}>Gold Sponsor</div>
+              <div className={styles.descriptionTitle}>
+                {`Thank you for helping our team educate future generations on the
+          necessity of renewable resources!`}
+              </div>
+              <SponsorLevelImages
+                sponsorLevel={SponsorLevel.Gold}
+                sponsors={sponsors ?? []}
+              />
+            </div>
+            <div>
+              <div className={styles.pageHeading}>Silver Sponsor</div>
+              <div className={styles.descriptionTitle}>
+                {`Thank you for giving us the ability to demonstrate that sustainable
+          energy can be practical!`}
+              </div>
+              <SponsorLevelImages
+                sponsorLevel={SponsorLevel.Silver}
+                sponsors={sponsors ?? []}
+              />
+            </div>
+            <div>
+              <div className={styles.pageHeading}>Bronze Sponsor</div>
+              <div className={styles.descriptionTitle}>
+                {`Thank you for giving us the ability to demonstrate that sustainable
+          energy can be practical!`}
+              </div>
+              <SponsorLevelImages
+                sponsorLevel={SponsorLevel.Bronze}
+                sponsors={sponsors ?? []}
+              />
+            </div>
+            <div className={styles.pageHeading}>Friends of Solar Car</div>
+            <div className={styles.descriptionTitle}>
+              {`Thank you for helping us continue to innovate!`}
+            </div>
+            <SponsorLevelImages
+              sponsorLevel={SponsorLevel.Friends}
+              sponsors={sponsors ?? []}
+            />
+            <div className={styles.seperator} />
           </div>
         </section>
 

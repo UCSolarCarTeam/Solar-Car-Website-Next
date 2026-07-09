@@ -13,20 +13,24 @@ export const metadata = {
 
 const Cars = () => {
   return (
-    <>
-      <Navbar />
-      <main className="min-h-screen bg-sc-bg text-sc-white">
-        <CarsHero />
-
-        <FleetHighlightProvider>
-          <section className="mx-auto flex max-w-[1400px] flex-col gap-32 px-5 py-16 pb-32">
-            <CarsFleetList />
-            <FleetTimeline />
-          </section>
-        </FleetHighlightProvider>
-      </main>
-      <Footer />
-    </>
+    <main style={{ height: "auto" }}>
+      <div className={styles.snapContainer}>
+        <Pagebullets defaultCurrentId="Helios" pageIds={Object.keys(pageIds)} />
+        {Object.entries(pageIds).map(([id, value], index) => (
+          <CarScreenView
+            className={styles.snapItem}
+            content={value.content}
+            footerEnabled={index === Object.keys(pageIds).length - 1}
+            id={id}
+            image={value.image}
+            key={id}
+            navbarEnabled={index === 0}
+            position={value.position as "left" | "right"}
+            title={value.title}
+          />
+        ))}
+      </div>
+    </main>
   );
 };
 

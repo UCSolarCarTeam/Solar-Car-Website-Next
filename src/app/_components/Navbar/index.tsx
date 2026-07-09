@@ -85,23 +85,24 @@ const Navbar = () => {
             src={Logo}
           />
         </div>
-
-        {isDesktop && (
-          <div className="flex items-center gap-8">
-            {links.map((link) => (
-              <Link
-                className={cn(
-                  "sc-mono text-sm no-underline transition-colors duration-200",
-                  isActive(link.href)
-                    ? "font-semibold text-sc-red"
-                    : "font-normal text-sc-white",
-                )}
-                href={link.href}
-                key={link.href}
-              >
-                {link.label}
-              </Link>
-            ))}
+        {width &&
+          width > 1024 &&
+          links.map((link) => (
+            <Link
+              className={
+                isActive(link.href)
+                  ? cx(styles.active, styles.link)
+                  : styles.link
+              }
+              href={link.href}
+              key={link.href}
+            >
+              {link.label}
+            </Link>
+          ))}
+        {width && width <= 1024 && (
+          <div onClick={toggleHambugerMenu}>
+            <Chevron className={styles.chevron} />
           </div>
         )}
 

@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 import type { SVGIconProps } from "@/app/_types";
 
 const CloseButton = ({ className, fill, onClick }: SVGIconProps) => {

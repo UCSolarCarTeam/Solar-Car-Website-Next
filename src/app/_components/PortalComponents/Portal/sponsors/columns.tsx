@@ -1,5 +1,6 @@
 "use client";
 
+import type { Sponsor } from "@prisma/client";
 import { createColumnHelper } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import Image from "next/image";
@@ -7,7 +8,6 @@ import Link from "next/link";
 import EditSponsorCell from "@/app/_components/PortalComponents/EditSponsorCell";
 import DeleteSponsor from "@/app/_components/PortalComponents/EditSponsorCell/DeleteSponsor";
 import { Button } from "@/components/ui/button";
-import type { Sponsor } from "@/generated/prisma/browser";
 
 const columnHelper = createColumnHelper<Sponsor>();
 export const columns = [

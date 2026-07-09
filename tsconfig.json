@@ -27,8 +27,7 @@
     /* Path Aliases */
     "paths": {
       "@/*": ["./src/*"],
-      "public/*": ["./public/*"],
-      "team.json": ["./team.json"]
+      "public/*": ["./public/*"]
     }
   },
   "include": [
