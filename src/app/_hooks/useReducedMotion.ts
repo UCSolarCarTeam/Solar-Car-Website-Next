@@ -1,27 +1,23 @@
-import { useSyncExternalStore } from "react";
-
-const QUERY = "(prefers-reduced-motion: reduce)";
-
-function getSnapshot() {
-  return window.matchMedia(QUERY).matches;
-}
-
-function getServerSnapshot() {
-  return false;
-}
-
-function subscribe(onStoreChange: () => void) {
-  const mediaQuery = window.matchMedia(QUERY);
-  mediaQuery.addEventListener("change", onStoreChange);
-  return () => mediaQuery.removeEventListener("change", onStoreChange);
-}
+import { useEffect, useState } from "react";
 
 /**
- * Returns `true` when the OS requests reduced motion.
- * Use only for vestibular-heavy effects (smooth scroll, parallax).
- * Decorative hovers and reveals should stay enabled — Framer Motion's
- * `MotionConfig reducedMotion="user"` handles shortening those automatically.
+ * Returns `true` when the user's OS/browser has
+ * `prefers-reduced-motion: reduce` enabled.
+ *
+ * Listens for live changes (e.g. user toggles the setting while the
+ * page is open).  Falls back to `false` during SSR.
  */
 export default function useReducedMotion(): boolean {
-  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const [prefersReduced, setPrefersReduced] = useState(false);
+
+  useEffect(() => {
+    const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReduced(mql.matches);
+
+    const handler = (e: MediaQueryListEvent) => setPrefersReduced(e.matches);
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
+  }, []);
+
+  return prefersReduced;
 }

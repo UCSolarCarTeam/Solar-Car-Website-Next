@@ -2,7 +2,6 @@ import type { User } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
-import { memo } from "react";
 import styles from "@/app/_components/TeamMember/index.module.scss";
 import { formatDateOnly } from "@/app/_lib/utils";
 

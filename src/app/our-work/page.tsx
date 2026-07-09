@@ -14,61 +14,196 @@ const OurWorkTimelinePage = async () => {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-sc-bg text-sc-white">
-        <section className="relative flex min-h-75 h-[40vh] w-full items-center justify-center overflow-hidden">
-          <div className="absolute inset-0 z-0 bg-size-[50px_50px] bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)]" />
-          <div className="absolute inset-0 z-1 bg-[radial-gradient(circle_at_center,transparent_0%,var(--sc-bg)_70%)]" />
+      <main
+        style={{
+          minHeight: "100vh",
+          background: "var(--sc-bg)",
+          color: "var(--sc-white)",
+        }}
+      >
+        {/* Cinematic Header */}
+        <section
+          style={{
+            position: "relative",
+            width: "100%",
+            height: "40vh",
+            minHeight: "300px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            overflow: "hidden",
+          }}
+        >
+          {/* Subtle grid background */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              backgroundSize: "50px 50px",
+              backgroundImage:
+                "linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)",
+              zIndex: 0,
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "radial-gradient(circle at center, transparent 0%, var(--sc-bg) 70%)",
+              zIndex: 1,
+            }}
+          />
 
-          <div className="relative z-10 px-5 text-center">
-            <div className="sc-label mb-4 text-sc-red">TIMELINE</div>
-            <h1 className="sc-heading m-0 text-[clamp(3rem,6vw,5rem)]">
+          <div
+            style={{
+              position: "relative",
+              zIndex: 10,
+              textAlign: "center",
+              padding: "0 20px",
+            }}
+          >
+            <div
+              className="sc-label"
+              style={{ color: "var(--sc-red)", marginBottom: "1rem" }}
+            >
+              TIMELINE
+            </div>
+            <h1
+              className="sc-heading"
+              style={{ fontSize: "clamp(3rem, 6vw, 5rem)", margin: 0 }}
+            >
               What We&apos;re Working On.
             </h1>
           </div>
         </section>
 
-        <section className="relative z-10 mx-auto max-w-250 px-5 py-16 pb-32">
+        {/* Timeline Content */}
+        <section
+          style={{
+            maxWidth: "1000px",
+            margin: "0 auto",
+            padding: "4rem 20px 8rem",
+            position: "relative",
+            zIndex: 10,
+          }}
+        >
           {!timelineData || timelineData.length === 0 ? (
-            <div className="sc-mono text-center text-sc-grey-dim">
+            <div
+              className="sc-mono"
+              style={{ textAlign: "center", color: "var(--sc-grey-dim)" }}
+            >
               {"// NO DATA AVAILABLE"}
             </div>
           ) : (
-            <div className="flex flex-col gap-24">
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "6rem" }}
+            >
               {timelineData.map((yearData) => (
                 <div key={yearData.year}>
-                  <div className="mb-12 flex items-center gap-8">
-                    <h2 className="sc-heading m-0 text-6xl leading-none text-sc-amber">
+                  {/* Year Header */}
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "2rem",
+                      marginBottom: "3rem",
+                    }}
+                  >
+                    <h2
+                      className="sc-heading"
+                      style={{
+                        color: "var(--sc-amber)",
+                        fontSize: "4rem",
+                        margin: 0,
+                        lineHeight: 1,
+                      }}
+                    >
                       {yearData.year}
                     </h2>
-                    <div className="h-px flex-1 bg-sc-border" />
+                    <div
+                      style={{
+                        flex: 1,
+                        height: "1px",
+                        background: "var(--sc-border)",
+                      }}
+                    />
                   </div>
 
-                  <div className="flex flex-col gap-12">
-                    {yearData.months.map((month) => (
+                  {/* Months Grid */}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "3rem",
+                    }}
+                  >
+                    {yearData.months.map((month, index) => (
                       <div
-                        className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 rounded border border-sc-border bg-[rgba(18,18,20,0.5)] p-8 backdrop-blur-md"
-                        key={`${yearData.year}-${month.month}`}
+                        key={index}
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns:
+                            "repeat(auto-fit, minmax(300px, 1fr))",
+                          gap: "3rem",
+                          background: "rgba(18, 18, 20, 0.5)",
+                          backdropFilter: "blur(10px)",
+                          border: "1px solid var(--sc-border)",
+                          borderRadius: "4px",
+                          padding: "2rem",
+                          alignItems: "center",
+                        }}
                       >
+                        {/* Image */}
                         {month.image && (
-                          <div className="relative aspect-video w-full overflow-hidden rounded">
+                          <div
+                            style={{
+                              position: "relative",
+                              width: "100%",
+                              aspectRatio: "16/9",
+                              borderRadius: "4px",
+                              overflow: "hidden",
+                            }}
+                          >
                             <Image
                               alt={month.month}
-                              className="object-cover"
                               fill
                               src={month.image}
+                              style={{ objectFit: "cover" }}
                             />
                           </div>
                         )}
 
+                        {/* Content */}
                         <div>
-                          <div className="sc-mono mb-2 text-sm text-sc-red">
+                          <div
+                            className="sc-mono"
+                            style={{
+                              color: "var(--sc-red)",
+                              fontSize: "0.9rem",
+                              marginBottom: "0.5rem",
+                            }}
+                          >
                             {"// UPDATE"}
                           </div>
-                          <h3 className="sc-heading mb-4 text-3xl text-sc-white">
+                          <h3
+                            className="sc-heading"
+                            style={{
+                              fontSize: "2rem",
+                              marginBottom: "1rem",
+                              color: "var(--sc-white)",
+                            }}
+                          >
                             {month.month}
                           </h3>
                           {month.description && (
-                            <p className="m-0 leading-relaxed text-sc-grey-light">
+                            <p
+                              style={{
+                                color: "var(--sc-grey-light)",
+                                lineHeight: 1.6,
+                                margin: 0,
+                              }}
+                            >
                               {month.description}
                             </p>
                           )}

@@ -1,30 +1,24 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "public/assets/logo-nav.png";
-import type { IconType } from "react-icons";
-import {
-  FaFacebookF,
-  FaInstagram,
-  FaLinkedinIn,
-  FaXTwitter,
-  FaYoutube,
-} from "react-icons/fa6";
-import * as TEAM from "team.json";
-import FooterCTA from "./FooterCTA";
+import MagneticButton from "@/components/ui/MagneticButton";
+import Facebook from "../svgs/Facebook";
+import Instagram from "../svgs/Instagram";
+import Linkedin from "../svgs/Linkedin";
+import Twitter from "../svgs/Twitter";
+import Youtube from "../svgs/Youtube";
 
-type SocialData = {
-  icon: IconType;
-  label: string;
-  href?: string;
-};
-const SOCIAL_DATA: SocialData[] = [
+const SOCIAL_LINKS = [
   {
     icon: FaFacebookF,
     label: "Facebook",
   },
-  { icon: FaXTwitter, label: "Twitter" },
+  { href: "https://x.com/uofcsolarcar", icon: Twitter, label: "Twitter" },
   {
-    icon: FaInstagram,
+    href: "https://www.instagram.com/uofc_solarcar",
+    icon: Instagram,
     label: "Instagram",
   },
   {
@@ -37,10 +31,21 @@ const SOCIAL_DATA: SocialData[] = [
   },
 ];
 
-const SOCIAL_LINKS = SOCIAL_DATA.map((social) => {
-  const socialJson = TEAM.socials.find((s) => s.label === social.label);
-  return { ...social, ...socialJson };
-});
+const CONTACT_INFO = [
+  {
+    href: "mailto:communications@calgarysolarcar.ca",
+    label: "communications@calgarysolarcar.ca",
+    type: "link" as const,
+  },
+  {
+    href: "mailto:sponsorship@calgarysolarcar.ca",
+    label: "sponsorship@calgarysolarcar.ca",
+    type: "link" as const,
+  },
+  { label: "ENC 36, Schulich School of Engineering", type: "text" as const },
+  { label: "2500 University Dr NW", type: "text" as const },
+  { label: "Calgary, AB T2N 1N4", type: "text" as const },
+] as const;
 
 const RESOURCE_LINKS = [
   { href: "/", label: "Homepage" },
@@ -56,70 +61,136 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative border-t border-sc-border bg-sc-bg px-5 pt-12 pb-6">
-      <div className="mx-auto mb-12 grid max-w-300 grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-8">
-        <div className="flex flex-col gap-6">
+    <footer
+      style={{
+        background: "var(--sc-bg)",
+        borderTop: "1px solid var(--sc-border)",
+        padding: "3rem 20px 1.5rem",
+        position: "relative",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: "1200px",
+          margin: "0 auto",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: "2rem",
+          marginBottom: "3rem",
+        }}
+      >
+        {/* Brand Column */}
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}
+        >
           <Image
             alt="Logo"
-            className="h-auto w-auto brightness-90"
             height={48}
             src={Logo}
+            style={{ width: "auto", filter: "brightness(0.9)" }}
           />
           <div>
-            <div className="sc-label mb-4 text-sc-amber">FOLLOW US</div>
-            <div className="flex gap-6">
+            <div
+              className="sc-label"
+              style={{ color: "var(--sc-amber)", marginBottom: "1rem" }}
+            >
+              FOLLOW US
+            </div>
+            <div style={{ display: "flex", gap: "1.5rem" }}>
               {SOCIAL_LINKS.map((social) => {
-                if (!social.href) return null;
                 const Icon = social.icon;
+                const iconProps = "props" in social ? social.props : {};
                 return (
-                  <Link
-                    aria-label={social.label}
-                    className="inline-block opacity-70 transition-opacity hover:opacity-100"
-                    href={social.href}
-                    key={social.label}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    <Icon
-                      aria-hidden="true"
-                      color="var(--sc-white)"
-                      size={24}
-                    />
-                  </Link>
+                  <MagneticButton key={social.label} strength={0.2}>
+                    <Link
+                      href={social.href}
+                      onMouseOut={(e) =>
+                        (e.currentTarget.style.opacity = "0.7")
+                      }
+                      onMouseOver={(e) => (e.currentTarget.style.opacity = "1")}
+                      style={{ opacity: 0.7, transition: "opacity 0.2s" }}
+                      target="_blank"
+                    >
+                      <Icon {...iconProps} fill="var(--sc-white)" />
+                    </Link>
+                  </MagneticButton>
                 );
               })}
             </div>
           </div>
-          <FooterCTA />
         </div>
 
+        {/* Contact Column */}
         <div>
-          <div className="sc-label mb-6 text-sc-red">CONTACT</div>
-          <div className="flex flex-col gap-3 text-[0.95rem] text-sc-grey-light">
-            {TEAM.contactInfo.map((item) =>
-              item.type === "link" && item.href ? (
+          <div
+            className="sc-label"
+            style={{ color: "var(--sc-red)", marginBottom: "1.5rem" }}
+          >
+            CONTACT
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.8rem",
+              color: "var(--sc-grey-light)",
+              fontSize: "0.95rem",
+            }}
+          >
+            {CONTACT_INFO.map((item, index) =>
+              item.type === "link" ? (
                 <Link
-                  className="text-sc-white no-underline transition-colors hover:text-sc-red"
                   href={item.href}
-                  key={item.href}
+                  key={index}
+                  onMouseOut={(e) =>
+                    (e.currentTarget.style.color = "var(--sc-white)")
+                  }
+                  onMouseOver={(e) =>
+                    (e.currentTarget.style.color = "var(--sc-red)")
+                  }
+                  style={{
+                    color: "var(--sc-white)",
+                    textDecoration: "none",
+                    transition: "color 0.2s",
+                  }}
                 >
                   {item.label}
                 </Link>
               ) : (
-                <span key={item.label}>{item.label}</span>
+                <span key={index}>{item.label}</span>
               ),
             )}
           </div>
         </div>
 
+        {/* Resources Column */}
         <div>
-          <div className="sc-label mb-6 text-sc-red">RESOURCES</div>
-          <div className="flex flex-col gap-3">
+          <div
+            className="sc-label"
+            style={{ color: "var(--sc-red)", marginBottom: "1.5rem" }}
+          >
+            RESOURCES
+          </div>
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "0.8rem" }}
+          >
             {RESOURCE_LINKS.map(({ href, label }) => (
               <Link
-                className="sc-mono text-sm text-sc-grey-light no-underline transition-colors hover:text-sc-white"
+                className="sc-mono"
                 href={href}
                 key={label}
+                onMouseOut={(e) =>
+                  (e.currentTarget.style.color = "var(--sc-grey-light)")
+                }
+                onMouseOver={(e) =>
+                  (e.currentTarget.style.color = "var(--sc-white)")
+                }
+                style={{
+                  color: "var(--sc-grey-light)",
+                  textDecoration: "none",
+                  fontSize: "0.9rem",
+                  transition: "color 0.2s",
+                }}
               >
                 {label}
               </Link>
@@ -128,11 +199,30 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="mx-auto flex max-w-300 flex-wrap items-center justify-between gap-4 border-t border-sc-border pt-8">
-        <span className="sc-mono text-xs text-sc-grey-dim">
+      {/* Copyright */}
+      <div
+        style={{
+          maxWidth: "1200px",
+          margin: "0 auto",
+          paddingTop: "2rem",
+          borderTop: "1px solid var(--sc-border)",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "1rem",
+        }}
+      >
+        <span
+          className="sc-mono"
+          style={{ color: "var(--sc-grey-dim)", fontSize: "0.8rem" }}
+        >
           © {currentYear} UNIVERSITY OF CALGARY SOLAR CAR TEAM
         </span>
-        <span className="sc-mono text-xs text-sc-grey-dim">
+        <span
+          className="sc-mono"
+          style={{ color: "var(--sc-grey-dim)", fontSize: "0.8rem" }}
+        >
           DESIGNED FOR PERFORMANCE
         </span>
       </div>

@@ -1,14 +1,16 @@
 "use client";
 
+import classNames from "classnames";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Logo from "public/assets/logo-nav.png";
 import { useEffect, useState } from "react";
-import { FaChevronRight } from "react-icons/fa6";
+
+import styles from "@/app/_components/Navbar/index.module.scss";
+import Chevron from "@/app/_components/svgs/Chevron";
 import useViewport from "@/app/_hooks/useViewport";
-import { cn } from "@/lib/utils";
 import CloseButton from "../Buttons/CloseButton";
 
 const links = [
@@ -26,11 +28,11 @@ const Navbar = () => {
   const pathname = usePathname();
   const router = useRouter();
   const isActive = (href: string) => pathname === href;
-  const isDesktop = width !== undefined && width > 1024;
 
   const [hamburgerMenuOpen, setHamburgerMenuOpen] = useState(false);
   const { scrollY } = useScroll();
 
+  // Glassmorphism effect when scrolled past 50px
   const bgOpacity = useTransform(scrollY, [0, 50], [0, 0.72]);
   const blurAmount = useTransform(scrollY, [0, 50], [0, 20]);
   const borderColor = useTransform(
@@ -39,24 +41,39 @@ const Navbar = () => {
     ["rgba(240, 239, 236, 0)", "rgba(240, 239, 236, 0.08)"],
   );
 
+  const links = [
+    { href: "/", label: "Home" },
+    { href: "/recruitment", label: "Recruitment" },
+    { href: "/cars", label: "Cars" },
+    { href: "/team", label: "Team" },
+    { href: "/support-us", label: "Support Us" },
+    { href: "/our-work", label: "Our Work" },
+    { href: "/sponsors", label: "Sponsors" },
+  ];
+
   const toggleHambugerMenu = () => {
     setHamburgerMenuOpen((prev) => !prev);
   };
 
   useEffect(() => {
     setHamburgerMenuOpen(false);
-  }, []);
+  }, [pathname]);
 
   return (
     <>
       <motion.nav
-        className={cn(
-          "fixed top-0 right-0 left-0 z-100 flex items-center transition-[padding] duration-300",
-          isDesktop
-            ? "flex-row justify-between gap-0 px-10 py-3.75"
-            : "flex-col justify-center gap-2.5 px-5 py-3.75",
-        )}
         style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 100,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: width && width > 1024 ? "space-between" : "center",
+          padding: width && width > 1024 ? "15px 40px" : "15px 20px",
+          flexDirection: width && width > 1024 ? "row" : "column",
+          gap: width && width > 1024 ? 0 : "10px",
           backgroundColor: useTransform(
             bgOpacity,
             (v) => `rgba(10, 10, 11, ${v})`,
@@ -66,12 +83,12 @@ const Navbar = () => {
             (v) => `blur(${v}px) saturate(120%)`,
           ),
           borderBottom: useTransform(borderColor, (v) => `1px solid ${v}`),
+          transition: "padding 0.3s ease",
         }}
       >
-        <div className="flex">
+        <div style={{ display: "flex" }}>
           <Image
             alt="Logo"
-            className="h-auto w-auto cursor-pointer drop-shadow-[2px_2px_4px_rgba(0,0,0,0.5)]"
             height={50}
             loading="eager"
             onClick={() => {
@@ -83,53 +100,52 @@ const Navbar = () => {
             }}
             priority
             src={Logo}
+            style={{
+              width: "auto",
+              cursor: "pointer",
+              filter: "drop-shadow(2px 2px 4px rgba(0,0,0,0.5))",
+            }}
           />
         </div>
-        {width &&
-          width > 1024 &&
-          links.map((link) => (
-            <Link
-              className={
-                isActive(link.href)
-                  ? cx(styles.active, styles.link)
-                  : styles.link
-              }
-              href={link.href}
-              key={link.href}
-            >
-              {link.label}
-            </Link>
-          ))}
-        {width && width <= 1024 && (
-          <div onClick={toggleHambugerMenu}>
-            <Chevron className={styles.chevron} />
+
+        {width && width > 1024 && (
+          <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
+            {links.map((link) => (
+              <Link
+                className="sc-mono"
+                href={link.href}
+                key={link.href}
+                style={{
+                  fontSize: "0.85rem",
+                  color: isActive(link.href)
+                    ? "var(--sc-red)"
+                    : "var(--sc-white)",
+                  textDecoration: "none",
+                  fontWeight: isActive(link.href) ? 600 : 400,
+                  transition: "color 0.2s",
+                }}
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
         )}
 
-        {!isDesktop && width !== undefined && (
-          <button
-            aria-label="Open menu"
-            className="absolute top-6.25 right-5 cursor-pointer border-none bg-transparent p-0"
+        {width && width <= 1024 && (
+          <div
             onClick={toggleHambugerMenu}
-            type="button"
+            style={{ position: "absolute", right: "20px", top: "25px" }}
           >
-            <FaChevronRight
-              aria-hidden
-              className="rotate-90 fill-white drop-shadow-[2px_2px_10px_#000000]"
-              size={25}
-            />
-          </button>
+            <Chevron className={styles.chevron} />
+          </div>
         )}
       </motion.nav>
 
-      {width !== undefined && !isDesktop && (
+      {/* Mobile Menu */}
+      {width && width <= 1024 && (
         <div
-          className={cn(
-            "fixed inset-x-0 top-0 z-99 flex flex-col items-center justify-center text-white transition-all duration-500",
-            hamburgerMenuOpen
-              ? "h-dvh bg-black/90 opacity-100 [&_a]:pointer-events-auto"
-              : "pointer-events-none h-0 bg-transparent opacity-0 [&_a]:pointer-events-none",
-          )}
+          className={`${styles.hamburgerMenu} ${hamburgerMenuOpen ? styles.open : styles.closed}`}
+          style={{ position: "fixed" }}
         >
           <button
             aria-label="Close menu"
@@ -141,13 +157,16 @@ const Navbar = () => {
           </button>
           {links.map((link) => (
             <Link
-              className={cn(
-                "sc-heading my-4 text-3xl no-underline",
-                isActive(link.href) ? "text-sc-red" : "text-white",
-              )}
+              className="sc-heading"
               href={link.href}
               key={link.href}
               onClick={toggleHambugerMenu}
+              style={{
+                fontSize: "2rem",
+                color: isActive(link.href) ? "var(--sc-red)" : "white",
+                textDecoration: "none",
+                margin: "1rem 0",
+              }}
             >
               {link.label}
             </Link>

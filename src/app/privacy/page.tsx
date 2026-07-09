@@ -5,16 +5,50 @@ export default function PrivacyPolicy() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-sc-bg px-5 pt-[120px] pb-20 text-sc-grey-light">
-        <div className="mx-auto max-w-[800px]">
-          <div className="sc-label mb-4 text-sc-amber">LEGAL</div>
-          <h1 className="sc-heading mb-12 text-[clamp(2.5rem,5vw,4rem)] text-sc-white">
+      <main
+        style={{
+          minHeight: "100vh",
+          background: "var(--sc-bg)",
+          padding: "120px 20px 80px",
+          color: "var(--sc-grey-light)",
+        }}
+      >
+        <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+          <div
+            className="sc-label"
+            style={{ color: "var(--sc-amber)", marginBottom: "1rem" }}
+          >
+            LEGAL
+          </div>
+          <h1
+            className="sc-heading"
+            style={{
+              color: "var(--sc-white)",
+              fontSize: "clamp(2.5rem, 5vw, 4rem)",
+              marginBottom: "3rem",
+            }}
+          >
             Privacy Policy
           </h1>
 
-          <div className="flex flex-col gap-8 text-lg leading-relaxed">
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "2rem",
+              fontSize: "1.1rem",
+              lineHeight: 1.6,
+            }}
+          >
             <section>
-              <h2 className="sc-heading mb-4 text-2xl text-sc-white">
+              <h2
+                className="sc-heading"
+                style={{
+                  color: "var(--sc-white)",
+                  fontSize: "1.5rem",
+                  marginBottom: "1rem",
+                }}
+              >
                 1. Information We Collect
               </h2>
               <p>
@@ -27,7 +61,14 @@ export default function PrivacyPolicy() {
             </section>
 
             <section>
-              <h2 className="sc-heading mb-4 text-2xl text-sc-white">
+              <h2
+                className="sc-heading"
+                style={{
+                  color: "var(--sc-white)",
+                  fontSize: "1.5rem",
+                  marginBottom: "1rem",
+                }}
+              >
                 2. How We Use Your Information
               </h2>
               <p>
@@ -41,7 +82,14 @@ export default function PrivacyPolicy() {
             </section>
 
             <section>
-              <h2 className="sc-heading mb-4 text-2xl text-sc-white">
+              <h2
+                className="sc-heading"
+                style={{
+                  color: "var(--sc-white)",
+                  fontSize: "1.5rem",
+                  marginBottom: "1rem",
+                }}
+              >
                 3. Analytics & Cookies
               </h2>
               <p>
@@ -54,14 +102,28 @@ export default function PrivacyPolicy() {
             </section>
 
             <section>
-              <h2 className="sc-heading mb-4 text-2xl text-sc-white">
+              <h2
+                className="sc-heading"
+                style={{
+                  color: "var(--sc-white)",
+                  fontSize: "1.5rem",
+                  marginBottom: "1rem",
+                }}
+              >
                 4. Contact Us
               </h2>
               <p>
                 If you have questions or comments about this notice, you may
                 email us at communications@calgarysolarcar.ca or by post to:
               </p>
-              <address className="sc-mono mt-4 not-italic text-sc-grey-dim">
+              <address
+                className="sc-mono"
+                style={{
+                  fontStyle: "normal",
+                  marginTop: "1rem",
+                  color: "var(--sc-grey-dim)",
+                }}
+              >
                 University of Calgary Solar Car Team
                 <br />
                 ENC 36, Schulich School of Engineering

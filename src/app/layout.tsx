@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Saira } from "next/font/google";
+import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 
 import "@/styles/globals.css";
 import "@/styles/globals.scss";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
 import { TRPCReactProvider } from "@/trpc/react";
 
 const spaceGrotesk = Space_Grotesk({
@@ -49,9 +50,7 @@ export default function RootLayout({
     <html className={`${spaceGrotesk.variable} ${jbMono.variable}`} lang="en">
       <body className="bg-[#0A0A0B]">
         <SmoothScrollProvider>
-          <MotionProvider>
-            <TRPCReactProvider>{children}</TRPCReactProvider>
-          </MotionProvider>
+          <TRPCReactProvider>{children}</TRPCReactProvider>
         </SmoothScrollProvider>
         <Analytics />
         <SpeedInsights />
