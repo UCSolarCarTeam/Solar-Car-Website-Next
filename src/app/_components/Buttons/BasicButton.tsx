@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, type PropsWithChildren, useState } from "react";
+import { type PropsWithChildren, useState } from "react";
 
 import styles from "@/app/_components/Buttons/index.module.scss";
 import ConfirmModal from "@/app/_components/Modals/ConfirmModal";
@@ -64,4 +64,4 @@ const BasicButton = (
   );
 };
 
-export default memo(BasicButton);
+export default BasicButton;

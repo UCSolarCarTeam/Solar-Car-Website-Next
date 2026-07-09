@@ -1,38 +1,21 @@
-import Image from "next/image";
-import backsplash from "public/assets/home/backsplash.jpeg";
-
+import CarShowcase from "@/app/_components/CarShowcase";
 import Footer from "@/app/_components/Footer";
+import HeroSection from "@/app/_components/HeroSection";
+import JoinCTA from "@/app/_components/JoinCTA";
+import Mission from "@/app/_components/Mission";
 import Navbar from "@/app/_components/Navbar";
-import styles from "@/app/index.module.scss";
+import StatsBar from "@/app/_components/StatsBar";
 
 const Home = () => {
   return (
     <>
-      <main className={styles.main}>
-        <Navbar />
-        <div className={styles.container}>
-          <div className={styles.pageHeading}>EDUCATE. INNOVATE. INSPIRE.</div>
-          <div className={styles.descriptionContainer}>
-            <div className={styles.descriptionTitle}>Schulich Elysia</div>
-            <div>
-              Schulich Elysia started it’s design phase in 2016 and this
-              catamaran style cruise car was completed in 2019. This design was
-              implemented to improve battery cooling as well as increase
-              aerodynamics. Elysia raced in the 2019 American Solar Challenge
-              where it took first place in the Multi Occupant Vehicle Class.
-            </div>
-          </div>
-          <Image
-            alt="backsplash"
-            fill
-            id="backsplashImage"
-            loading="eager"
-            placeholder="blur"
-            priority
-            src={backsplash}
-            style={{ objectFit: "cover" }}
-          />
-        </div>
+      <Navbar />
+      <main>
+        <HeroSection />
+        <StatsBar />
+        <Mission />
+        <CarShowcase />
+        <JoinCTA />
       </main>
       <Footer />
     </>

@@ -1,4 +1,3 @@
-import { memo } from "react";
 import { BarLoader } from "react-spinners";
 
 export interface LoaderProps {
@@ -32,4 +31,4 @@ const Loader = ({ isLoading, lightmode = false }: LoaderProps) => {
   );
 };
 
-export default memo(Loader);
+export default Loader;

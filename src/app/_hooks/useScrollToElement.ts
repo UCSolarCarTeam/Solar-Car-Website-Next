@@ -1,7 +1,5 @@
-import { useCallback } from "react";
-
 const useScrollToElement = () => {
-  const scrollToElement = useCallback((elementId: string) => {
+  const scrollToElement = (elementId: string) => {
     const element = document.getElementById(elementId);
 
     if (element) {
@@ -14,7 +12,7 @@ const useScrollToElement = () => {
       });
     } else {
     }
-  }, []);
+  };
 
   return scrollToElement;
 };

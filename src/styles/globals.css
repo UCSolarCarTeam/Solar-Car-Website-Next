@@ -4,6 +4,36 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ============================================================
+   SOLAR CAR DESIGN TOKENS
+   ============================================================ */
+:root {
+  /* Brand palette */
+  --sc-bg: #0a0a0b;
+  --sc-bg-surface: #111114;
+  --sc-red: #c8102e;
+  --sc-red-glow: rgba(200, 16, 46, 0.35);
+  --sc-amber: #f5a623;
+  --sc-amber-glow: rgba(245, 166, 35, 0.4);
+  --sc-white: #f0efec;
+  --sc-grey-light: rgba(240, 239, 236, 0.6);
+  --sc-grey-dim: rgba(240, 239, 236, 0.25);
+  --sc-border: rgba(240, 239, 236, 0.08);
+  --sc-glass-bg: rgba(10, 10, 11, 0.72);
+
+  /* Typography scale */
+  --sc-font-heading:
+    var(--font-space-grotesk), "Space Grotesk", system-ui, sans-serif;
+  --sc-font-mono: var(--font-jb-mono), "JetBrains Mono", monospace;
+
+  /* Motion */
+  --sc-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --sc-ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+  --sc-duration-fast: 200ms;
+  --sc-duration-med: 400ms;
+  --sc-duration-slow: 800ms;
+}
+
 @theme inline {
   --font-heading: var(--font-sans);
   --font-sans: var(--font-sans);
@@ -122,11 +152,114 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    box-sizing: border-box;
   }
   body {
     @apply bg-background text-foreground;
+    background-color: var(--sc-bg);
+    color: var(--sc-white);
+    font-family: var(--sc-font-heading);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
   html {
     @apply font-sans;
+    scroll-behavior: auto; /* Lenis handles smooth scroll */
+  }
+}
+
+/* ============================================================
+   FILM GRAIN NOISE OVERLAY
+   ============================================================ */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+}
+
+/* ============================================================
+   SOLAR CAR UTILITY CLASSES
+   ============================================================ */
+.sc-heading {
+  font-family: var(--sc-font-heading);
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.sc-mono {
+  font-family: var(--sc-font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sc-label {
+  font-family: var(--sc-font-mono);
+  font-size: 0.6875rem; /* 11px */
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sc-grey-light);
+}
+
+.sc-accent-red {
+  color: var(--sc-red);
+}
+.sc-accent-amber {
+  color: var(--sc-amber);
+}
+
+.sc-glass {
+  background: var(--sc-glass-bg);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  border: 1px solid var(--sc-border);
+}
+
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* ============================================================
+   REDUCED-MOTION SAFETY NET
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Kill film-grain noise overlay */
+  body::after {
+    display: none !important;
+  }
+
+  /* Lenis smooth scroll — force native */
+  html.lenis,
+  html.lenis body {
+    scroll-behavior: auto !important;
   }
 }

@@ -1,5 +1,3 @@
-import { memo } from "react";
-
 import type { SVGIconProps } from "@/app/_types";
 
 const CloseButton = ({ className, fill, onClick }: SVGIconProps) => {
@@ -23,4 +21,4 @@ const CloseButton = ({ className, fill, onClick }: SVGIconProps) => {
   );
 };
 
-export default memo(CloseButton);
+export default CloseButton;
