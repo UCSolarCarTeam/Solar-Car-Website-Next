@@ -3,16 +3,12 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import useReducedMotion from "@/app/_hooks/useReducedMotion";
 import { pageIds } from "@/app/cars/carInformation";
 import SectionReveal from "@/components/ui/SectionReveal";
 
-// Convert the object into an array for easier rendering
 const CARS = Object.entries(pageIds).map(([id, data]) => ({ id, ...data }));
 
 export default function CarShowcase() {
-  const prefersReduced = useReducedMotion();
-
   return (
     <section
       style={{
@@ -66,10 +62,16 @@ export default function CarShowcase() {
             gap: "2rem",
           }}
         >
-          {CARS.slice(0, 3).map((car, index) => {
-            const cardContent = (
+          {CARS.slice(0, 3).map((car, index) => (
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              key={car.id}
+              transition={{ delay: index * 0.15, duration: 0.6 }}
+              viewport={{ once: true, amount: 0.2 }}
+              whileInView={{ opacity: 1, y: 0 }}
+            >
               <Link
-                href={`/cars`}
+                href="/cars"
                 style={{ textDecoration: "none", display: "block" }}
               >
                 <div
@@ -82,48 +84,27 @@ export default function CarShowcase() {
                     border: "1px solid var(--sc-border)",
                   }}
                 >
-                  {prefersReduced ? (
-                    /* No hover scale when reduced-motion */
-                    <div style={{ width: "100%", height: "100%" }}>
-                      <Image
-                        alt={car.title}
-                        fill
-                        src={car.image}
-                        style={{ objectFit: "cover" }}
-                      />
-                      <div
-                        style={{
-                          position: "absolute",
-                          inset: 0,
-                          background:
-                            "linear-gradient(to top, rgba(10,10,11,0.9) 0%, transparent 60%)",
-                        }}
-                      />
-                    </div>
-                  ) : (
-                    <motion.div
-                      style={{ width: "100%", height: "100%" }}
-                      transition={{ duration: 0.4, ease: "easeOut" }}
-                      whileHover={{ scale: 1.05 }}
-                    >
-                      <Image
-                        alt={car.title}
-                        fill
-                        src={car.image}
-                        style={{ objectFit: "cover" }}
-                      />
-                      <div
-                        style={{
-                          position: "absolute",
-                          inset: 0,
-                          background:
-                            "linear-gradient(to top, rgba(10,10,11,0.9) 0%, transparent 60%)",
-                        }}
-                      />
-                    </motion.div>
-                  )}
+                  <motion.div
+                    style={{ width: "100%", height: "100%" }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    <Image
+                      alt={car.title}
+                      fill
+                      src={car.image}
+                      style={{ objectFit: "cover" }}
+                    />
+                    <div
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        background:
+                          "linear-gradient(to top, rgba(10,10,11,0.9) 0%, transparent 60%)",
+                      }}
+                    />
+                  </motion.div>
 
-                  {/* Overlay text */}
                   <div
                     style={{
                       position: "absolute",
@@ -155,25 +136,8 @@ export default function CarShowcase() {
                   </div>
                 </div>
               </Link>
-            );
-
-            // Reduced motion: no whileInView animation
-            if (prefersReduced) {
-              return <div key={car.id}>{cardContent}</div>;
-            }
-
-            return (
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                key={car.id}
-                transition={{ delay: index * 0.15, duration: 0.6 }}
-                viewport={{ once: true, amount: 0.2 }}
-                whileInView={{ opacity: 1, y: 0 }}
-              >
-                {cardContent}
-              </motion.div>
-            );
-          })}
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

@@ -1,7 +1,6 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import useReducedMotion from "@/app/_hooks/useReducedMotion";
 import { HERO_STAGE_1_END, HERO_STAGE_2_END } from "@/lib/animation/constants";
 import { labelPop } from "@/lib/animation/variants";
 
@@ -73,9 +72,8 @@ interface HeroLabelsProps {
 }
 
 export default function HeroLabels({ progress }: HeroLabelsProps) {
-  const stage1Active = progress >= HERO_STAGE_1_END * 0.8; // 80% into stage 1
+  const stage1Active = progress >= HERO_STAGE_1_END * 0.8;
   const stage2Active = progress >= HERO_STAGE_2_END * 0.6;
-  const prefersReduced = useReducedMotion();
 
   return (
     <div
@@ -87,14 +85,16 @@ export default function HeroLabels({ progress }: HeroLabelsProps) {
         zIndex: 20,
       }}
     >
-      {prefersReduced ? (
-        /* Reduced motion: show all labels instantly, no pop-in animation */
-        LABELS.map((label) => {
+      <AnimatePresence>
+        {LABELS.map((label) => {
           const visible = label.stage === 1 ? stage1Active : stage2Active;
           if (!visible) return null;
 
           return (
-            <div
+            <motion.div
+              animate="visible"
+              exit={{ opacity: 0, scale: 0.9 }}
+              initial="hidden"
               key={label.id}
               style={{
                 position: "absolute",
@@ -105,8 +105,8 @@ export default function HeroLabels({ progress }: HeroLabelsProps) {
                 transform:
                   label.left === "50%" ? "translateX(-50%)" : undefined,
               }}
+              variants={labelPop}
             >
-              {/* Connector line */}
               <div
                 style={{
                   width: "1px",
@@ -116,7 +116,6 @@ export default function HeroLabels({ progress }: HeroLabelsProps) {
                   margin: "0 auto 6px",
                 }}
               />
-              {/* Data card */}
               <div
                 style={{
                   background: "rgba(10, 10, 11, 0.72)",
@@ -153,84 +152,10 @@ export default function HeroLabels({ progress }: HeroLabelsProps) {
                   </span>
                 </div>
               </div>
-            </div>
+            </motion.div>
           );
-        })
-      ) : (
-        <AnimatePresence>
-          {LABELS.map((label) => {
-            const visible = label.stage === 1 ? stage1Active : stage2Active;
-            if (!visible) return null;
-
-            return (
-              <motion.div
-                animate="visible"
-                exit={{ opacity: 0, scale: 0.9 }}
-                initial="hidden"
-                key={label.id}
-                style={{
-                  position: "absolute",
-                  top: label.top,
-                  bottom: label.bottom,
-                  left: label.left,
-                  right: label.right,
-                  transform:
-                    label.left === "50%" ? "translateX(-50%)" : undefined,
-                }}
-                variants={labelPop}
-              >
-                {/* Connector line */}
-                <div
-                  style={{
-                    width: "1px",
-                    height: "28px",
-                    background:
-                      "linear-gradient(to bottom, var(--sc-amber), transparent)",
-                    margin: "0 auto 6px",
-                  }}
-                />
-                {/* Data card */}
-                <div
-                  style={{
-                    background: "rgba(10, 10, 11, 0.72)",
-                    border: "1px solid rgba(245, 166, 35, 0.3)",
-                    borderRadius: "2px",
-                    padding: "6px 10px",
-                    backdropFilter: "blur(8px)",
-                  }}
-                >
-                  <div
-                    className="sc-label"
-                    style={{ color: "var(--sc-amber)", marginBottom: "2px" }}
-                  >
-                    {label.text}
-                  </div>
-                  <div
-                    style={{
-                      fontFamily: "var(--sc-font-mono)",
-                      fontSize: "1.1rem",
-                      fontWeight: 600,
-                      color: "var(--sc-white)",
-                      lineHeight: 1,
-                    }}
-                  >
-                    {label.value}
-                    <span
-                      style={{
-                        fontSize: "0.65rem",
-                        color: "var(--sc-grey-light)",
-                        marginLeft: "3px",
-                      }}
-                    >
-                      {label.unit}
-                    </span>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
-        </AnimatePresence>
-      )}
+        })}
+      </AnimatePresence>
     </div>
   );
 }

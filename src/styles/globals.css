@@ -241,25 +241,16 @@ html.lenis body {
 
 /* ============================================================
    REDUCED-MOTION SAFETY NET
+   Only disable CSS-driven motion — Framer Motion / Lenis handle
+   their own reduced-motion paths in JS.
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+  html {
+    scroll-behavior: auto;
   }
 
   /* Kill film-grain noise overlay */
   body::after {
-    display: none !important;
-  }
-
-  /* Lenis smooth scroll — force native */
-  html.lenis,
-  html.lenis body {
-    scroll-behavior: auto !important;
+    display: none;
   }
 }

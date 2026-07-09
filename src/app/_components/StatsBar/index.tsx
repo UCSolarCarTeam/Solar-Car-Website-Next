@@ -2,7 +2,6 @@
 
 import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import useReducedMotion from "@/app/_hooks/useReducedMotion";
 
 const STATS = [
   { label: "YEARS ACTIVE", value: 12, suffix: "+" },
@@ -16,29 +15,24 @@ function AnimatedCounter({
   to,
   duration = 2,
   suffix = "",
-  instant = false,
 }: {
   from?: number;
   to: number;
   duration?: number;
   suffix?: string;
-  /** Skip the counting animation and show the final value */
-  instant?: boolean;
 }) {
   const nodeRef = useRef<HTMLSpanElement>(null);
   const inView = useInView(nodeRef, { once: true, amount: 0.5 });
-  const [count, setCount] = useState(instant ? to : from);
+  const [count, setCount] = useState(from);
 
   useEffect(() => {
-    if (!inView || instant) return;
+    if (!inView) return;
     let startTime: number;
     let animationFrame: number;
 
     const updateCount = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
-
-      // ease out expo
       const easeProgress = progress === 1 ? 1 : 1 - 2 ** (-10 * progress);
       setCount(Math.floor(easeProgress * (to - from) + from));
 
@@ -49,7 +43,7 @@ function AnimatedCounter({
 
     animationFrame = requestAnimationFrame(updateCount);
     return () => cancelAnimationFrame(animationFrame);
-  }, [inView, from, to, duration, instant]);
+  }, [inView, from, to, duration]);
 
   return (
     <span ref={nodeRef}>
@@ -60,8 +54,6 @@ function AnimatedCounter({
 }
 
 export default function StatsBar() {
-  const prefersReduced = useReducedMotion();
-
   return (
     <section
       style={{
@@ -82,62 +74,34 @@ export default function StatsBar() {
           textAlign: "center",
         }}
       >
-        {STATS.map((stat, i) => {
-          const content = (
-            <>
-              <div
-                className="sc-mono"
-                style={{
-                  fontSize: "2.5rem",
-                  color: "var(--sc-white)",
-                  fontWeight: 600,
-                }}
-              >
-                <AnimatedCounter
-                  instant={prefersReduced}
-                  suffix={stat.suffix}
-                  to={stat.value}
-                />
-              </div>
-              <div className="sc-label" style={{ color: "var(--sc-amber)" }}>
-                {stat.label}
-              </div>
-            </>
-          );
-
-          // Reduced motion: plain div, no fade-up
-          if (prefersReduced) {
-            return (
-              <div
-                key={stat.label}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "0.5rem",
-                }}
-              >
-                {content}
-              </div>
-            );
-          }
-
-          return (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              key={stat.label}
+        {STATS.map((stat, i) => (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            key={stat.label}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.5rem",
+            }}
+            transition={{ delay: i * 0.1, duration: 0.6 }}
+            viewport={{ once: true, amount: 0.5 }}
+            whileInView={{ opacity: 1, y: 0 }}
+          >
+            <div
+              className="sc-mono"
               style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "0.5rem",
+                fontSize: "2.5rem",
+                color: "var(--sc-white)",
+                fontWeight: 600,
               }}
-              transition={{ delay: i * 0.1, duration: 0.6 }}
-              viewport={{ once: true, amount: 0.5 }}
-              whileInView={{ opacity: 1, y: 0 }}
             >
-              {content}
-            </motion.div>
-          );
-        })}
+              <AnimatedCounter suffix={stat.suffix} to={stat.value} />
+            </div>
+            <div className="sc-label" style={{ color: "var(--sc-amber)" }}>
+              {stat.label}
+            </div>
+          </motion.div>
+        ))}
       </div>
     </section>
   );
