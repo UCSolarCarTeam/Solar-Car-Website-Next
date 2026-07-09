@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import useReducedMotion from "@/app/_hooks/useReducedMotion";
 
 /** Color accents per sponsor tier */
 const TIER_COLORS = {
@@ -32,17 +31,11 @@ function setSponsorCardHover(
   }
 }
 
-function setLeadSponsorCardHover(
-  target: HTMLElement,
-  hovered: boolean,
-  prefersReduced: boolean,
-) {
+function setLeadSponsorCardHover(target: HTMLElement, hovered: boolean) {
   target.style.borderColor = hovered ? TIER_COLORS.lead : "var(--sc-border)";
   target.style.boxShadow = hovered
     ? `0 0 60px ${TIER_COLORS.lead}25`
-    : prefersReduced
-      ? `0 0 60px ${TIER_COLORS.lead}15`
-      : "none";
+    : "none";
 }
 
 export function SponsorCard({
@@ -58,7 +51,6 @@ export function SponsorCard({
   tier?: TierKey;
   index?: number;
 }) {
-  const prefersReduced = useReducedMotion();
   const accentColor = TIER_COLORS[tier];
 
   const card = (
@@ -106,11 +98,6 @@ export function SponsorCard({
     </Link>
   );
 
-  // Reduced motion: no whileInView animation
-  if (prefersReduced) {
-    return card;
-  }
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -124,22 +111,12 @@ export function SponsorCard({
 }
 
 export function LeadSponsorCard() {
-  const prefersReduced = useReducedMotion();
-
   const card = (
     <div
-      onBlur={(e) =>
-        setLeadSponsorCardHover(e.currentTarget, false, prefersReduced)
-      }
-      onFocus={(e) =>
-        setLeadSponsorCardHover(e.currentTarget, true, prefersReduced)
-      }
-      onMouseOut={(e) =>
-        setLeadSponsorCardHover(e.currentTarget, false, prefersReduced)
-      }
-      onMouseOver={(e) =>
-        setLeadSponsorCardHover(e.currentTarget, true, prefersReduced)
-      }
+      onBlur={(e) => setLeadSponsorCardHover(e.currentTarget, false)}
+      onFocus={(e) => setLeadSponsorCardHover(e.currentTarget, true)}
+      onMouseOut={(e) => setLeadSponsorCardHover(e.currentTarget, false)}
+      onMouseOver={(e) => setLeadSponsorCardHover(e.currentTarget, true)}
       style={{
         background: "rgba(18, 18, 20, 0.5)",
         backdropFilter: "blur(10px)",
@@ -150,9 +127,6 @@ export function LeadSponsorCard() {
         maxWidth: "800px",
         margin: "0 auto",
         transition: "border-color 0.3s, box-shadow 0.3s",
-        boxShadow: prefersReduced
-          ? `0 0 60px ${TIER_COLORS.lead}15`
-          : undefined,
       }}
     >
       <Image
@@ -171,10 +145,6 @@ export function LeadSponsorCard() {
       />
     </div>
   );
-
-  if (prefersReduced) {
-    return card;
-  }
 
   return (
     <motion.div

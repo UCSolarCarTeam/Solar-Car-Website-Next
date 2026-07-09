@@ -25,8 +25,8 @@ export default function HeroSection() {
 
   useEffect(() => {
     getGPUTier().then((tier) => {
-      // Treat mobile devices and slow GPUs as low tier to save battery/performance
-      if (tier.tier < 2 || tier.isMobile) {
+      // Only skip 3D on devices with no usable GPU or phones
+      if (tier.tier === 0 || tier.isMobile) {
         setIsLowTier(true);
       }
     });
@@ -160,62 +160,37 @@ export default function HeroSection() {
 
       {/* ── Telemetry HUD Overlays (hidden on mobile — they overlap) ── */}
       {!isMobile &&
-        telemetryData.map((item, index) =>
-          prefersReduced ? (
+        telemetryData.map((item, index) => (
+          <motion.div
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            key={item.label}
+            style={{
+              position: "absolute",
+              ...item.pos,
+              zIndex: 10,
+              borderLeft: "2px solid var(--sc-red)",
+              paddingLeft: "12px",
+            }}
+            transition={{
+              duration: 0.8,
+              delay: 0.5 + index * 0.1,
+              ease: "easeOut",
+            }}
+          >
+            <div className="sc-label">{item.label}</div>
             <div
-              key={item.label}
+              className="sc-mono"
               style={{
-                position: "absolute",
-                ...item.pos,
-                zIndex: 10,
-                borderLeft: "2px solid var(--sc-red)",
-                paddingLeft: "12px",
+                fontSize: "1.25rem",
+                color: "var(--sc-white)",
+                fontWeight: 500,
               }}
             >
-              <div className="sc-label">{item.label}</div>
-              <div
-                className="sc-mono"
-                style={{
-                  fontSize: "1.25rem",
-                  color: "var(--sc-white)",
-                  fontWeight: 500,
-                }}
-              >
-                {item.value}
-              </div>
+              {item.value}
             </div>
-          ) : (
-            <motion.div
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              key={item.label}
-              style={{
-                position: "absolute",
-                ...item.pos,
-                zIndex: 10,
-                borderLeft: "2px solid var(--sc-red)",
-                paddingLeft: "12px",
-              }}
-              transition={{
-                duration: 0.8,
-                delay: 0.5 + index * 0.1,
-                ease: "easeOut",
-              }}
-            >
-              <div className="sc-label">{item.label}</div>
-              <div
-                className="sc-mono"
-                style={{
-                  fontSize: "1.25rem",
-                  color: "var(--sc-white)",
-                  fontWeight: 500,
-                }}
-              >
-                {item.value}
-              </div>
-            </motion.div>
-          ),
-        )}
+          </motion.div>
+        ))}
 
       {/* ── Center Headline ── */}
       <div
@@ -230,29 +205,19 @@ export default function HeroSection() {
           padding: isMobile ? "0 20px" : undefined,
         }}
       >
-        {prefersReduced ? (
-          /* Reduced motion: instant display */
+        <motion.div
+          animate="visible"
+          initial="hidden"
+          transition={{ delay: 0.2 }}
+          variants={fadeUp}
+        >
           <p
             className="sc-label"
             style={{ color: "var(--sc-amber)", marginBottom: "1rem" }}
           >
             UNIVERSITY OF CALGARY SOLAR CAR TEAM
           </p>
-        ) : (
-          <motion.div
-            animate="visible"
-            initial="hidden"
-            transition={{ delay: 0.2 }}
-            variants={fadeUp}
-          >
-            <p
-              className="sc-label"
-              style={{ color: "var(--sc-amber)", marginBottom: "1rem" }}
-            >
-              UNIVERSITY OF CALGARY SOLAR CAR TEAM
-            </p>
-          </motion.div>
-        )}
+        </motion.div>
 
         <h1
           className="sc-heading"
@@ -265,49 +230,46 @@ export default function HeroSection() {
             textShadow: "0px 4px 20px rgba(0,0,0,0.5)",
           }}
         >
-          {["EDUCATE.", "INNOVATE.", "INSPIRE."].map((word, i) =>
-            prefersReduced ? (
-              <span key={word} style={{ display: "block" }}>
-                {word}
-              </span>
-            ) : (
-              <motion.span
-                animate={{ opacity: 1, y: 0 }}
-                custom={i}
-                initial={{ opacity: 0, y: 50 }}
-                key={word}
-                style={{ display: "block" }}
-                transition={{
-                  delay: 0.3 + i * 0.1,
-                  duration: 0.8,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-              >
-                {word}
-              </motion.span>
-            ),
-          )}
+          {["EDUCATE.", "INNOVATE.", "INSPIRE."].map((word, i) => (
+            <motion.span
+              animate={{ opacity: 1, y: 0 }}
+              custom={i}
+              initial={{ opacity: 0, y: 50 }}
+              key={word}
+              style={{ display: "block" }}
+              transition={{
+                delay: 0.3 + i * 0.1,
+                duration: 0.8,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+            >
+              {word}
+            </motion.span>
+          ))}
         </h1>
       </div>
 
       {/* ── Scroll Indicator ── */}
-      {prefersReduced ? (
-        <div
-          style={{
-            position: "absolute",
-            bottom: "40px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            zIndex: 10,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "8px",
-          }}
-        >
-          <div className="sc-label" style={{ color: "var(--sc-grey-light)" }}>
-            SCROLL
-          </div>
+      <motion.div
+        animate={{ opacity: 1 }}
+        initial={{ opacity: 0 }}
+        style={{
+          position: "absolute",
+          bottom: "40px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 10,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "8px",
+        }}
+        transition={{ delay: 1.5, duration: 1 }}
+      >
+        <div className="sc-label" style={{ color: "var(--sc-grey-light)" }}>
+          SCROLL
+        </div>
+        {prefersReduced ? (
           <div
             style={{
               width: "1px",
@@ -316,27 +278,7 @@ export default function HeroSection() {
                 "linear-gradient(to bottom, var(--sc-red), transparent)",
             }}
           />
-        </div>
-      ) : (
-        <motion.div
-          animate={{ opacity: 1 }}
-          initial={{ opacity: 0 }}
-          style={{
-            position: "absolute",
-            bottom: "40px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            zIndex: 10,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "8px",
-          }}
-          transition={{ delay: 1.5, duration: 1 }}
-        >
-          <div className="sc-label" style={{ color: "var(--sc-grey-light)" }}>
-            SCROLL
-          </div>
+        ) : (
           <motion.div
             animate={{ y: [0, 8, 0] }}
             style={{
@@ -347,8 +289,8 @@ export default function HeroSection() {
             }}
             transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
           />
-        </motion.div>
-      )}
+        )}
+      </motion.div>
     </section>
   );
 }
