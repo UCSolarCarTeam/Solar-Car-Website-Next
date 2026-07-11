@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 
 import PortalPageHeader from "@/app/_components/PortalComponents/Portal/PortalPageHeader";
-import { portal } from "@/lib/portal-classes";
+import styles from "@/app/portal/index.module.scss";
 
 export default function PortalShell({
   children,
@@ -26,9 +26,9 @@ export default function PortalShell({
   }, []);
 
   return (
-    <main className="h-auto">
+    <main style={{ height: "auto" }}>
       <PortalPageHeader isAdmin={isAdmin} username={username} />
-      <div className={portal.content}>{children}</div>
+      <div className={styles.portalContent}>{children}</div>
       <Toaster />
     </main>
   );

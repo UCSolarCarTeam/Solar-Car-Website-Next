@@ -8,7 +8,7 @@ import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { inviteUser as inviteUserAction } from "@/app/portal/actions";
 import type { UserRole } from "@/server/portal/types";
 
-import { portal } from "@/lib/portal-classes";
+import styles from "../index.module.scss";
 
 const ROLE_OPTIONS = [
   { label: "Member", value: "member" },
@@ -55,7 +55,7 @@ const InviteUser = () => {
   };
 
   return (
-    <div className={portal.inviteUserFormContainer}>
+    <div className={styles.inviteUserFormContainer}>
       <SearchBar
         placeholder="Enter email"
         setSearchValue={setEmail}
