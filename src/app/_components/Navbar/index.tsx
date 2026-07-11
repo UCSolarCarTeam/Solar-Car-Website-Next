@@ -3,10 +3,9 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Logo from "public/assets/logo-nav.png";
 import { useEffect, useState } from "react";
-import Chevron from "@/app/_components/svgs/Chevron";
 import useViewport from "@/app/_hooks/useViewport";
 import { cn } from "@/lib/utils";
 import CloseButton from "../Buttons/CloseButton";
@@ -21,14 +20,32 @@ const links = [
   { href: "/sponsors", label: "Sponsors" },
 ] as const;
 
+const MenuIcon = ({ className }: { className?: string }) => (
+  <svg
+    aria-hidden
+    className={className}
+    fill="none"
+    height="24"
+    viewBox="0 0 24 24"
+    width="24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M4 7h16M4 12h16M4 17h16"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeWidth="2"
+    />
+  </svg>
+);
+
 const Navbar = () => {
   const { width } = useViewport();
   const pathname = usePathname();
-  const router = useRouter();
   const isActive = (href: string) => pathname === href;
   const isDesktop = width !== undefined && width > 1024;
 
-  const [hamburgerMenuOpen, setHamburgerMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const { scrollY } = useScroll();
 
   const bgOpacity = useTransform(scrollY, [0, 50], [0, 0.72]);
@@ -39,22 +56,29 @@ const Navbar = () => {
     ["rgba(240, 239, 236, 0)", "rgba(240, 239, 236, 0.08)"],
   );
 
-  const toggleHambugerMenu = () => {
-    setHamburgerMenuOpen((prev) => !prev);
-  };
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
+<<<<<<< HEAD
     setHamburgerMenuOpen(false);
   }, [pathname]);
       const [menuOpen, setMenuOpen] = useState(false);
+=======
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
+
+>>>>>>> 8c7fd45 (Added a hamburger menu)
   return (
     <>
       <motion.nav
         className={cn(
-          "fixed top-0 right-0 left-0 z-[100] flex items-center transition-[padding] duration-300",
-          isDesktop
-            ? "flex-row justify-between gap-0 px-10 py-[15px]"
-            : "flex-col justify-center gap-2.5 px-5 py-[15px]",
+          "fixed top-0 right-0 left-0 z-[100] flex items-center justify-between px-4 pt-[max(0.75rem,env(safe-area-inset-top))] pb-3 sm:px-6",
+          isDesktop ? "px-10 py-[15px]" : "h-16",
         )}
         style={{
           backgroundColor: useTransform(
@@ -68,22 +92,17 @@ const Navbar = () => {
         setMenuOpen(false);
         }}
       >
-        <div className="flex">
+        <Link className="min-w-0 shrink" href="/">
           <Image
-            alt="Logo"
-            className="h-auto w-auto cursor-pointer drop-shadow-[2px_2px_4px_rgba(0,0,0,0.5)]"
-            height={50}
+            alt="University of Calgary Solar Car Team"
+            className="h-9 w-auto max-w-[min(100%,220px)] drop-shadow-[2px_2px_4px_rgba(0,0,0,0.5)] sm:h-10"
+            height={40}
             loading="eager"
-            onClick={() => {
-              if (isDesktop) {
-                void router.push("/");
-              } else {
-                toggleHambugerMenu();
-              }
-            }}
             priority
             src={Logo}
+            width={180}
           />
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         </div>
@@ -116,8 +135,11 @@ const Navbar = () => {
 =======
         </div>
 >>>>>>> 6a6170a (refactor: enhance component styles and structure for improved layout)
+=======
+        </Link>
+>>>>>>> 8c7fd45 (Added a hamburger menu)
 
-        {isDesktop && (
+        {isDesktop ? (
           <div className="flex items-center gap-8">
             {links.map((link) => (
               <Link
@@ -135,6 +157,9 @@ const Navbar = () => {
             ))}
           </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8c7fd45 (Added a hamburger menu)
         ) : (
           width !== undefined && (
             <button
@@ -151,6 +176,7 @@ const Navbar = () => {
               )}
             </button>
           )
+<<<<<<< HEAD
 >>>>>>> 1d3c7f9 (refactor: update component styles for improved responsiveness and layout)
 =======
         )}
@@ -165,18 +191,22 @@ const Navbar = () => {
             <Chevron className="rotate-90 fill-white drop-shadow-[2px_2px_10px_#000000]" />
           </button>
 >>>>>>> 6a6170a (refactor: enhance component styles and structure for improved layout)
+=======
+>>>>>>> 8c7fd45 (Added a hamburger menu)
         )}
       </motion.nav>
 
       {width !== undefined && !isDesktop && (
         <div
+          aria-hidden={!menuOpen}
           className={cn(
-            "fixed inset-x-0 top-0 z-[99] flex flex-col items-center justify-center text-white transition-all duration-500",
-            hamburgerMenuOpen
-              ? "h-dvh bg-black/90 opacity-100 [&_a]:pointer-events-auto"
-              : "pointer-events-none h-0 bg-transparent opacity-0 [&_a]:pointer-events-none",
+            "fixed inset-0 z-[99] flex flex-col bg-black/95 pt-20 transition-[visibility,opacity] duration-300",
+            menuOpen
+              ? "visible opacity-100"
+              : "pointer-events-none invisible opacity-0",
           )}
         >
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -207,6 +237,8 @@ const Navbar = () => {
           ))}
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> 8c7fd45 (Added a hamburger menu)
           <nav className="flex flex-1 flex-col items-center justify-center gap-1 overflow-y-auto px-5 pb-10">
             {links.map((link) => (
               <Link
@@ -222,9 +254,12 @@ const Navbar = () => {
               </Link>
             ))}
           </nav>
+<<<<<<< HEAD
 >>>>>>> 1d3c7f9 (refactor: update component styles for improved responsiveness and layout)
 =======
 >>>>>>> 6a6170a (refactor: enhance component styles and structure for improved layout)
+=======
+>>>>>>> 8c7fd45 (Added a hamburger menu)
         </div>
       )}
     </>
