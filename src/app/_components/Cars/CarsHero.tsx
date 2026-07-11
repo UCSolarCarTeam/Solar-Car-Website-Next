@@ -3,7 +3,7 @@ import backsplash from "public/assets/home/backsplash.jpeg";
 
 export default function CarsHero() {
   return (
-    <section className="relative flex min-h-100 h-[50vh] w-full items-center justify-center overflow-hidden">
+    <section className="relative flex min-h-[400px] h-[50vh] w-full items-center justify-center overflow-hidden">
       <div className="absolute inset-0 z-0">
         <Image
           alt="Fleet Background"
@@ -12,7 +12,7 @@ export default function CarsHero() {
           priority
           src={backsplash}
         />
-        <div className="absolute inset-0 bg-linear-to-b from-transparent to-sc-bg" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-sc-bg" />
       </div>
 
       <div className="relative z-10 px-5 text-center">
