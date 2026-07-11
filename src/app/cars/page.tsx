@@ -17,7 +17,7 @@ export const metadata = {
 
 const CARS = Object.entries(pageIds).map(([id, data], index) => {
   let status = "RETIRED";
-  if (id === "Helios" || id === "Elysia") status = "ACTIVE";
+  if (id === "Helios") status = "ACTIVE";
 
   let carClass = "CHALLENGER";
   if (id === "Elysia" || id === "Delta") carClass = "CRUISER";
@@ -56,13 +56,15 @@ const Cars = () => {
         <section className="mx-auto flex max-w-[1400px] flex-col gap-32 px-5 py-16 pb-32">
           {CARS.map((car) => (
             <div
-              className={cn(
-                "grid grid-cols-[repeat(auto-fit,minmax(350px,1fr))] items-center gap-16",
-                car.index % 2 !== 0 ? "rtl" : "ltr",
-              )}
+              className="grid grid-cols-1 items-center gap-16 md:grid-cols-2"
               key={car.id}
             >
-              <div className="relative aspect-[16/10] w-full ltr">
+              <div
+                className={cn(
+                  "relative aspect-[16/10] w-full",
+                  car.index % 2 !== 0 && "md:order-2",
+                )}
+              >
                 <div className="absolute -inset-2.5 z-0 border border-sc-amber/30" />
                 <div className="absolute -top-[15px] -left-[15px] z-0 h-[15px] w-[15px] border-t-2 border-l-2 border-sc-amber" />
                 <div className="absolute -right-[15px] -bottom-[15px] z-0 h-[15px] w-[15px] border-r-2 border-b-2 border-sc-amber" />
@@ -78,7 +80,7 @@ const Cars = () => {
                 </div>
               </div>
 
-              <div className="ltr">
+              <div className={cn(car.index % 2 !== 0 && "md:order-1")}>
                 <div
                   className={cn(
                     "border border-sc-border bg-[rgba(18,18,20,0.5)] p-10 backdrop-blur-md border-l-4",
