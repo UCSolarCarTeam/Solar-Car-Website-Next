@@ -3,7 +3,7 @@ import type { UserResource } from "@clerk/nextjs/types";
 import type { User } from "@prisma/client";
 import { useEffect, useState } from "react";
 import EditUserPopupAdmin from "@/app/_components/PortalComponents/EditUserCell/EditUserPopupAdmin";
-import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
+import { portal } from "@/lib/portal-classes";
 
 import BasicButton from "../../Buttons/BasicButton";
 
@@ -36,7 +36,7 @@ const EditUserCell = ({ currentRow, currentUser }: EditUserCellProps) => {
   }, []);
 
   return (
-    <div className={styles.editTeamCell}>
+    <div className={portal.editTeamCell}>
       <BasicButton onClick={() => setPopupOpen((prev) => !prev)}>
         Edit
       </BasicButton>

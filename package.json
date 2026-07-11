@@ -40,10 +40,8 @@
     "@trpc/server": "^11.0.0-rc.446",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
-    "axios": "^1.7.9",
     "browser-image-compression": "^2.0.2",
     "class-variance-authority": "^0.7.1",
-    "classnames": "^2.5.1",
     "clsx": "^2.1.1",
     "detect-gpu": "^5.0.70",
     "flags": "4.0.6",
@@ -84,16 +82,12 @@
     "babel-plugin-react-compiler": "1.0.0",
     "cross-env": "^10.1.0",
     "prisma": "^6.4.1",
-    "sass": "^1.79.4",
     "shadcn": "^4.13.0",
     "tsx": "^4.22.0",
     "typescript": "7.0.2"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
-  },
-  "ct3aMetadata": {
-    "initVersion": "7.37.0"
   },
   "packageManager": "yarn@1.22.22"
 }

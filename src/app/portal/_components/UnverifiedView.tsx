@@ -1,10 +1,10 @@
 import Link from "next/link";
 
-import styles from "@/app/portal/index.module.scss";
+import { portal } from "@/lib/portal-classes";
 
 export default function UnverifiedView() {
   return (
-    <div className={styles.unverifiedPage}>
+    <div className={portal.unverifiedPage}>
       <div>
         You are not verified. Please contact the Telemetry Team or your Team
         Lead.

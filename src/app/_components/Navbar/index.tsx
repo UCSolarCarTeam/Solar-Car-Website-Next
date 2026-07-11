@@ -6,7 +6,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Logo from "public/assets/logo-nav.png";
 import { useEffect, useState } from "react";
-
 import Chevron from "@/app/_components/svgs/Chevron";
 import useViewport from "@/app/_hooks/useViewport";
 import { cn } from "@/lib/utils";
@@ -94,7 +93,7 @@ const Navbar = () => {
           />
         </div>
 
-        {isDesktop ? (
+        {isDesktop && (
           <div className="flex items-center gap-8">
             {links.map((link) => (
               <Link
@@ -111,33 +110,27 @@ const Navbar = () => {
               </Link>
             ))}
           </div>
-        ) : (
-          width !== undefined && (
-            <button
-              aria-expanded={menuOpen}
-              aria-label={menuOpen ? "Close menu" : "Open menu"}
-              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border-none bg-transparent text-white"
-              onClick={toggleHambugerMenu}
-              type="button"
-            >
-              {menuOpen ? (
-                <CloseButton className="h-7 w-7" fill="white" />
-              ) : (
-                <Chevron className="rotate-90 fill-white drop-shadow-[2px_2px_10px_#000000]" />
-              )}
-            </button>
-          )
+        )}
+
+        {!isDesktop && width !== undefined && (
+          <button
+            aria-label="Open menu"
+            className="absolute top-[25px] right-5 cursor-pointer border-none bg-transparent p-0"
+            onClick={toggleHambugerMenu}
+            type="button"
+          >
+            <Chevron className="rotate-90 fill-white drop-shadow-[2px_2px_10px_#000000]" />
+          </button>
         )}
       </motion.nav>
 
       {width !== undefined && !isDesktop && (
         <div
-          aria-hidden={!menuOpen}
           className={cn(
-            "fixed inset-0 z-[99] flex flex-col bg-black/95 pt-20 transition-[visibility,opacity] duration-300",
-            menuOpen
-              ? "visible opacity-100"
-              : "pointer-events-none invisible opacity-0",
+            "fixed inset-x-0 top-0 z-[99] flex flex-col items-center justify-center text-white transition-all duration-500",
+            hamburgerMenuOpen
+              ? "h-dvh bg-black/90 opacity-100 [&_a]:pointer-events-auto"
+              : "pointer-events-none h-0 bg-transparent opacity-0 [&_a]:pointer-events-none",
           )}
         >
           <button
@@ -148,21 +141,19 @@ const Navbar = () => {
           >
             <CloseButton fill="white" />
           </button>
-          <nav className="flex flex-1 flex-col items-center justify-center gap-1 overflow-y-auto px-5 pb-10">
-            {links.map((link) => (
-              <Link
-                className={cn(
-                  "sc-heading w-full max-w-sm py-3 text-center text-3xl no-underline",
-                  isActive(link.href) ? "text-sc-red" : "text-white",
-                )}
-                href={link.href}
-                key={link.href}
-                onClick={() => setMenuOpen(false)}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+          {links.map((link) => (
+            <Link
+              className={cn(
+                "sc-heading my-4 text-3xl no-underline",
+                isActive(link.href) ? "text-sc-red" : "text-white",
+              )}
+              href={link.href}
+              key={link.href}
+              onClick={toggleHambugerMenu}
+            >
+              {link.label}
+            </Link>
+          ))}
         </div>
       )}
     </>

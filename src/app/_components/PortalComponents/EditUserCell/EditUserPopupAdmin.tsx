@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
 import type { EditUserCellProps } from "@/app/_components/PortalComponents/EditUserCell";
-import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
+import { portal } from "@/lib/portal-classes";
 import { useUploadProfilePic } from "@/app/_hooks/useUploadProfilePic";
 import {
   type UserFormData,
@@ -199,14 +199,14 @@ const EditUserPopupAdmin = ({
   const isPending = uploadProfilePicMutation.isPending || saving;
 
   return (
-    <div className={styles.popup} onClick={handleOverlayClick}>
-      <div className={`${styles.popupContent} ${styles.popupEnter}`}>
-        <CloseButton className={styles.closeButton} onClick={togglePopup} />
+    <div className={portal.popup} onClick={handleOverlayClick}>
+      <div className={`${portal.popupContentUser} ${portal.popupEnter}`}>
+        <CloseButton className={portal.closeButton} onClick={togglePopup} />
         <h2>Edit Team Member</h2>
-        <div className={styles.popupLayout}>
-          <div className={styles.profileImageContainer}>
+        <div className={portal.popupLayout}>
+          <div className={portal.profileImageContainer}>
             <div>Profile Picture</div>
-            <div className={styles.popupProfileImage}>
+            <div className={portal.popupProfileImage}>
               <DropZone
                 currentImage={currentProfileImage}
                 handleFileUpload={handleFileUpload}
@@ -214,18 +214,18 @@ const EditUserPopupAdmin = ({
             </div>
           </div>
           {newRowData && (
-            <div className={styles.popupForm}>
+            <div className={portal.popupFormGrid2}>
               {Object.values(rowDataToRender).map((row) => (
-                <div className={styles.textFieldContainer} key={row.id}>
-                  <label className={styles.textFieldLabel} htmlFor={row.id}>
+                <div className={portal.textFieldContainer} key={row.id}>
+                  <label className={portal.textFieldLabel} htmlFor={row.id}>
                     {row.label}
                   </label>
                   {row.id === "description" ? (
                     <>
                       <textarea
-                        className={`${styles.textFieldInput} ${
+                        className={`${portal.textFieldInput} ${
                           validationErrors[row.id as keyof UserFormData]
-                            ? styles.inputError
+                            ? portal.inputError
                             : ""
                         }`}
                         id={row.id}
@@ -235,7 +235,7 @@ const EditUserPopupAdmin = ({
                         rows={5}
                         value={row.value ?? ""}
                       />
-                      <div className={styles.charCounter}>
+                      <div className={portal.charCounter}>
                         <span>{(row.value as string)?.length ?? 0}</span>
                         <span>/</span>
                         <span>{MAX_DESCRIPTION_LENGTH}</span>
@@ -243,9 +243,9 @@ const EditUserPopupAdmin = ({
                     </>
                   ) : row.id === "teamRole" ? (
                     <select
-                      className={`${styles.teamRoleSelect} ${
+                      className={`${portal.teamRoleSelect} ${
                         validationErrors[row.id as keyof UserFormData]
-                          ? styles.inputError
+                          ? portal.inputError
                           : ""
                       }`}
                       id={row.id}
@@ -284,9 +284,9 @@ const EditUserPopupAdmin = ({
                     </select>
                   ) : (
                     <input
-                      className={`${styles.textFieldInput} ${
+                      className={`${portal.textFieldInput} ${
                         validationErrors[row.id as keyof UserFormData]
-                          ? styles.inputError
+                          ? portal.inputError
                           : ""
                       }`}
                       id={row.id}
@@ -299,7 +299,7 @@ const EditUserPopupAdmin = ({
                     />
                   )}
                   {validationErrors[row.id as keyof UserFormData] && (
-                    <span className={styles.errorMessage}>
+                    <span className={portal.errorMessage}>
                       {validationErrors[row.id as keyof UserFormData]}
                     </span>
                   )}
@@ -308,7 +308,7 @@ const EditUserPopupAdmin = ({
             </div>
           )}
         </div>
-        <div className={styles.buttonContainer}>
+        <div className={portal.buttonContainer}>
           {isPending ? (
             <p>Saving...</p>
           ) : (

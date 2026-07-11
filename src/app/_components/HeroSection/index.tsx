@@ -9,7 +9,6 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import useReducedMotion from "@/app/_hooks/useReducedMotion";
 import useViewport from "@/app/_hooks/useViewport";
 import { fadeUp } from "@/lib/animation/variants";
-import { imageSize } from "@/lib/image-sizes";
 import { cn } from "@/lib/utils";
 
 const Hero3DCanvas = dynamic(() => import("./Hero3DCanvas"), {
@@ -40,7 +39,6 @@ export default function HeroSection() {
 
   useEffect(() => {
     getGPUTier().then((tier) => {
-      // Only skip 3D on devices with no usable GPU or phones
       if (tier.tier === 0 || tier.isMobile) {
         setIsLowTier(true);
       }
@@ -123,57 +121,15 @@ export default function HeroSection() {
         telemetryData.map((item, index) => (
           <motion.div
             animate={{ opacity: 1, scale: 1, y: 0 }}
+            className="absolute z-10 border-l-2 border-l-sc-red pl-3"
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             key={item.label}
-            style={{
-              position: "absolute",
-              ...item.pos,
-              zIndex: 10,
-              borderLeft: "2px solid var(--sc-red)",
-              paddingLeft: "12px",
-            }}
+            style={item.pos}
             transition={{
               duration: 0.8,
               delay: 0.5 + index * 0.1,
               ease: "easeOut",
             }}
-          >
-            <div className="sc-label">{item.label}</div>
-            <div
-              className="sc-mono"
-              style={{
-                fontSize: "1.25rem",
-                color: "var(--sc-white)",
-                fontWeight: 500,
-              }}
-            >
-              {item.value}
-            </div>
-          </motion.div>
-        ))}
-
-      {/* ── Center Headline ── */}
-      <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          textAlign: "center",
-          zIndex: 10,
-          width: "100%",
-          padding: isMobile ? "0 20px" : undefined,
-        }}
-      >
-        <motion.div
-          animate="visible"
-          initial="hidden"
-          transition={{ delay: 0.2 }}
-          variants={fadeUp}
-        >
-          <p
-            className="sc-label"
-            style={{ color: "var(--sc-amber)", marginBottom: "1rem" }}
           >
             <div className="sc-label">{item.label}</div>
             <div className="sc-mono text-xl font-medium text-sc-white">
@@ -199,24 +155,14 @@ export default function HeroSection() {
           </p>
         </motion.div>
 
-        <h1
-          className="sc-heading"
-          style={{
-            fontSize: "clamp(2.5rem, 8vw, 6.5rem)",
-            fontWeight: 700,
-            letterSpacing: "-0.04em",
-            textTransform: "uppercase",
-            lineHeight: 1,
-            textShadow: "0px 4px 20px rgba(0,0,0,0.5)",
-          }}
-        >
+        <h1 className="sc-heading text-[clamp(2.5rem,8vw,6.5rem)] leading-none font-bold tracking-[-0.04em] uppercase drop-shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
           {["EDUCATE.", "INNOVATE.", "INSPIRE."].map((word, i) => (
             <motion.span
               animate={{ opacity: 1, y: 0 }}
+              className="block"
               custom={i}
               initial={{ opacity: 0, y: 50 }}
               key={word}
-              style={{ display: "block" }}
               transition={{
                 delay: 0.3 + i * 0.1,
                 duration: 0.8,
@@ -229,35 +175,15 @@ export default function HeroSection() {
         </h1>
       </div>
 
-      {/* ── Scroll Indicator ── */}
       <motion.div
         animate={{ opacity: 1 }}
+        className="absolute bottom-10 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2"
         initial={{ opacity: 0 }}
-        style={{
-          position: "absolute",
-          bottom: "40px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          zIndex: 10,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "8px",
-        }}
         transition={{ delay: 1.5, duration: 1 }}
       >
-        <div className="sc-label" style={{ color: "var(--sc-grey-light)" }}>
-          SCROLL
-        </div>
+        <div className="sc-label text-sc-grey-light">SCROLL</div>
         {prefersReduced ? (
-          <div
-            style={{
-              width: "1px",
-              height: "40px",
-              background:
-                "linear-gradient(to bottom, var(--sc-red), transparent)",
-            }}
-          />
+          <div className="h-10 w-px bg-gradient-to-b from-sc-red to-transparent" />
         ) : (
           <motion.div
             animate={{ y: [0, 8, 0] }}

@@ -3,8 +3,7 @@
 import Link from "next/link";
 
 import BasicButton from "@/app/_components/Buttons/BasicButton";
-import MagneticButton from "@/components/ui/MagneticButton";
-import { trpc } from "@/trpc/react";
+import { trpc } from "@/trpc/server";
 
 export default async function RecruitmentForms({
   isRecruitmentClosed,

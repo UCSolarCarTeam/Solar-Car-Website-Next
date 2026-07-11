@@ -54,7 +54,7 @@ const OurWorkTimelinePage = async () => {
                           <div className="relative aspect-video w-full overflow-hidden rounded">
                             <Image
                               alt={month.month}
-                              className="object-cover object-center"
+                              className="object-cover"
                               fill
                               sizes={imageSize("ourWorkMedia")}
                               src={month.image}
