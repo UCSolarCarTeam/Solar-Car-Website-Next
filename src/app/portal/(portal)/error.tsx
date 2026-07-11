@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect } from "react";
 
-import styles from "@/app/portal/index.module.scss";
+import { portal } from "@/lib/portal-classes";
 
 export default function PortalError({
   error,
@@ -18,7 +18,7 @@ export default function PortalError({
   }, [error]);
 
   return (
-    <div className={styles.unverifiedPage}>
+    <div className={portal.unverifiedPage}>
       <div>Something went wrong loading the portal.</div>
       {error.digest && <div>Reference: {error.digest}</div>}
       <button onClick={reset} type="button">

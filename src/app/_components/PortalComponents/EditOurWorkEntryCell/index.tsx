@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
+import { portal } from "@/lib/portal-classes";
 import PlusIcon from "@/app/_components/svgs/PlusIcon";
 
 import BasicButton from "../../Buttons/BasicButton";
@@ -56,7 +56,7 @@ const EditOurWorkEntryCell = ({
   }
 
   return (
-    <div className={styles.editSponsorCell}>
+    <div className={portal.editSponsorCell}>
       <BasicButton onClick={() => setPopupOpen((prev) => !prev)}>
         Edit
       </BasicButton>

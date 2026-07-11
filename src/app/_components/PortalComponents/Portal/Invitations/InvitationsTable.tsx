@@ -12,7 +12,7 @@ import RevokeUserCell from "@/app/_components/PortalComponents/Portal/Invitation
 import SearchBar from "@/app/_components/PortalComponents/SearchBar";
 import type { PortalInvitation } from "@/server/portal/types";
 
-import styles from "../index.module.scss";
+import { portal } from "@/lib/portal-classes";
 
 const columnHelper = createColumnHelper<PortalInvitation>();
 
@@ -69,16 +69,16 @@ const InvitationsTable = (props: { invitations: PortalInvitation[] }) => {
 
   return (
     <div id="inivitations">
-      <div className={styles.inviteUserContainer}>
+      <div className={portal.inviteUserContainer}>
         <div>Invite a User</div>
         <InviteUser />
       </div>
-      <div className={styles.tableHeader}>
+      <div className={portal.tableHeader}>
         <div>Portal Invitations</div>
         <SearchBar setSearchValue={setSearchValue} value={searchValue} />
       </div>
-      <div className={styles.tableContainer}>
-        <table className={styles.table}>
+      <div className={portal.tableContainer}>
+        <table>
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
@@ -108,7 +108,7 @@ const InvitationsTable = (props: { invitations: PortalInvitation[] }) => {
           </tbody>
         </table>
         {dataToRender.length === 0 && (
-          <div className={styles.noResults}>No Results Found</div>
+          <div className={portal.noResults}>No Results Found</div>
         )}
       </div>
     </div>

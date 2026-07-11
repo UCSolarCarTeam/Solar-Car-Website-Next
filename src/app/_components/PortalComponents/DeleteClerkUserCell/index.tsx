@@ -1,6 +1,6 @@
 import { useState, useTransition } from "react";
 
-import styles from "@/app/_components/PortalComponents/DeleteClerkUserCell/index.module.scss";
+import { portal } from "@/lib/portal-classes";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { deleteClerkUser } from "@/app/portal/actions";
 
@@ -17,7 +17,7 @@ const DeleteClerkUser = ({ clerkId }: DeleteClerkUserProps) => {
 
   return (
     <div
-      className={styles.deleteClerkUserCell}
+      className={portal.deleteClerkUserCell}
       onClick={(e) => e.stopPropagation()}
     >
       <BasicButton
