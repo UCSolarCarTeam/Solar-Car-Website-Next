@@ -1,26 +1,44 @@
 import type { Metadata } from "next";
-import { Saira } from "next/font/google";
+import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 
 import "@/styles/globals.css";
-import "@/styles/globals.scss";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import MotionProvider from "@/components/providers/MotionProvider";
+import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
 import { TRPCReactProvider } from "@/trpc/react";
 
-const saira = Saira({
+const spaceGrotesk = Space_Grotesk({
   display: "swap",
   subsets: ["latin"],
+  variable: "--font-space-grotesk",
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+const jbMono = JetBrains_Mono({
+  display: "swap",
+  subsets: ["latin"],
+  variable: "--font-jb-mono",
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
-  description: "The University of Calgary Solar Car Team",
+  description:
+    "University of Calgary Solar Car Team — engineering solar-powered vehicles that push the limits of renewable energy and motorsport.",
   icons: [
     {
       rel: "icon",
       url: "/favicon.ico",
     },
   ],
-  title: "Calgary Solar Car",
+  title: {
+    default: "Calgary Solar Car",
+    template: "%s | Calgary Solar Car",
+  },
+  openGraph: {
+    siteName: "Calgary Solar Car",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -29,9 +47,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html className={`${saira.className}`} lang="en">
-      <body className="bg-[#121212]">
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+    <html className={`${spaceGrotesk.variable} ${jbMono.variable}`} lang="en">
+      <body className="bg-[#0A0A0B]">
+        <SmoothScrollProvider>
+          <MotionProvider>
+            <TRPCReactProvider>{children}</TRPCReactProvider>
+          </MotionProvider>
+        </SmoothScrollProvider>
         <Analytics />
         <SpeedInsights />
       </body>

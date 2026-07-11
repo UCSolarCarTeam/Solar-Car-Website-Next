@@ -1,11 +1,15 @@
-import { memo } from "react";
-
 import type { SVGIconProps } from "@/app/_types";
 
-const Linkedin = ({ className, height, width }: SVGIconProps) => {
+const Linkedin = ({
+  className,
+  height,
+  width,
+  fill = "currentColor",
+}: SVGIconProps) => {
   return (
     <svg
-      fill="currentColor"
+      className={className}
+      fill={fill}
       height={height}
       viewBox="0 0 28 26"
       width={width}
@@ -16,4 +20,4 @@ const Linkedin = ({ className, height, width }: SVGIconProps) => {
   );
 };
 
-export default memo(Linkedin);
+export default Linkedin;

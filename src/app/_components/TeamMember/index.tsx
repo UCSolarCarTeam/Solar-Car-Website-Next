@@ -2,9 +2,8 @@ import type { User } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
-import { memo } from "react";
-import styles from "@/app/_components/TeamMember/index.module.scss";
 import { formatDateOnly } from "@/app/_lib/utils";
+import { cn } from "@/lib/utils";
 
 import Linkedin from "../svgs/Linkedin";
 
@@ -15,39 +14,44 @@ type TeamMemberProps = {
 const TeamMember = ({ user }: TeamMemberProps) => {
   if (!user) return null;
 
-  // Determine if this is an alumnus by checking if yearRetired exists
   const isAlumni = user.yearRetired !== null && user.yearRetired !== undefined;
 
-  // Use companyTitle for alumni, description for active members
   const description = isAlumni
     ? (user.companyTitle ?? user.description ?? null)
     : (user.description ?? null);
 
-  // Show company for alumni, otherwise show fieldOfStudy; include description and linkedIn
   const overlayLeft = isAlumni ? user.company : user.fieldOfStudy;
   const hasOverlay = overlayLeft ?? description ?? user.linkedIn ?? false;
 
   return (
     <div
-      className={`${styles.teamMember} ${hasOverlay ? styles.hasOverlay : ""}`}
+      className={cn(
+        "relative box-content flex min-h-[350px] w-[300px] cursor-default flex-col items-center gap-3 rounded-2xl pt-12 text-center text-white max-lg:min-h-[380px] max-lg:w-[280px] max-sm:w-full max-sm:max-w-[300px] max-sm:min-h-[360px]",
+        hasOverlay && "group hover:-translate-y-1",
+      )}
       key={user.profilePictureUrl}
     >
-      <div className={styles.teamMemberImage}>
+      <div
+        className={cn(
+          "relative z-[1] h-[225px] w-[225px] overflow-hidden rounded-full border-2 border-white/20 transition-[border-color,transform] duration-300 max-lg:h-[220px] max-lg:w-[220px] max-sm:h-[200px] max-sm:w-[200px]",
+          hasOverlay && "group-hover:scale-105 group-hover:border-primary-red",
+        )}
+      >
         <Image
           alt="Headshot"
+          className="object-cover"
           fill
           loading="eager"
           src={user.profilePictureUrl ?? defaultProfilePicture}
-          style={{ objectFit: "cover" }}
           unoptimized
         />
       </div>
 
-      <div className={styles.nameRoleContainer}>
-        <div className={styles.name}>
+      <div className="flex flex-col items-center">
+        <div className="w-fit min-w-[210px] rounded-xl bg-primary-red px-1 py-0.5 text-2xl font-semibold wrap-break-word text-white max-lg:px-5 max-lg:py-1 max-lg:text-[1.3rem] max-sm:px-4 max-sm:text-xl">
           {[user.firstName, user.lastName].filter(Boolean).join(" ")}
         </div>
-        <div className={styles.teamRole}>
+        <div className="mt-2.5 text-[1.075rem] font-medium max-lg:text-lg max-sm:text-base">
           {(user.teamRole ?? "").replace(/([a-z])([A-Z])/g, "$1 $2")}
           {user.yearJoined && user.yearRetired && (
             <>
@@ -58,19 +62,23 @@ const TeamMember = ({ user }: TeamMemberProps) => {
           )}
         </div>
       </div>
-      {/* Hover overlay */}
+
       {hasOverlay && (
-        <div className={styles.hoverOverlay}>
-          <div className={styles.overlayContent}>
+        <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-2xl bg-black/80 p-8 opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100 max-lg:p-7 max-sm:rounded-xl max-sm:p-6">
+          <div className="flex w-full flex-col gap-6 overflow-hidden text-center">
             {overlayLeft && (
-              <div className={styles.fieldOfStudy}>{overlayLeft}</div>
+              <div className="text-base font-medium wrap-break-word text-white/95 italic after:mx-auto after:mt-2 after:block after:h-0.5 after:w-[150px] after:bg-[linear-gradient(90deg,transparent,var(--primary-red),transparent)] max-lg:text-[0.95rem] max-sm:text-sm">
+                {overlayLeft}
+              </div>
             )}
             {description && (
-              <div className={styles.description}>{description}</div>
+              <div className="mb-4 px-2 text-center text-[0.95rem] leading-relaxed font-light wrap-break-word text-white/85 max-lg:text-sm max-sm:text-[0.85rem]">
+                {description}
+              </div>
             )}
 
             {user.linkedIn && (
-              <div className={styles.linkedIn}>
+              <div className="mx-auto flex h-8 w-8 items-center justify-center overflow-visible rounded bg-primary-red text-white transition-[transform,filter] duration-300 hover:scale-110 hover:drop-shadow-[0_4px_12px_rgba(245,23,32,0.6)] focus-visible:scale-110 focus-visible:drop-shadow-[0_4px_12px_rgba(245,23,32,0.6)]">
                 <Link
                   href={user.linkedIn}
                   rel="noopener noreferrer"
@@ -87,4 +95,4 @@ const TeamMember = ({ user }: TeamMemberProps) => {
   );
 };
 
-export default memo(TeamMember);
+export default TeamMember;
