@@ -1,12 +1,3 @@
-import { axiom2010 } from "./entries/axiom-2010";
-import { axiom2011 } from "./entries/axiom-2011";
-import { delta } from "./entries/delta";
-import { elysia } from "./entries/elysia";
-import { helios } from "./entries/helios";
-import { schulich1 } from "./entries/schulich-1";
-import { soleon } from "./entries/soleon";
-import { x1 } from "./entries/x1";
-
 export type {
   CarClass,
   CarEntry,
@@ -15,29 +6,5 @@ export type {
   FleetTimelineEntry,
 } from "./types";
 
-export { fleetTimeline } from "./fleet-timeline";
+export { cars, fleetTimeline, pageIds } from "./cars";
 export { getHighlightSpecs } from "./highlight-specs";
-
-/** Newest first — matches scroll order on /cars */
-export const cars = [
-  helios,
-  elysia,
-  delta,
-  axiom2011,
-  axiom2010,
-  schulich1,
-  soleon,
-  x1,
-] as const;
-
-export const pageIds = Object.fromEntries(
-  cars.map((car) => [
-    car.id,
-    {
-      content: car.content,
-      image: car.image,
-      title: car.title,
-      position: "left" as const,
-    },
-  ]),
-);

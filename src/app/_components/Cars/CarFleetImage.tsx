@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { getHighlightSpecs } from "@/lib/cars/highlight-specs";
 import type { CarEntry } from "@/lib/cars/types";
+import { imageSize } from "@/lib/image-sizes";
 import { cn } from "@/lib/utils";
 
 export default function CarFleetImage({
@@ -53,8 +54,9 @@ export default function CarFleetImage({
       >
         <Image
           alt={car.title}
-          className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
           fill
+          sizes={imageSize("carFleet")}
           src={car.image}
         />
         <div
