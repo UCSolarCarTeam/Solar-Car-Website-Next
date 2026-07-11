@@ -1,4 +1,5 @@
 import { SponsorLevel } from "@prisma/client";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import backsplash from "public/assets/sponsors/backsplash.jpeg";
@@ -9,6 +10,12 @@ import SectionReveal from "@/components/ui/SectionReveal";
 import type { RouterOutputs } from "@/trpc/react";
 import { HydrateClient, trpc } from "@/trpc/server";
 import { LeadSponsorCard, SponsorCard } from "./SponsorCards";
+
+export const metadata: Metadata = {
+  title: "Sponsors | Calgary Solar Car",
+  description:
+    "Meet the partners and sponsors who power the University of Calgary Solar Car Team.",
+};
 
 type Sponsor = RouterOutputs["fe"]["getSponsors"][0];
 
@@ -31,45 +38,18 @@ const SponsorLevelSection = ({
   if (levelSponsors.length === 0) return null;
 
   return (
-    <div style={{ marginBottom: "8rem" }}>
+    <div className="mb-32">
       <SectionReveal>
-        <div
-          style={{
-            borderBottom: "1px solid var(--sc-border)",
-            paddingBottom: "1rem",
-            marginBottom: "4rem",
-            display: "flex",
-            flexDirection: "column",
-            gap: "0.5rem",
-          }}
-        >
-          <h2
-            className="sc-heading"
-            style={{ color: "var(--sc-white)", fontSize: "2.5rem", margin: 0 }}
-          >
-            {title}
-          </h2>
-          <p
-            className="sc-mono"
-            style={{
-              color: "var(--sc-grey-light)",
-              fontSize: "1rem",
-              margin: 0,
-            }}
-          >
+        <div className="mb-16 flex flex-col gap-2 border-b border-sc-border pb-4">
+          <h2 className="sc-heading m-0 text-4xl text-sc-white">{title}</h2>
+          <p className="sc-mono m-0 text-base text-sc-grey-light">
             {"// "}
             {description}
           </p>
         </div>
       </SectionReveal>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-          gap: "2rem",
-        }}
-      >
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-8">
         {levelSponsors.map((sponsor, index) => (
           <SponsorCard
             href={sponsor.websiteUrl}
@@ -91,83 +71,26 @@ const Sponsors = async () => {
   return (
     <HydrateClient>
       <Navbar />
-      <main
-        style={{
-          minHeight: "100vh",
-          background: "var(--sc-bg)",
-          color: "var(--sc-white)",
-        }}
-      >
-        {/* Cinematic Header */}
-        <section
-          style={{
-            position: "relative",
-            width: "100%",
-            height: "60vh",
-            minHeight: "500px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            overflow: "hidden",
-          }}
-        >
-          <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+      <main className="min-h-screen bg-sc-bg text-sc-white">
+        <section className="relative flex min-h-[500px] h-[60vh] w-full items-center justify-center overflow-hidden">
+          <div className="absolute inset-0 z-0">
             <Image
               alt="Sponsors Background"
+              className="object-cover object-center brightness-[0.3] saturate-50"
               fill
               priority
               src={backsplash}
-              style={{
-                objectFit: "cover",
-                objectPosition: "center",
-                filter: "brightness(0.3) saturate(0.5)",
-              }}
             />
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                background:
-                  "linear-gradient(to bottom, transparent 0%, var(--sc-bg) 100%)",
-              }}
-            />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-sc-bg" />
           </div>
 
-          <div
-            style={{
-              position: "relative",
-              zIndex: 10,
-              textAlign: "center",
-              padding: "0 20px",
-            }}
-          >
+          <div className="relative z-10 px-5 text-center">
             <SectionReveal delay={0.2}>
-              <div
-                className="sc-label"
-                style={{ color: "var(--sc-amber)", marginBottom: "1rem" }}
-              >
-                OUR PARTNERS
-              </div>
-              <h1
-                className="sc-heading"
-                style={{
-                  fontSize: "clamp(3.5rem, 8vw, 6rem)",
-                  margin: 0,
-                  textShadow: "0px 4px 20px rgba(0,0,0,0.5)",
-                }}
-              >
+              <div className="sc-label mb-4 text-sc-amber">OUR PARTNERS</div>
+              <h1 className="sc-heading m-0 text-[clamp(3.5rem,8vw,6rem)] drop-shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
                 Fueling Innovation.
               </h1>
-              <p
-                style={{
-                  color: "var(--sc-grey-light)",
-                  marginTop: "1.5rem",
-                  fontSize: "1.2rem",
-                  maxWidth: "650px",
-                  margin: "1.5rem auto 0",
-                  lineHeight: 1.6,
-                }}
-              >
+              <p className="mx-auto mt-6 max-w-[650px] text-xl leading-relaxed text-sc-grey-light">
                 Our work is made possible by the generous support of our
                 sponsors. They provide the resources we need to push the
                 boundaries of renewable energy.
@@ -176,33 +99,11 @@ const Sponsors = async () => {
           </div>
         </section>
 
-        {/* Content Section */}
-        <section
-          style={{
-            maxWidth: "1200px",
-            margin: "0 auto",
-            padding: "4rem 20px 8rem",
-            position: "relative",
-            zIndex: 10,
-          }}
-        >
-          {/* Lead Sponsor */}
-          <div style={{ marginBottom: "10rem", textAlign: "center" }}>
+        <section className="relative z-10 mx-auto max-w-[1200px] px-5 py-16 pb-32">
+          <div className="mb-40 text-center">
             <SectionReveal>
-              <div
-                className="sc-label"
-                style={{ color: "var(--sc-red)", marginBottom: "1rem" }}
-              >
-                TITLE SPONSOR
-              </div>
-              <p
-                className="sc-mono"
-                style={{
-                  color: "var(--sc-grey-light)",
-                  fontSize: "1rem",
-                  marginBottom: "4rem",
-                }}
-              >
+              <div className="sc-label mb-4 text-sc-red">TITLE SPONSOR</div>
+              <p className="sc-mono mb-16 text-base text-sc-grey-light">
                 {
                   "// A special thank you to our kind donor, the faculty and everything they've done for us!"
                 }
@@ -241,89 +142,26 @@ const Sponsors = async () => {
           />
         </section>
 
-        {/* Call to Action Section */}
-        <section
-          style={{
-            width: "100%",
-            padding: "8rem 20px",
-            background: "var(--sc-bg-surface)",
-            borderTop: "1px solid var(--sc-border)",
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
-          {/* Background Glow */}
-          <div
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: "60vw",
-              height: "60vw",
-              background:
-                "radial-gradient(circle, rgba(245, 166, 35, 0.1) 0%, transparent 70%)",
-              pointerEvents: "none",
-              zIndex: 0,
-            }}
-          />
+        <section className="relative w-full overflow-hidden border-t border-sc-border bg-sc-bg-surface px-5 py-32">
+          <div className="pointer-events-none absolute top-1/2 left-1/2 z-0 h-[60vw] w-[60vw] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(circle,rgba(245,166,35,0.1)_0%,transparent_70%)]" />
 
-          <div
-            style={{
-              maxWidth: "800px",
-              margin: "0 auto",
-              textAlign: "center",
-              position: "relative",
-              zIndex: 10,
-            }}
-          >
+          <div className="relative z-10 mx-auto max-w-[800px] text-center">
             <SectionReveal>
-              <div
-                className="sc-label"
-                style={{ color: "var(--sc-amber)", marginBottom: "1rem" }}
-              >
+              <div className="sc-label mb-4 text-sc-amber">
                 BECOME A SPONSOR
               </div>
-              <h2
-                className="sc-heading"
-                style={{
-                  fontSize: "clamp(2.5rem, 5vw, 4rem)",
-                  marginBottom: "1.5rem",
-                  lineHeight: 1.1,
-                }}
-              >
+              <h2 className="sc-heading mb-6 text-[clamp(2.5rem,5vw,4rem)] leading-tight">
                 Partner With Us.
               </h2>
-              <p
-                style={{
-                  color: "var(--sc-grey-light)",
-                  fontSize: "1.2rem",
-                  lineHeight: 1.6,
-                  marginBottom: "3rem",
-                  maxWidth: "600px",
-                  margin: "0 auto 3rem",
-                }}
-              >
+              <p className="mx-auto mb-12 max-w-[600px] text-xl leading-relaxed text-sc-grey-light">
                 Join us in our mission to push the limits of sustainable
                 technology. Your support enables our students to gain invaluable
                 hands-on experience and innovate for a greener future.
               </p>
 
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <Link href="/support-us" style={{ textDecoration: "none" }}>
-                  <MagneticButton
-                    style={{
-                      background: "var(--sc-amber)",
-                      color: "var(--sc-bg)",
-                      border: "none",
-                      padding: "1rem 3rem",
-                      fontSize: "1.1rem",
-                      fontWeight: 700,
-                      letterSpacing: "2px",
-                      textTransform: "uppercase",
-                      fontFamily: "var(--sc-font-sans)",
-                    }}
-                  >
+              <div className="flex justify-center">
+                <Link className="no-underline" href="/support-us">
+                  <MagneticButton className="border-none bg-sc-amber px-12 py-4 font-sans text-lg font-bold tracking-widest text-sc-bg uppercase">
                     View Sponsorship Package
                   </MagneticButton>
                 </Link>

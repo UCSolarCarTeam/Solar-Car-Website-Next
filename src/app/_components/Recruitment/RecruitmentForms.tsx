@@ -3,8 +3,6 @@ import Link from "next/link";
 import BasicButton from "@/app/_components/Buttons/BasicButton";
 import { trpc } from "@/trpc/server";
 
-import styles from "./index.module.scss";
-
 export default async function RecruitmentForms({
   isRecruitmentClosed,
 }: {
@@ -13,10 +11,10 @@ export default async function RecruitmentForms({
   const recruitmentForms = await trpc.fe.getRecruitment();
 
   return (
-    <div className={styles.applicationContainer}>
+    <div className="flex flex-wrap justify-center gap-12">
       {isRecruitmentClosed ? (
-        <div className={styles.application}>
-          <div className={styles.applicationDescription}>
+        <div className="flex min-w-[20%] max-w-[40%] flex-col items-center gap-4 text-center max-lg:min-w-full">
+          <div className="py-4 pb-12 text-xl font-normal">
             The current application period for the Calgary Solar Car Team is now
             closed. We’ll be accepting new applications in the next semester. If
             you’re excited about renewable energy, engineering innovation, and
@@ -29,23 +27,21 @@ export default async function RecruitmentForms({
         </div>
       ) : (
         recruitmentForms?.map((form) => (
-          <div className={styles.application} key={form.header}>
-            <div className={styles.applicationTitle}>{form.header}</div>
-            <div className={styles.applicationDescription}>
+          <div
+            className="flex min-w-[20%] max-w-[40%] flex-col items-center gap-4 text-center max-lg:min-w-full"
+            key={form.header}
+          >
+            <div className="text-3xl font-semibold">{form.header}</div>
+            <div className="py-4 pb-12 text-lg font-normal">
               {form.description}
             </div>
             <Link
+              className="mt-auto"
               href={form.link}
               rel="noopener noreferrer"
-              style={{ marginTop: "auto" }}
               target="_blank"
             >
-              <BasicButton
-                style={{
-                  backgroundColor: "var(--primary-red)",
-                  textTransform: "uppercase",
-                }}
-              >
+              <BasicButton className="bg-primary-red uppercase">
                 Apply now
               </BasicButton>
             </Link>

@@ -18,77 +18,25 @@ const Recruitment = async () => {
   return (
     <HydrateClient>
       <Navbar />
-      <main
-        style={{
-          minHeight: "100vh",
-          background: "var(--sc-bg)",
-          color: "var(--sc-white)",
-        }}
-      >
-        {/* Cinematic Header */}
-        <section
-          style={{
-            position: "relative",
-            width: "100%",
-            height: "60vh",
-            minHeight: "400px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            overflow: "hidden",
-          }}
-        >
-          <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+      <main className="min-h-screen bg-sc-bg text-sc-white">
+        <section className="relative flex min-h-[400px] h-[60vh] w-full items-center justify-center overflow-hidden">
+          <div className="absolute inset-0 z-0">
             <Image
               alt="Solar Car Background"
+              className="object-cover object-center brightness-[0.4] saturate-[0.8]"
               fill
               priority
               src={backsplash}
-              style={{
-                objectFit: "cover",
-                objectPosition: "center",
-                filter: "brightness(0.4) saturate(0.8)",
-              }}
             />
-            {/* Vignette */}
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                background:
-                  "linear-gradient(to bottom, transparent 0%, var(--sc-bg) 100%)",
-              }}
-            />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-sc-bg" />
           </div>
 
-          <div
-            style={{
-              position: "relative",
-              zIndex: 10,
-              textAlign: "center",
-              padding: "0 20px",
-            }}
-          >
-            <div
-              className="sc-label"
-              style={{ color: "var(--sc-amber)", marginBottom: "1rem" }}
-            >
-              JOIN THE TEAM
-            </div>
-            <h1
-              className="sc-heading"
-              style={{ fontSize: "clamp(3rem, 6vw, 5rem)", margin: 0 }}
-            >
+          <div className="relative z-10 px-5 text-center">
+            <div className="sc-label mb-4 text-sc-amber">JOIN THE TEAM</div>
+            <h1 className="sc-heading m-0 text-[clamp(3rem,6vw,5rem)]">
               Build the Future.
             </h1>
-            <p
-              className="sc-mono"
-              style={{
-                color: "var(--sc-grey-light)",
-                marginTop: "1.5rem",
-                fontSize: "1.1rem",
-              }}
-            >
+            <p className="sc-mono mt-6 text-lg text-sc-grey-light">
               {isRecruitmentClosed
                 ? "RECRUITMENT_STATUS: CLOSED"
                 : "RECRUITMENT_STATUS: ACCEPTING_APPLICATIONS"}
@@ -96,42 +44,14 @@ const Recruitment = async () => {
           </div>
         </section>
 
-        {/* Content Section */}
-        <section
-          style={{
-            maxWidth: "1000px",
-            margin: "0 auto",
-            padding: "4rem 20px 8rem",
-            position: "relative",
-            zIndex: 10,
-          }}
-        >
-          <div
-            style={{
-              background: "rgba(18, 18, 20, 0.6)",
-              backdropFilter: "blur(20px)",
-              border: "1px solid var(--sc-border)",
-              borderRadius: "4px",
-              padding: "3rem",
-              boxShadow: "0 20px 40px rgba(0,0,0,0.5)",
-            }}
-          >
+        <section className="relative z-10 mx-auto max-w-[1000px] px-5 py-16 pb-32">
+          <div className="rounded border border-sc-border bg-[rgba(18,18,20,0.6)] p-12 shadow-[0_20px_40px_rgba(0,0,0,0.5)] backdrop-blur-xl">
             {!isRecruitmentClosed && (
-              <div
-                style={{
-                  background: "rgba(200, 16, 46, 0.1)",
-                  borderLeft: "2px solid var(--sc-red)",
-                  padding: "1rem",
-                  marginBottom: "3rem",
-                }}
-              >
-                <span
-                  className="sc-mono"
-                  style={{ color: "var(--sc-amber)", fontSize: "0.9rem" }}
-                >
+              <div className="mb-12 border-l-2 border-l-sc-red bg-sc-red/10 p-4">
+                <span className="sc-mono text-sm text-sc-amber">
                   {"// SYSTEM ALERT"}
                 </span>
-                <p style={{ margin: "0.5rem 0 0 0", color: "var(--sc-white)" }}>
+                <p className="mt-2 mb-0 text-sc-white">
                   Applications close on September 13th. Select a sub-team below
                   to begin your application.
                 </p>

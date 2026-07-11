@@ -1,30 +1,36 @@
 "use client";
 
-import classNames from "classnames";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Logo from "public/assets/logo-nav.png";
 import { useEffect, useState } from "react";
-
-import styles from "@/app/_components/Navbar/index.module.scss";
 import Chevron from "@/app/_components/svgs/Chevron";
 import useViewport from "@/app/_hooks/useViewport";
+import { cn } from "@/lib/utils";
 import CloseButton from "../Buttons/CloseButton";
 
-const cx = classNames.bind(styles);
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/recruitment", label: "Recruitment" },
+  { href: "/cars", label: "Cars" },
+  { href: "/team", label: "Team" },
+  { href: "/support-us", label: "Support Us" },
+  { href: "/our-work", label: "Our Work" },
+  { href: "/sponsors", label: "Sponsors" },
+] as const;
 
 const Navbar = () => {
   const { width } = useViewport();
   const pathname = usePathname();
   const router = useRouter();
   const isActive = (href: string) => pathname === href;
+  const isDesktop = width !== undefined && width > 1024;
 
   const [hamburgerMenuOpen, setHamburgerMenuOpen] = useState(false);
   const { scrollY } = useScroll();
 
-  // Glassmorphism effect when scrolled past 50px
   const bgOpacity = useTransform(scrollY, [0, 50], [0, 0.72]);
   const blurAmount = useTransform(scrollY, [0, 50], [0, 20]);
   const borderColor = useTransform(
@@ -32,16 +38,6 @@ const Navbar = () => {
     [0, 50],
     ["rgba(240, 239, 236, 0)", "rgba(240, 239, 236, 0.08)"],
   );
-
-  const links = [
-    { href: "/", label: "Home" },
-    { href: "/recruitment", label: "Recruitment" },
-    { href: "/cars", label: "Cars" },
-    { href: "/team", label: "Team" },
-    { href: "/support-us", label: "Support Us" },
-    { href: "/our-work", label: "Our Work" },
-    { href: "/sponsors", label: "Sponsors" },
-  ];
 
   const toggleHambugerMenu = () => {
     setHamburgerMenuOpen((prev) => !prev);
@@ -54,18 +50,13 @@ const Navbar = () => {
   return (
     <>
       <motion.nav
+        className={cn(
+          "fixed top-0 right-0 left-0 z-[100] flex items-center transition-[padding] duration-300",
+          isDesktop
+            ? "flex-row justify-between gap-0 px-10 py-[15px]"
+            : "flex-col justify-center gap-2.5 px-5 py-[15px]",
+        )}
         style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 100,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: width && width > 1024 ? "space-between" : "center",
-          padding: width && width > 1024 ? "15px 40px" : "15px 20px",
-          flexDirection: width && width > 1024 ? "row" : "column",
-          gap: width && width > 1024 ? 0 : "10px",
           backgroundColor: useTransform(
             bgOpacity,
             (v) => `rgba(10, 10, 11, ${v})`,
@@ -75,16 +66,16 @@ const Navbar = () => {
             (v) => `blur(${v}px) saturate(120%)`,
           ),
           borderBottom: useTransform(borderColor, (v) => `1px solid ${v}`),
-          transition: "padding 0.3s ease",
         }}
       >
-        <div style={{ display: "flex" }}>
+        <div className="flex">
           <Image
             alt="Logo"
+            className="h-auto w-auto cursor-pointer drop-shadow-[2px_2px_4px_rgba(0,0,0,0.5)]"
             height={50}
             loading="eager"
             onClick={() => {
-              if (width !== undefined && width > 1024) {
+              if (isDesktop) {
                 void router.push("/");
               } else {
                 toggleHambugerMenu();
@@ -92,30 +83,21 @@ const Navbar = () => {
             }}
             priority
             src={Logo}
-            style={{
-              width: "auto",
-              cursor: "pointer",
-              filter: "drop-shadow(2px 2px 4px rgba(0,0,0,0.5))",
-            }}
           />
         </div>
 
-        {width && width > 1024 && (
-          <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
+        {isDesktop && (
+          <div className="flex items-center gap-8">
             {links.map((link) => (
               <Link
-                className="sc-mono"
+                className={cn(
+                  "sc-mono text-sm no-underline transition-colors duration-200",
+                  isActive(link.href)
+                    ? "font-semibold text-sc-red"
+                    : "font-normal text-sc-white",
+                )}
                 href={link.href}
                 key={link.href}
-                style={{
-                  fontSize: "0.85rem",
-                  color: isActive(link.href)
-                    ? "var(--sc-red)"
-                    : "var(--sc-white)",
-                  textDecoration: "none",
-                  fontWeight: isActive(link.href) ? 600 : 400,
-                  transition: "color 0.2s",
-                }}
               >
                 {link.label}
               </Link>
@@ -123,37 +105,44 @@ const Navbar = () => {
           </div>
         )}
 
-        {width && width <= 1024 && (
-          <div
+        {!isDesktop && width !== undefined && (
+          <button
+            aria-label="Open menu"
+            className="absolute top-[25px] right-5 cursor-pointer border-none bg-transparent p-0"
             onClick={toggleHambugerMenu}
-            style={{ position: "absolute", right: "20px", top: "25px" }}
+            type="button"
           >
-            <Chevron className={styles.chevron} />
-          </div>
+            <Chevron className="rotate-90 fill-white drop-shadow-[2px_2px_10px_#000000]" />
+          </button>
         )}
       </motion.nav>
 
-      {/* Mobile Menu */}
-      {width && width <= 1024 && (
+      {width !== undefined && !isDesktop && (
         <div
-          className={`${styles.hamburgerMenu} ${hamburgerMenuOpen ? styles.open : styles.closed}`}
-          style={{ position: "fixed" }}
+          className={cn(
+            "fixed inset-x-0 top-0 z-[99] flex flex-col items-center justify-center text-white transition-all duration-500",
+            hamburgerMenuOpen
+              ? "h-dvh bg-black/90 opacity-100 [&_a]:pointer-events-auto"
+              : "pointer-events-none h-0 bg-transparent opacity-0 [&_a]:pointer-events-none",
+          )}
         >
-          <div className={styles.closeButton} onClick={toggleHambugerMenu}>
+          <button
+            aria-label="Close menu"
+            className="absolute top-5 right-5 cursor-pointer border-none bg-transparent p-0"
+            onClick={toggleHambugerMenu}
+            type="button"
+          >
             <CloseButton fill="white" />
-          </div>
+          </button>
           {links.map((link) => (
             <Link
-              className="sc-heading"
+              className={cn(
+                "sc-heading my-4 text-3xl no-underline",
+                isActive(link.href) ? "text-sc-red" : "text-white",
+              )}
               href={link.href}
               key={link.href}
               onClick={toggleHambugerMenu}
-              style={{
-                fontSize: "2rem",
-                color: isActive(link.href) ? "var(--sc-red)" : "white",
-                textDecoration: "none",
-                margin: "1rem 0",
-              }}
             >
               {link.label}
             </Link>

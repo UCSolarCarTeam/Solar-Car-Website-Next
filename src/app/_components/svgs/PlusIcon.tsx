@@ -1,16 +1,19 @@
 import { memo } from "react";
 
 import type { SVGIconProps } from "@/app/_types";
+import { cn } from "@/lib/utils";
 
 const PlusIcon = ({ fill, onClick, size }: SVGIconProps) => {
+  const dimension = size === "sm" ? "12px" : size === "md" ? "24px" : "36px";
+
   return (
     <svg
+      className={cn(onClick && "cursor-pointer")}
       fill={fill ?? "#ffffff"}
-      height={size === "sm" ? "12px" : size === "md" ? "24px" : "36px"}
+      height={dimension}
       onClick={onClick}
-      style={{ cursor: onClick ? "pointer" : "inherit" }}
       viewBox="0 0 330 330"
-      width={size === "sm" ? "12px" : size === "md" ? "24px" : "36px"}
+      width={dimension}
       xmlSpace="preserve"
     >
       <g strokeWidth="0" />

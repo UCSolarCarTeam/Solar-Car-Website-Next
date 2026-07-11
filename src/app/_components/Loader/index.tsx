@@ -1,4 +1,5 @@
 import { BarLoader } from "react-spinners";
+import { cn } from "@/lib/utils";
 
 export interface LoaderProps {
   isLoading: boolean;
@@ -8,18 +9,10 @@ export interface LoaderProps {
 const Loader = ({ isLoading, lightmode = false }: LoaderProps) => {
   return (
     <div
-      style={{
-        alignItems: "center",
-        backgroundColor: lightmode ? "#e6e6e6" : "#121212",
-        display: "flex",
-        height: "100%",
-        justifyContent: "center",
-        left: 0,
-        position: "fixed",
-        top: 0,
-        width: "100%",
-        zIndex: 1000,
-      }}
+      className={cn(
+        "fixed inset-0 z-[1000] flex h-full w-full items-center justify-center",
+        lightmode ? "bg-[#e6e6e6]" : "bg-[#121212]",
+      )}
     >
       <BarLoader
         color={lightmode ? "#121212" : "#e6e6e6"}

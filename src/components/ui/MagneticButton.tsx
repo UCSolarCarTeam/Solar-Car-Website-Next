@@ -2,6 +2,7 @@
 
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { type ReactNode, useRef } from "react";
+import { cn } from "@/lib/utils";
 
 interface MagneticButtonProps {
   children: ReactNode;
@@ -47,13 +48,13 @@ export default function MagneticButton({
 
   return (
     <motion.div
-      className={className}
+      className={cn("inline-block", className)}
       data-cursor="interactive"
       onClick={onClick}
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
       ref={ref}
-      style={{ ...style, x: springX, y: springY, display: "inline-block" }}
+      style={{ x: springX, y: springY, ...style }}
     >
       {children}
     </motion.div>

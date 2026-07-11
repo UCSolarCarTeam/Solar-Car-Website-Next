@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
 import type { EditOurWorkEntryCellProps } from "@/app/_components/PortalComponents/EditOurWorkEntryCell";
-import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
+import { portal } from "@/lib/portal-classes";
 import { compress } from "@/app/_lib/compress";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { createOurWorkEntry, updateOurWorkEntry } from "@/app/portal/actions";
@@ -172,18 +172,18 @@ const EditOurWorkEntryPopup = ({
   };
 
   return (
-    <div className={styles.popup} onClick={handleOverlayClick}>
-      <div className={`${styles.popupContent} ${styles.popupEnter}`}>
-        <CloseButton className={styles.closeButton} onClick={togglePopup} />
+    <div className={portal.popup} onClick={handleOverlayClick}>
+      <div className={`${portal.popupContentMd} ${portal.popupEnter}`}>
+        <CloseButton className={portal.closeButton} onClick={togglePopup} />
         <h2>{newEntry ? "New Timeline Entry" : "Edit Timeline Entry"}</h2>
-        <div className={styles.popupLayout}>
+        <div className={portal.popupLayoutSponsor}>
           {newRowData && (
-            <div className={styles.popupForm}>
+            <div className={portal.popupForm}>
               {Object.values(rowDataToRender).map((row) => (
                 <div key={row.id}>
                   <label htmlFor={row.id}>{row.label}</label>
                   {row.id === "imageUrl" ? (
-                    <div className={styles.profileImageContainer}>
+                    <div className={portal.profileImageContainer}>
                       <DropZone
                         currentImage={
                           imageFile
@@ -197,7 +197,7 @@ const EditOurWorkEntryPopup = ({
                     </div>
                   ) : row.id === "description" ? (
                     <textarea
-                      className={styles.textFieldInput}
+                      className={portal.textFieldInput}
                       id={row.id}
                       name={row.label}
                       onChange={onInputChange}
@@ -207,7 +207,7 @@ const EditOurWorkEntryPopup = ({
                     />
                   ) : row.id === "date" ? (
                     <input
-                      className={styles.textFieldInput}
+                      className={portal.textFieldInput}
                       id={row.id}
                       name={row.label}
                       onChange={onInputChange}
@@ -216,7 +216,7 @@ const EditOurWorkEntryPopup = ({
                     />
                   ) : (
                     <input
-                      className={styles.textFieldInput}
+                      className={portal.textFieldInput}
                       id={row.id}
                       name={row.label}
                       onChange={onInputChange}
@@ -229,7 +229,7 @@ const EditOurWorkEntryPopup = ({
             </div>
           )}
         </div>
-        <div className={styles.buttonContainer}>
+        <div className={portal.buttonContainer}>
           {saving ? (
             <p>Saving...</p>
           ) : (

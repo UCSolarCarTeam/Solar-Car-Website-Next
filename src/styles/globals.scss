@@ -1,9 +1,0 @@
-img#backsplashImage {
-  height: 100vh !important;
-}
-
-@supports (height: 100dvh) {
-  img#backsplashImage {
-    height: 100dvh !important;
-  }
-}

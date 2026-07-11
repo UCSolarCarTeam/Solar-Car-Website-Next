@@ -1,6 +1,6 @@
 import { useTransition } from "react";
 
-import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
+import { portal } from "@/lib/portal-classes";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { deleteOurWorkEntry } from "@/app/portal/actions";
 
@@ -21,7 +21,7 @@ const DeleteOurWorkEntry = ({ currentRow }: DeleteOurWorkEntryProps) => {
   const [, startTransition] = useTransition();
 
   return (
-    <div className={styles.editSponsorCell}>
+    <div className={portal.editSponsorCell}>
       <BasicButton
         onConfirmDelete={() => {
           startTransition(() => {

@@ -1,14 +1,12 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "public/assets/logo-nav.png";
-import MagneticButton from "@/components/ui/MagneticButton";
 import Facebook from "../svgs/Facebook";
 import Instagram from "../svgs/Instagram";
 import Linkedin from "../svgs/Linkedin";
 import Twitter from "../svgs/Twitter";
 import Youtube from "../svgs/Youtube";
+import FooterCTA from "./FooterCTA";
 
 const SOCIAL_LINKS = [
   {
@@ -65,136 +63,64 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer
-      style={{
-        background: "var(--sc-bg)",
-        borderTop: "1px solid var(--sc-border)",
-        padding: "3rem 20px 1.5rem",
-        position: "relative",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-          gap: "2rem",
-          marginBottom: "3rem",
-        }}
-      >
-        {/* Brand Column */}
-        <div
-          style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}
-        >
+    <footer className="relative border-t border-sc-border bg-sc-bg px-5 pt-12 pb-6">
+      <div className="mx-auto mb-12 grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-8">
+        <div className="flex flex-col gap-6">
           <Image
             alt="Logo"
+            className="h-auto w-auto brightness-90"
             height={48}
             src={Logo}
-            style={{ width: "auto", filter: "brightness(0.9)" }}
           />
           <div>
-            <div
-              className="sc-label"
-              style={{ color: "var(--sc-amber)", marginBottom: "1rem" }}
-            >
-              FOLLOW US
-            </div>
-            <div style={{ display: "flex", gap: "1.5rem" }}>
+            <div className="sc-label mb-4 text-sc-amber">FOLLOW US</div>
+            <div className="flex gap-6">
               {SOCIAL_LINKS.map((social) => {
                 const Icon = social.icon;
                 const iconProps = "props" in social ? social.props : {};
                 return (
-                  <MagneticButton key={social.label} strength={0.2}>
-                    <Link
-                      href={social.href}
-                      onMouseOut={(e) =>
-                        (e.currentTarget.style.opacity = "0.7")
-                      }
-                      onMouseOver={(e) => (e.currentTarget.style.opacity = "1")}
-                      style={{ opacity: 0.7, transition: "opacity 0.2s" }}
-                      target="_blank"
-                    >
-                      <Icon {...iconProps} fill="var(--sc-white)" />
-                    </Link>
-                  </MagneticButton>
+                  <Link
+                    className="inline-block opacity-70 transition-opacity hover:opacity-100"
+                    href={social.href}
+                    key={social.label}
+                    target="_blank"
+                  >
+                    <Icon {...iconProps} fill="var(--sc-white)" />
+                  </Link>
                 );
               })}
             </div>
           </div>
+          <FooterCTA />
         </div>
 
-        {/* Contact Column */}
         <div>
-          <div
-            className="sc-label"
-            style={{ color: "var(--sc-red)", marginBottom: "1.5rem" }}
-          >
-            CONTACT
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.8rem",
-              color: "var(--sc-grey-light)",
-              fontSize: "0.95rem",
-            }}
-          >
-            {CONTACT_INFO.map((item, index) =>
+          <div className="sc-label mb-6 text-sc-red">CONTACT</div>
+          <div className="flex flex-col gap-3 text-[0.95rem] text-sc-grey-light">
+            {CONTACT_INFO.map((item) =>
               item.type === "link" ? (
                 <Link
+                  className="text-sc-white no-underline transition-colors hover:text-sc-red"
                   href={item.href}
-                  key={index}
-                  onMouseOut={(e) =>
-                    (e.currentTarget.style.color = "var(--sc-white)")
-                  }
-                  onMouseOver={(e) =>
-                    (e.currentTarget.style.color = "var(--sc-red)")
-                  }
-                  style={{
-                    color: "var(--sc-white)",
-                    textDecoration: "none",
-                    transition: "color 0.2s",
-                  }}
+                  key={item.href}
                 >
                   {item.label}
                 </Link>
               ) : (
-                <span key={index}>{item.label}</span>
+                <span key={item.label}>{item.label}</span>
               ),
             )}
           </div>
         </div>
 
-        {/* Resources Column */}
         <div>
-          <div
-            className="sc-label"
-            style={{ color: "var(--sc-red)", marginBottom: "1.5rem" }}
-          >
-            RESOURCES
-          </div>
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "0.8rem" }}
-          >
+          <div className="sc-label mb-6 text-sc-red">RESOURCES</div>
+          <div className="flex flex-col gap-3">
             {RESOURCE_LINKS.map(({ href, label }) => (
               <Link
-                className="sc-mono"
+                className="sc-mono text-sm text-sc-grey-light no-underline transition-colors hover:text-sc-white"
                 href={href}
                 key={label}
-                onMouseOut={(e) =>
-                  (e.currentTarget.style.color = "var(--sc-grey-light)")
-                }
-                onMouseOver={(e) =>
-                  (e.currentTarget.style.color = "var(--sc-white)")
-                }
-                style={{
-                  color: "var(--sc-grey-light)",
-                  textDecoration: "none",
-                  fontSize: "0.9rem",
-                  transition: "color 0.2s",
-                }}
               >
                 {label}
               </Link>
@@ -203,30 +129,11 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Copyright */}
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-          paddingTop: "2rem",
-          borderTop: "1px solid var(--sc-border)",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: "1rem",
-        }}
-      >
-        <span
-          className="sc-mono"
-          style={{ color: "var(--sc-grey-dim)", fontSize: "0.8rem" }}
-        >
+      <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-4 border-t border-sc-border pt-8">
+        <span className="sc-mono text-xs text-sc-grey-dim">
           © {currentYear} UNIVERSITY OF CALGARY SOLAR CAR TEAM
         </span>
-        <span
-          className="sc-mono"
-          style={{ color: "var(--sc-grey-dim)", fontSize: "0.8rem" }}
-        >
+        <span className="sc-mono text-xs text-sc-grey-dim">
           DESIGNED FOR PERFORMANCE
         </span>
       </div>
