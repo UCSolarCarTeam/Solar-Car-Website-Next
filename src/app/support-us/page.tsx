@@ -40,7 +40,7 @@ const SupportUs = () => {
             </p>
 
             <div className="flex justify-center">
-              <MagneticButton className="border-none bg-sc-amber px-12 py-4 font-sans text-lg font-semibold tracking-wide text-sc-bg uppercase">
+              <MagneticButton className="max-w-full border-none bg-sc-amber px-6 py-4 text-center font-sans text-base font-semibold tracking-wide text-sc-bg uppercase sm:px-12 sm:text-lg">
                 <Link
                   className="text-inherit no-underline"
                   href="mailto:sponsorship@calgarysolarcar.ca"
@@ -53,7 +53,7 @@ const SupportUs = () => {
         </section>
 
         <section className="relative z-10 mx-auto max-w-[1000px] px-5 py-16 pb-32">
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-12 border border-sc-border border-l-4 border-l-sc-red bg-[rgba(18,18,20,0.5)] p-16 backdrop-blur-md">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-8 border border-sc-border border-l-4 border-l-sc-red bg-[rgba(18,18,20,0.5)] p-6 backdrop-blur-md sm:gap-12 sm:p-16">
             <div>
               <div className="sc-mono mb-4 text-sc-amber">
                 {"// WHY SUPPORT US?"}

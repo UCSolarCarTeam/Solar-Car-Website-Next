@@ -2,7 +2,7 @@ import MissionDiagram from "./MissionDiagram";
 
 export default function Mission() {
   return (
-    <section className="w-full bg-sc-bg px-5 py-32">
+    <section className="w-full bg-sc-bg px-5 py-20 sm:py-32">
       <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-16">
         <div>
           <div className="sc-label mb-4 text-sc-red">OUR MISSION</div>

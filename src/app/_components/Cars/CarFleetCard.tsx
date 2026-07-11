@@ -6,12 +6,12 @@ export default function CarFleetCard({ car }: { car: CarEntry }) {
   return (
     <div
       className={cn(
-        "border border-sc-border bg-sc-bg-surface/50 p-10 backdrop-blur-md border-l-4",
+        "border border-sc-border bg-sc-bg-surface/50 p-5 backdrop-blur-md border-l-4 sm:p-10",
         car.status === "ACTIVE" ? "border-l-sc-red" : "border-l-sc-grey-dim",
       )}
     >
       <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
-        <h2 className="sc-heading m-0 text-4xl">{car.title}</h2>
+        <h2 className="sc-heading m-0 text-3xl sm:text-4xl">{car.title}</h2>
         <div
           className={cn(
             "sc-mono rounded-sm px-2.5 py-1 text-sm font-semibold",

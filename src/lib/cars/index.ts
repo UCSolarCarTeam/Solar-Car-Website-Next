@@ -1,5 +1,4 @@
-import { axiom2010 } from "./entries/axiom-2010";
-import { axiom2011 } from "./entries/axiom-2011";
+import { axiom } from "./entries/axiom";
 import { delta } from "./entries/delta";
 import { elysia } from "./entries/elysia";
 import { helios } from "./entries/helios";
@@ -23,8 +22,7 @@ export const cars = [
   helios,
   elysia,
   delta,
-  axiom2011,
-  axiom2010,
+  axiom,
   schulich1,
   soleon,
   x1,
