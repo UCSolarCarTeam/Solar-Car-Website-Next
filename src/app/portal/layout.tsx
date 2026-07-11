@@ -1,6 +1,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 
-// export meta
+import "@/styles/portal.css";
+
 export const metadata = {
   title: "Portal - Calgary Solar Car",
 };

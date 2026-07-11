@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 
 import "@/styles/globals.css";
-import "@/styles/globals.scss";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
 import MotionProvider from "@/components/providers/MotionProvider";
+import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
 import { TRPCReactProvider } from "@/trpc/react";
 
 const spaceGrotesk = Space_Grotesk({

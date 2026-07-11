@@ -6,31 +6,7 @@ import BasicButton from "@/app/_components/Buttons/BasicButton";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { trpc } from "@/trpc/react";
 
-function ClosedRecruitment() {
-  return (
-    <div className="flex flex-wrap justify-center gap-12">
-      <div className="max-w-3xl flex flex-col items-center gap-4 text-center">
-        <div className="py-4 pb-12 text-xl font-normal">
-          The current application period for the Calgary Solar Car Team is now
-          closed. We'll be accepting new applications in the next semester. If
-          you're excited about renewable energy, engineering innovation, and
-          working with a passionate student team to build solar-powered
-          vehicles, we encourage you to keep an eye on our{" "}
-          <Link
-            className="text-sc-amber underline"
-            href="https://www.linkedin.com/company/university-ofcalgary-solar-car-team"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            LinkedIn!
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default function RecruitmentForms({
+export default async function RecruitmentForms({
   isRecruitmentClosed,
 }: {
   isRecruitmentClosed: boolean;
@@ -84,14 +60,17 @@ export default function RecruitmentForms({
 
   return (
     <div className="flex flex-wrap justify-center gap-12">
-      {recruitmentForms.map((form) => (
-        <div
-          className="flex min-w-[20%] max-w-[40%] flex-col items-center gap-4 text-center max-lg:min-w-full"
-          key={form.header}
-        >
-          <div className="text-3xl font-semibold">{form.header}</div>
-          <div className="py-4 pb-12 text-lg font-normal">
-            {form.description}
+      {isRecruitmentClosed ? (
+        <div className="flex min-w-[20%] max-w-[40%] flex-col items-center gap-4 text-center max-lg:min-w-full">
+          <div className="py-4 pb-12 text-xl font-normal">
+            The current application period for the Calgary Solar Car Team is now
+            closed. We’ll be accepting new applications in the next semester. If
+            you’re excited about renewable energy, engineering innovation, and
+            working with a passionate student team to build solar-powered
+            vehicles, we encourage you to keep an eye on our{" "}
+            <Link href="https://www.linkedin.com/company/university-of-calgary-solar-car-team">
+              LinkedIn!
+            </Link>
           </div>
           <Link
             className="mt-auto"
@@ -104,7 +83,29 @@ export default function RecruitmentForms({
             </MagneticButton>
           </Link>
         </div>
-      ))}
+      ) : (
+        recruitmentForms?.map((form) => (
+          <div
+            className="flex min-w-[20%] max-w-[40%] flex-col items-center gap-4 text-center max-lg:min-w-full"
+            key={form.header}
+          >
+            <div className="text-3xl font-semibold">{form.header}</div>
+            <div className="py-4 pb-12 text-lg font-normal">
+              {form.description}
+            </div>
+            <Link
+              className="mt-auto"
+              href={form.link}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <BasicButton className="bg-primary-red uppercase">
+                Apply now
+              </BasicButton>
+            </Link>
+          </div>
+        ))
+      )}
     </div>
   );
 }

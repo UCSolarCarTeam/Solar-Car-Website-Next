@@ -1,4 +1,6 @@
-import * as motion from "framer-motion/client";
+"use client";
+
+import { motion } from "framer-motion";
 
 const MISSION_NODES = [
   { cx: 150, cy: 100, delay: 1.2 },
@@ -18,7 +20,7 @@ const missionDiagramVariants = {
 
 export default function MissionDiagram() {
   return (
-    <div className="relative flex h-75 w-full items-center justify-center">
+    <div className="relative flex h-[300px] w-full items-center justify-center">
       <motion.svg
         className="h-full w-full"
         fill="none"

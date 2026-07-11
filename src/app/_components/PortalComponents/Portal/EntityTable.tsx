@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 
-import styles from "./index.module.scss";
+import { portal } from "@/lib/portal-classes";
 
 export type EntityTableProps<T> = {
   data: T[];
@@ -62,11 +62,11 @@ export default function EntityTable<T>(props: EntityTableProps<T>) {
   });
   return (
     <div>
-      <div className={styles.tableHeader}>
+      <div className={portal.tableHeader}>
         {tableHeader}
         <div className="flex items-center py-4 gap-2">
           <Input
-            className={styles.searchBar}
+            className={portal.searchBar}
             onChange={(event) =>
               table.setGlobalFilter(String(event.target.value))
             }
@@ -100,7 +100,7 @@ export default function EntityTable<T>(props: EntityTableProps<T>) {
           </DropdownMenu>
         </div>
       </div>
-      <div className={styles.tableContainer}>
+      <div className={portal.tableContainer}>
         <table>
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (

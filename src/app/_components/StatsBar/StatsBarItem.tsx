@@ -1,4 +1,6 @@
-import * as motion from "framer-motion/client";
+"use client";
+
+import { motion } from "framer-motion";
 import AnimatedCounter from "./AnimatedCounter";
 
 export default function StatsBarItem({

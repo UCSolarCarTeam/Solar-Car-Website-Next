@@ -1,4 +1,6 @@
-import * as motion from "framer-motion/client";
+"use client";
+
+import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 
 export default function CarCardHover({ children }: { children: ReactNode }) {

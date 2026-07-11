@@ -6,7 +6,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import logo from "public/assets/logo-center-black.png";
 import { useState } from "react";
-import styles from "@/app/_components/PortalComponents/Portal/index.module.scss";
+import { portal } from "@/lib/portal-classes";
+import Chevron from "@/app/_components/svgs/Chevron";
 import useViewport from "@/app/_hooks/useViewport";
 import { portalNavItems } from "@/app/_types";
 
@@ -24,7 +25,7 @@ const PortalPageHeader = ({ isAdmin, username }: PortalPageHeaderProps) => {
   const closeMenu = () => setIsMenuOpen(false);
 
   const navLinkClassName = (href: string) =>
-    pathname === href ? styles.active : undefined;
+    pathname === href ? portal.active : undefined;
 
   const renderNavLinks = () =>
     portalNavItems.map(({ href, label }) => (
@@ -40,37 +41,37 @@ const PortalPageHeader = ({ isAdmin, username }: PortalPageHeaderProps) => {
 
   return (
     <>
-      <header className={styles.portalPageHeaderLayout}>
-        <div className={styles.portalPageHeader}>
+      <header className={portal.pageHeaderLayout}>
+        <div className={portal.pageHeader}>
           <Link href="/">
             <Image alt="navlogo" height={48} src={logo} width={48} />
           </Link>
           {isAdmin && (
             <>
               {!isMobile && (
-                <nav className={styles.desktopNavLinks}>{renderNavLinks()}</nav>
+                <nav className={portal.desktopNavLinks}>{renderNavLinks()}</nav>
               )}
               {isMobile && (
                 <button
                   aria-expanded={isMenuOpen}
                   aria-label="Toggle navigation menu"
-                  className={styles.hamburgerIcon}
+                  className={portal.hamburgerIcon}
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
                   type="button"
                 >
-                  <FaChevronRight aria-hidden className={styles.chevronIcon} />
+                  <Chevron className={portal.chevronIcon} />
                 </button>
               )}
             </>
           )}
         </div>
-        <div className={styles.profilePicture}>
+        <div className={portal.profilePicture}>
           {username}
           <UserButton />
         </div>
       </header>
       {isMobile && isMenuOpen && isAdmin && (
-        <nav className={styles.mobileMenuDropdown}>{renderNavLinks()}</nav>
+        <nav className={portal.mobileMenuDropdown}>{renderNavLinks()}</nav>
       )}
     </>
   );

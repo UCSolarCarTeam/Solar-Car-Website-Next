@@ -1,7 +1,8 @@
 import Image, { type StaticImageData } from "next/image";
 import type React from "react";
 
-import styles from "./index.module.scss";
+import Upload from "../../svgs/Upload";
+import { portal } from "@/lib/portal-classes";
 
 interface DropZoneProps {
   currentImage: string | StaticImageData;
@@ -44,7 +45,7 @@ const DropZone = ({ currentImage, handleFileUpload }: DropZoneProps) => {
 
   return (
     <div
-      className={styles.dropzoneContainer}
+      className={portal.dropzoneContainer}
       onDragOver={handleDragOver}
       onDrop={handleDrop}
     >
@@ -63,13 +64,13 @@ const DropZone = ({ currentImage, handleFileUpload }: DropZoneProps) => {
           style={{ objectFit: "cover" }}
         />
       )}
-      <label className={styles.label} htmlFor="fileInput">
-        <FaUpload aria-hidden color="#9DA3AE" size={48} />
+      <label className={portal.dropzoneLabel} htmlFor="fileInput">
+        <Upload />
         <div>
-          <div className={styles.headerText}>
+          <div className={portal.dropzoneHeaderText}>
             Drop images here or click to upload
           </div>
-          <p className={styles.fileSupport}>Supports JPEG, PNG, WebP</p>
+          <p className={portal.dropzoneFileSupport}>Supports JPEG, PNG, WebP</p>
         </div>
       </label>
     </div>

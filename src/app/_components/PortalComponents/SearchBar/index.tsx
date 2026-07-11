@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
 
-import styles from "./index.module.scss";
+import { portal } from "@/lib/portal-classes";
 
 export interface SearchBarProps {
   setSearchValue: Dispatch<SetStateAction<string>>;
@@ -10,7 +10,7 @@ export interface SearchBarProps {
 
 const SearchBar = ({ placeholder, setSearchValue, value }: SearchBarProps) => {
   return (
-    <div className={styles.searchBar}>
+    <div className={portal.searchBar}>
       <input
         className="search"
         onChange={(e) => setSearchValue(e.target.value)}
