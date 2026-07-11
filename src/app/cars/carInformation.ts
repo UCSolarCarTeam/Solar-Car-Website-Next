@@ -22,8 +22,8 @@ export const pageIds = {
         style cruise car was completed in 2019. This design was implemented to improve 
         battery cooling as well as increase aerodynamics. The Elysia raced in the 2019 
         American Solar Challenge where it took first place in the Multi Occupant Vehicle Class. 
-        In summer of 2025, Elysia will be retiring at its final race at the Formula Sun Grand 
-        Prix in Bowling Green, Kentucky. Stay tuned for race updates!`,
+        Elysia retired after its final race at the Formula Sun Grand Prix in Bowling Green, 
+        Kentucky in summer of 2025.`,
     image: backsplash2,
     position: "left",
     title: "Schulich Elysia",
