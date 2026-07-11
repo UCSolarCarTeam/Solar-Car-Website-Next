@@ -19,7 +19,7 @@ const Cars = () => {
         <CarsHero />
 
         <FleetHighlightProvider>
-          <section className="mx-auto flex max-w-[1400px] flex-col gap-16 px-5 py-16 pb-32 sm:gap-32">
+          <section className="mx-auto flex max-w-[1400px] flex-col gap-32 px-5 py-16 pb-32">
             <CarsFleetList />
             <FleetTimeline />
           </section>

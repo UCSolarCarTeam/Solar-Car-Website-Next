@@ -30,7 +30,7 @@ const TeamMember = ({ user }: TeamMemberProps) => {
   return (
     <div
       className={cn(
-        "relative box-content mx-auto flex min-h-[350px] w-[300px] cursor-default flex-col items-center gap-3 rounded-2xl pt-12 text-center text-white max-lg:min-h-[380px] max-lg:w-[280px] max-sm:min-h-[360px] max-sm:w-[min(100%,280px)]",
+        "relative box-content flex min-h-[350px] w-[300px] cursor-default flex-col items-center gap-3 rounded-2xl pt-12 text-center text-white max-lg:min-h-[380px] max-lg:w-[280px] max-sm:w-full max-sm:max-w-[300px] max-sm:min-h-[360px]",
         hasOverlay && "group hover:-translate-y-1",
       )}
       key={user.profilePictureUrl}

@@ -3,7 +3,7 @@ import TimelineRow from "./TimelineRow";
 
 export default function FleetTimeline() {
   return (
-    <div className="border border-sc-border bg-sc-bg-surface/50 p-5 backdrop-blur-md sm:p-10">
+    <div className="border border-sc-border bg-sc-bg-surface/50 p-10 backdrop-blur-md">
       <div className="sc-label mb-6 text-sc-amber">FLEET TIMELINE</div>
       <h2 className="sc-heading mb-10 text-3xl">Generations at a Glance</h2>
 

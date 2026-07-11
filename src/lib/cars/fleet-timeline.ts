@@ -19,7 +19,7 @@ export const fleetTimeline: FleetTimelineEntry[] = [
   {
     name: "Schulich Axiom",
     years: "2010–2013",
-    scrollTargetId: "Axiom",
+    scrollTargetId: "Axiom2011",
   },
   {
     name: "Schulich I",

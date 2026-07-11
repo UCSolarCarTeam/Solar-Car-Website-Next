@@ -50,7 +50,7 @@ const SponsorLevelSection = ({
         </div>
       </SectionReveal>
 
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] justify-items-center gap-8 sm:justify-items-stretch">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-8">
         {levelSponsors.map((sponsor, index) => (
           <SponsorCard
             href={sponsor.websiteUrl}
