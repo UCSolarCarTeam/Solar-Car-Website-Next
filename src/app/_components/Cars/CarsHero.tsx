@@ -1,6 +1,5 @@
 import Image from "next/image";
 import backsplash from "public/assets/home/backsplash.jpeg";
-import { imageSize } from "@/lib/image-sizes";
 
 export default function CarsHero() {
   return (
@@ -11,7 +10,6 @@ export default function CarsHero() {
           className="object-cover object-center brightness-[0.4] saturate-[0.8]"
           fill
           priority
-          sizes={imageSize("pageHero")}
           src={backsplash}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-sc-bg" />

@@ -1,10 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { pageIds } from "@/app/cars/carInformation";
+import { cars } from "@/lib/cars";
 import CarCardHover from "./CarCardHover";
 import CarShowcaseCardEntrance from "./CarShowcaseCardEntrance";
-
-const CARS = Object.entries(pageIds).map(([id, data]) => ({ id, ...data }));
 
 export default function CarShowcase() {
   return (
@@ -26,7 +24,7 @@ export default function CarShowcase() {
         </div>
 
         <div className="grid grid-cols-[repeat(auto-fit,minmax(350px,1fr))] gap-8">
-          {CARS.slice(0, 3).map((car, index) => (
+          {cars.slice(0, 3).map((car, index) => (
             <CarShowcaseCardEntrance index={index} key={car.id}>
               <Link className="block no-underline" href="/cars">
                 <div className="relative aspect-[4/3] w-full overflow-hidden rounded border border-sc-border">
@@ -44,7 +42,9 @@ export default function CarShowcase() {
 
                   <div className="absolute inset-x-5 bottom-5">
                     <div className="sc-mono mb-1 text-xs text-sc-red">
-                      STATUS: {index === 0 ? "ACTIVE" : "RETIRED"}
+                      {car.status === "ACTIVE"
+                        ? "STATUS: ACTIVE"
+                        : `STATUS: RETIRED · ${car.retired ?? car.serviceYears}`}
                     </div>
                     <h3 className="sc-heading m-0 text-2xl text-sc-white">
                       {car.title}

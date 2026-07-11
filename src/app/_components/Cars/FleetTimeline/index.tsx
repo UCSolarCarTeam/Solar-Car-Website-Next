@@ -1,4 +1,4 @@
-import { fleetTimeline } from "@/lib/cars";
+import { fleetTimeline } from "@/lib/cars/fleet-timeline";
 import TimelineRow from "./TimelineRow";
 
 export default function FleetTimeline() {
