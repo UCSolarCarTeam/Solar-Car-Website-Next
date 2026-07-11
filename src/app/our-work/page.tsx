@@ -38,7 +38,7 @@ const OurWorkTimelinePage = async () => {
               {timelineData.map((yearData) => (
                 <div key={yearData.year}>
                   <div className="mb-12 flex items-center gap-8">
-                    <h2 className="sc-heading m-0 text-6xl leading-none text-sc-amber">
+                    <h2 className="sc-heading m-0 text-4xl leading-none text-sc-amber sm:text-6xl">
                       {yearData.year}
                     </h2>
                     <div className="h-px flex-1 bg-sc-border" />
@@ -47,7 +47,7 @@ const OurWorkTimelinePage = async () => {
                   <div className="flex flex-col gap-12">
                     {yearData.months.map((month) => (
                       <div
-                        className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 rounded border border-sc-border bg-[rgba(18,18,20,0.5)] p-8 backdrop-blur-md"
+                        className="grid grid-cols-1 items-center gap-8 rounded border border-sc-border bg-[rgba(18,18,20,0.5)] p-5 backdrop-blur-md sm:grid-cols-[repeat(auto-fit,minmax(280px,1fr))] sm:gap-12 sm:p-8"
                         key={`${yearData.year}-${month.month}`}
                       >
                         {month.image && (

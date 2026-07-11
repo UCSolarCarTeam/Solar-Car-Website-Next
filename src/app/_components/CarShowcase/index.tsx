@@ -6,16 +6,16 @@ import CarShowcaseCardEntrance from "./CarShowcaseCardEntrance";
 
 export default function CarShowcase() {
   return (
-    <section className="w-full border-t border-sc-border bg-sc-bg-surface px-5 py-32">
+    <section className="w-full border-t border-sc-border bg-sc-bg-surface px-5 py-20 sm:py-32">
       <div className="mx-auto max-w-[1200px]">
         <div className="mb-12">
           <div className="sc-label mb-4 text-sc-red">THE FLEET</div>
-          <div className="flex items-end justify-between">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <h2 className="sc-heading text-[clamp(2rem,4vw,3rem)]">
               Generations of Innovation.
             </h2>
             <Link
-              className="sc-mono border-b border-sc-red pb-1 text-sc-white no-underline"
+              className="sc-mono w-fit shrink-0 border-b border-sc-red pb-1 text-sm text-sc-white no-underline sm:text-base"
               href="/cars"
             >
               VIEW ALL VEHICLES
@@ -23,7 +23,7 @@ export default function CarShowcase() {
           </div>
         </div>
 
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(350px,1fr))] gap-8">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-[repeat(auto-fit,minmax(280px,1fr))]">
           {cars.slice(0, 3).map((car, index) => (
             <CarShowcaseCardEntrance index={index} key={car.id}>
               <Link className="block no-underline" href="/cars">
