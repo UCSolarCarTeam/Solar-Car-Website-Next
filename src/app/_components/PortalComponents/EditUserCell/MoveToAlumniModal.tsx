@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { moveUserToAlumni } from "@/app/portal/actions";
 
-import styles from "./index.module.scss";
+import { portal } from "@/lib/portal-classes";
 
 type MoveToAlumniModalProps = {
   userId: number;
@@ -61,12 +61,12 @@ export const MoveToAlumniModal = ({
   };
 
   return (
-    <div className={styles.modalOverlay} onClick={onClose}>
-      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+    <div className={portal.modalOverlay} onClick={onClose}>
+      <div className={portal.modalContent} onClick={(e) => e.stopPropagation()}>
         <h2>Move {userName} to Alumni</h2>
         <p>Enter the date they left the solar car team:</p>
         <input
-          className={styles.yearInput}
+          className={portal.yearInput}
           max={currentDateInputValue}
           onChange={(e) => setYearRetired(e.target.value)}
           type="date"
@@ -76,7 +76,7 @@ export const MoveToAlumniModal = ({
           Optional: Add their company and job title
         </p>
         <input
-          className={styles.yearInput}
+          className={portal.yearInput}
           maxLength={100}
           onChange={(e) => setCompany(e.target.value)}
           placeholder="Company (optional)"
@@ -84,23 +84,23 @@ export const MoveToAlumniModal = ({
           value={company}
         />
         <input
-          className={styles.yearInput}
+          className={portal.yearInput}
           maxLength={100}
           onChange={(e) => setCompanyTitle(e.target.value)}
           placeholder="Job Title (optional)"
           type="text"
           value={companyTitle}
         />
-        <div className={styles.modalActions}>
+        <div className={portal.modalActions}>
           <button
-            className={styles.cancelButton}
+            className={portal.cancelButton}
             disabled={isPending}
             onClick={onClose}
           >
             Cancel
           </button>
           <button
-            className={styles.confirmButton}
+            className={portal.confirmButton}
             disabled={isPending}
             onClick={handleMove}
           >
