@@ -1,0 +1,254 @@
+import type { CarEntry, FleetTimelineEntry } from "./types";
+import backsplash1 from "public/assets/cars/backsplash1.png";
+import backsplash2 from "public/assets/cars/backsplash2.jpeg";
+import backsplash3 from "public/assets/cars/backsplash3.jpeg";
+import backsplash4 from "public/assets/cars/backsplash4.jpeg";
+import backsplash5 from "public/assets/cars/backsplash5.jpeg";
+import backsplash6 from "public/assets/cars/backsplash6.jpeg";
+import x1Image from "public/assets/cars/x1.png";
+
+const carImages = {
+  helios: backsplash1,
+  elysia: backsplash2,
+  delta: backsplash3,
+  axiom: backsplash4,
+  schulich1: backsplash5,
+  soleon: backsplash6,
+  x1: x1Image,
+} as const;
+
+const helios: CarEntry = {
+  id: "Helios",
+  title: "Schulich Helios",
+  image: carImages.helios,
+  carClass: "CHALLENGER",
+  status: "ACTIVE",
+  serviceYears: "2026–present",
+  content: `Schulich Helios is the current project by the University of Calgary Solar Car Team,
+    embodying the future of renewable automotive technology. Capable of theoretically reaching
+    speeds of 110 km/h, Helios represents the culmination of the team's intensified efforts
+    ahead of the Formula Sun Grand Prix in summer 2026.`,
+  specs: [
+    { label: "Target Top Speed", value: "~110 km/h (theoretical)" },
+    { label: "Status", value: "In development" },
+    { label: "Commissioned", value: "2026" },
+  ],
+};
+
+const elysia: CarEntry = {
+  id: "Elysia",
+  title: "Schulich Elysia",
+  image: carImages.elysia,
+  carClass: "CRUISER",
+  status: "RETIRED",
+  retired: "Summer 2025",
+  serviceYears: "2019–2025",
+  content: `Schulich Elysia began its design phase in 2016 and this catamaran-style cruiser was
+    completed in 2019 to improve battery cooling and aerodynamics. Elysia took first place in
+    the Multi-Occupant Vehicle Class at the 2019 American Solar Challenge and completed its
+    final race at the Formula Sun Grand Prix in Bowling Green, Kentucky.`,
+  specs: [
+    { label: "Solar Array Type", value: "Multi-junction GaAs" },
+    { label: "Class", value: "Cruiser (MOV)" },
+    { label: "Commissioned", value: "2019" },
+    { label: "Decommissioned", value: "Summer 2025" },
+  ],
+};
+
+const delta: CarEntry = {
+  id: "Delta",
+  title: "Schulich Delta",
+  image: carImages.delta,
+  carClass: "CRUISER",
+  status: "RETIRED",
+  retired: "2015",
+  serviceYears: "2013–2015",
+  content: `Canada's first cruiser-class solar car, built from 2012 to 2015. Delta raced in the
+    2013 Bridgestone World Solar Challenge (8th) and the 2015 Formula Sun Grand Prix, completing
+    84 laps with a fastest lap of 5:33.886 to finish 9th. Officially retired in 2015, Delta
+    continues to inspire through educational demonstrations.`,
+  specs: [
+    { label: "Class", value: "Cruiser" },
+    { label: "Commissioned", value: "2013" },
+    { label: "Decommissioned", value: "2015" },
+    {
+      label: "Notable Result",
+      value: "8th — 2013 World Solar Challenge",
+    },
+  ],
+};
+
+const axiom: CarEntry = {
+  id: "Axiom",
+  title: "Schulich Axiom",
+  image: carImages.axiom,
+  carClass: "CHALLENGER",
+  status: "RETIRED",
+  retired: "2013",
+  serviceYears: "2010–2013",
+  content: `Schulich Axiom was the team's challenger-class program from 2010 to 2013. The original
+    configuration placed 6th overall in the 2010 North American Solar Challenge before a major
+    2011 rebuild for the World Solar Challenge — dropping from ~600 lbs to 390 lbs without driver
+    and ballast. All improvements were completed ahead of the 2011 race from Darwin to Adelaide.`,
+  specs: [
+    { label: "Maximum Achieved Speed", value: "130 km/h (2010) · 110 km/h (2011)" },
+    {
+      label: "Solar Array Type",
+      value: "GaAs triple-junction (2010) · Silicon monocrystalline UC Solar (2011)",
+    },
+    { label: "Chassis", value: "Carbon fiber & Kevlar (2010) · Carbon fiber (2011)" },
+    { label: "Shell Composition", value: "Carbon fiber & Kevlar (2010) · Carbon fiber (2011)" },
+    { label: "Weight", value: "~600 lbs (2010) · ~390 lbs (2011)" },
+    { label: "Commissioned", value: "October 2009" },
+    {
+      label: "Current Uses",
+      value:
+        "6th in the 2010 North American Solar Challenge. Rebuilt and competed in the 2011 World Solar Challenge. Retired when the program concluded in 2013.",
+    },
+  ],
+  note: `"It is evident from the previous race that weight is no minor detail. We have taken Axiom on its diet and the result is stunning. Axiom has dropped from around 600 lbs without driver and ballast to 390 lbs. A loss of 210 lbs!" — Mico Madamesila`,
+};
+
+const schulich1: CarEntry = {
+  id: "Schulich1",
+  title: "Schulich I",
+  image: carImages.schulich1,
+  carClass: "CHALLENGER",
+  status: "RETIRED",
+  retired: "May 2011",
+  serviceYears: "2007–2010",
+  content: `Schulich I debuted at the 2007 Panasonic World Solar Challenge, finishing 8th as the
+    top Canadian team. It later placed 6th at the 2008 North American Solar Challenge — a team
+    record at the time. As the team's second car, it introduced gallium arsenide solar cells,
+    replacing the silicon cells used on Soleon.`,
+  specs: [
+    { label: "Maximum Achieved Speed", value: "105 km/h" },
+    {
+      label: "Solar Array Type",
+      value: "Gallium arsenide (GaAs) Triple-junction",
+    },
+    { label: "Chassis", value: "Steel Space frame" },
+    { label: "Shell Composition", value: "Carbon Fiber & Kevlar" },
+    { label: "Weight", value: "~520 lbs" },
+    { label: "Commissioned", value: "September 2007" },
+    { label: "Decommissioned", value: "May 2011" },
+    {
+      label: "Current Uses",
+      value:
+        "Participated in the 2007 World Solar Challenge and 2008 North American Solar Challenge. Retired once Axiom took over driver training, mechanical testing, and PR events.",
+    },
+  ],
+  note: `Gallium arsenide (GaAs) is a III-V direct band gap semiconductor with a zinc blende crystal structure, used in devices such as microwave frequency integrated circuits and high-efficiency solar cells.`,
+};
+
+const soleon: CarEntry = {
+  id: "Soleon",
+  title: "Schulich Soleon",
+  image: carImages.soleon,
+  carClass: "CHALLENGER",
+  status: "RETIRED",
+  retired: "July 2007",
+  serviceYears: "2004–2006",
+  content: `Built in 2004 for the inaugural North American Solar Challenge (2005), Soleon finished
+    13th — an impressive debut. It then competed in the 2005 World Solar Challenge, placing
+    1st in its class and 10th overall.`,
+  specs: [
+    { label: "Maximum Achieved Speed", value: "140 km/h" },
+    { label: "Solar Array Type", value: "Silicon" },
+    { label: "Chassis", value: "Aluminum Space frame" },
+    { label: "Shell Composition", value: "Carbon Fiber & Kevlar" },
+    { label: "Weight", value: "~500 lbs" },
+    { label: "Commissioned", value: "June 2005" },
+    { label: "Decommissioned", value: "July 2007" },
+    {
+      label: "Current Uses",
+      value:
+        "Donated to the Calgary Telus World of Science in fall 2008 and displayed for two years. Now retired and looking for a nice warm garage to rest.",
+    },
+  ],
+};
+
+const x1: CarEntry = {
+  id: "X1",
+  title: "X1 (prototype)",
+  image: carImages.x1,
+  carClass: "PROTOTYPE",
+  status: "RETIRED",
+  retired: "June 2006",
+  serviceYears: "2005–2006",
+  content: `The X1 prototype was the team's early proof-of-concept vehicle — a steel space frame
+    wrapped in fibreglass and gelcoat. Solar stickers adorned the shell for show; there was no
+    functional solar array. It laid the groundwork for every Schulich vehicle that followed.`,
+  specs: [
+    { label: "Maximum Achieved Speed", value: "~70 km/h" },
+    {
+      label: "Solar Array Type",
+      value: "None (stickers merely for show)",
+    },
+    { label: "Chassis", value: "Steel Space frame" },
+    { label: "Shell Composition", value: "Fibreglass & Gelcoat" },
+    { label: "Commissioned", value: "May 2005" },
+    { label: "Decommissioned", value: "June 2006" },
+  ],
+};
+
+/** Newest first — matches scroll order on /cars */
+export const cars = [
+  helios,
+  elysia,
+  delta,
+  axiom,
+  schulich1,
+  soleon,
+  x1,
+] as const;
+
+export const fleetTimeline: FleetTimelineEntry[] = [
+  {
+    name: "Schulich Helios",
+    years: "2026–present",
+    scrollTargetId: "Helios",
+  },
+  {
+    name: "Schulich Elysia",
+    years: "2019–2025",
+    scrollTargetId: "Elysia",
+  },
+  {
+    name: "Schulich Delta",
+    years: "2013–2015",
+    scrollTargetId: "Delta",
+  },
+  {
+    name: "Schulich Axiom",
+    years: "2010–2013",
+    scrollTargetId: "Axiom",
+  },
+  {
+    name: "Schulich I",
+    years: "2007–2010",
+    scrollTargetId: "Schulich1",
+  },
+  {
+    name: "Schulich Soleon",
+    years: "2004–2006",
+    scrollTargetId: "Soleon",
+  },
+  {
+    name: "X1 (prototype)",
+    years: "2005–2006",
+    scrollTargetId: "X1",
+  },
+];
+
+export const pageIds = Object.fromEntries(
+  cars.map((car) => [
+    car.id,
+    {
+      content: car.content,
+      image: car.image,
+      title: car.title,
+      position: "left" as const,
+    },
+  ]),
+);

@@ -4,6 +4,7 @@ import backsplash from "public/assets/home/backsplash.jpeg";
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 import TeamMember from "@/app/_components/TeamMember";
+import { imageSize } from "@/lib/image-sizes";
 import { HydrateClient, trpc } from "@/trpc/server";
 
 export const metadata = {
@@ -69,6 +70,7 @@ const Team = async () => {
               className="object-cover object-center brightness-[0.3] saturate-50"
               fill
               priority
+              sizes={imageSize("pageHero")}
               src={backsplash}
             />
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-sc-bg" />

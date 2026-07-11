@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { imageSize } from "@/lib/image-sizes";
 import { cn } from "@/lib/utils";
 
 const TIER_CARD_CLASSES = {
@@ -54,6 +55,7 @@ export function SponsorCard({
             alt={name}
             className="object-contain p-6 opacity-70 transition-opacity duration-300 group-hover:opacity-100"
             fill
+            sizes={imageSize("sponsorLogo")}
             src={logoUrl}
           />
         </div>
