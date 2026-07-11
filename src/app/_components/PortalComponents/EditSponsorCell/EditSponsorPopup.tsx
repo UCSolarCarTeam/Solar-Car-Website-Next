@@ -3,7 +3,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import CloseButton from "@/app/_components/Buttons/CloseButton";
 import type { EditSponsorCellProps } from "@/app/_components/PortalComponents/EditSponsorCell";
-import { portal } from "@/lib/portal-classes";
+import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import { compress } from "@/app/_lib/compress";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { createSponsor, updateSponsor } from "@/app/portal/actions";
@@ -149,18 +149,18 @@ const EditSponsorPopup = ({
   };
 
   return (
-    <div className={portal.popup} onClick={handleOverlayClick}>
-      <div className={`${portal.popupContentMd} ${portal.popupEnter}`}>
-        <CloseButton className={portal.closeButton} onClick={togglePopup} />
+    <div className={styles.popup} onClick={handleOverlayClick}>
+      <div className={`${styles.popupContent} ${styles.popupEnter}`}>
+        <CloseButton className={styles.closeButton} onClick={togglePopup} />
         <h2>{newSponsor ? "New Sponsor" : "Edit Sponsor"}</h2>
-        <div className={portal.popupLayoutSponsor}>
+        <div className={styles.popupLayout}>
           {newRowData && (
-            <div className={portal.popupForm}>
+            <div className={styles.popupForm}>
               {Object.values(rowDataToRender).map((row) => (
                 <div key={row.id}>
                   <label htmlFor={row.id}>{row.label}</label>
                   {row.id === "logoUrl" ? (
-                    <div className={portal.profileImageContainer}>
+                    <div className={styles.profileImageContainer}>
                       <DropZone
                         currentImage={
                           imageFile
@@ -174,7 +174,7 @@ const EditSponsorPopup = ({
                     </div>
                   ) : row.id === "sponsorLevel" ? (
                     <select
-                      className={portal.sponsorSelect}
+                      className={styles.sponsorSelect}
                       id={row.id}
                       name={row.label}
                       onChange={onInputChange}
@@ -190,7 +190,7 @@ const EditSponsorPopup = ({
                     </select>
                   ) : (
                     <input
-                      className={portal.textFieldInput}
+                      className={styles.textFieldInput}
                       id={row.id}
                       name={row.label}
                       onChange={onInputChange}
@@ -203,7 +203,7 @@ const EditSponsorPopup = ({
             </div>
           )}
         </div>
-        <div className={portal.buttonContainer}>
+        <div className={styles.buttonContainer}>
           {saving ? (
             <p>Saving...</p>
           ) : (

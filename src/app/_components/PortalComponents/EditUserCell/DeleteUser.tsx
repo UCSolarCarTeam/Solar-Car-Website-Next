@@ -1,7 +1,7 @@
 import type { UserResource } from "@clerk/nextjs/types";
 import type { User } from "@prisma/client";
 import { useTransition } from "react";
-import { portal } from "@/lib/portal-classes";
+import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { deleteDBUser } from "@/app/portal/actions";
 
@@ -16,7 +16,7 @@ const DeleteUser = ({ currentRow }: DeleteUserProps) => {
   const [, startTransition] = useTransition();
 
   return (
-    <div className={portal.editSponsorCell}>
+    <div className={styles.editSponsorCell}>
       <BasicButton
         onConfirmDelete={() => {
           startTransition(() => {

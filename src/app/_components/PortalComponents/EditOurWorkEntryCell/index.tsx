@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaCirclePlus } from "react-icons/fa6";
 
-import { portal } from "@/lib/portal-classes";
+import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import PlusIcon from "@/app/_components/svgs/PlusIcon";
 
 import BasicButton from "../../Buttons/BasicButton";
@@ -63,7 +63,7 @@ const EditOurWorkEntryCell = ({
   }
 
   return (
-    <div className={portal.editSponsorCell}>
+    <div className={styles.editSponsorCell}>
       <BasicButton onClick={() => setPopupOpen((prev) => !prev)}>
         Edit
       </BasicButton>

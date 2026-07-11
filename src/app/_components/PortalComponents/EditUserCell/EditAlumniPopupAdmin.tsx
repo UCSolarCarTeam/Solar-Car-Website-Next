@@ -3,7 +3,7 @@ import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import CloseButton from "@/app/_components/Buttons/CloseButton";
-import { portal } from "@/lib/portal-classes";
+import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
 import { compress } from "@/app/_lib/compress";
 import { formatDateOnly, parseDateOnly } from "@/app/_lib/utils";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
@@ -266,29 +266,29 @@ const EditAlumniPopupAdmin = ({
     newRowData.profilePictureUrl ?? defaultProfilePicture;
 
   return (
-    <div className={portal.popup} onClick={handleOverlayClick}>
-      <div className={`${portal.popupContentUser} ${portal.popupEnter}`}>
-        <CloseButton className={portal.closeButton} onClick={togglePopup} />
+    <div className={styles.popup} onClick={handleOverlayClick}>
+      <div className={`${styles.popupContent} ${styles.popupEnter}`}>
+        <CloseButton className={styles.closeButton} onClick={togglePopup} />
         <h2>{currentRow ? "Edit Alumni" : "Create Alumni"}</h2>
-        <div className={portal.popupLayout}>
-          <div className={portal.profileImageContainer}>
+        <div className={styles.popupLayout}>
+          <div className={styles.profileImageContainer}>
             <div>Profile Picture</div>
-            <div className={portal.popupProfileImage}>
+            <div className={styles.popupProfileImage}>
               <DropZone
                 currentImage={currentProfileImage}
                 handleFileUpload={handleFileUpload}
               />
             </div>
           </div>
-          <div className={portal.popupFormGrid2}>
+          <div className={styles.popupForm}>
             {rowDataToRender.map((row) => (
-              <div className={portal.textFieldContainer} key={row.id}>
-                <label className={portal.textFieldLabel} htmlFor={row.id}>
+              <div className={styles.textFieldContainer} key={row.id}>
+                <label className={styles.textFieldLabel} htmlFor={row.id}>
                   {row.label}
                 </label>
                 <input
-                  className={`${portal.textFieldInput} ${
-                    validationErrors[row.id] ? portal.inputError : ""
+                  className={`${styles.textFieldInput} ${
+                    validationErrors[row.id] ? styles.inputError : ""
                   }`}
                   id={row.id}
                   name={row.label}
@@ -302,7 +302,7 @@ const EditAlumniPopupAdmin = ({
                   value={row.value ?? ""}
                 />
                 {validationErrors[row.id] && (
-                  <span className={portal.errorMessage}>
+                  <span className={styles.errorMessage}>
                     {validationErrors[row.id]}
                   </span>
                 )}
@@ -310,7 +310,7 @@ const EditAlumniPopupAdmin = ({
             ))}
           </div>
         </div>
-        <div className={portal.buttonContainer}>
+        <div className={styles.buttonContainer}>
           {saving ? (
             <p>Saving...</p>
           ) : (

@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
 import type { EditRecruitmentFormCellProps } from "@/app/_components/PortalComponents/EditRecruitmentFormCell";
-import { portal } from "@/lib/portal-classes";
+import styles from "@/app/_components/PortalComponents/EditRecruitmentFormCell/index.module.scss";
 import { toLocalDateTimeString } from "@/app/_lib/toLocalDate";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import {
@@ -104,19 +104,19 @@ const EditFormPopup = ({
   };
 
   return (
-    <div className={portal.popup} onClick={handleOverlayClick}>
-      <div className={`${portal.popupContentMdWide} ${portal.popupEnter}`}>
-        <CloseButton className={portal.closeButton} onClick={togglePopup} />
+    <div className={styles.popup} onClick={handleOverlayClick}>
+      <div className={`${styles.popupContent} ${styles.popupEnter}`}>
+        <CloseButton className={styles.closeButton} onClick={togglePopup} />
         <h2>{newForm ? "New Form" : "Edit Form"}</h2>
-        <div className={portal.popupLayout}>
+        <div className={styles.popupLayout}>
           {newRowData && (
-            <div className={portal.popupForm}>
+            <div className={styles.popupForm}>
               {Object.values(rowDataToRender).map((row) => (
                 <div key={row.id}>
                   <label htmlFor={row.id}>{row.label}</label>
                   {row.id === "description" ? (
                     <textarea
-                      className={portal.textFieldInput}
+                      className={styles.textFieldInput}
                       id={row.id}
                       name={row.label}
                       onChange={onInputChange}
@@ -126,7 +126,7 @@ const EditFormPopup = ({
                     />
                   ) : row.id === "expiresAt" ? (
                     <input
-                      className={portal.textFieldInput}
+                      className={styles.textFieldInput}
                       id={row.id}
                       name={row.label}
                       onChange={onInputChange}
@@ -135,7 +135,7 @@ const EditFormPopup = ({
                     />
                   ) : (
                     <input
-                      className={portal.textFieldInput}
+                      className={styles.textFieldInput}
                       id={row.id}
                       name={row.label}
                       onChange={onInputChange}
@@ -148,7 +148,7 @@ const EditFormPopup = ({
             </div>
           )}
         </div>
-        <div className={portal.buttonContainer}>
+        <div className={styles.buttonContainer}>
           {saving ? (
             <p>Saving...</p>
           ) : (

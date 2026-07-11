@@ -1,6 +1,6 @@
 import type { UserResource } from "@clerk/nextjs/types";
 import { useTransition } from "react";
-import { portal } from "@/lib/portal-classes";
+import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { deleteRecruitmentForm } from "@/app/portal/actions";
 
@@ -21,7 +21,7 @@ const DeleteForm = ({ currentRow }: DeleteFormProps) => {
   const [, startTransition] = useTransition();
 
   return (
-    <div className={portal.editSponsorCell}>
+    <div className={styles.editSponsorCell}>
       <BasicButton
         onConfirmDelete={() => {
           startTransition(() => {

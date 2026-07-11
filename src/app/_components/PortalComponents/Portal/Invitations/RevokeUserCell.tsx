@@ -1,7 +1,7 @@
 import { useTransition } from "react";
 
 import BasicButton from "@/app/_components/Buttons/BasicButton";
-import { portal } from "@/lib/portal-classes";
+import styles from "@/app/_components/PortalComponents/DeleteClerkUserCell/index.module.scss";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { revokeUserInvitation } from "@/app/portal/actions";
 
@@ -14,7 +14,7 @@ const RevokeUserCell = ({ invitationId }: RevokeUserInvitationProps) => {
 
   return (
     <div
-      className={portal.deleteClerkUserCell}
+      className={styles.deleteClerkUserCell}
       onClick={(e) => {
         e.stopPropagation();
         startTransition(() => {

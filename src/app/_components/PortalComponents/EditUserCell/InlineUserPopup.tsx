@@ -3,7 +3,7 @@ import type { User } from "@prisma/client";
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { portal } from "@/lib/portal-classes";
+import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
 import { compress } from "@/app/_lib/compress";
 import {
   type UserFormData,
@@ -197,10 +197,10 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
       <h2 style={{ textAlign: "center" }}>
         Welcome back, {clerkUser.firstName}
       </h2>
-      <div className={portal.popupLayout}>
-        <div className={portal.profileImageContainer}>
+      <div className={styles.popupLayout}>
+        <div className={styles.profileImageContainer}>
           <div>Profile Picture</div>
-          <div className={portal.popupProfileImage}>
+          <div className={styles.popupProfileImage}>
             <DropZone
               currentImage={
                 imageFile
@@ -212,18 +212,18 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
           </div>
         </div>
         {newRowData && (
-          <div className={portal.popupFormGrid2}>
+          <div className={styles.popupForm}>
             {Object.values(rowDataToRender).map((row) => (
-              <div className={portal.textFieldContainer} key={row.id}>
-                <label className={portal.textFieldLabel} htmlFor={row.id}>
+              <div className={styles.textFieldContainer} key={row.id}>
+                <label className={styles.textFieldLabel} htmlFor={row.id}>
                   {row.label}
                 </label>
                 {row.id === "description" ? (
                   <>
                     <textarea
-                      className={`${portal.textFieldInput} ${
+                      className={`${styles.textFieldInput} ${
                         validationErrors[row.id as keyof UserFormData]
-                          ? portal.inputError
+                          ? styles.inputError
                           : ""
                       }`}
                       id={row.id}
@@ -233,7 +233,7 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
                       rows={5}
                       value={row.value ?? ""}
                     />
-                    <div className={portal.charCounter}>
+                    <div className={styles.charCounter}>
                       <span>{(row.value as string)?.length ?? 0}</span>
                       <span>/</span>
                       <span>{MAX_DESCRIPTION_LENGTH}</span>
@@ -241,9 +241,9 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
                   </>
                 ) : row.id === "teamRole" ? (
                   <select
-                    className={`${portal.teamRoleSelect} ${
+                    className={`${styles.teamRoleSelect} ${
                       validationErrors[row.id as keyof UserFormData]
-                        ? portal.inputError
+                        ? styles.inputError
                         : ""
                     }`}
                     id={row.id}
@@ -264,9 +264,9 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
                   </select>
                 ) : (
                   <input
-                    className={`${portal.textFieldInput} ${
+                    className={`${styles.textFieldInput} ${
                       validationErrors[row.id as keyof UserFormData]
-                        ? portal.inputError
+                        ? styles.inputError
                         : ""
                     }`}
                     id={row.id}
@@ -279,7 +279,7 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
                   />
                 )}
                 {validationErrors[row.id as keyof UserFormData] && (
-                  <span className={portal.errorMessage}>
+                  <span className={styles.errorMessage}>
                     {validationErrors[row.id as keyof UserFormData]}
                   </span>
                 )}
@@ -288,7 +288,7 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
           </div>
         )}
       </div>
-      <div className={portal.buttonContainer}>
+      <div className={styles.buttonContainer}>
         {saving ? (
           <p>Saving...</p>
         ) : (
