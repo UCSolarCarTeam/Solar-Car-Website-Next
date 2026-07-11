@@ -48,7 +48,7 @@ export default function RootLayout({
 }) {
   return (
     <html className={`${spaceGrotesk.variable} ${jbMono.variable}`} lang="en">
-      <body className="overflow-x-hidden bg-[#0A0A0B]">
+      <body className="bg-[#0A0A0B]">
         <SmoothScrollProvider>
           <MotionProvider>
             <TRPCReactProvider>{children}</TRPCReactProvider>

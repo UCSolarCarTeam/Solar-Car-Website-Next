@@ -125,7 +125,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="mx-auto flex max-w-[1200px] flex-col items-center justify-between gap-4 border-t border-sc-border pt-8 text-center sm:flex-row sm:text-left">
+      <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-4 border-t border-sc-border pt-8">
         <span className="sc-mono text-xs text-sc-grey-dim">
           © {currentYear} UNIVERSITY OF CALGARY SOLAR CAR TEAM
         </span>
