@@ -2,12 +2,19 @@ import type { CarEntry } from "@/lib/cars/types";
 import { cn } from "@/lib/utils";
 import CarSpecGrid from "./CarSpecGrid";
 
-export default function CarFleetCard({ car }: { car: CarEntry }) {
+export default function CarFleetCard({
+  car,
+  className,
+}: {
+  car: CarEntry;
+  className?: string;
+}) {
   return (
     <div
       className={cn(
-        "border border-sc-border bg-sc-bg-surface/50 p-10 backdrop-blur-md border-l-4",
+        "border border-sc-border bg-sc-bg-surface/50 p-5 backdrop-blur-md border-l-4 sm:p-10",
         car.status === "ACTIVE" ? "border-l-sc-red" : "border-l-sc-grey-dim",
+        className,
       )}
     >
       <div className="mb-8 flex flex-wrap items-start justify-between gap-4">

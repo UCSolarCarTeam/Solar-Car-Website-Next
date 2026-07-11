@@ -10,16 +10,26 @@ import { cn } from "@/lib/utils";
 export default function CarFleetImage({
   car,
   className,
+  stretch = false,
 }: {
   car: CarEntry;
   className?: string;
+  stretch?: boolean;
 }) {
   const [revealed, setRevealed] = useState(false);
   const highlights = getHighlightSpecs(car.specs);
   const active = revealed;
 
   return (
-    <div className={cn("group relative aspect-[16/10] w-full", className)}>
+    <div
+      className={cn(
+        "group relative w-full",
+        stretch
+          ? "h-full min-h-[280px] md:min-h-full"
+          : "aspect-[16/10]",
+        className,
+      )}
+    >
       <div
         className={cn(
           "absolute -inset-2.5 z-0 border transition-colors duration-300",
@@ -48,7 +58,7 @@ export default function CarFleetImage({
       <button
         aria-expanded={active}
         aria-label={`${car.title} telemetry stats`}
-        className="relative z-[1] h-full w-full cursor-pointer overflow-hidden border-0 bg-transparent p-0 text-left"
+        className="relative z-[1] h-full min-h-[inherit] w-full cursor-pointer overflow-hidden border-0 bg-transparent p-0 text-left"
         onClick={() => setRevealed((v) => !v)}
         type="button"
       >
