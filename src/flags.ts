@@ -11,3 +11,6 @@ export const recruitmentOpen = flag<boolean>({
     { label: "Open", value: true },
   ],
 });
+
+/** Flags encoded into the static recruitment page route. */
+export const recruitmentFlags = [recruitmentOpen] as const;
