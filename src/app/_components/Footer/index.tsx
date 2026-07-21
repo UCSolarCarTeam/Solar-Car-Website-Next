@@ -42,11 +42,6 @@ const SOCIAL_LINKS = SOCIAL_DATA.map((social) => {
   return { ...social, ...socialJson };
 });
 
-const SOCIAL_LINKS = SOCIAL_DATA.map((social) => {
-  const socialJson = TEAM.socials.find((s) => s.label === social.label);
-  return { ...social, ...socialJson };
-});
-
 const RESOURCE_LINKS = [
   { href: "/", label: "Homepage" },
   { href: "/cars", label: "Cars" },
