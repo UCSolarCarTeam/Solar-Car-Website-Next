@@ -15,8 +15,8 @@ const OurWorkTimelinePage = async () => {
     <>
       <Navbar />
       <main className="min-h-screen bg-sc-bg text-sc-white">
-        <section className="relative flex min-h-[300px] h-[40vh] w-full items-center justify-center overflow-hidden">
-          <div className="absolute inset-0 z-0 bg-[length:50px_50px] bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)]" />
+        <section className="relative flex min-h-75 h-[40vh] w-full items-center justify-center overflow-hidden">
+          <div className="absolute inset-0 z-0 bg-size-[50px_50px] bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)]" />
           <div className="absolute inset-0 z-1 bg-[radial-gradient(circle_at_center,transparent_0%,var(--sc-bg)_70%)]" />
 
           <div className="relative z-10 px-5 text-center">
@@ -27,7 +27,7 @@ const OurWorkTimelinePage = async () => {
           </div>
         </section>
 
-        <section className="relative z-10 mx-auto max-w-[1000px] px-5 py-16 pb-32">
+        <section className="relative z-10 mx-auto max-w-250 px-5 py-16 pb-32">
           {!timelineData || timelineData.length === 0 ? (
             <div className="sc-mono text-center text-sc-grey-dim">
               {"// NO DATA AVAILABLE"}

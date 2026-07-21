@@ -60,7 +60,7 @@ const Team = async () => {
     <HydrateClient>
       <Navbar />
       <main className="min-h-screen bg-sc-bg text-sc-white">
-        <section className="relative flex min-h-[400px] h-[50vh] w-full items-center justify-center overflow-hidden">
+        <section className="relative flex min-h-100 h-[50vh] w-full items-center justify-center overflow-hidden">
           <div className="absolute inset-0 z-0">
             <Image
               alt="Team Background"
@@ -69,7 +69,7 @@ const Team = async () => {
               priority
               src={backsplash}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-sc-bg" />
+            <div className="absolute inset-0 bg-linear-to-b from-transparent to-sc-bg" />
           </div>
 
           <div className="relative z-10 px-5 text-center">
@@ -77,14 +77,14 @@ const Team = async () => {
             <h1 className="sc-heading m-0 text-[clamp(3rem,6vw,5rem)]">
               Meet the Team.
             </h1>
-            <p className="mx-auto mt-6 max-w-[600px] text-lg text-sc-grey-light">
+            <p className="mx-auto mt-6 max-w-150 text-lg text-sc-grey-light">
               The minds behind the machine. A multidisciplinary student-run
               organization pushing the boundaries of renewable energy.
             </p>
           </div>
         </section>
 
-        <section className="relative z-10 mx-auto max-w-[1200px] px-5 py-16 pb-32">
+        <section className="relative z-10 mx-auto max-w-300 px-5 py-16 pb-32">
           <RoleSection
             members={[
               engineeringTeamManager,
