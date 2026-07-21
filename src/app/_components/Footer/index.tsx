@@ -1,37 +1,47 @@
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "public/assets/logo-nav.png";
-import Facebook from "../svgs/Facebook";
-import Instagram from "../svgs/Instagram";
-import Linkedin from "../svgs/Linkedin";
-import Twitter from "../svgs/Twitter";
-import Youtube from "../svgs/Youtube";
+import type { IconType } from "react-icons";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaLinkedinIn,
+  FaXTwitter,
+  FaYoutube,
+} from "react-icons/fa6";
+import * as TEAM from "team.json";
 import FooterCTA from "./FooterCTA";
 
-const SOCIAL_LINKS = [
+type SocialData = {
+  icon: IconType;
+  label: string;
+  href?: string;
+};
+const SOCIAL_DATA: SocialData[] = [
   {
-    href: "https://www.facebook.com/UofCSolarTeam",
-    icon: Facebook,
+    icon: FaFacebookF,
     label: "Facebook",
   },
-  { href: "https://x.com/uofcsolarcar", icon: Twitter, label: "Twitter" },
+  { icon: FaXTwitter, label: "Twitter" },
   {
-    href: "https://www.instagram.com/uofc_solarcar",
-    icon: Instagram,
+    icon: FaInstagram,
     label: "Instagram",
   },
   {
     href: "https://www.linkedin.com/company/university-ofcalgary-solar-car-team",
     icon: Linkedin,
     label: "LinkedIn",
-    props: { height: 26, width: 28 },
   },
   {
-    href: "https://www.youtube.com/user/calgarysolarcar",
-    icon: Youtube,
+    icon: FaYoutube,
     label: "YouTube",
   },
-] as const;
+];
+
+const SOCIAL_LINKS = SOCIAL_DATA.map((social) => {
+  const socialJson = TEAM.socials.find((s) => s.label === social.label);
+  return { ...social, ...socialJson };
+});
 
 const CONTACT_INFO = [
   {
@@ -64,7 +74,7 @@ const Footer = () => {
 
   return (
     <footer className="relative border-t border-sc-border bg-sc-bg px-5 pt-12 pb-6">
-      <div className="mx-auto mb-12 grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-8">
+      <div className="mx-auto mb-12 grid max-w-300 grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-8">
         <div className="flex flex-col gap-6">
           <Image
             alt="Logo"
@@ -76,16 +86,22 @@ const Footer = () => {
             <div className="sc-label mb-4 text-sc-amber">FOLLOW US</div>
             <div className="flex gap-6">
               {SOCIAL_LINKS.map((social) => {
+                if (!social.href) return null;
                 const Icon = social.icon;
-                const iconProps = "props" in social ? social.props : {};
                 return (
                   <Link
+                    aria-label={social.label}
                     className="inline-block opacity-70 transition-opacity hover:opacity-100"
                     href={social.href}
                     key={social.label}
+                    rel="noopener noreferrer"
                     target="_blank"
                   >
-                    <Icon {...iconProps} fill="var(--sc-white)" />
+                    <Icon
+                      aria-hidden="true"
+                      color="var(--sc-white)"
+                      size={24}
+                    />
                   </Link>
                 );
               })}
@@ -129,7 +145,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-4 border-t border-sc-border pt-8">
+      <div className="mx-auto flex max-w-300 flex-wrap items-center justify-between gap-4 border-t border-sc-border pt-8">
         <span className="sc-mono text-xs text-sc-grey-dim">
           © {currentYear} UNIVERSITY OF CALGARY SOLAR CAR TEAM
         </span>
