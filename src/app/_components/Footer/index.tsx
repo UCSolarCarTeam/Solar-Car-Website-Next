@@ -28,8 +28,7 @@ const SOCIAL_DATA: SocialData[] = [
     label: "Instagram",
   },
   {
-    href: "https://www.linkedin.com/company/university-of-calgary-solar-car-team",
-    icon: Linkedin,
+    icon: FaLinkedinIn,
     label: "LinkedIn",
   },
   {
@@ -42,22 +41,6 @@ const SOCIAL_LINKS = SOCIAL_DATA.map((social) => {
   const socialJson = TEAM.socials.find((s) => s.label === social.label);
   return { ...social, ...socialJson };
 });
-
-const CONTACT_INFO = [
-  {
-    href: "mailto:communications@calgarysolarcar.ca",
-    label: "communications@calgarysolarcar.ca",
-    type: "link" as const,
-  },
-  {
-    href: "mailto:sponsorship@calgarysolarcar.ca",
-    label: "sponsorship@calgarysolarcar.ca",
-    type: "link" as const,
-  },
-  { label: "ENC 36, Schulich School of Engineering", type: "text" as const },
-  { label: "2500 University Dr NW", type: "text" as const },
-  { label: "Calgary, AB T2N 1N4", type: "text" as const },
-] as const;
 
 const RESOURCE_LINKS = [
   { href: "/", label: "Homepage" },
@@ -113,8 +96,8 @@ const Footer = () => {
         <div>
           <div className="sc-label mb-6 text-sc-red">CONTACT</div>
           <div className="flex flex-col gap-3 text-[0.95rem] text-sc-grey-light">
-            {CONTACT_INFO.map((item) =>
-              item.type === "link" ? (
+            {TEAM.contactInfo.map((item) =>
+              item.type === "link" && item.href ? (
                 <Link
                   className="text-sc-white no-underline transition-colors hover:text-sc-red"
                   href={item.href}
