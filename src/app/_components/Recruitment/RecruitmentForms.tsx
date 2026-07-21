@@ -24,7 +24,7 @@ export default async function RecruitmentForms({
             vehicles, we encourage you to keep an eye on our{" "}
             <Link
               className="text-sc-amber underline"
-              href="https://www.linkedin.com/company/university-of-calgary-solar-car-team"
+              href="https://www.linkedin.com/company/university-ofcalgary-solar-car-team"
               target="_blank"
             >
               LinkedIn!
