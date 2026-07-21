@@ -56,6 +56,7 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-hot-toast": "^2.5.2",
+    "react-icons": "^5.7.0",
     "react-select": "^5.8.1",
     "react-spinners": "^0.15.0",
     "server-only": "^0.0.1",
@@ -80,10 +81,10 @@
     "babel-plugin-react-compiler": "1.0.0",
     "cross-env": "^10.1.0",
     "prisma": "^6.4.1",
+    "sass": "^1.79.4",
     "shadcn": "^4.13.0",
     "tsx": "^4.22.0",
-    "typescript": "7.0.2",
-    "sass": "^1.79.4"
+    "typescript": "7.0.2"
   },
   "prisma": {
     "seed": "npx tsx prisma/seed.ts"
