@@ -1,7 +1,7 @@
-import type { SponsorLevel } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { FaCirclePlus } from "react-icons/fa6";
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
+import type { SponsorLevel } from "@/generated/prisma/browser";
 
 import BasicButton from "../../Buttons/BasicButton";
 import EditSponsorPopup from "./EditSponsorPopup";

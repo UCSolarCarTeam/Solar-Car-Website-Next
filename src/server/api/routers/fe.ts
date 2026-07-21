@@ -1,4 +1,3 @@
-import { AllTeamRoles, type User } from "@prisma/client";
 import {
   AccountingTeam,
   CommunicationsTeam,
@@ -10,6 +9,7 @@ import {
   SoftwareTeam,
   SponsorshipTeam,
 } from "@/app/_types";
+import { AllTeamRoles, type User } from "@/generated/prisma/browser";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
 

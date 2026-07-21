@@ -1,11 +1,11 @@
 "use client";
 
-import type { User } from "@prisma/client";
 import type { ColumnDef } from "@tanstack/react-table";
 import { PlusIcon } from "lucide-react";
 import { useState, useTransition } from "react";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { deleteDBUser } from "@/app/portal/actions";
+import type { User } from "@/generated/prisma/browser";
 
 import EditAlumniPopupAdmin from "../../EditUserCell/EditAlumniPopupAdmin";
 import EntityTable from "../EntityTable";

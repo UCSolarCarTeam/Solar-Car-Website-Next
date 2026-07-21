@@ -1,4 +1,3 @@
-import { SponsorLevel } from "@prisma/client";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,6 +6,7 @@ import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 import MagneticButton from "@/components/ui/MagneticButton";
 import SectionReveal from "@/components/ui/SectionReveal";
+import { SponsorLevel } from "@/generated/prisma/browser";
 import type { RouterOutputs } from "@/trpc/react";
 import { HydrateClient, trpc } from "@/trpc/server";
 import { LeadSponsorCard, SponsorCard } from "./SponsorCards";

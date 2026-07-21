@@ -1,9 +1,9 @@
-import type { User } from "@prisma/client";
 import Image from "next/image";
 import backsplash from "public/assets/home/backsplash.jpeg";
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 import TeamMember from "@/app/_components/TeamMember";
+import type { User } from "@/generated/prisma/browser";
 import { HydrateClient, trpc } from "@/trpc/server";
 
 export const metadata = {
