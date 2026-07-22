@@ -1,7 +1,7 @@
 import type { SponsorLevel } from "@prisma/client";
 import { useEffect, useState } from "react";
+import { FaCirclePlus } from "react-icons/fa6";
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
-import PlusIcon from "@/app/_components/svgs/PlusIcon";
 
 import BasicButton from "../../Buttons/BasicButton";
 import EditSponsorPopup from "./EditSponsorPopup";
@@ -40,7 +40,13 @@ const EditSponsorCell = ({ currentRow, newSponsor }: EditSponsorCellProps) => {
   if (newSponsor) {
     return (
       <>
-        <PlusIcon fill="#000000" onClick={togglePopup} size="md" />
+        <FaCirclePlus
+          aria-label="Add sponsor"
+          className="cursor-pointer"
+          color="#000000"
+          onClick={togglePopup}
+          size={24}
+        />
         {popupOpen && (
           <EditSponsorPopup
             currentRow={currentRow}

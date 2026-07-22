@@ -6,8 +6,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import logo from "public/assets/logo-center-black.png";
 import { useState } from "react";
+import { FaChevronRight } from "react-icons/fa6";
 import styles from "@/app/_components/PortalComponents/Portal/index.module.scss";
-import Chevron from "@/app/_components/svgs/Chevron";
 import useViewport from "@/app/_hooks/useViewport";
 import { portalNavItems } from "@/app/_types";
 
@@ -59,7 +59,7 @@ const PortalPageHeader = ({ isAdmin, username }: PortalPageHeaderProps) => {
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
                   type="button"
                 >
-                  <Chevron className={styles.chevronIcon} />
+                  <FaChevronRight aria-hidden className={styles.chevronIcon} />
                 </button>
               )}
             </>
