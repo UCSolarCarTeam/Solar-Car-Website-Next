@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import MagneticButton from "@/components/ui/MagneticButton";
 

@@ -1,5 +1,3 @@
-"use client";
-
 /**
  * Placeholder mount point for the future Three.js / R3F hero scene.
  */
