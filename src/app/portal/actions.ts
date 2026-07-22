@@ -185,6 +185,7 @@ export async function createSponsor(
     const parsed = createSponsorSchema.parse(input);
     const ctx = await requireAdminContext();
     const data = await createSponsorService(ctx, parsed);
+    revalidatePath("/sponsors");
     revalidatePath("/portal/sponsors");
     return actionSuccess(data);
   } catch (error) {
@@ -266,6 +267,7 @@ export async function deleteSponsor(input: {
     const parsed = z.object({ id: z.number() }).parse(input);
     const ctx = await requireAdminContext();
     const data = await deleteSponsorService(ctx, parsed);
+    revalidatePath("/sponsors");
     revalidatePath("/portal/sponsors");
     return actionSuccess(data);
   } catch (error) {
@@ -425,6 +427,7 @@ export async function updateSponsor(
     const parsed = updateSponsorSchema.parse(input);
     const ctx = await requireAdminContext();
     const data = await updateSponsorService(ctx, parsed);
+    revalidatePath("/sponsors");
     revalidatePath("/portal/sponsors");
     return actionSuccess(data);
   } catch (error) {

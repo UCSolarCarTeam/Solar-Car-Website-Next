@@ -1,5 +1,5 @@
 import { getPublicAlumni, getPublicTeamMembers } from "@/app/team/actions";
-
+import { getPublicSponsors } from "@/server/public/sponsors";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const feRouter = createTRPCRouter({
@@ -28,23 +28,7 @@ export const feRouter = createTRPCRouter({
     });
   }),
 
-  getSponsors: publicProcedure.query(async ({ ctx }) => {
-    const sponsors = await ctx.db.sponsor.findMany({
-      where: {
-        deletedAt: null,
-      },
-    });
-    return sponsors.map((sponsor) => {
-      const { description, logoUrl, name, sponsorLevel, websiteUrl } = sponsor;
-      return {
-        description,
-        logoUrl,
-        name,
-        sponsorLevel,
-        websiteUrl,
-      };
-    });
-  }),
+  getSponsors: publicProcedure.query(getPublicSponsors),
 
   getTeamMembers: publicProcedure.query(getPublicTeamMembers),
 });
