@@ -4,7 +4,10 @@ import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 import TeamMember from "@/app/_components/TeamMember";
 import type { User } from "@/generated/prisma/browser";
-import { HydrateClient, trpc } from "@/trpc/server";
+import { getPublicAlumni, getPublicTeamMembers } from "@/server/public/team";
+
+export const dynamic = "error";
+export const revalidate = 3600;
 
 export const metadata = {
   title: "Team | Calgary Solar Car",
@@ -13,8 +16,10 @@ export const metadata = {
 };
 
 const Team = async () => {
-  const teamHierarchy = await trpc.fe.getTeamMembers();
-  const alumniTeam = await trpc.fe.getAlumni();
+  const [teamHierarchy, alumniTeam] = await Promise.all([
+    getPublicTeamMembers(),
+    getPublicAlumni(),
+  ]);
 
   const {
     accountingTeam,
@@ -57,7 +62,7 @@ const Team = async () => {
   };
 
   return (
-    <HydrateClient>
+    <>
       <Navbar />
       <main className="min-h-screen bg-sc-bg text-sc-white">
         <section className="relative flex min-h-100 h-[50vh] w-full items-center justify-center overflow-hidden">
@@ -116,7 +121,7 @@ const Team = async () => {
         </section>
       </main>
       <Footer />
-    </HydrateClient>
+    </>
   );
 };
 
