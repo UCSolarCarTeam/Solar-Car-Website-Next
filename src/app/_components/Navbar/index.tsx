@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Logo from "public/assets/logo-nav.png";
 import { useEffect, useState } from "react";
-import Chevron from "@/app/_components/svgs/Chevron";
+import { FaChevronRight } from "react-icons/fa6";
 import useViewport from "@/app/_hooks/useViewport";
 import { cn } from "@/lib/utils";
 import CloseButton from "../Buttons/CloseButton";
@@ -112,7 +112,11 @@ const Navbar = () => {
             onClick={toggleHambugerMenu}
             type="button"
           >
-            <Chevron className="rotate-90 fill-white drop-shadow-[2px_2px_10px_#000000]" />
+            <FaChevronRight
+              aria-hidden
+              className="rotate-90 fill-white drop-shadow-[2px_2px_10px_#000000]"
+              size={25}
+            />
           </button>
         )}
       </motion.nav>

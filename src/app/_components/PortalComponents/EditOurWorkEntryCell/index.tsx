@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
+import { FaCirclePlus } from "react-icons/fa6";
 
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
-import PlusIcon from "@/app/_components/svgs/PlusIcon";
 
 import BasicButton from "../../Buttons/BasicButton";
 import EditOurWorkEntryPopup from "./EditOurWorkEntryPopup";
@@ -43,7 +43,13 @@ const EditOurWorkEntryCell = ({
   if (newEntry) {
     return (
       <>
-        <PlusIcon fill="#000000" onClick={togglePopup} size="md" />
+        <FaCirclePlus
+          aria-label="Add timeline entry"
+          className="cursor-pointer"
+          color="#000000"
+          onClick={togglePopup}
+          size={24}
+        />
         {popupOpen && (
           <EditOurWorkEntryPopup
             currentRow={currentRow}
