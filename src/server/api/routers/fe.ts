@@ -1,4 +1,4 @@
-import { getPublicAlumni, getPublicTeamMembers } from "@/server/public/team";
+import { getPublicAlumni, getPublicTeamMembers } from "@/app/team/actions";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
 

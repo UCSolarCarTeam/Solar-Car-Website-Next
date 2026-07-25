@@ -1,5 +1,4 @@
-import "server-only";
-
+'use server'
 import {
   AccountingTeam,
   CommunicationsTeam,
@@ -14,6 +13,22 @@ import {
 import { AllTeamRoles, type User } from "@/generated/prisma/browser";
 import { db } from "@/server/db";
 
+export type PublicTeamMember = Pick<
+  User,
+  | "company"
+  | "companyTitle"
+  | "description"
+  | "fieldOfStudy"
+  | "firstName"
+  | "id"
+  | "lastName"
+  | "linkedIn"
+  | "profilePictureUrl"
+  | "teamRole"
+  | "yearJoined"
+  | "yearRetired"
+>;
+
 type SubteamRoles =
   | typeof AccountingTeam
   | typeof CommunicationsTeam
@@ -23,7 +38,22 @@ type SubteamRoles =
   | typeof SoftwareTeam
   | typeof SponsorshipTeam;
 
-function filterByRole(teamMembers: User[], roles: SubteamRoles) {
+const publicTeamMemberSelect = {
+  company: true,
+  companyTitle: true,
+  description: true,
+  fieldOfStudy: true,
+  firstName: true,
+  id: true,
+  lastName: true,
+  linkedIn: true,
+  profilePictureUrl: true,
+  teamRole: true,
+  yearJoined: true,
+  yearRetired: true,
+} as const;
+
+function filterByRole(teamMembers: PublicTeamMember[], roles: SubteamRoles) {
   return teamMembers.filter(
     (teamMember) =>
       teamMember.teamRole !== null &&
@@ -36,6 +66,7 @@ export async function getPublicAlumni() {
     orderBy: {
       yearRetired: "desc",
     },
+    select: publicTeamMemberSelect,
     where: {
       deletedAt: null,
       yearRetired: {
@@ -47,6 +78,7 @@ export async function getPublicAlumni() {
 
 export async function getPublicTeamMembers() {
   const dbUsers = await db.user.findMany({
+    select: publicTeamMemberSelect,
     where: {
       deletedAt: null,
     },
