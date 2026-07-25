@@ -45,16 +45,16 @@ const Navbar = () => {
 
   useEffect(() => {
     setHamburgerMenuOpen(false);
-  }, [pathname]);
+  }, []);
 
   return (
     <>
       <motion.nav
         className={cn(
-          "fixed top-0 right-0 left-0 z-[100] flex items-center transition-[padding] duration-300",
+          "fixed top-0 right-0 left-0 z-100 flex items-center transition-[padding] duration-300",
           isDesktop
-            ? "flex-row justify-between gap-0 px-10 py-[15px]"
-            : "flex-col justify-center gap-2.5 px-5 py-[15px]",
+            ? "flex-row justify-between gap-0 px-10 py-3.75"
+            : "flex-col justify-center gap-2.5 px-5 py-3.75",
         )}
         style={{
           backgroundColor: useTransform(
@@ -108,7 +108,7 @@ const Navbar = () => {
         {!isDesktop && width !== undefined && (
           <button
             aria-label="Open menu"
-            className="absolute top-[25px] right-5 cursor-pointer border-none bg-transparent p-0"
+            className="absolute top-6.25 right-5 cursor-pointer border-none bg-transparent p-0"
             onClick={toggleHambugerMenu}
             type="button"
           >
@@ -120,7 +120,7 @@ const Navbar = () => {
       {width !== undefined && !isDesktop && (
         <div
           className={cn(
-            "fixed inset-x-0 top-0 z-[99] flex flex-col items-center justify-center text-white transition-all duration-500",
+            "fixed inset-x-0 top-0 z-99 flex flex-col items-center justify-center text-white transition-all duration-500",
             hamburgerMenuOpen
               ? "h-dvh bg-black/90 opacity-100 [&_a]:pointer-events-auto"
               : "pointer-events-none h-0 bg-transparent opacity-0 [&_a]:pointer-events-none",

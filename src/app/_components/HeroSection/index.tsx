@@ -180,11 +180,11 @@ export default function HeroSection() {
       >
         <div className="sc-label text-sc-grey-light">SCROLL</div>
         {prefersReduced ? (
-          <div className="h-10 w-px bg-gradient-to-b from-sc-red to-transparent" />
+          <div className="h-10 w-px bg-linear-to-b from-sc-red to-transparent" />
         ) : (
           <motion.div
             animate={{ y: [0, 8, 0] }}
-            className="h-10 w-px bg-gradient-to-b from-sc-red to-transparent"
+            className="h-10 w-px bg-linear-to-b from-sc-red to-transparent"
             transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
           />
         )}
