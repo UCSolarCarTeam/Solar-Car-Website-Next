@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { cars } from "@/lib/cars";
+import { imageSize } from "@/lib/image-sizes";
 import CarCardHover from "./CarCardHover";
 import CarShowcaseCardEntrance from "./CarShowcaseCardEntrance";
 
@@ -32,8 +33,9 @@ export default function CarShowcase() {
                     <div className="relative h-full w-full">
                       <Image
                         alt={car.title}
-                        className="object-cover"
+                        className="object-cover object-center"
                         fill
+                        sizes={imageSize("carCard")}
                         src={car.image}
                       />
                       <div className="absolute inset-0 bg-linear-to-t from-[rgba(10,10,11,0.9)] from-0% to-transparent to-60%" />

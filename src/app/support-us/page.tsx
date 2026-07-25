@@ -4,6 +4,7 @@ import backsplash from "public/assets/support-us/backsplash.jpeg";
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 import MagneticButton from "@/components/ui/MagneticButton";
+import { imageSize } from "@/lib/image-sizes";
 
 export const metadata = {
   title: "Support Us | Calgary Solar Car",
@@ -22,6 +23,7 @@ const SupportUs = () => {
               className="object-cover object-center brightness-[0.3] saturate-50"
               fill
               priority
+              sizes={imageSize("pageHero")}
               src={backsplash}
             />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,rgba(200,16,46,0.2)_0%,transparent_60%),linear-gradient(to_bottom,transparent_0%,var(--sc-bg)_100%)]" />

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
+import { imageSize } from "@/lib/image-sizes";
 import { getOurWork } from "./actions";
 
 export const metadata = {
@@ -53,8 +54,9 @@ const OurWorkTimelinePage = async () => {
                           <div className="relative aspect-video w-full overflow-hidden rounded">
                             <Image
                               alt={month.month}
-                              className="object-cover"
+                              className="object-cover object-center"
                               fill
+                              sizes={imageSize("ourWorkMedia")}
                               src={month.image}
                             />
                           </div>

@@ -4,21 +4,30 @@ import Image from "next/image";
 import { useState } from "react";
 import { getHighlightSpecs } from "@/lib/cars/highlight-specs";
 import type { CarEntry } from "@/lib/cars/types";
+import { imageSize } from "@/lib/image-sizes";
 import { cn } from "@/lib/utils";
 
 export default function CarFleetImage({
   car,
   className,
+  stretch = false,
 }: {
   car: CarEntry;
   className?: string;
+  stretch?: boolean;
 }) {
   const [revealed, setRevealed] = useState(false);
   const highlights = getHighlightSpecs(car.specs);
   const active = revealed;
 
   return (
-    <div className={cn("group relative aspect-16/10 w-full", className)}>
+    <div
+      className={cn(
+        "group relative w-full",
+        stretch ? "h-full min-h-[280px] md:min-h-full" : "aspect-[16/10]",
+        className,
+      )}
+    >
       <div
         className={cn(
           "absolute -inset-2.5 z-0 border transition-colors duration-300",
@@ -29,7 +38,7 @@ export default function CarFleetImage({
       />
       <div
         className={cn(
-          "absolute -top-3.75 -left-3.75 z-0 h-3.75 w-3.75 border-t-2 border-l-2 transition-colors duration-300",
+          "absolute -top-[15px] -left-[15px] z-0 h-[15px] w-[15px] border-t-2 border-l-2 transition-colors duration-300",
           active
             ? "border-sc-amber"
             : "border-sc-amber/70 group-hover:border-sc-amber",
@@ -37,7 +46,7 @@ export default function CarFleetImage({
       />
       <div
         className={cn(
-          "absolute -right-3.75 -bottom-3.75 z-0 h-3.75 w-3.75 border-r-2 border-b-2 transition-colors duration-300",
+          "absolute -right-[15px] -bottom-[15px] z-0 h-[15px] w-[15px] border-r-2 border-b-2 transition-colors duration-300",
           active
             ? "border-sc-amber"
             : "border-sc-amber/70 group-hover:border-sc-amber",
@@ -47,14 +56,15 @@ export default function CarFleetImage({
       <button
         aria-expanded={active}
         aria-label={`${car.title} telemetry stats`}
-        className="relative z-1 h-full w-full cursor-pointer overflow-hidden border-0 bg-transparent p-0 text-left"
+        className="relative z-[1] h-full min-h-[inherit] w-full cursor-pointer overflow-hidden border-0 bg-transparent p-0 text-left"
         onClick={() => setRevealed((v) => !v)}
         type="button"
       >
         <Image
           alt={car.title}
-          className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
           fill
+          sizes={imageSize("carFleet")}
           src={car.image}
         />
         <div
@@ -66,7 +76,7 @@ export default function CarFleetImage({
 
         <div
           className={cn(
-            "absolute inset-0 flex flex-col justify-end bg-linear-to-t from-sc-bg via-sc-bg/90 to-sc-bg/20 p-6 opacity-0 transition-opacity duration-300",
+            "absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-sc-bg via-sc-bg/90 to-sc-bg/20 p-6 opacity-0 transition-opacity duration-300",
             active ? "opacity-100" : "group-hover:opacity-100",
           )}
         >

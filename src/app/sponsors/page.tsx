@@ -7,6 +7,7 @@ import Navbar from "@/app/_components/Navbar";
 import MagneticButton from "@/components/ui/MagneticButton";
 import SectionReveal from "@/components/ui/SectionReveal";
 import { SponsorLevel } from "@/generated/prisma/browser";
+import { imageSize } from "@/lib/image-sizes";
 import type { RouterOutputs } from "@/trpc/react";
 import { HydrateClient, trpc } from "@/trpc/server";
 import { LeadSponsorCard, SponsorCard } from "./SponsorCards";
@@ -79,6 +80,7 @@ const Sponsors = async () => {
               className="object-cover object-center brightness-[0.3] saturate-50"
               fill
               priority
+              sizes={imageSize("pageHero")}
               src={backsplash}
             />
             <div className="absolute inset-0 bg-linear-to-b from-transparent to-sc-bg" />

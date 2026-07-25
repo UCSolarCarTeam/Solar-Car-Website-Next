@@ -1,8 +1,8 @@
-import Footer from "@/app/_components/Footer";
 import CarsFleetList from "@/app/_components/Cars/CarsFleetList";
 import CarsHero from "@/app/_components/Cars/CarsHero";
-import FleetTimeline from "@/app/_components/Cars/FleetTimeline";
 import { FleetHighlightProvider } from "@/app/_components/Cars/FleetHighlight/FleetHighlightProvider";
+import FleetTimeline from "@/app/_components/Cars/FleetTimeline";
+import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 
 export const metadata = {

@@ -1,6 +1,7 @@
 import * as motion from "framer-motion/client";
 import Image from "next/image";
 import Link from "next/link";
+import { imageSize } from "@/lib/image-sizes";
 import { cn } from "@/lib/utils";
 
 const TIER_CARD_CLASSES = {
@@ -44,7 +45,7 @@ export function SponsorCard({
       >
         <div
           className={cn(
-            "group relative flex h-[150px] items-center justify-center rounded border bg-[rgba(18,18,20,0.5)] p-8 backdrop-blur-md transition-[border-color,background-color,box-shadow] duration-300",
+            "group relative flex h-37.5 items-center justify-center rounded border bg-[rgba(18,18,20,0.5)] p-8 backdrop-blur-md transition-[border-color,background-color,box-shadow] duration-300",
             TIER_CARD_CLASSES[tier],
           )}
         >
@@ -52,6 +53,7 @@ export function SponsorCard({
             alt={name}
             className="object-contain p-6 opacity-70 transition-opacity duration-300 group-hover:opacity-100"
             fill
+            sizes={imageSize("sponsorLogo")}
             src={logoUrl}
           />
         </div>
@@ -70,7 +72,7 @@ export function LeadSponsorCard() {
     >
       <div
         className={cn(
-          "relative mx-auto max-w-[800px] rounded border bg-[rgba(18,18,20,0.5)] p-16 backdrop-blur-md transition-[border-color,box-shadow] duration-300",
+          "relative mx-auto max-w-200 rounded border bg-[rgba(18,18,20,0.5)] p-16 backdrop-blur-md transition-[border-color,box-shadow] duration-300",
           TIER_CARD_CLASSES.lead,
         )}
       >

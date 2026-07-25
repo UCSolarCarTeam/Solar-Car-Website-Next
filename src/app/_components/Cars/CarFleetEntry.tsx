@@ -17,16 +17,17 @@ export default function CarFleetEntry({
   const isHighlighted = highlightedId === id;
 
   return (
-    <div
-      className={cn(
-        "grid grid-cols-1 items-center gap-16 rounded-xl transition-all duration-500 md:grid-cols-2",
-        isHighlighted &&
-          "bg-sc-amber/5 shadow-[0_0_32px_rgba(245,166,35,0.2)] ring-2 ring-sc-amber/50",
-        className,
+    <div className={cn("relative scroll-mt-28", className)} id={id}>
+      {isHighlighted && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -inset-x-4 -inset-y-5 z-0 rounded-2xl bg-sc-amber/5 shadow-[0_0_40px_rgba(245,166,35,0.22)] ring-2 ring-sc-amber/55 md:-inset-x-6 md:-inset-y-6"
+        />
       )}
-      id={id}
-    >
-      {children}
+
+      <div className="relative z-[1] grid grid-cols-1 items-stretch gap-10 md:grid-cols-2 md:gap-16">
+        {children}
+      </div>
     </div>
   );
 }

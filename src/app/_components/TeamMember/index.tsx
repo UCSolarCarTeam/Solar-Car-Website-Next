@@ -3,8 +3,8 @@ import Link from "next/link";
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { FaLinkedinIn } from "react-icons/fa6";
 import { formatDateOnly } from "@/app/_lib/utils";
-import { cn } from "@/lib/utils";
 import type { PublicTeamMember } from "@/app/team/actions";
+import { cn } from "@/lib/utils";
 
 type TeamMemberProps = {
   user: PublicTeamMember | null | undefined;

@@ -9,6 +9,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import useReducedMotion from "@/app/_hooks/useReducedMotion";
 import useViewport from "@/app/_hooks/useViewport";
 import { fadeUp } from "@/lib/animation/variants";
+import { imageSize } from "@/lib/image-sizes";
 import { cn } from "@/lib/utils";
 
 const Hero3DCanvas = dynamic(() => import("./Hero3DCanvas"), {
@@ -70,6 +71,7 @@ export default function HeroSection() {
                 className="object-cover object-center blur-xl"
                 fill
                 priority
+                sizes={imageSize("hero")}
                 src={backsplash}
               />
             }
@@ -88,6 +90,7 @@ export default function HeroSection() {
             className="object-cover object-center"
             fill
             priority
+            sizes={imageSize("hero")}
             src={backsplash}
           />
           <div
@@ -105,6 +108,7 @@ export default function HeroSection() {
             className="object-cover object-center"
             fill
             priority
+            sizes={imageSize("hero")}
             src={backsplash}
           />
           <div
