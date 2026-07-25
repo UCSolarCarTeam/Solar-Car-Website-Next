@@ -1,5 +1,3 @@
-import type { StaticImageData } from "next/image";
-
 export type CarSpec = {
   label: string;
   value: string;
@@ -12,7 +10,7 @@ export type CarStatus = "ACTIVE" | "RETIRED";
 export type CarEntry = {
   id: string;
   title: string;
-  image: StaticImageData;
+  image: string;
   content: string;
   specs: CarSpec[];
   note?: string;

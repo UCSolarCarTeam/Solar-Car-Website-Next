@@ -8,7 +8,7 @@ import CarShowcaseCardEntrance from "./CarShowcaseCardEntrance";
 export default function CarShowcase() {
   return (
     <section className="w-full border-t border-sc-border bg-sc-bg-surface px-5 py-32">
-      <div className="mx-auto max-w-[1200px]">
+      <div className="mx-auto max-w-300">
         <div className="mb-12">
           <div className="sc-label mb-4 text-sc-red">THE FLEET</div>
           <div className="flex items-end justify-between">
@@ -28,7 +28,7 @@ export default function CarShowcase() {
           {cars.slice(0, 3).map((car, index) => (
             <CarShowcaseCardEntrance index={index} key={car.id}>
               <Link className="block no-underline" href="/cars">
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded border border-sc-border">
+                <div className="relative aspect-4/3 w-full overflow-hidden rounded border border-sc-border">
                   <CarCardHover>
                     <div className="relative h-full w-full">
                       <Image
@@ -38,7 +38,7 @@ export default function CarShowcase() {
                         sizes={imageSize("carCard")}
                         src={car.image}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[rgba(10,10,11,0.9)] from-0% to-transparent to-60%" />
+                      <div className="absolute inset-0 bg-linear-to-t from-[rgba(10,10,11,0.9)] from-0% to-transparent to-60%" />
                     </div>
                   </CarCardHover>
 

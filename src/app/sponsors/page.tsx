@@ -73,7 +73,7 @@ const Sponsors = async () => {
     <HydrateClient>
       <Navbar />
       <main className="min-h-screen bg-sc-bg text-sc-white">
-        <section className="relative flex min-h-[500px] h-[60vh] w-full items-center justify-center overflow-hidden">
+        <section className="relative flex min-h-125 h-[60vh] w-full items-center justify-center overflow-hidden">
           <div className="absolute inset-0 z-0">
             <Image
               alt="Sponsors Background"
@@ -83,7 +83,7 @@ const Sponsors = async () => {
               sizes={imageSize("pageHero")}
               src={backsplash}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-sc-bg" />
+            <div className="absolute inset-0 bg-linear-to-b from-transparent to-sc-bg" />
           </div>
 
           <div className="relative z-10 px-5 text-center">
@@ -92,7 +92,7 @@ const Sponsors = async () => {
               <h1 className="sc-heading m-0 text-[clamp(3.5rem,8vw,6rem)] drop-shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
                 Fueling Innovation.
               </h1>
-              <p className="mx-auto mt-6 max-w-[650px] text-xl leading-relaxed text-sc-grey-light">
+              <p className="mx-auto mt-6 max-w-162.5 text-xl leading-relaxed text-sc-grey-light">
                 Our work is made possible by the generous support of our
                 sponsors. They provide the resources we need to push the
                 boundaries of renewable energy.
@@ -101,7 +101,7 @@ const Sponsors = async () => {
           </div>
         </section>
 
-        <section className="relative z-10 mx-auto max-w-[1200px] px-5 py-16 pb-32">
+        <section className="relative z-10 mx-auto max-w-300 px-5 py-16 pb-32">
           <div className="mb-40 text-center">
             <SectionReveal>
               <div className="sc-label mb-4 text-sc-red">TITLE SPONSOR</div>
@@ -147,7 +147,7 @@ const Sponsors = async () => {
         <section className="relative w-full overflow-hidden border-t border-sc-border bg-sc-bg-surface px-5 py-32">
           <div className="pointer-events-none absolute top-1/2 left-1/2 z-0 h-[60vw] w-[60vw] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(circle,rgba(245,166,35,0.1)_0%,transparent_70%)]" />
 
-          <div className="relative z-10 mx-auto max-w-[800px] text-center">
+          <div className="relative z-10 mx-auto max-w-200 text-center">
             <SectionReveal>
               <div className="sc-label mb-4 text-sc-amber">
                 BECOME A SPONSOR
@@ -155,7 +155,7 @@ const Sponsors = async () => {
               <h2 className="sc-heading mb-6 text-[clamp(2.5rem,5vw,4rem)] leading-tight">
                 Partner With Us.
               </h2>
-              <p className="mx-auto mb-12 max-w-[600px] text-xl leading-relaxed text-sc-grey-light">
+              <p className="mx-auto mb-12 max-w-150 text-xl leading-relaxed text-sc-grey-light">
                 Join us in our mission to push the limits of sustainable
                 technology. Your support enables our students to gain invaluable
                 hands-on experience and innovate for a greener future.

@@ -10,7 +10,7 @@ const Loader = ({ isLoading, lightmode = false }: LoaderProps) => {
   return (
     <div
       className={cn(
-        "fixed inset-0 z-[1000] flex h-full w-full items-center justify-center",
+        "fixed inset-0 z-1000 flex h-full w-full items-center justify-center",
         lightmode ? "bg-[#e6e6e6]" : "bg-[#121212]",
       )}
     >
