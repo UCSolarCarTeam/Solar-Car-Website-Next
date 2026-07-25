@@ -1,5 +1,5 @@
+import { getPublicSponsors } from "@/app/sponsors/actions";
 import { getPublicAlumni, getPublicTeamMembers } from "@/app/team/actions";
-import { getPublicSponsors } from "@/server/public/sponsors";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const feRouter = createTRPCRouter({

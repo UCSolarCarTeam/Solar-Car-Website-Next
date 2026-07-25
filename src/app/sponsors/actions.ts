@@ -1,5 +1,4 @@
-import "server-only";
-
+"use server";
 import { db } from "@/server/db";
 
 export async function getPublicSponsors() {

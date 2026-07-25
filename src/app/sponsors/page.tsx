@@ -4,11 +4,11 @@ import Link from "next/link";
 import backsplash from "public/assets/sponsors/backsplash.jpeg";
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
+import { getPublicSponsors } from "@/app/sponsors/actions";
 import MagneticButton from "@/components/ui/MagneticButton";
 import SectionReveal from "@/components/ui/SectionReveal";
 import { SponsorLevel } from "@/generated/prisma/browser";
 import { imageSize } from "@/lib/image-sizes";
-import { getPublicSponsors } from "@/server/public/sponsors";
 import { LeadSponsorCard, SponsorCard } from "./SponsorCards";
 
 export const dynamic = "error";
