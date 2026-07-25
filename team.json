@@ -1,0 +1,48 @@
+{
+  "contactInfo": [
+    {
+      "href": "mailto:communications@calgarysolarcar.ca",
+      "label": "communications@calgarysolarcar.ca",
+      "type": "link"
+    },
+    {
+      "href": "mailto:sponsorship@calgarysolarcar.ca",
+      "label": "sponsorship@calgarysolarcar.ca",
+      "type": "link"
+    },
+    {
+      "label": "ENC 36, Schulich School of Engineering",
+      "type": "text"
+    },
+    {
+      "label": "2500 University Dr NW",
+      "type": "text"
+    },
+    {
+      "label": "Calgary, AB T2N 1N4",
+      "type": "text"
+    }
+  ],
+  "socials": [
+    {
+      "href": "https://www.facebook.com/UofCSolarTeam",
+      "label": "Facebook"
+    },
+    {
+      "href": "https://x.com/uofcsolarcar",
+      "label": "Twitter"
+    },
+    {
+      "href": "https://www.instagram.com/uofc_solarcar",
+      "label": "Instagram"
+    },
+    {
+      "href": "https://www.linkedin.com/company/university-ofcalgary-solar-car-team",
+      "label": "LinkedIn"
+    },
+    {
+      "href": "https://www.youtube.com/user/calgarysolarcar",
+      "label": "YouTube"
+    }
+  ]
+}
