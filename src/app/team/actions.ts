@@ -81,6 +81,7 @@ export async function getPublicTeamMembers() {
     select: publicTeamMemberSelect,
     where: {
       deletedAt: null,
+      yearRetired: null,
     },
   });
   const teamMembers = dbUsers.filter(
