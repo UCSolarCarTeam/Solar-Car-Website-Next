@@ -42,7 +42,6 @@ const TeamMember = ({ user }: TeamMemberProps) => {
           fill
           loading="eager"
           src={user.profilePictureUrl ?? defaultProfilePicture}
-          unoptimized
         />
       </div>
 
