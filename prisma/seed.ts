@@ -1,4 +1,5 @@
 /** biome-ignore-all lint/suspicious/noConsole: local seed script */
+import "dotenv/config";
 import { faker } from "@faker-js/faker";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient, SponsorLevel } from "../src/generated/prisma/client";

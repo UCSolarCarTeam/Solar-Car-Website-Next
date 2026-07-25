@@ -1,11 +1,16 @@
-import type { User } from "@prisma/client";
 import Image from "next/image";
 import backsplash from "public/assets/home/backsplash.jpeg";
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 import TeamMember from "@/app/_components/TeamMember";
-import { imageSize } from "@/lib/image-sizes";
-import { HydrateClient, trpc } from "@/trpc/server";
+import {
+  getPublicAlumni,
+  getPublicTeamMembers,
+  type PublicTeamMember,
+} from "@/app/team/actions";
+
+export const dynamic = "error";
+export const revalidate = 3600;
 
 export const metadata = {
   title: "Team | Calgary Solar Car",
@@ -39,7 +44,7 @@ const Team = async () => {
     members,
   }: {
     title: string;
-    members: (User | null | undefined)[];
+    members: (PublicTeamMember | null | undefined)[];
   }) => {
     if (!members || members.length === 0) return null;
     return (
@@ -51,29 +56,26 @@ const Team = async () => {
           </span>
         </div>
         <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-8">
-          {members.map((m) =>
-            m ? <TeamMember key={m.id || m.clerkUserId} user={m} /> : null,
-          )}
+          {members.map((m) => (m ? <TeamMember key={m.id} user={m} /> : null))}
         </div>
       </div>
     );
   };
 
   return (
-    <HydrateClient>
+    <>
       <Navbar />
       <main className="min-h-screen bg-sc-bg text-sc-white">
-        <section className="relative flex min-h-[400px] h-[50vh] w-full items-center justify-center overflow-hidden">
+        <section className="relative flex min-h-100 h-[50vh] w-full items-center justify-center overflow-hidden">
           <div className="absolute inset-0 z-0">
             <Image
               alt="Team Background"
               className="object-cover object-center brightness-[0.3] saturate-50"
               fill
               priority
-              sizes={imageSize("pageHero")}
               src={backsplash}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-sc-bg" />
+            <div className="absolute inset-0 bg-linear-to-b from-transparent to-sc-bg" />
           </div>
 
           <div className="relative z-10 px-5 text-center">
@@ -81,14 +83,14 @@ const Team = async () => {
             <h1 className="sc-heading m-0 text-[clamp(3rem,6vw,5rem)]">
               Meet the Team.
             </h1>
-            <p className="mx-auto mt-6 max-w-[600px] text-lg text-sc-grey-light">
+            <p className="mx-auto mt-6 max-w-150 text-lg text-sc-grey-light">
               The minds behind the machine. A multidisciplinary student-run
               organization pushing the boundaries of renewable energy.
             </p>
           </div>
         </section>
 
-        <section className="relative z-10 mx-auto max-w-[1200px] px-5 py-16 pb-32">
+        <section className="relative z-10 mx-auto max-w-300 px-5 py-16 pb-32">
           <RoleSection
             members={[
               engineeringTeamManager,

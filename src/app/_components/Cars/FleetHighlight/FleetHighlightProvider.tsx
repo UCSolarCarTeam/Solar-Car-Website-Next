@@ -2,10 +2,10 @@
 
 import {
   createContext,
+  type ReactNode,
   useContext,
   useRef,
   useState,
-  type ReactNode,
 } from "react";
 import { useSmoothScroll } from "@/components/providers/SmoothScrollProvider";
 

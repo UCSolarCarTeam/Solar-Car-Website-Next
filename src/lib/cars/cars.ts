@@ -1,4 +1,3 @@
-import type { CarEntry, FleetTimelineEntry } from "./types";
 import backsplash1 from "public/assets/cars/backsplash1.png";
 import backsplash2 from "public/assets/cars/backsplash2.jpeg";
 import backsplash3 from "public/assets/cars/backsplash3.jpeg";
@@ -6,6 +5,7 @@ import backsplash4 from "public/assets/cars/backsplash4.jpeg";
 import backsplash5 from "public/assets/cars/backsplash5.jpeg";
 import backsplash6 from "public/assets/cars/backsplash6.jpeg";
 import x1Image from "public/assets/cars/x1.png";
+import type { CarEntry, FleetTimelineEntry } from "./types";
 
 const carImages = {
   helios: backsplash1,
@@ -91,13 +91,23 @@ const axiom: CarEntry = {
     2011 rebuild for the World Solar Challenge — dropping from ~600 lbs to 390 lbs without driver
     and ballast. All improvements were completed ahead of the 2011 race from Darwin to Adelaide.`,
   specs: [
-    { label: "Maximum Achieved Speed", value: "130 km/h (2010) · 110 km/h (2011)" },
+    {
+      label: "Maximum Achieved Speed",
+      value: "130 km/h (2010) · 110 km/h (2011)",
+    },
     {
       label: "Solar Array Type",
-      value: "GaAs triple-junction (2010) · Silicon monocrystalline UC Solar (2011)",
+      value:
+        "GaAs triple-junction (2010) · Silicon monocrystalline UC Solar (2011)",
     },
-    { label: "Chassis", value: "Carbon fiber & Kevlar (2010) · Carbon fiber (2011)" },
-    { label: "Shell Composition", value: "Carbon fiber & Kevlar (2010) · Carbon fiber (2011)" },
+    {
+      label: "Chassis",
+      value: "Carbon fiber & Kevlar (2010) · Carbon fiber (2011)",
+    },
+    {
+      label: "Shell Composition",
+      value: "Carbon fiber & Kevlar (2010) · Carbon fiber (2011)",
+    },
     { label: "Weight", value: "~600 lbs (2010) · ~390 lbs (2011)" },
     { label: "Commissioned", value: "October 2009" },
     {

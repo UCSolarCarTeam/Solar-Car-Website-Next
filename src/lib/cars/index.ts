@@ -1,3 +1,5 @@
+export { cars, fleetTimeline, pageIds } from "./cars";
+export { getHighlightSpecs } from "./highlight-specs";
 export type {
   CarClass,
   CarEntry,
@@ -5,6 +7,3 @@ export type {
   CarStatus,
   FleetTimelineEntry,
 } from "./types";
-
-export { cars, fleetTimeline, pageIds } from "./cars";
-export { getHighlightSpecs } from "./highlight-specs";

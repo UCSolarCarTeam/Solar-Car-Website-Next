@@ -17,10 +17,7 @@ export default function CarFleetEntry({
   const isHighlighted = highlightedId === id;
 
   return (
-    <div
-      className={cn("relative scroll-mt-28", className)}
-      id={id}
-    >
+    <div className={cn("relative scroll-mt-28", className)} id={id}>
       {isHighlighted && (
         <div
           aria-hidden

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { FaCirclePlus } from "react-icons/fa6";
 
 import styles from "@/app/_components/PortalComponents/EditSponsorCell/index.module.scss";
-import PlusIcon from "@/app/_components/svgs/PlusIcon";
 
 import BasicButton from "../../Buttons/BasicButton";
 import EditFormPopup from "./EditFormPopup";

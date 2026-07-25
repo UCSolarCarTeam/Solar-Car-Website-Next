@@ -6,12 +6,12 @@ import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import {
   createContext,
+  type ReactNode,
   useContext,
   useEffect,
   useMemo,
   useRef,
   useState,
-  type ReactNode,
 } from "react";
 
 import useReducedMotion from "@/app/_hooks/useReducedMotion";
@@ -25,13 +25,12 @@ type ScrollToOptions = {
 };
 
 type SmoothScrollContextValue = {
-  scrollTo: (
-    target: string | HTMLElement,
-    options?: ScrollToOptions,
-  ) => void;
+  scrollTo: (target: string | HTMLElement, options?: ScrollToOptions) => void;
 };
 
-const SmoothScrollContext = createContext<SmoothScrollContextValue | null>(null);
+const SmoothScrollContext = createContext<SmoothScrollContextValue | null>(
+  null,
+);
 
 export function useSmoothScroll() {
   return useContext(SmoothScrollContext);

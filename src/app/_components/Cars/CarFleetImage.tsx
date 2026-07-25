@@ -24,9 +24,7 @@ export default function CarFleetImage({
     <div
       className={cn(
         "group relative w-full",
-        stretch
-          ? "h-full min-h-[280px] md:min-h-full"
-          : "aspect-[16/10]",
+        stretch ? "h-full min-h-[280px] md:min-h-full" : "aspect-[16/10]",
         className,
       )}
     >

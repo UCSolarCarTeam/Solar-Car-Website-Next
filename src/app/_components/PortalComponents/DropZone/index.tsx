@@ -1,7 +1,7 @@
 import Image, { type StaticImageData } from "next/image";
 import type React from "react";
+import { FaUpload } from "react-icons/fa6";
 
-import Upload from "../../svgs/Upload";
 import styles from "./index.module.scss";
 
 interface DropZoneProps {
@@ -65,7 +65,7 @@ const DropZone = ({ currentImage, handleFileUpload }: DropZoneProps) => {
         />
       )}
       <label className={styles.label} htmlFor="fileInput">
-        <Upload />
+        <FaUpload aria-hidden color="#9DA3AE" size={48} />
         <div>
           <div className={styles.headerText}>
             Drop images here or click to upload
