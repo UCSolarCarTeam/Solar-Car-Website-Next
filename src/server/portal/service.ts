@@ -1,5 +1,5 @@
-import type { AllTeamRoles, SponsorLevel } from "@prisma/client";
 import { LeadRoles, ManagerRoles } from "@/app/_types";
+import type { AllTeamRoles, SponsorLevel } from "@/generated/prisma/browser";
 
 import type { PortalContext } from "./context";
 import { PortalError } from "./errors";

@@ -1,6 +1,5 @@
 "use client";
 
-import type { User } from "@prisma/client";
 import type {
   CellContext,
   ColumnDef,
@@ -9,6 +8,7 @@ import type {
 import { useEffect, useState } from "react";
 import { MoveToAlumniModal } from "@/app/_components/PortalComponents/EditUserCell/MoveToAlumniModal";
 import { useUser } from "@/app/_hooks/useUser";
+import type { User } from "@/generated/prisma/browser";
 
 import EntityTable from "../EntityTable";
 import { columns } from "./columns";

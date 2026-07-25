@@ -1,15 +1,23 @@
 /** biome-ignore-all lint/suspicious/noConsole: local seed script */
+import "dotenv/config";
 import { faker } from "@faker-js/faker";
-import { PrismaClient, SponsorLevel } from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient, SponsorLevel } from "../src/generated/prisma/client";
 
-const prisma = new PrismaClient();
 const LOCAL_DATABASE_URL =
   "postgresql://postgres:password@localhost:5432/solar-car-website-next";
+const databaseUrl = process.env.DATABASE_URL;
+
+if (!databaseUrl) {
+  throw new Error("DATABASE_URL is required to seed the database.");
+}
+
+const prisma = new PrismaClient({
+  adapter: new PrismaPg({ connectionString: databaseUrl }),
+});
 
 async function main() {
   console.log("Starting seed...");
-
-  const databaseUrl = process.env.DATABASE_URL;
 
   if (databaseUrl !== LOCAL_DATABASE_URL) {
     console.error(

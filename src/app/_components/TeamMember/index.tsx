@@ -1,9 +1,9 @@
-import type { User } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { FaLinkedinIn } from "react-icons/fa6";
 import { formatDateOnly } from "@/app/_lib/utils";
+import type { User } from "@/generated/prisma/browser";
 import { cn } from "@/lib/utils";
 
 type TeamMemberProps = {
