@@ -21,7 +21,7 @@ const SOCIAL_LINKS = [
     label: "Instagram",
   },
   {
-    href: "https://www.linkedin.com/company/university-of-calgary-solar-car-team",
+    href: "https://www.linkedin.com/company/university-ofcalgary-solar-car-team",
     icon: Linkedin,
     label: "LinkedIn",
     props: { height: 26, width: 28 },
