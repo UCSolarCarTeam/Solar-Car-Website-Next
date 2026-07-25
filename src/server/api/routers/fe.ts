@@ -1,32 +1,9 @@
-import {
-  AccountingTeam,
-  CommunicationsTeam,
-  ElectricalTeam,
-  LeadRoles,
-  ManagerRoles,
-  MechanicalTeam,
-  MultiTeam,
-  SoftwareTeam,
-  SponsorshipTeam,
-} from "@/app/_types";
-import { AllTeamRoles, type User } from "@/generated/prisma/browser";
+import { getPublicAlumni, getPublicTeamMembers } from "@/app/team/actions";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const feRouter = createTRPCRouter({
-  getAlumni: publicProcedure.query(async ({ ctx }) => {
-    return ctx.db.user.findMany({
-      orderBy: {
-        yearRetired: "desc",
-      },
-      where: {
-        deletedAt: null,
-        yearRetired: {
-          not: null,
-        },
-      },
-    });
-  }),
+  getAlumni: publicProcedure.query(getPublicAlumni),
   getRecruitment: publicProcedure.query(async ({ ctx }) => {
     const forms = await ctx.db.recruitment.findMany({
       orderBy: {
@@ -69,97 +46,5 @@ export const feRouter = createTRPCRouter({
     });
   }),
 
-  getTeamMembers: publicProcedure.query(async ({ ctx }) => {
-    const dbUsers = await ctx.db.user.findMany({
-      where: {
-        deletedAt: null,
-      },
-    });
-    const teamMembers = dbUsers
-      .filter((teamMember) => teamMember.teamRole !== null)
-      .filter(
-        (teamMember) =>
-          teamMember.firstName !== null || teamMember.firstName === "",
-      );
-
-    const filterByRole = (
-      teamMembers: User[],
-      roles:
-        | typeof AccountingTeam
-        | typeof CommunicationsTeam
-        | typeof ElectricalTeam
-        | typeof MechanicalTeam
-        | typeof MultiTeam
-        | typeof SoftwareTeam
-        | typeof SponsorshipTeam,
-    ) => {
-      return teamMembers.filter((teamMember) =>
-        // we can assume that we filtered out null teamRoles already
-        Object.keys(roles).includes(teamMember.teamRole!),
-      );
-    };
-
-    const teamCaptain =
-      teamMembers.find(
-        (teamMember) => teamMember.teamRole === AllTeamRoles.TeamCaptain,
-      ) ?? null;
-    const engineeringTeamManager =
-      teamMembers.find(
-        (teamMember) =>
-          teamMember.teamRole === AllTeamRoles.EngineeringTeamManager,
-      ) ?? null;
-    const businessTeamManager =
-      teamMembers.find(
-        (teamMember) =>
-          teamMember.teamRole === AllTeamRoles.BusinessTeamManager,
-      ) ?? null;
-
-    const managerRoles = teamMembers
-      .filter(
-        (teamMember) =>
-          teamMember.teamRole !== null && teamMember.teamRole in ManagerRoles,
-      )
-      .filter(
-        (teamMember) =>
-          teamMember !== teamCaptain &&
-          teamMember !== engineeringTeamManager &&
-          teamMember !== businessTeamManager,
-      );
-
-    const leadRoles = teamMembers
-      .filter(
-        (teamMember) =>
-          teamMember.teamRole !== null && teamMember.teamRole in LeadRoles,
-      )
-      .filter(
-        (teamMember) =>
-          teamMember !== teamCaptain &&
-          teamMember !== engineeringTeamManager &&
-          teamMember !== businessTeamManager &&
-          !managerRoles.includes(teamMember),
-      );
-
-    const accountingTeam = filterByRole(teamMembers, AccountingTeam);
-    const commmunicationsTeam = filterByRole(teamMembers, CommunicationsTeam);
-    const sponsorshipTeam = filterByRole(teamMembers, SponsorshipTeam);
-    const softwareTeam = filterByRole(teamMembers, SoftwareTeam);
-    const electricalTeam = filterByRole(teamMembers, ElectricalTeam);
-    const mechanicalTeam = filterByRole(teamMembers, MechanicalTeam);
-    const multiTeam = filterByRole(teamMembers, MultiTeam);
-
-    return {
-      accountingTeam,
-      businessTeamManager,
-      commmunicationsTeam,
-      electricalTeam,
-      engineeringTeamManager,
-      leadRoles,
-      managerRoles,
-      mechanicalTeam,
-      multiTeam,
-      softwareTeam,
-      sponsorshipTeam,
-      teamCaptain,
-    };
-  }),
+  getTeamMembers: publicProcedure.query(getPublicTeamMembers),
 });

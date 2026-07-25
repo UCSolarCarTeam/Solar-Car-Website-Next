@@ -3,8 +3,14 @@ import backsplash from "public/assets/home/backsplash.jpeg";
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 import TeamMember from "@/app/_components/TeamMember";
-import type { User } from "@/generated/prisma/browser";
-import { HydrateClient, trpc } from "@/trpc/server";
+import {
+  getPublicAlumni,
+  getPublicTeamMembers,
+  type PublicTeamMember,
+} from "@/app/team/actions";
+
+export const dynamic = "error";
+export const revalidate = 3600;
 
 export const metadata = {
   title: "Team | Calgary Solar Car",
@@ -13,8 +19,10 @@ export const metadata = {
 };
 
 const Team = async () => {
-  const teamHierarchy = await trpc.fe.getTeamMembers();
-  const alumniTeam = await trpc.fe.getAlumni();
+  const [teamHierarchy, alumniTeam] = await Promise.all([
+    getPublicTeamMembers(),
+    getPublicAlumni(),
+  ]);
 
   const {
     accountingTeam,
@@ -36,7 +44,7 @@ const Team = async () => {
     members,
   }: {
     title: string;
-    members: (User | null | undefined)[];
+    members: (PublicTeamMember | null | undefined)[];
   }) => {
     if (!members || members.length === 0) return null;
     return (
@@ -48,16 +56,14 @@ const Team = async () => {
           </span>
         </div>
         <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-8">
-          {members.map((m) =>
-            m ? <TeamMember key={m.id || m.clerkUserId} user={m} /> : null,
-          )}
+          {members.map((m) => (m ? <TeamMember key={m.id} user={m} /> : null))}
         </div>
       </div>
     );
   };
 
   return (
-    <HydrateClient>
+    <>
       <Navbar />
       <main className="min-h-screen bg-sc-bg text-sc-white">
         <section className="relative flex min-h-100 h-[50vh] w-full items-center justify-center overflow-hidden">
@@ -116,7 +122,7 @@ const Team = async () => {
         </section>
       </main>
       <Footer />
-    </HydrateClient>
+    </>
   );
 };
 

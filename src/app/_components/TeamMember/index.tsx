@@ -3,11 +3,11 @@ import Link from "next/link";
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { FaLinkedinIn } from "react-icons/fa6";
 import { formatDateOnly } from "@/app/_lib/utils";
-import type { User } from "@/generated/prisma/browser";
 import { cn } from "@/lib/utils";
+import type { PublicTeamMember } from "@/app/team/actions";
 
 type TeamMemberProps = {
-  user: User | null | undefined;
+  user: PublicTeamMember | null | undefined;
 };
 
 const TeamMember = ({ user }: TeamMemberProps) => {

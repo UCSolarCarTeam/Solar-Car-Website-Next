@@ -110,6 +110,7 @@ export async function createAlumni(
     const parsed = createAlumniSchema.parse(input);
     const ctx = await requireAdminContext();
     const data = await createAlumniService(ctx, parsed);
+    revalidatePath("/team");
     revalidatePath("/portal/alumni");
     revalidatePath("/portal/team");
     return actionSuccess(data);
@@ -220,6 +221,7 @@ export async function deleteDBUser(input: {
     const parsed = z.object({ id: z.number() }).parse(input);
     const ctx = await requireAdminContext();
     const data = await deleteDBUserService(ctx, parsed);
+    revalidatePath("/team");
     revalidatePath("/portal/users");
     revalidatePath("/portal/team");
     revalidatePath("/portal/alumni");
@@ -297,6 +299,7 @@ export async function moveUserToAlumni(
     const parsed = moveUserToAlumniSchema.parse(input);
     const ctx = await requireAdminContext();
     const data = await moveUserToAlumniService(ctx, parsed);
+    revalidatePath("/team");
     revalidatePath("/portal/alumni");
     revalidatePath("/portal/team");
     revalidatePath("/portal/users");
@@ -336,6 +339,7 @@ export async function updateDBUser(
     const parsed = updateDBUserSchema.parse(input);
     const ctx = await requireAuthedContext();
     const data = await updateDBUserService(ctx, parsed);
+    revalidatePath("/team");
     revalidatePath("/portal/profile");
     revalidatePath("/portal/team");
     return actionSuccess(data);
