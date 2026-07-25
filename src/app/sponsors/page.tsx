@@ -4,13 +4,15 @@ import Link from "next/link";
 import backsplash from "public/assets/sponsors/backsplash.jpeg";
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
+import { getPublicSponsors } from "@/app/sponsors/actions";
 import MagneticButton from "@/components/ui/MagneticButton";
 import SectionReveal from "@/components/ui/SectionReveal";
 import { SponsorLevel } from "@/generated/prisma/browser";
 import { imageSize } from "@/lib/image-sizes";
-import type { RouterOutputs } from "@/trpc/react";
-import { HydrateClient, trpc } from "@/trpc/server";
 import { LeadSponsorCard, SponsorCard } from "./SponsorCards";
+
+export const dynamic = "error";
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Sponsors | Calgary Solar Car",
@@ -18,7 +20,7 @@ export const metadata: Metadata = {
     "Meet the partners and sponsors who power the University of Calgary Solar Car Team.",
 };
 
-type Sponsor = RouterOutputs["fe"]["getSponsors"][0];
+type Sponsor = Awaited<ReturnType<typeof getPublicSponsors>>[number];
 
 const SponsorLevelSection = ({
   title,
@@ -67,10 +69,10 @@ const SponsorLevelSection = ({
 };
 
 const Sponsors = async () => {
-  const sponsors = await trpc.fe.getSponsors();
+  const sponsors = await getPublicSponsors();
 
   return (
-    <HydrateClient>
+    <>
       <Navbar />
       <main className="min-h-screen bg-sc-bg text-sc-white">
         <section className="relative flex min-h-125 h-[60vh] w-full items-center justify-center overflow-hidden">
@@ -173,7 +175,7 @@ const Sponsors = async () => {
         </section>
       </main>
       <Footer />
-    </HydrateClient>
+    </>
   );
 };
 
