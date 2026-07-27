@@ -2,12 +2,9 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import createBundleAnalyzer from "@next/bundle-analyzer";
+import type { NextConfig } from "next";
 
-/**
- * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful
- * for Docker builds.
- */
-await import("./src/env.js");
+import "./src/env.js";
 
 const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 const publicDir = path.join(projectRoot, "public");
@@ -16,8 +13,7 @@ const withBundleAnalyzer = createBundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 });
 
-/** @type {import("next").NextConfig} */
-const config = {
+const config: NextConfig = {
   images: {
     localPatterns: [
       {
@@ -46,7 +42,6 @@ const config = {
   },
   reactCompiler: true,
   reactStrictMode: true,
-  transpilePackages: ["geist"],
   typescript: {
     // Next.js 16's build-time TS worker is not compatible with TS 7 yet.
     // We run `yarn typecheck` separately before `next build`.
