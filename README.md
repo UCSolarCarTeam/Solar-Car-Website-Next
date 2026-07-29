@@ -145,6 +145,7 @@ To ensure that Clerk syncs with our Supabase database, follow these steps for th
    - Navigate to: **Configure** > **Webhooks**.
    - Edit the Webhook URL: Append `/api/webhooks` to your public URL.  
      **Example:**
+
      ```
      https://rngwz-XXX-XXX-XXX-XXX.a.free.pinggy.link/api/webhooks
      ```
@@ -167,7 +168,7 @@ To ensure that Clerk syncs with our Supabase database, follow these steps for th
 - **tRPC:** Provides end-to-end type safety between the client and the server.
 - **ESLint & Prettier:** Ensures high-quality, consistent code throughout the project.
 
-- **Framer Motion:** Used to animate images and carousels. Find the documentation here --> https://motion.dev/
+- **Framer Motion:** Used to animate images and carousels. Find the documentation here --> <https://motion.dev/>
 
 ## 🛠️ Code Quality
 
@@ -188,11 +189,13 @@ docker-compose up -d
 - Create a local `.env` from the example (then edit secrets if needed):
 
 PowerShell:
+
 ```powershell
 copy .env.example .env
 ```
 
 bash / WSL / git-bash:
+
 ```bash
 cp .env.example .env
 ```
