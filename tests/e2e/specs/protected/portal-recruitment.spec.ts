@@ -1,22 +1,21 @@
-import { expect, test } from "@playwright/test";
-
-import { createRecruitmentData } from "../helpers/recruitment-data";
-import { RecruitmentPage } from "../pages/recruitment.page";
+import { expect, test } from "../../fixtures/auth.fixture";
+import { createRecruitmentData } from "../../helpers/recruitment-data";
+import { RecruitmentPage } from "../../pages/recruitment.page";
 
 test.describe("portal recruitment CRUD", () => {
-  test("an administrator can open Recruitment", async ({ page }) => {
-    const recruitmentPage = new RecruitmentPage(page);
+  test("an administrator can open Recruitment", async ({ adminPage }) => {
+    const recruitmentPage = new RecruitmentPage(adminPage);
 
     await recruitmentPage.goto();
 
-    await expect(page).toHaveURL(/\/portal\/recruitment$/);
+    await expect(adminPage).toHaveURL(/\/portal\/recruitment$/);
     await expect(recruitmentPage.getCreateButton()).toBeVisible();
   });
 
   test("an administrator can create, update, and delete a recruitment form", async ({
-    page,
+    adminPage,
   }) => {
-    const recruitmentPage = new RecruitmentPage(page);
+    const recruitmentPage = new RecruitmentPage(adminPage);
     const created = createRecruitmentData(
       `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     );
@@ -34,7 +33,7 @@ test.describe("portal recruitment CRUD", () => {
     await recruitmentPage.save(createDialog);
 
     await expect(
-      page.getByText("Recruitment form created successfully!"),
+      adminPage.getByText("Recruitment form created successfully!"),
     ).toBeVisible();
 
     const createdRow = recruitmentPage.getRowByHeader(created.header);
@@ -58,7 +57,7 @@ test.describe("portal recruitment CRUD", () => {
     await recruitmentPage.save(editDialog);
 
     await expect(
-      page.getByText("Recruitment form updated successfully!"),
+      adminPage.getByText("Recruitment form updated successfully!"),
     ).toBeVisible();
 
     const updatedRow = recruitmentPage.getRowByHeader(updated.header);
@@ -71,7 +70,9 @@ test.describe("portal recruitment CRUD", () => {
 
     await recruitmentPage.deleteRow(updatedRow);
 
-    await expect(page.getByText("Form deleted successfully!")).toBeVisible();
+    await expect(
+      adminPage.getByText("Form deleted successfully!"),
+    ).toBeVisible();
     await expect(recruitmentPage.getRowByHeader(updated.header)).toHaveCount(0);
   });
 });
