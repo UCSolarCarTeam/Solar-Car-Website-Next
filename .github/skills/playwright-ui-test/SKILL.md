@@ -31,6 +31,16 @@ Use this skill when creating a Playwright UI test for a page or a feature on a p
 7. Prefer locators and expectations over hard-coded waits.
 8. Use fixtures or page objects only when they reduce repetition or improve clarity.
 
+## Authentication Rules for Protected Routes
+1. Authentication must not be applied globally.
+2. Public routes should run with the normal `page` fixture and no `storageState`.
+3. Protected routes must explicitly import an authentication fixture such as `auth.fixture.ts`.
+4. Authentication fixtures should load a pre-generated `storageState` file such as `admin.json` or `student.json`.
+5. A one-time setup script such as `auth.setup.ts` should generate storage state files, but it should not run before every test.
+6. Public and protected tests should be separated under `tests/e2e/specs/public/` and `tests/e2e/specs/protected/`.
+7. Tests should make authentication requirements obvious by choosing the correct fixture import.
+8. Authentication logic should live in fixtures and setup scripts, not inside spec files.
+
 ## Page Object Separation Rules
 - Page Objects must live in `tests/e2e/pages/` and never inside application code such as `src/app/...`.
 - Spec files must live in `tests/e2e/specs/` and should import Page Objects rather than embedding UI interaction logic directly.
@@ -66,6 +76,9 @@ Ask a follow-up question when any of these are unclear:
 - Shared data builders live under `tests/e2e/helpers/`.
 - The spec reads like a user story and uses Page Object methods for the high-level flow.
 - The spec follows the repo's Playwright conventions.
+- Public tests do not import auth fixtures, while protected tests explicitly do.
+- Protected tests load pre-generated storage state through imported fixtures only.
+- One-time auth setup scripts create storage state files without being wired into every test run.
 
 ## Example Patterns
 - `home-page.spec.ts` for a general page-level smoke test
