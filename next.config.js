@@ -44,6 +44,11 @@ const config = {
       },
     ],
   },
+  allowedDevOrigins: [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "127.0.0.1",
+  ],
   reactCompiler: true,
   reactStrictMode: true,
   transpilePackages: ["geist"],

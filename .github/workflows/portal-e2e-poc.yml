@@ -1,0 +1,85 @@
+name: Portal E2E POC
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  portal-e2e-poc:
+    name: Portal E2E proof of concept
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: portal_e2e
+          POSTGRES_PASSWORD: password
+          POSTGRES_USER: postgres
+        options: >-
+          --health-cmd "pg_isready -U postgres -d portal_e2e"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    env:
+      CI: "true"
+      CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
+      DATABASE_URL: postgresql://postgres:password@127.0.0.1:5432/portal_e2e
+      DIRECT_URL: postgresql://postgres:password@127.0.0.1:5432/portal_e2e
+      E2E_ADMIN_EMAIL: ${{ secrets.E2E_ADMIN_EMAIL }}
+      FLAGS: e2e-flags
+      FLAGS_SECRET: e2e-flags-secret
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: e2e-supabase-anon-key
+      NEXT_PUBLIC_SUPABASE_URL: https://e2e.invalid
+      PROFILE_PICTURE_BUCKET: e2e-profile-pictures
+      SPONSORSHIP_PICTURE_BUCKET: e2e-sponsor-pictures
+      WEBHOOK_SECRET: e2e-webhook-secret
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack
+        run: |
+          corepack enable
+          yarn --version
+
+      - name: Verify E2E secrets
+        run: |
+          test -n "$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY"
+          test -n "$CLERK_SECRET_KEY"
+          test -n "$E2E_ADMIN_EMAIL"
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Prepare database
+        run: |
+          yarn db:generate
+          yarn db:migrate:prod
+
+      - name: Install Playwright browser
+        run: yarn playwright install --with-deps chromium
+
+      - name: Run portal E2E POC
+        run: yarn test:e2e:ci
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: portal-e2e-poc-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
