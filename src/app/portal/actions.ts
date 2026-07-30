@@ -36,6 +36,7 @@ import {
   updateSponsor as updateSponsorService,
   updateUserRole as updateUserRoleService,
 } from "@/server/portal/service";
+import { tryCatch } from "../_lib/utils";
 
 export type ActionResult<T = void> =
   | { success: true; data: T }
@@ -106,17 +107,12 @@ export async function getCurrentDBUser() {
 export async function createAlumni(
   input: z.infer<typeof createAlumniSchema>,
 ): Promise<ActionResult<Awaited<ReturnType<typeof createAlumniService>>>> {
-  try {
-    const parsed = createAlumniSchema.parse(input);
-    const ctx = await requireAdminContext();
-    const data = await createAlumniService(ctx, parsed);
-    revalidatePath("/team");
-    revalidatePath("/portal/alumni");
-    revalidatePath("/portal/team");
-    return actionSuccess(data);
-  } catch (error) {
-    return actionError(error);
-  }
+  return await performOperation(
+    createAlumniService,
+    input,
+    createAlumniSchema,
+    ["/team", "/portal/alumni", "/portal/team"],
+  );
 }
 
 const createAlumniSchema = z.object({
@@ -136,15 +132,12 @@ export async function createOurWorkEntry(
 ): Promise<
   ActionResult<Awaited<ReturnType<typeof createOurWorkEntryService>>>
 > {
-  try {
-    const parsed = createOurWorkEntrySchema.parse(input);
-    const ctx = await requireAdminContext();
-    const data = await createOurWorkEntryService(ctx, parsed);
-    revalidatePath("/portal/our-work");
-    return actionSuccess(data);
-  } catch (error) {
-    return actionError(error);
-  }
+  return await performOperation(
+    createOurWorkEntryService,
+    input,
+    createOurWorkEntrySchema,
+    ["/portal/our-work"],
+  );
 }
 
 const createOurWorkEntrySchema = z.object({
@@ -160,15 +153,12 @@ export async function createRecruitmentForm(
 ): Promise<
   ActionResult<Awaited<ReturnType<typeof createRecruitmentFormService>>>
 > {
-  try {
-    const parsed = createRecruitmentFormSchema.parse(input);
-    const ctx = await requireAdminContext();
-    const data = await createRecruitmentFormService(ctx, parsed);
-    revalidatePath("/portal/recruitment");
-    return actionSuccess(data);
-  } catch (error) {
-    return actionError(error);
-  }
+  return await performOperation(
+    createRecruitmentFormService,
+    input,
+    createRecruitmentFormSchema,
+    ["/portal/recruitment"],
+  );
 }
 
 const createRecruitmentFormSchema = z.object({
@@ -181,16 +171,12 @@ const createRecruitmentFormSchema = z.object({
 export async function createSponsor(
   input: z.infer<typeof createSponsorSchema>,
 ): Promise<ActionResult<Awaited<ReturnType<typeof createSponsorService>>>> {
-  try {
-    const parsed = createSponsorSchema.parse(input);
-    const ctx = await requireAdminContext();
-    const data = await createSponsorService(ctx, parsed);
-    revalidatePath("/sponsors");
-    revalidatePath("/portal/sponsors");
-    return actionSuccess(data);
-  } catch (error) {
-    return actionError(error);
-  }
+  return await performOperation(
+    createSponsorService,
+    input,
+    createSponsorSchema,
+    ["/sponsors", "/portal/sponsors"],
+  );
 }
 
 const createSponsorSchema = z.object({
@@ -204,89 +190,64 @@ const createSponsorSchema = z.object({
 export async function deleteClerkUser(input: {
   clerkId: string;
 }): Promise<ActionResult<Awaited<ReturnType<typeof deleteClerkUserService>>>> {
-  try {
-    const parsed = z.object({ clerkId: z.string() }).parse(input);
-    const ctx = await requireAdminContext();
-    const data = await deleteClerkUserService(ctx, parsed);
-    revalidatePath("/portal/users");
-    return actionSuccess(data);
-  } catch (error) {
-    return actionError(error);
-  }
+  return await performOperation(
+    deleteClerkUserService,
+    input,
+    z.object({ clerkId: z.string() }),
+    ["/portal/users"],
+  );
 }
 
 export async function deleteDBUser(input: {
   id: number;
 }): Promise<ActionResult<Awaited<ReturnType<typeof deleteDBUserService>>>> {
-  try {
-    const parsed = z.object({ id: z.number() }).parse(input);
-    const ctx = await requireAdminContext();
-    const data = await deleteDBUserService(ctx, parsed);
-    revalidatePath("/team");
-    revalidatePath("/portal/users");
-    revalidatePath("/portal/team");
-    revalidatePath("/portal/alumni");
-    return actionSuccess(data);
-  } catch (error) {
-    return actionError(error);
-  }
+  return await performOperation(
+    deleteDBUserService,
+    input,
+    z.object({ id: z.number() }),
+    ["/team", "/portal/users", "/portal/team", "/portal/alumni"],
+  );
 }
 
 export async function deleteOurWorkEntry(input: {
   id: number;
 }): Promise<ActionResult<boolean>> {
-  try {
-    const parsed = z.object({ id: z.number() }).parse(input);
-    const ctx = await requireAdminContext();
-    const data = await deleteOurWorkEntryService(ctx, parsed);
-    revalidatePath("/portal/our-work");
-    return actionSuccess(data);
-  } catch (error) {
-    return actionError(error);
-  }
+  return await performOperation(
+    deleteOurWorkEntryService,
+    input,
+    z.object({ id: z.number() }),
+    ["/portal/our-work"],
+  );
 }
 
 export async function deleteRecruitmentForm(input: {
   id: number;
 }): Promise<ActionResult<boolean>> {
-  try {
-    const parsed = z.object({ id: z.number() }).parse(input);
-    const ctx = await requireAdminContext();
-    const data = await deleteRecruitmentFormService(ctx, parsed);
-    revalidatePath("/portal/recruitment");
-    return actionSuccess(data);
-  } catch (error) {
-    return actionError(error);
-  }
+  return await performOperation(
+    deleteRecruitmentFormService,
+    input,
+    z.object({ id: z.number() }),
+    ["/portal/recruitment"],
+  );
 }
 
 export async function deleteSponsor(input: {
   id: number;
 }): Promise<ActionResult<Awaited<ReturnType<typeof deleteSponsorService>>>> {
-  try {
-    const parsed = z.object({ id: z.number() }).parse(input);
-    const ctx = await requireAdminContext();
-    const data = await deleteSponsorService(ctx, parsed);
-    revalidatePath("/sponsors");
-    revalidatePath("/portal/sponsors");
-    return actionSuccess(data);
-  } catch (error) {
-    return actionError(error);
-  }
+  return await performOperation(
+    deleteSponsorService,
+    input,
+    z.object({ id: z.number() }),
+    ["/sponsors", "/portal/sponsors"],
+  );
 }
 
 export async function inviteUser(
   input: z.infer<typeof inviteUserSchema>,
 ): Promise<ActionResult<boolean>> {
-  try {
-    const parsed = inviteUserSchema.parse(input);
-    const ctx = await requireAdminContext();
-    const data = await inviteUserService(ctx, parsed);
-    revalidatePath("/portal/invitations");
-    return actionSuccess(data);
-  } catch (error) {
-    return actionError(error);
-  }
+  return await performOperation(inviteUserService, input, inviteUserSchema, [
+    "/portal/invitations",
+  ]);
 }
 
 const inviteUserSchema = z.object({
@@ -294,22 +255,33 @@ const inviteUserSchema = z.object({
   selectedRole: UserRoleSchema,
 });
 
-export async function moveUserToAlumni(
+const performOperation = async <T, I extends z.ZodTypeAny>(
+  operation: (
+    ctx: Awaited<ReturnType<typeof requireAdminContext>>,
+    input: z.infer<I>,
+  ) => Promise<T>,
+  input: z.infer<I>,
+  schema: I,
+  pathsToRevalidate: string[] = [],
+) => {
+  const ctx = await requireAdminContext();
+  const parsed = schema.parse(input);
+  const { data, error } = await tryCatch(operation(ctx, parsed));
+  if (error != null) return actionError(error);
+
+  for (const path of pathsToRevalidate) revalidatePath(path);
+  return actionSuccess(data);
+};
+
+export const moveUserToAlumni = async (
   input: z.infer<typeof moveUserToAlumniSchema>,
-): Promise<ActionResult<boolean>> {
-  try {
-    const parsed = moveUserToAlumniSchema.parse(input);
-    const ctx = await requireAdminContext();
-    const data = await moveUserToAlumniService(ctx, parsed);
-    revalidatePath("/team");
-    revalidatePath("/portal/alumni");
-    revalidatePath("/portal/team");
-    revalidatePath("/portal/users");
-    return actionSuccess(data);
-  } catch (error) {
-    return actionError(error);
-  }
-}
+) =>
+  await performOperation(
+    moveUserToAlumniService,
+    input,
+    moveUserToAlumniSchema,
+    ["/team", "/portal/alumni", "/portal/team", "/portal/users"],
+  );
 
 const moveUserToAlumniSchema = z.object({
   company: z.string().nullable().optional(),
@@ -378,15 +350,12 @@ const updateDBUserSchema = z.object({
 export async function updateOurWorkEntry(
   input: z.infer<typeof updateOurWorkEntrySchema>,
 ): Promise<ActionResult<boolean>> {
-  try {
-    const parsed = updateOurWorkEntrySchema.parse(input);
-    const ctx = await requireAdminContext();
-    const data = await updateOurWorkEntryService(ctx, parsed);
-    revalidatePath("/portal/our-work");
-    return actionSuccess(data);
-  } catch (error) {
-    return actionError(error);
-  }
+  return await performOperation(
+    updateOurWorkEntryService,
+    input,
+    updateOurWorkEntrySchema,
+    ["/portal/our-work"],
+  );
 }
 
 const updateOurWorkEntrySchema = z.object({
@@ -401,15 +370,12 @@ const updateOurWorkEntrySchema = z.object({
 export async function updateRecruitmentForm(
   input: z.infer<typeof updateRecruitmentFormSchema>,
 ): Promise<ActionResult<boolean>> {
-  try {
-    const parsed = updateRecruitmentFormSchema.parse(input);
-    const ctx = await requireAdminContext();
-    const data = await updateRecruitmentFormService(ctx, parsed);
-    revalidatePath("/portal/recruitment");
-    return actionSuccess(data);
-  } catch (error) {
-    return actionError(error);
-  }
+  return await performOperation(
+    updateRecruitmentFormService,
+    input,
+    updateRecruitmentFormSchema,
+    ["/portal/recruitment"],
+  );
 }
 
 const updateRecruitmentFormSchema = z.object({
@@ -423,16 +389,12 @@ const updateRecruitmentFormSchema = z.object({
 export async function updateSponsor(
   input: z.infer<typeof updateSponsorSchema>,
 ): Promise<ActionResult<boolean>> {
-  try {
-    const parsed = updateSponsorSchema.parse(input);
-    const ctx = await requireAdminContext();
-    const data = await updateSponsorService(ctx, parsed);
-    revalidatePath("/sponsors");
-    revalidatePath("/portal/sponsors");
-    return actionSuccess(data);
-  } catch (error) {
-    return actionError(error);
-  }
+  return await performOperation(
+    updateSponsorService,
+    input,
+    updateSponsorSchema,
+    ["/sponsors", "/portal/sponsors"],
+  );
 }
 
 const updateSponsorSchema = z.object({
@@ -447,15 +409,12 @@ const updateSponsorSchema = z.object({
 export async function updateUserRole(
   input: z.infer<typeof updateUserRoleSchema>,
 ): Promise<ActionResult<boolean>> {
-  try {
-    const parsed = updateUserRoleSchema.parse(input);
-    const ctx = await requireAdminContext();
-    const data = await updateUserRoleService(ctx, parsed);
-    revalidatePath("/portal/users");
-    return actionSuccess(data);
-  } catch (error) {
-    return actionError(error);
-  }
+  return await performOperation(
+    updateUserRoleService,
+    input,
+    updateUserRoleSchema,
+    ["/portal/users"],
+  );
 }
 
 const updateUserRoleSchema = z.object({
