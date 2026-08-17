@@ -93,7 +93,7 @@ export enum LeadRoles {
   InKindLead = "In-Kind Lead",
   EmbeddedTeamLead = "Embedded Team Lead",
   TelemetryTeamLead = "Telemetry Team Lead",
-  ViscommTeamLead = "Viscomm Team Lead",
+  InterfaceSystemsTeamLead = "Interface Systems Team Lead",
   ArraysLead = "Arrays Lead",
   EnergyStorageLead = "Energy Storage Lead",
   HighVoltageLead = "High Voltage Lead",
@@ -119,7 +119,7 @@ export enum SponsorshipTeam {
 export enum SoftwareTeam {
   EmbeddedTeam = "Embedded Team",
   TelemetryTeam = "Telemetry Team",
-  ViscommTeam = "Viscomm Team",
+  InterfaceSystemsTeam = "Interface Systems Team",
 }
 
 export enum ElectricalTeam {

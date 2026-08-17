@@ -86,10 +86,10 @@ enum AllTeamRoles {
   SoftwareTechnicalManager @map("Software Technical Manager")
   EmbeddedTeamLead         @map("Embedded Team Lead")
   TelemetryTeamLead        @map("Telemetry Team Lead")
-  ViscommTeamLead          @map("Viscomm Team Lead")
+  InterfaceSystemsTeamLead @map("Interface Systems Team Lead")
   EmbeddedTeam             @map("Embedded Team")
   TelemetryTeam            @map("Telemetry Team")
-  ViscommTeam              @map("Viscomm Team")
+  InterfaceSystemsTeam     @map("Interface Systems Team")
 
   // accounting team
   AccountingCoManager        @map("Accounting Co-Manager")
