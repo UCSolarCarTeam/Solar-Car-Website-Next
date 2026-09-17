@@ -1,82 +1,10 @@
-"use client";
-
 import Link from "next/link";
-
-import BasicButton from "@/app/_components/Buttons/BasicButton";
+import { getRecruitment } from "@/app/recruitment/[recruitmentCode]/actions";
 import MagneticButton from "@/components/ui/MagneticButton";
-import { trpc } from "@/trpc/react";
+import ClosedRecruitment from "./ClosedRecruitment";
 
-function ClosedRecruitment() {
-  return (
-    <div className="flex flex-wrap justify-center gap-12">
-      <div className="max-w-3xl flex flex-col items-center gap-4 text-center">
-        <div className="py-4 pb-12 text-xl font-normal">
-          The current application period for the Calgary Solar Car Team is now
-          closed. We'll be accepting new applications in the next semester. If
-          you're excited about renewable energy, engineering innovation, and
-          working with a passionate student team to build solar-powered
-          vehicles, we encourage you to keep an eye on our{" "}
-          <Link
-            className="text-sc-amber underline"
-            href="https://www.linkedin.com/company/university-ofcalgary-solar-car-team"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            LinkedIn!
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default function RecruitmentForms({
-  isRecruitmentClosed,
-}: {
-  isRecruitmentClosed: boolean;
-}) {
-  const {
-    data: recruitmentForms,
-    isError,
-    isPending,
-    refetch,
-  } = trpc.fe.getRecruitment.useQuery(undefined, {
-    enabled: !isRecruitmentClosed,
-    refetchOnMount: "always",
-    staleTime: 0,
-  });
-
-  if (isRecruitmentClosed) {
-    return <ClosedRecruitment />;
-  }
-
-  if (isPending) {
-    return (
-      <div
-        aria-live="polite"
-        className="sc-mono py-12 text-center text-sm text-sc-grey-light"
-        role="status"
-      >
-        Loading recruitment opportunities...
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <div className="flex flex-col items-center gap-4 py-12 text-center">
-        <p className="text-sc-grey-light">
-          We couldn't load the recruitment opportunities.
-        </p>
-        <BasicButton
-          className="bg-primary-red uppercase"
-          onClick={() => void refetch()}
-        >
-          Try again
-        </BasicButton>
-      </div>
-    );
-  }
+export default async function RecruitmentForms() {
+  const recruitmentForms = await getRecruitment();
 
   if (!recruitmentForms.length) {
     return <ClosedRecruitment />;
