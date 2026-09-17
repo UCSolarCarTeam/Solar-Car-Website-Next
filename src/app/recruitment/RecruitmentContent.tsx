@@ -1,6 +1,7 @@
 import Image from "next/image";
 import backsplash from "public/assets/home/backsplash.jpeg";
 import RecruitmentForms from "@/app/_components/Recruitment/RecruitmentForms";
+import ClosedRecruitment from "../_components/Recruitment/ClosedRecruitment";
 
 export default function RecruitmentContent({
   isRecruitmentClosed,
@@ -42,12 +43,12 @@ export default function RecruitmentContent({
                 {"// SYSTEM ALERT"}
               </span>
               <p className="mt-2 mb-0 text-sc-white">
-                Applications close on September 13th. Select a sub-team below to
+                Applications close on September 20th. Select a sub-team below to
                 begin your application.
               </p>
             </div>
           )}
-          <RecruitmentForms isRecruitmentClosed={isRecruitmentClosed} />
+          {isRecruitmentClosed ? <ClosedRecruitment /> : <RecruitmentForms />}
         </div>
       </section>
     </main>
