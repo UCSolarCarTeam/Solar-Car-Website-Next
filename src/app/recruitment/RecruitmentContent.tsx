@@ -1,6 +1,7 @@
 import Image from "next/image";
 import backsplash from "public/assets/home/backsplash.jpeg";
 import RecruitmentForms from "@/app/_components/Recruitment/RecruitmentForms";
+import { RECRUITMENT_CLOSE_DATE } from "@/constants";
 import ClosedRecruitment from "../_components/Recruitment/ClosedRecruitment";
 
 export default function RecruitmentContent({
@@ -43,8 +44,12 @@ export default function RecruitmentContent({
                 {"// SYSTEM ALERT"}
               </span>
               <p className="mt-2 mb-0 text-sc-white">
-                Applications close on September 20th. Select a sub-team below to
-                begin your application.
+                Applications close on{" "}
+                {RECRUITMENT_CLOSE_DATE.toLocaleDateString("en-US", {
+                  month: "long",
+                  day: "2-digit",
+                })}
+                . Select a sub-team below to begin your application.
               </p>
             </div>
           )}
