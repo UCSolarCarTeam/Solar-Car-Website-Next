@@ -29,7 +29,7 @@ const ConfirmModal = ({
         <h2 className="text-xl font-semibold">{title}</h2>
         <p className="mt-2">{message}</p>
         <div className="mt-4 flex flex-wrap justify-around gap-3">
-          <BasicButton className="bg-[#DC676C]" onClick={onConfirm}>
+          <BasicButton className="bg-destructive" onClick={onConfirm}>
             {confirmText}
           </BasicButton>
           <BasicButton onClick={onClose}>{cancelText}</BasicButton>

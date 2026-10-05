@@ -15,6 +15,7 @@ const RevokeUserCell = ({ invitationId }: RevokeUserInvitationProps) => {
   return (
     <div className={styles.deleteClerkUserCell}>
       <BasicButton
+        className="bg-destructive"
         disabled={isPending}
         onClick={(e) => {
           e.stopPropagation();
@@ -30,7 +31,6 @@ const RevokeUserCell = ({ invitationId }: RevokeUserInvitationProps) => {
             );
           });
         }}
-        style={{ backgroundColor: "#DC676C" }}
       >
         {isPending ? "Revoking..." : "Revoke Invitation"}
       </BasicButton>
