@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 
+import { tryCatch } from "@/app/_lib/utils";
 import type { ActionResult } from "@/app/portal/actions";
 
 export async function runPortalAction<T>(
@@ -11,7 +12,11 @@ export async function runPortalAction<T>(
   },
 ): Promise<ActionResult<T>> {
   const toastId = toast.loading(messages.loading);
-  const result = await action();
+  const { data } = await tryCatch(Promise.resolve().then(action));
+  const result: ActionResult<T> = data ?? {
+    error: messages.error ?? "Something went wrong.",
+    success: false,
+  };
 
   if (!result.success) {
     toast.error(result.error ?? messages.error ?? "Something went wrong.", {

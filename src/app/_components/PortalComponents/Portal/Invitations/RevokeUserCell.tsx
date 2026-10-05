@@ -10,25 +10,29 @@ export interface RevokeUserInvitationProps {
 }
 
 const RevokeUserCell = ({ invitationId }: RevokeUserInvitationProps) => {
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
 
   return (
-    <div
-      className={styles.deleteClerkUserCell}
-      onClick={(e) => {
-        e.stopPropagation();
-        startTransition(() => {
-          void runPortalAction(() => revokeUserInvitation({ invitationId }), {
-            error:
-              "There was an error revoking the user's invitation. Please contact Telemetry Team.",
-            loading: "Revoking...",
-            success: "Invitation revoked successfully!",
+    <div className={styles.deleteClerkUserCell}>
+      <BasicButton
+        disabled={isPending}
+        onClick={(e) => {
+          e.stopPropagation();
+          startTransition(async () => {
+            await runPortalAction(
+              () => revokeUserInvitation({ invitationId }),
+              {
+                error:
+                  "There was an error revoking the user's invitation. Please contact Telemetry Team.",
+                loading: "Revoking...",
+                success: "Invitation revoked successfully!",
+              },
+            );
           });
-        });
-      }}
-    >
-      <BasicButton style={{ backgroundColor: "#DC676C" }}>
-        Revoke Invitation
+        }}
+        style={{ backgroundColor: "#DC676C" }}
+      >
+        {isPending ? "Revoking..." : "Revoke Invitation"}
       </BasicButton>
     </div>
   );

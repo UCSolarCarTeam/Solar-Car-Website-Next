@@ -408,8 +408,10 @@ export async function moveUserToAlumni(
 export async function revokeUserInvitation(
   ctx: PortalContext,
   input: { invitationId: string },
-) {
-  return ctx.clerkClient.invitations.revokeInvitation(input.invitationId);
+): Promise<boolean> {
+  // Clerk returns a class instance that cannot cross the server-action boundary.
+  await ctx.clerkClient.invitations.revokeInvitation(input.invitationId);
+  return true;
 }
 
 export async function updateDBUser(
