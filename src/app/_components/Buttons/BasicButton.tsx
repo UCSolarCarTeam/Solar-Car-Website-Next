@@ -42,7 +42,7 @@ const BasicButton = (
       <button
         className={cn(
           "box-border h-11 cursor-pointer rounded-md border-0 px-6 text-center leading-[1.15] text-white shadow-[rgba(50,50,93,0.1)_0_0_0_1px_inset,rgba(50,50,93,0.1)_0_2px_5px_0,rgba(0,0,0,0.07)_0_1px_1px_0] transition-all duration-200 [transition:box-shadow_0.08s_ease-in]",
-          variant === ButtonVariant.Delete ? "bg-[#dc676c]" : "bg-[#474747]",
+          variant === ButtonVariant.Delete ? "bg-destructive" : "bg-[#474747]",
           className,
         )}
         onClick={handleClick}

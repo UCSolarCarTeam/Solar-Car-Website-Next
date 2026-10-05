@@ -320,9 +320,7 @@ const moveUserToAlumniSchema = z.object({
 
 export async function revokeUserInvitation(input: {
   invitationId: string;
-}): Promise<
-  ActionResult<Awaited<ReturnType<typeof revokeUserInvitationService>>>
-> {
+}): Promise<ActionResult<boolean>> {
   try {
     const parsed = z.object({ invitationId: z.string() }).parse(input);
     const ctx = await requireAdminContext();

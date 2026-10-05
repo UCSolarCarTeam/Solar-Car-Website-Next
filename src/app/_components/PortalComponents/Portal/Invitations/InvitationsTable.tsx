@@ -6,7 +6,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import InviteUser from "@/app/_components/PortalComponents/Portal/Invitations/InviteUser";
 import RevokeUserCell from "@/app/_components/PortalComponents/Portal/Invitations/RevokeUserCell";
 import SearchBar from "@/app/_components/PortalComponents/SearchBar";
@@ -39,7 +39,7 @@ const columns = [
   columnHelper.display({
     cell: (info) => {
       const status = info.row.original.status?.toLowerCase();
-      if (status === "accepted") {
+      if (status === "accepted" || status === "revoked") {
         return null;
       }
       return <RevokeUserCell invitationId={info.row.original.id} />;
@@ -51,15 +51,17 @@ const columns = [
 
 const InvitationsTable = (props: { invitations: PortalInvitation[] }) => {
   const [searchValue, setSearchValue] = useState("");
-  const dataToRender =
-    props.invitations.filter((invitation) => {
-      const lowerSearch = searchValue.toLowerCase();
+  // TanStack resets its state when data changes, so keep this reference stable.
+  const dataToRender = useMemo(() => {
+    const lowerSearch = searchValue.toLowerCase();
+    return props.invitations.filter((invitation) => {
       return (
         (invitation.email ?? "").toLowerCase().includes(lowerSearch) ||
         (invitation.status ?? "").toLowerCase().includes(lowerSearch) ||
-        searchValue.toLowerCase() === ""
+        lowerSearch === ""
       );
-    }) ?? [];
+    });
+  }, [props.invitations, searchValue]);
 
   const table = useReactTable({
     columns,

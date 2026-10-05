@@ -21,8 +21,8 @@ const DeleteClerkUser = ({ clerkId }: DeleteClerkUserProps) => {
       onClick={(e) => e.stopPropagation()}
     >
       <BasicButton
+        className="bg-destructive"
         onClick={() => setShowConfirm(true)}
-        style={{ backgroundColor: "#DC676C" }}
       >
         Delete
       </BasicButton>
