@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 
-import styles from "./index.module.scss";
+import PortalTableContainer from "./PortalTableContainer";
 
 export type EntityTableProps<T> = {
   data: T[];
@@ -62,11 +62,12 @@ export default function EntityTable<T>(props: EntityTableProps<T>) {
   });
   return (
     <div>
-      <div className={styles.tableHeader}>
-        {tableHeader}
-        <div className="flex items-center py-4 gap-2">
+      <div className="mb-4 flex min-w-0 flex-wrap items-center justify-between gap-4 text-[1.2rem] font-semibold text-[#1f2937] [@media(max-width:768px)]:items-start [@media(max-width:768px)]:text-base">
+        <div className="min-w-0">{tableHeader}</div>
+        <div className="ml-auto flex min-w-0 max-w-100 flex-[1_1_280px] flex-wrap items-center gap-2 [@media(max-width:768px)]:ml-0 [@media(max-width:768px)]:max-w-none [@media(max-width:768px)]:basis-full">
           <Input
-            className={styles.searchBar}
+            aria-label={filterPlaceholder ?? "Filter items"}
+            className="h-9 w-auto min-w-0 flex-[1_1_200px] bg-white font-normal text-[#1f2937]"
             onChange={(event) =>
               table.setGlobalFilter(String(event.target.value))
             }
@@ -74,9 +75,7 @@ export default function EntityTable<T>(props: EntityTableProps<T>) {
           />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button className="ml-auto" variant="secondary">
-                Columns
-              </Button>
+              <Button variant="secondary">Columns</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-40">
               {table
@@ -100,7 +99,7 @@ export default function EntityTable<T>(props: EntityTableProps<T>) {
           </DropdownMenu>
         </div>
       </div>
-      <div className={styles.tableContainer}>
+      <PortalTableContainer>
         <table>
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -130,7 +129,7 @@ export default function EntityTable<T>(props: EntityTableProps<T>) {
             ))}
           </tbody>
         </table>
-      </div>
+      </PortalTableContainer>
       {children}
     </div>
   );

@@ -1,12 +1,11 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import Image from "next/image";
-import defaultProfilePictureSquare from "public/assets/DefaultProfilePicture-Square.png";
 import Select from "react-select";
 import type { ClerkUser } from "@/app/_hooks/useUser";
 import { adminClerkRoles } from "@/app/_types";
 import type { AdminRoles, UserRole } from "@/server/portal/types";
 
 import DeleteClerkUserCell from "../../DeleteClerkUserCell";
+import PortalAvatar from "../PortalAvatar";
 import type { User } from "./UsersTable";
 
 const dropdownOptions = [
@@ -23,13 +22,9 @@ export const columns = (
 ) => [
   columnHelper.accessor("imageUrl", {
     cell: (info) => (
-      <Image
-        alt="profile image"
-        height={64}
-        loading="eager"
-        priority
-        src={info.getValue() ?? defaultProfilePictureSquare}
-        width={64}
+      <PortalAvatar
+        alt={`Profile picture of ${[info.row.original.firstName, info.row.original.lastName].filter(Boolean).join(" ") || info.row.original.username || "portal user"}`}
+        src={info.getValue()}
       />
     ),
     header: () => null,
