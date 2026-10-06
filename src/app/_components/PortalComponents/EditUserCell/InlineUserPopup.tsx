@@ -17,6 +17,7 @@ import type { User } from "@/generated/prisma/browser";
 
 import BasicButton from "../../Buttons/BasicButton";
 import DropZone from "../DropZone";
+import TeamRoleSelect from "./TeamRoleSelect";
 
 interface InlineUserPopupProps {
   user: NonNullable<User>;
@@ -83,13 +84,7 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
     }
   };
 
-  const onInputChange = (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>
-      | React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    const { id, value } = e.target;
+  const onFieldChange = (id: string, value: string) => {
     setTouched(true);
 
     setValidationErrors((prev) => {
@@ -112,6 +107,10 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
     }
     setNewRowData((prev) => ({ ...prev, [id]: value }));
   };
+
+  const onInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => onFieldChange(e.target.id, e.target.value);
 
   const saveUser = async (profilePictureUrl?: string) => {
     const result = await runPortalAction(
@@ -240,28 +239,14 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
                     </div>
                   </>
                 ) : row.id === "teamRole" ? (
-                  <select
-                    className={`${styles.teamRoleSelect} ${
-                      validationErrors[row.id as keyof UserFormData]
-                        ? styles.inputError
-                        : ""
-                    }`}
+                  <TeamRoleSelect
+                    error={validationErrors.teamRole}
+                    groups={teamRoleOptions}
                     id={row.id}
                     name={row.label}
-                    onChange={onInputChange}
-                    value={row.value ?? ""}
-                  >
-                    <option value="">Please select</option>
-                    {teamRoleOptions.map(({ label, options }) => (
-                      <optgroup key={label} label={label}>
-                        {Object.entries(options).map(([key, label]) => (
-                          <option key={key} value={key}>
-                            {label}
-                          </option>
-                        ))}
-                      </optgroup>
-                    ))}
-                  </select>
+                    onValueChange={(value) => onFieldChange(row.id, value)}
+                    value={newRowData.teamRole}
+                  />
                 ) : (
                   <input
                     className={`${styles.textFieldInput} ${
@@ -279,7 +264,7 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
                   />
                 )}
                 {validationErrors[row.id as keyof UserFormData] && (
-                  <span className={styles.errorMessage}>
+                  <span className={styles.errorMessage} id={`${row.id}-error`}>
                     {validationErrors[row.id as keyof UserFormData]}
                   </span>
                 )}

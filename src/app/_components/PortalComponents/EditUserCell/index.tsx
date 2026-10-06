@@ -23,7 +23,7 @@ const EditUserCell = ({ currentRow, currentUser }: EditUserCellProps) => {
 
   useEffect(() => {
     const closePopup = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key === "Escape" && !e.defaultPrevented) {
         setPopupOpen(false);
       }
     };
