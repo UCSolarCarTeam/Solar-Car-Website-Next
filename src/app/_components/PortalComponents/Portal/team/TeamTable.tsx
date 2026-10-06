@@ -54,7 +54,7 @@ const TeamTable = ({ users }: { users: TeamMember[] }) => {
       data={users}
       filterPlaceholder={"Filter team members..."}
       initialVisibility={columnVisibility}
-      tableHeader={"Filter team members..."}
+      tableHeader="Team Members"
     >
       {alumniModal && (
         <MoveToAlumniModal

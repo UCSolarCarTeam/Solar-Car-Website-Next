@@ -12,7 +12,7 @@ import RevokeUserCell from "@/app/_components/PortalComponents/Portal/Invitation
 import SearchBar from "@/app/_components/PortalComponents/SearchBar";
 import type { PortalInvitation } from "@/server/portal/types";
 
-import styles from "../index.module.scss";
+import PortalTableContainer from "../PortalTableContainer";
 
 const columnHelper = createColumnHelper<PortalInvitation>();
 
@@ -71,16 +71,16 @@ const InvitationsTable = (props: { invitations: PortalInvitation[] }) => {
 
   return (
     <div id="inivitations">
-      <div className={styles.inviteUserContainer}>
+      <div className="my-4 flex flex-col text-[1.2rem] font-[650]">
         <div>Invite a User</div>
         <InviteUser />
       </div>
-      <div className={styles.tableHeader}>
+      <div className="mb-4 flex min-w-0 flex-wrap items-center justify-between gap-4 text-[1.2rem] font-semibold text-[#1f2937] [@media(max-width:768px)]:items-start [@media(max-width:768px)]:text-base">
         <div>Portal Invitations</div>
         <SearchBar setSearchValue={setSearchValue} value={searchValue} />
       </div>
-      <div className={styles.tableContainer}>
-        <table className={styles.table}>
+      <PortalTableContainer>
+        <table>
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
@@ -110,9 +110,9 @@ const InvitationsTable = (props: { invitations: PortalInvitation[] }) => {
           </tbody>
         </table>
         {dataToRender.length === 0 && (
-          <div className={styles.noResults}>No Results Found</div>
+          <div className="py-1.25 text-center">No Results Found</div>
         )}
-      </div>
+      </PortalTableContainer>
     </div>
   );
 };

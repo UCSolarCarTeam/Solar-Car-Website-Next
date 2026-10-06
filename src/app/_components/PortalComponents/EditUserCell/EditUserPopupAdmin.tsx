@@ -23,6 +23,7 @@ import { updateDBUser } from "@/app/portal/actions";
 
 import BasicButton from "../../Buttons/BasicButton";
 import DropZone from "../DropZone";
+import TeamRoleSelect from "./TeamRoleSelect";
 
 type EditUserPopupAdminProps = {
   togglePopup: () => void;
@@ -89,13 +90,7 @@ const EditUserPopupAdmin = ({
     }
   };
 
-  const onInputChange = (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>
-      | React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    const { id, value } = e.target;
+  const onFieldChange = (id: string, value: string) => {
     setTouched(true);
 
     setValidationErrors((prev) => {
@@ -118,6 +113,10 @@ const EditUserPopupAdmin = ({
     }
     setNewRowData((prev) => ({ ...prev, [id]: value }));
   };
+
+  const onInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => onFieldChange(e.target.id, e.target.value);
 
   const saveUser = async (profilePictureUrl?: string) => {
     setSaving(true);
@@ -242,46 +241,22 @@ const EditUserPopupAdmin = ({
                       </div>
                     </>
                   ) : row.id === "teamRole" ? (
-                    <select
-                      className={`${styles.teamRoleSelect} ${
-                        validationErrors[row.id as keyof UserFormData]
-                          ? styles.inputError
-                          : ""
-                      }`}
+                    <TeamRoleSelect
+                      error={validationErrors.teamRole}
+                      groups={[
+                        ...(currentUser?.publicMetadata?.role === "admin"
+                          ? [
+                              { label: "Manager Roles", options: ManagerRoles },
+                              { label: "Lead Roles", options: LeadRoles },
+                            ]
+                          : []),
+                        ...teamRoleOptions,
+                      ]}
                       id={row.id}
                       name={row.label}
-                      onChange={onInputChange}
-                      value={row.value ?? ""}
-                    >
-                      <option value="">Please select</option>
-                      {currentUser?.publicMetadata?.role === "admin" && (
-                        <optgroup key={"Manager Roles"} label="Manager Roles">
-                          {Object.entries(ManagerRoles).map(([key, label]) => (
-                            <option key={key} value={key}>
-                              {label}
-                            </option>
-                          ))}
-                        </optgroup>
-                      )}
-                      {currentUser?.publicMetadata?.role === "admin" && (
-                        <optgroup key={"Lead Roles"} label="Lead Roles">
-                          {Object.entries(LeadRoles).map(([key, label]) => (
-                            <option key={key} value={key}>
-                              {label}
-                            </option>
-                          ))}
-                        </optgroup>
-                      )}
-                      {teamRoleOptions.map(({ label, options }) => (
-                        <optgroup key={label} label={label}>
-                          {Object.entries(options).map(([key, label]) => (
-                            <option key={key} value={key}>
-                              {label}
-                            </option>
-                          ))}
-                        </optgroup>
-                      ))}
-                    </select>
+                      onValueChange={(value) => onFieldChange(row.id, value)}
+                      value={newRowData.teamRole}
+                    />
                   ) : (
                     <input
                       className={`${styles.textFieldInput} ${
@@ -299,7 +274,10 @@ const EditUserPopupAdmin = ({
                     />
                   )}
                   {validationErrors[row.id as keyof UserFormData] && (
-                    <span className={styles.errorMessage}>
+                    <span
+                      className={styles.errorMessage}
+                      id={`${row.id}-error`}
+                    >
                       {validationErrors[row.id as keyof UserFormData]}
                     </span>
                   )}

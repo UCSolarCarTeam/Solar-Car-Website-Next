@@ -2,12 +2,11 @@
 
 import { type CellContext, createColumnHelper } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-import Image from "next/image";
-import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import EditTeamCell from "@/app/_components/PortalComponents/EditUserCell";
 import DeleteUser from "@/app/_components/PortalComponents/EditUserCell/DeleteUser";
 import { Button } from "@/components/ui/button";
 
+import PortalAvatar from "../PortalAvatar";
 import type { TeamMember } from "./TeamTable";
 
 const columnHelper = createColumnHelper<TeamMember>();
@@ -17,13 +16,9 @@ export const columns = (
   columnHelper.accessor("profilePictureUrl", {
     cell: (info) => {
       return (
-        <Image
-          alt="profile image"
-          fill
-          loading="eager"
-          priority
-          src={info.getValue() ?? defaultProfilePicture}
-          style={{ objectFit: "cover" }}
+        <PortalAvatar
+          alt={`Profile picture of ${[info.row.original.firstName, info.row.original.lastName].filter(Boolean).join(" ") || "team member"}`}
+          src={info.getValue()}
         />
       );
     },
