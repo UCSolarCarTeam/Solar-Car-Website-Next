@@ -106,6 +106,10 @@ const EditUserPopupAdmin = ({
       }));
       return;
     }
+    if (id === "teamRole" && !value) {
+      setNewRowData((prev) => ({ ...prev, teamRole: null }));
+      return;
+    }
     if (id === "description") {
       const truncated = value.slice(0, MAX_DESCRIPTION_LENGTH);
       setNewRowData((prev) => ({ ...prev, [id]: truncated }));
@@ -146,17 +150,7 @@ const EditUserPopupAdmin = ({
       togglePopup();
       return;
     }
-    const sanitizedData = Object.fromEntries(
-      Object.entries(newRowData).map(([key, value]) => [
-        key,
-        userRowMetadata[key as keyof typeof userRowMetadata] === "date"
-          ? formatDateOnly(value as Date | string | null | undefined)
-          : value == null
-            ? ""
-            : String(value),
-      ]),
-    ) as Partial<UserFormData>;
-    const errors = validateUserForm(sanitizedData);
+    const errors = validateUserForm(newRowData);
 
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);

@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { formatDateOnly } from "./utils";
+
 // Regex patterns for validation
 const phoneRegex = /^\+?[\d\s()-]{10,}$/;
 const emailDomainRegex = /@ucalgary\.ca$/i; // UCalgary email validation
@@ -132,13 +134,44 @@ export const userFormSchema = z.object({
 
 export type UserFormData = z.infer<typeof userFormSchema>;
 
+export type UserFormInput = Partial<{
+  [Field in keyof UserFormData]: UserFormData[Field] | null;
+}>;
+
 // type of the validation errors
 export type UserFormErrors = Partial<Record<keyof UserFormData, string>>;
 
+// Normalize stored values for validation without changing the save payload.
+function normalizeUserFormField(
+  fieldName: keyof UserFormData,
+  value: unknown,
+): unknown {
+  if (value == null) return "";
+
+  if (
+    (fieldName === "yearJoined" || fieldName === "yearRetired") &&
+    (value instanceof Date || typeof value === "string")
+  ) {
+    return formatDateOnly(value);
+  }
+
+  if (fieldName === "linkedIn" && typeof value === "string") {
+    return value.trim();
+  }
+
+  return value;
+}
+
 // validate form. return errors if any
-export function validateUserForm(data: Partial<UserFormData>): UserFormErrors {
+export function validateUserForm(data: UserFormInput): UserFormErrors {
   try {
-    userFormSchema.parse(data);
+    const normalizedData = Object.fromEntries(
+      Object.entries(data).map(([fieldName, value]) => [
+        fieldName,
+        normalizeUserFormField(fieldName as keyof UserFormData, value),
+      ]),
+    );
+    userFormSchema.parse(normalizedData);
     return {};
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -158,12 +191,12 @@ export function validateUserForm(data: Partial<UserFormData>): UserFormErrors {
 // validate a single field. return error if any
 export function validateUserFormField(
   fieldName: keyof UserFormData,
-  value: string | number | null | undefined,
+  value: string | number | Date | null | undefined,
 ): string | null {
   try {
     const fieldSchema = userFormSchema.shape[fieldName];
     if (fieldSchema) {
-      fieldSchema.parse(value);
+      fieldSchema.parse(normalizeUserFormField(fieldName, value));
     }
     return null;
   } catch (error) {
