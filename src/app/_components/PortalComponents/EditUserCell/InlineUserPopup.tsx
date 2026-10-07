@@ -100,6 +100,10 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
       }));
       return;
     }
+    if (id === "teamRole" && !value) {
+      setNewRowData((prev) => ({ ...prev, teamRole: null }));
+      return;
+    }
     if (id === "description") {
       const truncated = value.slice(0, MAX_DESCRIPTION_LENGTH);
       setNewRowData((prev) => ({ ...prev, [id]: truncated }));
@@ -135,14 +139,7 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
   const handleSave = async () => {
     if (!touched) return;
 
-    const processedData = {
-      ...newRowData,
-      yearJoined: formatDateOnly(newRowData.yearJoined),
-      yearRetired: formatDateOnly(newRowData.yearRetired),
-    };
-    processedData.ucid = String(processedData.ucid);
-    processedData.linkedIn = processedData.linkedIn?.trim() ?? null;
-    const errors = validateUserForm(processedData as Partial<UserFormData>);
+    const errors = validateUserForm(newRowData);
 
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
