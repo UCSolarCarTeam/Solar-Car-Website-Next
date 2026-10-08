@@ -3,7 +3,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { Recruitment } from "@/generated/prisma/browser";
 
-import EditRecruitmentFormCell from "../../EditRecruitmentFormCell";
 import EntityTable from "../EntityTable";
 import { columns } from "./columns";
 
@@ -17,21 +16,7 @@ const RecruitmentTable = ({ forms }: { forms: RecruitmentForm[] }) => {
     <EntityTable
       columns={columns as ColumnDef<RecruitmentForm, unknown>[]}
       data={forms}
-      tableHeader={
-        <div className="flex items-center gap-3">
-          <span>Recruitment</span>
-          <EditRecruitmentFormCell
-            currentRow={{
-              description: "",
-              expiresAt: "",
-              header: "",
-              id: 0,
-              link: "",
-            }}
-            newForm
-          />
-        </div>
-      }
+      tableHeader="Recruitment"
     />
   );
 };

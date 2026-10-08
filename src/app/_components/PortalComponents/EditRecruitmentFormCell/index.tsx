@@ -42,14 +42,13 @@ const EditRecruitmentFormCell = ({
   if (newForm) {
     return (
       <>
-        <button
+        <FaCirclePlus
           aria-label="Add recruitment form"
-          className="inline-flex cursor-pointer border-0 bg-transparent p-0"
+          className="cursor-pointer"
+          color="#000000"
           onClick={togglePopup}
-          type="button"
-        >
-          <FaCirclePlus aria-hidden="true" color="#000000" size={24} />
-        </button>
+          size={24}
+        />
         {popupOpen && (
           <EditFormPopup
             currentRow={currentRow}

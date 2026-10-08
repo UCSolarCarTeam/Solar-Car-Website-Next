@@ -2,7 +2,7 @@
 
 Welcome to the public-facing website for [calgarysolarcar.ca](https://calgarysolarcar.ca)! This project is built on the **T3 Stack** and is designed to deliver a seamless web experience for our team members.
 
-> **Note:** This project uses **Yarn 4.18.0**. Enable Corepack before installing dependencies.
+> **Note:** This project uses **Yarn v4**. To enable Yarn v4 with Corepack, simply run:
 >
 > ```bash
 > corepack enable yarn
@@ -52,7 +52,7 @@ Follow these steps to set up the app, database, and Clerk auth locally.
    cd Solar-Car-Website-Next
    ```
 
-2. **Enable Yarn 4.18.0:**
+2. **Enable Yarn v4:**
 
    ```bash
    corepack enable yarn
@@ -111,26 +111,6 @@ Follow these steps to set up the app, database, and Clerk auth locally.
 
 If `yarn dev` fails with a Clerk middleware error, check the auth middleware entrypoint in `src/proxy.ts` and make sure you are using the current Clerk packages.
 
-Configure these GitHub Actions secrets using a dedicated Clerk development application:
-
-- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
-- `CLERK_SECRET_KEY`
-
-For a local run, configure the development environment above with local database URLs and development Clerk keys in `.env`, then start the local PostgreSQL container. Supply the other required application environment values from `.env.example` using development or test resources.
-
-```bash
-corepack enable yarn
-yarn install --immutable
-yarn db:generate
-yarn db:migrate:prod
-yarn playwright install chromium
-yarn test:e2e
-```
-
-Playwright starts Next.js automatically and can reuse an existing local server. For the interactive test runner, use `yarn test:e2e:ui`; for CI-style reporting, use `yarn test:e2e:ci`.
-
-Open a local report with `yarn playwright show-report`. Failed tests retain traces, screenshots, and videos. GitHub Actions uploads `playwright-report/` and `test-results/` only on failure and retains them for seven days.
-
 ## 🌐 Using Webhooks Locally
 
 To ensure that Clerk syncs with our Supabase database, follow these steps for the first time while signing up on /portal locally.
@@ -165,7 +145,6 @@ To ensure that Clerk syncs with our Supabase database, follow these steps for th
    - Navigate to: **Configure** > **Webhooks**.
    - Edit the Webhook URL: Append `/api/webhooks` to your public URL.  
      **Example:**
-
      ```
      https://rngwz-XXX-XXX-XXX-XXX.a.free.pinggy.link/api/webhooks
      ```
@@ -188,7 +167,7 @@ To ensure that Clerk syncs with our Supabase database, follow these steps for th
 - **tRPC:** Provides end-to-end type safety between the client and the server.
 - **ESLint & Prettier:** Ensures high-quality, consistent code throughout the project.
 
-- **Framer Motion:** Used to animate images and carousels. Find the documentation here --> <https://motion.dev/>
+- **Framer Motion:** Used to animate images and carousels. Find the documentation here --> https://motion.dev/
 
 ## 🛠️ Code Quality
 
@@ -209,13 +188,11 @@ docker-compose up -d
 - Create a local `.env` from the example (then edit secrets if needed):
 
 PowerShell:
-
 ```powershell
 copy .env.example .env
 ```
 
 bash / WSL / git-bash:
-
 ```bash
 cp .env.example .env
 ```

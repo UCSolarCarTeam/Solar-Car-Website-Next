@@ -104,18 +104,10 @@ const EditFormPopup = ({
   };
 
   return (
-    <div
-      aria-labelledby="recruitment-form-title"
-      aria-modal="true"
-      className={styles.popup}
-      onClick={handleOverlayClick}
-      role="dialog"
-    >
+    <div className={styles.popup} onClick={handleOverlayClick}>
       <div className={`${styles.popupContent} ${styles.popupEnter}`}>
         <CloseButton className={styles.closeButton} onClick={togglePopup} />
-        <h2 id="recruitment-form-title">
-          {newForm ? "New Form" : "Edit Form"}
-        </h2>
+        <h2>{newForm ? "New Form" : "Edit Form"}</h2>
         <div className={styles.popupLayout}>
           {newRowData && (
             <div className={styles.popupForm}>
