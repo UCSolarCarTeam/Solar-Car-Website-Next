@@ -111,25 +111,25 @@ Follow these steps to set up the app, database, and Clerk auth locally.
 
 If `yarn dev` fails with a Clerk middleware error, check the auth middleware entrypoint in `src/proxy.ts` and make sure you are using the current Clerk packages.
 
-## Portal E2E POC
-
-The Playwright proof of concept validates the authenticated Recruitment portal against a fresh PostgreSQL database. It is manual-only in GitHub Actions until the POC has passed its decision gate.
-
-Configure these GitHub Actions secrets before dispatching the `Portal E2E POC` workflow:
+Configure these GitHub Actions secrets using a dedicated Clerk development application:
 
 - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
 - `CLERK_SECRET_KEY`
-- `E2E_ADMIN_EMAIL`
 
-The keys and account must belong to a dedicated Clerk development application. The account must have a portal administrator role in `publicMetadata.role`.
+For a local run, configure the development environment above with local database URLs and development Clerk keys in `.env`, then start the local PostgreSQL container. Supply the other required application environment values from `.env.example` using development or test resources.
 
-For a local run, start the local PostgreSQL container, provide the same Clerk and database variables in `.env`, then run the tests from the VS Code Testing panel.
+```bash
+corepack enable yarn
+yarn install --immutable
+yarn db:generate
+yarn db:migrate:prod
+yarn playwright install chromium
+yarn test:e2e
+```
 
-1. Install the Microsoft Playwright Test extension in VS Code.
-2. Open the Testing panel and discover the E2E suite.
-3. Run the tests from there; the extension uses the same Playwright configuration as the project and will pick up your local `.env` values.
+Playwright starts Next.js automatically and can reuse an existing local server. For the interactive test runner, use `yarn test:e2e:ui`; for CI-style reporting, use `yarn test:e2e:ci`.
 
-The test creates and deletes a Recruitment record. It must only be run against a disposable or dedicated test database.
+Open a local report with `yarn playwright show-report`. Failed tests retain traces, screenshots, and videos. GitHub Actions uploads `playwright-report/` and `test-results/` only on failure and retains them for seven days.
 
 ## 🌐 Using Webhooks Locally
 

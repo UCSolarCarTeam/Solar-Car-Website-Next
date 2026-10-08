@@ -1,14 +1,18 @@
-name: Portal E2E POC
+name: Portal E2E
 
 on:
+  pull_request:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  portal-e2e-poc:
-    name: Portal E2E proof of concept
+  portal-e2e:
+    name: Portal E2E
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -32,8 +36,8 @@ jobs:
       CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
       DATABASE_URL: postgresql://postgres:password@127.0.0.1:5432/portal_e2e
       DIRECT_URL: postgresql://postgres:password@127.0.0.1:5432/portal_e2e
-      E2E_ADMIN_EMAIL: ${{ secrets.E2E_ADMIN_EMAIL }}
-      FLAGS: e2e-flags
+      # The adapter requires this prefix at startup; homepage smoke does not evaluate flags.
+      FLAGS: vf_server_e2e
       FLAGS_SECRET: e2e-flags-secret
       NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
       NEXT_PUBLIC_SUPABASE_ANON_KEY: e2e-supabase-anon-key
@@ -58,7 +62,6 @@ jobs:
         run: |
           test -n "$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY"
           test -n "$CLERK_SECRET_KEY"
-          test -n "$E2E_ADMIN_EMAIL"
 
       - name: Install dependencies
         run: yarn install --immutable
@@ -71,14 +74,14 @@ jobs:
       - name: Install Playwright browser
         run: yarn playwright install --with-deps chromium
 
-      - name: Run portal E2E POC
+      - name: Run homepage E2E smoke test
         run: yarn test:e2e:ci
 
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: portal-e2e-poc-report
+          name: portal-e2e-report
           path: |
             playwright-report/
             test-results/
