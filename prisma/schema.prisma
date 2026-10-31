@@ -126,12 +126,12 @@ enum AllTeamRoles {
   // mechanical team
   MechanicalManager          @map("Mechanical Manager")
   MechanicalTechnicalManager @map("Mechanical Technical Manager")
-  SuspensionAndSteeringLead  @map("Suspension \\& Steering Lead")
+  VehicleDynamicsLead        @map("Vehicle Dynamics Lead")
   StructuresLead             @map("Structures Lead")
   ElectricalIntegrationLead  @map("Electrical Integration Lead")
   BodyAndChassisLead         @map("Body \\& Chassis Lead")
 
-  SuspensionAndSteeringTeam @map("Suspension \\& Steering Team")
+  VehicleDynamicsTeam       @map("Vehicle Dynamics Team")
   StructuresTeam            @map("Structures Team")
   ElectricalIntegrationTeam @map("Electrical Integration Team")
   BodyAndChassisTeam        @map("Body \\& Chassis Team")
