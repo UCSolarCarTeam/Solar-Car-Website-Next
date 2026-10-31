@@ -33,55 +33,68 @@ const dateOnlyInputSchema = z.string().refine(
   },
 );
 
+const dateInputSchema = z.union([
+  z.date().refine(
+    (value) => {
+      const year = value.getUTCFullYear();
+      return year >= 2000 && year <= currentYear + 1;
+    },
+    { message: `Year must be between 2000 and ${currentYear + 1}` },
+  ),
+  dateOnlyInputSchema,
+]);
+
 export const userFormSchema = z.object({
   company: z
     .string()
     .max(100, "Company must be less than 100 characters")
-    .optional()
+    .nullish()
     .or(z.literal("")),
 
   companyTitle: z
     .string()
     .max(100, "Company title must be less than 100 characters")
-    .optional()
+    .nullish()
     .or(z.literal("")),
 
   description: z
     .string()
     .max(250, "Description must be less than 250 characters")
-    .optional()
+    .nullish()
     .or(z.literal("")),
 
   fieldOfStudy: z
     .string()
     .max(100, "Field of study must be less than 100 characters")
-    .optional()
+    .nullish()
     .or(z.literal("")),
 
   firstName: z
     .string()
-    .min(1, "First name is required")
     .max(50, "First name must be less than 50 characters")
     .regex(
       /^[a-zA-Z\s'-]+$/,
       "First name can only contain letters, spaces, hyphens, and apostrophes",
-    ),
+    )
+    .nullish()
+    .or(z.literal("")),
 
   lastName: z
     .string()
-    .min(1, "Last name is required")
     .max(50, "Last name must be less than 50 characters")
     .regex(
       /^[a-zA-Z\s'-]+$/,
       "Last name can only contain letters, spaces, hyphens, and apostrophes",
-    ),
+    )
+    .nullish()
+    .or(z.literal("")),
   linkedIn: z
     .string()
     .regex(
       /^https:\/\/([a-z]{2,3}\.)?linkedin\.com\/in\/[A-Za-z0-9-_%]+\/?$/,
       "Invalid LinkedIn profile URL",
     )
-    .optional()
+    .nullish()
     .or(z.literal("")),
 
   phoneNumber: z
@@ -89,45 +102,38 @@ export const userFormSchema = z.object({
     .regex(phoneRegex, "Please enter a valid phone number")
     .min(10, "Phone number must be at least 10 digits")
     .max(20, "Phone number is too long")
-    .optional()
+    .nullish()
     .or(z.literal("")),
 
   // profile picture (not validated here as it's a file upload)
 
-  profilePictureUrl: z.string().optional().or(z.literal("")),
+  profilePictureUrl: z.string().nullish().or(z.literal("")),
 
   schoolEmail: z
     .string()
     .email("Please enter a valid email address")
     .regex(emailDomainRegex, "Must be a @ucalgary.ca email address")
-    .optional()
+    .nullish()
     .or(z.literal("")),
 
   schoolYear: z
     .string()
     .max(50, "School year must be less than 50 characters")
-    .optional()
+    .nullish()
     .or(z.literal("")),
 
-  teamRole: z.string().optional().or(z.literal("")),
+  teamRole: z.string().nullish().or(z.literal("")),
 
   ucid: z
     .string()
     .trim()
     .regex(/^\d{8}$/, "UCID must be exactly 8 digits")
-    .optional()
-    .or(z.literal(""))
-    .or(z.literal(null)),
-
-  yearJoined: z
-    .union([z.date(), dateOnlyInputSchema])
-    .optional()
+    .nullish()
     .or(z.literal("")),
 
-  yearRetired: z
-    .union([z.date(), dateOnlyInputSchema])
-    .optional()
-    .or(z.literal("")),
+  yearJoined: dateInputSchema.nullish().or(z.literal("")),
+
+  yearRetired: dateInputSchema.nullish().or(z.literal("")),
 });
 
 export type UserFormData = z.infer<typeof userFormSchema>;

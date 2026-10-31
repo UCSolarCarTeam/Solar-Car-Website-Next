@@ -1,6 +1,6 @@
 import type { UserResource } from "@clerk/nextjs/types";
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
 import { compress } from "@/app/_lib/compress";
@@ -13,6 +13,9 @@ import { formatDateOnly, parseDateOnly } from "@/app/_lib/utils";
 import { teamRoleOptions, userRowMetadata } from "@/app/_types";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { updateDBUser } from "@/app/portal/actions";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import type { User } from "@/generated/prisma/browser";
 
 import BasicButton from "../../Buttons/BasicButton";
@@ -30,7 +33,13 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
   const [newRowData, setNewRowData] = useState(user);
   const [saving, setSaving] = useState(false);
   const [validationErrors, setValidationErrors] = useState<UserFormErrors>({});
-  const MAX_DESCRIPTION_LENGTH = 250;
+
+  useEffect(() => {
+    const previewUrl = newRowData.profilePictureUrl;
+    return () => {
+      if (previewUrl?.startsWith("blob:")) URL.revokeObjectURL(previewUrl);
+    };
+  }, [newRowData.profilePictureUrl]);
 
   const rowDataToRender = Object.entries(newRowData)
     .filter(
@@ -84,13 +93,18 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
     }
   };
 
+  const handleRemovePhoto = () => {
+    setTouched(true);
+    setImageFile(null);
+    setNewRowData((prev) => ({ ...prev, profilePictureUrl: null }));
+  };
+
   const onFieldChange = (id: string, value: string) => {
     setTouched(true);
-
     setValidationErrors((prev) => {
-      const newErrors = { ...prev };
-      delete newErrors[id as keyof UserFormData];
-      return newErrors;
+      const errors = { ...prev };
+      delete errors[id as keyof UserFormData];
+      return errors;
     });
 
     if (id === "ucid") {
@@ -98,11 +112,6 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
         ...prev,
         ucid: value ? value.trim() : null,
       }));
-      return;
-    }
-    if (id === "description") {
-      const truncated = value.slice(0, MAX_DESCRIPTION_LENGTH);
-      setNewRowData((prev) => ({ ...prev, [id]: truncated }));
       return;
     }
     setNewRowData((prev) => ({ ...prev, [id]: value }));
@@ -118,6 +127,8 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
         updateDBUser({
           ...newRowData,
           profilePictureUrl: profilePictureUrl ?? newRowData.profilePictureUrl,
+          schoolEmail: newRowData.schoolEmail || null,
+          teamRole: newRowData.teamRole || null,
           yearJoined: parseDateOnly(newRowData.yearJoined),
           yearRetired: parseDateOnly(newRowData.yearRetired),
         }),
@@ -135,17 +146,9 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
   const handleSave = async () => {
     if (!touched) return;
 
-    const processedData = {
-      ...newRowData,
-      yearJoined: formatDateOnly(newRowData.yearJoined),
-      yearRetired: formatDateOnly(newRowData.yearRetired),
-    };
-    processedData.ucid = String(processedData.ucid);
-    processedData.linkedIn = processedData.linkedIn?.trim() ?? null;
-    const errors = validateUserForm(processedData as Partial<UserFormData>);
-
+    const errors = validateUserForm(newRowData);
+    setValidationErrors(errors);
     if (Object.keys(errors).length > 0) {
-      setValidationErrors(errors);
       toast.error("Please fix the validation errors before saving.");
       return;
     }
@@ -202,13 +205,24 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
           <div className={styles.popupProfileImage}>
             <DropZone
               currentImage={
-                imageFile
-                  ? URL.createObjectURL(imageFile)
-                  : (user.profilePictureUrl ?? defaultProfilePicture)
+                newRowData.profilePictureUrl ?? defaultProfilePicture
               }
               handleFileUpload={handleFileUpload}
             />
           </div>
+          {newRowData.profilePictureUrl && (
+            <div className={styles.buttonContainer}>
+              <Button
+                disabled={saving}
+                onClick={handleRemovePhoto}
+                size="sm"
+                type="button"
+                variant="destructive"
+              >
+                Remove photo
+              </Button>
+            </div>
+          )}
         </div>
         {newRowData && (
           <div className={styles.popupForm}>
@@ -218,26 +232,20 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
                   {row.label}
                 </label>
                 {row.id === "description" ? (
-                  <>
-                    <textarea
-                      className={`${styles.textFieldInput} ${
-                        validationErrors[row.id as keyof UserFormData]
-                          ? styles.inputError
-                          : ""
-                      }`}
-                      id={row.id}
-                      maxLength={MAX_DESCRIPTION_LENGTH}
-                      name={row.label}
-                      onChange={onInputChange}
-                      rows={5}
-                      value={row.value ?? ""}
-                    />
-                    <div className={styles.charCounter}>
-                      <span>{(row.value as string)?.length ?? 0}</span>
-                      <span>/</span>
-                      <span>{MAX_DESCRIPTION_LENGTH}</span>
-                    </div>
-                  </>
+                  <Textarea
+                    aria-describedby={
+                      validationErrors.description
+                        ? `${row.id}-error`
+                        : undefined
+                    }
+                    aria-invalid={!!validationErrors.description}
+                    className={`${styles.textFieldInput} ${validationErrors.description ? styles.inputError : ""}`}
+                    id={row.id}
+                    name={row.label}
+                    onChange={onInputChange}
+                    rows={5}
+                    value={row.value ?? ""}
+                  />
                 ) : row.id === "teamRole" ? (
                   <TeamRoleSelect
                     error={validationErrors.teamRole}
@@ -248,12 +256,16 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
                     value={newRowData.teamRole}
                   />
                 ) : (
-                  <input
-                    className={`${styles.textFieldInput} ${
+                  <Input
+                    aria-describedby={
                       validationErrors[row.id as keyof UserFormData]
-                        ? styles.inputError
-                        : ""
-                    }`}
+                        ? `${row.id}-error`
+                        : undefined
+                    }
+                    aria-invalid={
+                      !!validationErrors[row.id as keyof UserFormData]
+                    }
+                    className={`${styles.textFieldInput} ${validationErrors[row.id as keyof UserFormData] ? styles.inputError : ""}`}
                     id={row.id}
                     name={row.label}
                     onChange={onInputChange}
