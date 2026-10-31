@@ -24,7 +24,8 @@ model User {
   profilePictureUrl String?
   description       String?
   linkedIn          String?
-  teamRole          AllTeamRoles?
+  teamRole          String?
+  role              TeamRole?     @relation(fields: [teamRole], references: [name], onDelete: Restrict, onUpdate: Cascade)
   updatedAt         DateTime      @default("1970-01-01T00:00:00Z") @updatedAt
   modifiedBy        String        @default("SYSTEM")
   deletedAt         DateTime?
@@ -77,66 +78,13 @@ enum SponsorLevel {
   Friends @map("Friends")
 }
 
-enum AllTeamRoles {
-  TeamCaptain              @map("Team Captain")
-  EngineeringTeamManager   @map("Engineering Team Manager")
-  BusinessTeamManager      @map("Business Team Manager")
-  // software team
-  SoftwareTeamManager      @map("Software Team Manager")
-  SoftwareTechnicalManager @map("Software Technical Manager")
-  EmbeddedTeamLead         @map("Embedded Team Lead")
-  TelemetryTeamLead        @map("Telemetry Team Lead")
-  ViscommTeamLead          @map("Viscomm Team Lead")
-  EmbeddedTeam             @map("Embedded Team")
-  TelemetryTeam            @map("Telemetry Team")
-  ViscommTeam              @map("Viscomm Team")
-
-  // accounting team
-  AccountingCoManager        @map("Accounting Co-Manager")
-  AssistantAccountingManager @map("Assistant Accounting Manager")
-  AccountingAnalyst          @map("Accounting Analyst")
-  AccountingAssociate        @map("Accounting Associate")
-
-  // communications team
-  CommunicationsManager   @map("Communications Manager")
-  CommunicationsCoManager @map("Communications Co-Manager")
-  CommunicationsAssociate @map("Communications Associate")
-
-  // sponsorship
-  SponsorshipManager          @map("Sponsorship Manager")
-  SponsorshipAssistantManager @map("Sponsorship Assistant Manager")
-  MonetaryLead                @map("Monetary Lead")
-  InKindLead                  @map("In-Kind Lead")
-  SponsorshipAssociate        @map("Sponsorship Associate")
-
-  // electrical team
-  ElectricalManager          @map("Electrical Manager")
-  ElectricalCoManager        @map("Electrical Co-Manager")
-  ElectricalTechnicalManager @map("Electrical Technical Manager")
-  ArraysLead                 @map("Arrays Lead")
-  EnergyStorageLead          @map("Energy Storage Lead")
-  HighVoltageLead            @map("High Voltage Lead")
-  LowVoltageLead             @map("Low Voltage Lead")
-  ArraysTeam                 @map("Arrays Team")
-  EnergyStorageTeam          @map("Energy Storage Team")
-  HighVoltageTeam            @map("High Voltage Team")
-  LowVoltageTeam             @map("Low Voltage Team")
-  ElectricalTeamTeam         @map("Electrical Team")
-
-  // mechanical team
-  MechanicalManager          @map("Mechanical Manager")
-  MechanicalTechnicalManager @map("Mechanical Technical Manager")
-  SuspensionAndSteeringLead  @map("Suspension \\& Steering Lead")
-  StructuresLead             @map("Structures Lead")
-  ElectricalIntegrationLead  @map("Electrical Integration Lead")
-  BodyAndChassisLead         @map("Body \\& Chassis Lead")
-
-  SuspensionAndSteeringTeam @map("Suspension \\& Steering Team")
-  StructuresTeam            @map("Structures Team")
-  ElectricalIntegrationTeam @map("Electrical Integration Team")
-  BodyAndChassisTeam        @map("Body \\& Chassis Team")
-
-  // multi team
-  MultiTeamLead @map("Multi Team Lead")
-  MultiTeam     @map("Multi Team")
+model TeamRole {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  section    String
+  adminOnly  Boolean  @default(false)
+  sortOrder  Int      @default(0)
+  updatedAt  DateTime @default(now()) @updatedAt
+  modifiedBy String   @default("SYSTEM")
+  users      User[]
 }

@@ -9,14 +9,16 @@ import { useEffect, useRef, useState } from "react";
 import { FaChevronRight } from "react-icons/fa6";
 import useViewport from "@/app/_hooks/useViewport";
 import { portalNavItems } from "@/app/_types";
+import { isAdminRole, type PortalUser } from "@/app/portal/_lib/user";
 import { cn } from "@/lib/utils";
 
 interface PortalPageHeaderProps {
-  isAdmin: boolean;
-  username: string;
+  portalUser: PortalUser;
 }
 
-const PortalPageHeader = ({ isAdmin, username }: PortalPageHeaderProps) => {
+const PortalPageHeader = ({ portalUser }: PortalPageHeaderProps) => {
+  const isAdmin = isAdminRole(portalUser.role);
+  const canManageTeamRoles = portalUser.role === "admin";
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
@@ -39,25 +41,27 @@ const PortalPageHeader = ({ isAdmin, username }: PortalPageHeaderProps) => {
   }, [isMenuOpen]);
 
   const renderNavLinks = (mobile = false) =>
-    portalNavItems.map(({ href, label }) => (
-      <Link
-        aria-current={pathname === href ? "page" : undefined}
-        className={cn(
-          "shrink-0 cursor-pointer rounded-lg no-underline",
-          mobile
-            ? "p-3 font-medium focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-sc-red [@media(max-width:320px)]:p-2.5"
-            : "flex items-center justify-center px-3 py-2.5",
-          pathname === href
-            ? "bg-[#fff1f2] font-semibold text-[#9f1239]"
-            : "text-inherit hover:bg-slate-100",
-        )}
-        href={href}
-        key={href}
-        onClick={closeMenu}
-      >
-        {label}
-      </Link>
-    ));
+    portalNavItems
+      .filter(({ href }) => href !== "/portal/team-roles" || canManageTeamRoles)
+      .map(({ href, label }) => (
+        <Link
+          aria-current={pathname === href ? "page" : undefined}
+          className={cn(
+            "shrink-0 cursor-pointer rounded-lg no-underline",
+            mobile
+              ? "p-3 font-medium focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-sc-red [@media(max-width:320px)]:p-2.5"
+              : "flex items-center justify-center px-3 py-2.5",
+            pathname === href
+              ? "bg-[#fff1f2] font-semibold text-[#9f1239]"
+              : "text-inherit hover:bg-slate-100",
+          )}
+          href={href}
+          key={href}
+          onClick={closeMenu}
+        >
+          {label}
+        </Link>
+      ));
 
   return (
     <>
@@ -107,7 +111,7 @@ const PortalPageHeader = ({ isAdmin, username }: PortalPageHeaderProps) => {
         </div>
         <div className="flex min-w-0 shrink-0 items-center justify-center gap-2.5">
           <span className="max-w-35 truncate [@media(max-width:768px)]:hidden">
-            {username}
+            {portalUser.username}
           </span>
           <UserButton />
         </div>

@@ -81,7 +81,7 @@ export const columns = (
   }),
   columnHelper.accessor("teamRole", {
     cell: (info) => {
-      return (info.getValue() ?? "").replace(/([a-z])([A-Z])/g, "$1 $2");
+      return info.getValue() ?? "";
     },
     header: ({ column }) => {
       return (

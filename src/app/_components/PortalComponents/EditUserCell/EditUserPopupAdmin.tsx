@@ -12,12 +12,7 @@ import {
   validateUserForm,
 } from "@/app/_lib/userValidation";
 import { formatDateOnly, parseDateOnly } from "@/app/_lib/utils";
-import {
-  LeadRoles,
-  ManagerRoles,
-  teamRoleOptions,
-  userRowMetadata,
-} from "@/app/_types";
+import { userRowMetadata } from "@/app/_types";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { updateDBUser } from "@/app/portal/actions";
 
@@ -242,16 +237,10 @@ const EditUserPopupAdmin = ({
                     </>
                   ) : row.id === "teamRole" ? (
                     <TeamRoleSelect
+                      canAssignRestricted={
+                        currentUser?.publicMetadata?.role === "admin"
+                      }
                       error={validationErrors.teamRole}
-                      groups={[
-                        ...(currentUser?.publicMetadata?.role === "admin"
-                          ? [
-                              { label: "Manager Roles", options: ManagerRoles },
-                              { label: "Lead Roles", options: LeadRoles },
-                            ]
-                          : []),
-                        ...teamRoleOptions,
-                      ]}
                       id={row.id}
                       name={row.label}
                       onValueChange={(value) => onFieldChange(row.id, value)}

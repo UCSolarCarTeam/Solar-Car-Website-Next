@@ -1,5 +1,7 @@
 "use client";
 
+import { groupTeamRoleOptions } from "@/app/_lib/teamRoles";
+import { useTeamRoles } from "@/app/portal/_components/TeamRolesProvider";
 import {
   Select,
   SelectContent,
@@ -14,7 +16,7 @@ interface TeamRoleSelectProps {
   id: string;
   name: string;
   value: string | null;
-  groups: { label: string; options: Record<string, string> }[];
+  canAssignRestricted?: boolean;
   onValueChange: (value: string) => void;
   error?: string;
 }
@@ -26,17 +28,21 @@ export default function TeamRoleSelect({
   id,
   name,
   value,
-  groups,
+  canAssignRestricted = false,
   onValueChange,
   error,
 }: TeamRoleSelectProps) {
+  const roles = useTeamRoles();
+  const groups = groupTeamRoleOptions(roles, canAssignRestricted, value);
   return (
     <Select
       name={name}
       onValueChange={(nextValue) =>
-        onValueChange(nextValue === NO_ROLE_VALUE ? "" : nextValue)
+        onValueChange(
+          nextValue === NO_ROLE_VALUE ? "" : nextValue.slice("role:".length),
+        )
       }
-      value={value || NO_ROLE_VALUE}
+      value={value ? `role:${value}` : NO_ROLE_VALUE}
     >
       <SelectTrigger
         aria-describedby={error ? `${id}-error` : undefined}
@@ -59,7 +65,7 @@ export default function TeamRoleSelect({
           <SelectGroup key={label}>
             <SelectLabel>{label}</SelectLabel>
             {Object.entries(options).map(([key, label]) => (
-              <SelectItem key={key} value={key}>
+              <SelectItem key={key} value={`role:${key}`}>
                 {label}
               </SelectItem>
             ))}

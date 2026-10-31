@@ -19,25 +19,10 @@ export const metadata = {
 };
 
 const Team = async () => {
-  const [teamHierarchy, alumniTeam] = await Promise.all([
+  const [teamSections, alumniTeam] = await Promise.all([
     getPublicTeamMembers(),
     getPublicAlumni(),
   ]);
-
-  const {
-    accountingTeam,
-    businessTeamManager,
-    commmunicationsTeam,
-    electricalTeam,
-    engineeringTeamManager,
-    leadRoles,
-    managerRoles,
-    mechanicalTeam,
-    multiTeam,
-    softwareTeam,
-    sponsorshipTeam,
-    teamCaptain,
-  } = teamHierarchy ?? {};
 
   const RoleSection = ({
     title,
@@ -91,29 +76,9 @@ const Team = async () => {
         </section>
 
         <section className="relative z-10 mx-auto max-w-300 px-5 py-16 pb-32">
-          <RoleSection
-            members={[
-              engineeringTeamManager,
-              teamCaptain,
-              businessTeamManager,
-            ].filter(Boolean)}
-            title="Co-Chairs"
-          />
-          <RoleSection members={managerRoles || []} title="Subteam Managers" />
-          <RoleSection members={leadRoles || []} title="Team Leads" />
-          <RoleSection members={mechanicalTeam || []} title="Mechanical Team" />
-          <RoleSection members={electricalTeam || []} title="Electrical Team" />
-          <RoleSection members={softwareTeam || []} title="Software Team" />
-          <RoleSection members={accountingTeam || []} title="Accounting Team" />
-          <RoleSection
-            members={commmunicationsTeam || []}
-            title="Communications Team"
-          />
-          <RoleSection
-            members={sponsorshipTeam || []}
-            title="Sponsorship Team"
-          />
-          <RoleSection members={multiTeam || []} title="Multi Team" />
+          {teamSections.map(({ title, members }) => (
+            <RoleSection key={title} members={members} title={title} />
+          ))}
 
           <div className="mt-32">
             <div className="sc-label mb-4 text-sc-amber">LEGACY</div>

@@ -32,9 +32,15 @@ export enum PortalNavigationLinks {
   Invitations = "invitations",
   OurWork = "our-work",
   Alumni = "alumni",
+  TeamRoles = "team-roles",
 }
 
 export const portalNavItems = [
+  {
+    href: "/portal/team-roles",
+    label: "Team Roles",
+    segment: PortalNavigationLinks.TeamRoles,
+  },
   { href: "/portal/team", label: "Team", segment: PortalNavigationLinks.Team },
   {
     href: "/portal/users",
@@ -68,110 +74,6 @@ export const portalNavItems = [
   },
 ] as const;
 
-export enum ManagerRoles {
-  TeamCaptain = "Team Captain",
-  EngineeringTeamManager = "Engineering Team Manager",
-  BusinessTeamManager = "Business Team Manager",
-  ElectricalTechnicalManager = "Electrical Technical Manager",
-  ElectricalManager = "Electrical Manager",
-  ElectricalCoManager = "Electrical Co-Manager",
-  AccountingCoManager = "Accounting Co-Manager",
-  AssistantAccountingManager = "Assistant Accounting Manager",
-  CommunicationsManager = "Communications Manager",
-  CommunicationsCoManager = "Communications Co-Manager",
-  SponsorshipManager = "Sponsorship Manager",
-  SponsorshipAssistantManager = "Sponsorship Assistant Manager",
-  SoftwareTeamManager = "Software Team Manager",
-  SoftwareTechnicalManager = "Software Technical Manager",
-  MechanicalManager = "Mechanical Manager",
-  MechanicalTechnicalManager = "Mechanical Technical Manager",
-}
-
-export enum LeadRoles {
-  ElectricalIntegrationLead = "Electrical Integration Lead",
-  MonetaryLead = "Monetary Lead",
-  InKindLead = "In-Kind Lead",
-  EmbeddedTeamLead = "Embedded Team Lead",
-  TelemetryTeamLead = "Telemetry Team Lead",
-  ViscommTeamLead = "Viscomm Team Lead",
-  ArraysLead = "Arrays Lead",
-  EnergyStorageLead = "Energy Storage Lead",
-  HighVoltageLead = "High Voltage Lead",
-  LowVoltageLead = "Low Voltage Lead",
-  SuspensionAndSteeringLead = "Suspension & Steering Lead",
-  BodyAndChassisLead = "Body & Chassis Lead",
-  StructuresLead = "Structures Lead",
-  MultiTeamLead = "Multi Team Lead",
-}
-
-export enum AccountingTeam {
-  AccountingAnalyst = "Accounting Analyst",
-  AccountingAssociate = "Accounting Associate",
-}
-
-export enum CommunicationsTeam {
-  CommunicationsAssociate = "Communications Associate",
-}
-
-export enum SponsorshipTeam {
-  SponsorshipAssociate = "Sponsorship Associate",
-}
-
-export enum SoftwareTeam {
-  EmbeddedTeam = "Embedded Team",
-  TelemetryTeam = "Telemetry Team",
-  ViscommTeam = "Viscomm Team",
-}
-
-export enum ElectricalTeam {
-  ArraysTeam = "Arrays Team",
-  EnergyStorageTeam = "Energy Storage Team",
-  HighVoltageTeam = "High Voltage Team",
-  LowVoltageTeam = "Low Voltage Team",
-  ElectricalTeam = "Electrical Team",
-}
-
-export enum MechanicalTeam {
-  SuspensionAndSteeringTeam = "Suspension & Steering Team",
-  StructuresTeam = "Structures Team",
-  ElectricalIntegrationTeam = "Electrical Integration Team",
-  BodyAndChassisTeam = "Body & Chassis Team",
-}
-
-export enum MultiTeam {
-  MultiTeam = "Multi Team",
-}
-
-export const teamRoleOptions = [
-  {
-    label: "Accounting",
-    options: AccountingTeam,
-  },
-  {
-    label: "Communications",
-    options: CommunicationsTeam,
-  },
-  {
-    label: "Sponsorship",
-    options: SponsorshipTeam,
-  },
-  {
-    label: "Software",
-    options: SoftwareTeam,
-  },
-  {
-    label: "Electrical",
-    options: ElectricalTeam,
-  },
-  {
-    label: "Mechanical",
-    options: MechanicalTeam,
-  },
-  {
-    label: "Multi-Team",
-    options: MultiTeam,
-  },
-];
 type UserPrismaMetadata = Prisma.UserScalarFieldEnum;
 export const userRowMetadata = {
   company: "string",

@@ -1,20 +1,16 @@
-import { currentUser, type User } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { adminClerkRoles } from "@/app/_types";
-import type { AdminRoles } from "@/server/portal/types";
+import {
+  isAdminRole,
+  type PortalRole,
+  type PortalUser,
+} from "@/app/portal/_lib/user";
 
-export type PortalRole = AdminRoles | "member" | "unverified";
-
-export type PortalUser = {
-  isUnverified: boolean;
-  role: PortalRole | undefined;
-  user: User;
-  username: string;
-};
-
-export function isAdminRole(role: PortalRole | undefined): role is AdminRoles {
-  return !!role && adminClerkRoles.includes(role as AdminRoles);
-}
+export {
+  isAdminRole,
+  type PortalRole,
+  type PortalUser,
+} from "@/app/portal/_lib/user";
 
 export async function getPortalUser(): Promise<PortalUser | null> {
   const user = await currentUser();
@@ -28,7 +24,6 @@ export async function getPortalUser(): Promise<PortalUser | null> {
   return {
     isUnverified,
     role,
-    user,
     username: user.username ?? "",
   };
 }

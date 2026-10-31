@@ -2,7 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { AllTeamRoles, SponsorLevel } from "@/generated/prisma/browser";
+import { teamRoleSchema } from "@/app/_lib/teamRoles";
+import { SponsorLevel } from "@/generated/prisma/browser";
 import {
   requireAdminContext,
   requireAuthedContext,
@@ -36,6 +37,11 @@ import {
   updateSponsor as updateSponsorService,
   updateUserRole as updateUserRoleService,
 } from "@/server/portal/service";
+import {
+  deleteTeamRole as deleteTeamRoleService,
+  requireRoleAdministrator,
+  saveTeamRole as saveTeamRoleService,
+} from "@/server/portal/teamRoles";
 
 export type ActionResult<T = void> =
   | { success: true; data: T }
@@ -126,7 +132,12 @@ const createAlumniSchema = z.object({
   lastName: z.string(),
   linkedIn: z.string().nullable(),
   profilePictureUrl: z.string().nullable(),
-  teamRole: z.nativeEnum(AllTeamRoles).nullable(),
+  teamRole: z
+    .string()
+    .trim()
+    .max(100)
+    .nullable()
+    .transform((value) => value || null),
   yearJoined: z.preprocess((v) => parseAndNormalizeDate(v), z.date()),
   yearRetired: z.preprocess((v) => parseAndNormalizeDate(v), z.date()),
 });
@@ -361,7 +372,12 @@ const updateDBUserSchema = z.object({
   profilePictureUrl: z.string().nullable(),
   schoolEmail: z.string().nullable(),
   schoolYear: z.string().nullable(),
-  teamRole: z.nativeEnum(AllTeamRoles).nullable(),
+  teamRole: z
+    .string()
+    .trim()
+    .max(100)
+    .nullable()
+    .transform((value) => value || null),
   ucid: z.string().nullable(),
   yearJoined: z.preprocess((v) => {
     if (v === null || v === undefined) return null;
@@ -460,3 +476,49 @@ const updateUserRoleSchema = z.object({
   role: UserRoleSchema,
   userId: z.string(),
 });
+
+export async function getTeamRoles() {
+  const ctx = await requireAuthedContext();
+  await requireRoleAdministrator(ctx);
+  return ctx.db.teamRole.findMany({
+    include: { _count: { select: { users: true } } },
+    orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+  });
+}
+
+const saveTeamRoleSchema = teamRoleSchema.extend({
+  id: z.number().int().positive().optional(),
+});
+
+function revalidateTeamRoles() {
+  revalidatePath("/team");
+  revalidatePath("/portal", "layout");
+}
+
+export async function saveTeamRole(
+  input: z.infer<typeof saveTeamRoleSchema>,
+): Promise<ActionResult> {
+  try {
+    const parsed = saveTeamRoleSchema.parse(input);
+    const ctx = await requireAuthedContext();
+    await saveTeamRoleService(ctx, parsed);
+    revalidateTeamRoles();
+    return actionSuccess(undefined);
+  } catch (error) {
+    return actionError(error);
+  }
+}
+
+export async function deleteTeamRole(input: {
+  id: number;
+}): Promise<ActionResult> {
+  try {
+    const { id } = z.object({ id: z.number().int().positive() }).parse(input);
+    const ctx = await requireAuthedContext();
+    await deleteTeamRoleService(ctx, id);
+    revalidateTeamRoles();
+    return actionSuccess(undefined);
+  } catch (error) {
+    return actionError(error);
+  }
+}

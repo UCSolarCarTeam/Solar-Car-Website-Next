@@ -3,14 +3,15 @@ import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import CloseButton from "@/app/_components/Buttons/CloseButton";
 import styles from "@/app/_components/PortalComponents/EditUserCell/index.module.scss";
+import { useUser } from "@/app/_hooks/useUser";
 import { compress } from "@/app/_lib/compress";
 import { formatDateOnly, parseDateOnly } from "@/app/_lib/utils";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { createAlumni, updateDBUser } from "@/app/portal/actions";
 import type { User } from "@/generated/prisma/browser";
-
 import BasicButton from "../../Buttons/BasicButton";
 import DropZone from "../DropZone";
+import TeamRoleSelect from "./TeamRoleSelect";
 
 type EditAlumniPopupAdminProps = {
   currentRow?: User;
@@ -21,6 +22,7 @@ const EditAlumniPopupAdmin = ({
   currentRow,
   togglePopup,
 }: EditAlumniPopupAdminProps) => {
+  const { user } = useUser();
   const [newRowData, setNewRowData] = useState<Partial<User>>(
     currentRow ?? {
       company: "",
@@ -281,6 +283,26 @@ const EditAlumniPopupAdmin = ({
             </div>
           </div>
           <div className={styles.popupForm}>
+            <div className={styles.textFieldContainer}>
+              <label
+                className={styles.textFieldLabel}
+                htmlFor="alumni-team-role"
+              >
+                Team Role
+              </label>
+              <TeamRoleSelect
+                canAssignRestricted={user?.publicMetadata?.role === "admin"}
+                id="alumni-team-role"
+                name="teamRole"
+                onValueChange={(value) =>
+                  setNewRowData((previous) => ({
+                    ...previous,
+                    teamRole: value || null,
+                  }))
+                }
+                value={newRowData.teamRole ?? null}
+              />
+            </div>
             {rowDataToRender.map((row) => (
               <div className={styles.textFieldContainer} key={row.id}>
                 <label className={styles.textFieldLabel} htmlFor={row.id}>

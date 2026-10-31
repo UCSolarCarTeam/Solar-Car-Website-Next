@@ -50,7 +50,7 @@ const TeamMember = ({ user }: TeamMemberProps) => {
           {[user.firstName, user.lastName].filter(Boolean).join(" ")}
         </div>
         <div className="mt-2.5 text-[1.075rem] font-medium max-lg:text-lg max-sm:text-base">
-          {(user.teamRole ?? "").replace(/([a-z])([A-Z])/g, "$1 $2")}
+          {user.teamRole ?? ""}
           {user.yearJoined && user.yearRetired && (
             <>
               <br />

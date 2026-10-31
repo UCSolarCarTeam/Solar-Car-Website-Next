@@ -10,7 +10,7 @@ import {
   validateUserForm,
 } from "@/app/_lib/userValidation";
 import { formatDateOnly, parseDateOnly } from "@/app/_lib/utils";
-import { teamRoleOptions, userRowMetadata } from "@/app/_types";
+import { userRowMetadata } from "@/app/_types";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { updateDBUser } from "@/app/portal/actions";
 import type { User } from "@/generated/prisma/browser";
@@ -240,8 +240,10 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
                   </>
                 ) : row.id === "teamRole" ? (
                   <TeamRoleSelect
+                    canAssignRestricted={
+                      clerkUser.publicMetadata?.role === "admin"
+                    }
                     error={validationErrors.teamRole}
-                    groups={teamRoleOptions}
                     id={row.id}
                     name={row.label}
                     onValueChange={(value) => onFieldChange(row.id, value)}

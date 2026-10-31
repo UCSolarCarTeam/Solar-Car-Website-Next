@@ -1,8 +1,9 @@
-import { LeadRoles, ManagerRoles } from "@/app/_types";
-import type { AllTeamRoles, SponsorLevel } from "@/generated/prisma/browser";
+import { adminClerkRoles } from "@/app/_types";
+import type { SponsorLevel } from "@/generated/prisma/browser";
 
 import type { PortalContext } from "./context";
 import { PortalError } from "./errors";
+import { assertAssignableRole } from "./teamRoles";
 import type {
   ClerkPortalUser,
   OurWorkListItem,
@@ -62,11 +63,16 @@ export async function createAlumni(
     lastName: string;
     linkedIn: string | null;
     profilePictureUrl: string | null;
-    teamRole: AllTeamRoles | null;
+    teamRole: string | null;
     yearJoined: unknown;
     yearRetired: unknown;
   },
 ) {
+  await assertAssignableRole(
+    ctx.db,
+    input.teamRole,
+    ctx.user?.publicMetadata?.role === "admin",
+  );
   return ctx.db.user.create({
     data: {
       company: input.company ?? null,
@@ -429,7 +435,7 @@ export async function updateDBUser(
     profilePictureUrl: string | null;
     schoolEmail: string | null;
     schoolYear: string | null;
-    teamRole: AllTeamRoles | null;
+    teamRole: string | null;
     ucid: string | null;
     yearJoined: unknown;
     yearRetired: unknown;
@@ -440,14 +446,6 @@ export async function updateDBUser(
   }
 
   const user = await ctx.clerkClient.users.getUser(ctx.user.id);
-  const isUpperTeamRole =
-    Object.values(ManagerRoles).includes(input.teamRole as ManagerRoles) ||
-    Object.values(LeadRoles).includes(input.teamRole as LeadRoles);
-
-  if (isUpperTeamRole && user.publicMetadata?.role !== "admin") {
-    throw new PortalError("You must be an admin to assign this role.");
-  }
-
   // Normalize any incoming year/date value to a UTC midnight Date (or null)
   const convertToDate = (val: unknown): Date | null =>
     parseAndNormalizeDate(val);
@@ -465,6 +463,20 @@ export async function updateDBUser(
 
     if (dbUser.deletedAt) {
       throw new PortalError("Deleted users cannot be updated.");
+    }
+
+    const isPortalAdmin = adminClerkRoles.some(
+      (role) => role === user.publicMetadata?.role,
+    );
+    if (dbUser.clerkUserId !== user.id && !isPortalAdmin) {
+      throw new PortalError("You can only update your own profile.");
+    }
+    if (input.teamRole !== dbUser.teamRole) {
+      await assertAssignableRole(
+        tx,
+        input.teamRole,
+        user.publicMetadata?.role === "admin",
+      );
     }
 
     await tx.user.update({
