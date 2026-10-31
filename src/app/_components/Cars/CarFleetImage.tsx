@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
+import Image from "@/components/Image";
 import { getHighlightSpecs } from "@/lib/cars/highlight-specs";
 import type { CarEntry } from "@/lib/cars/types";
 import { imageSize } from "@/lib/image-sizes";

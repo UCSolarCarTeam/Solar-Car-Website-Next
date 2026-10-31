@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
+import Image from "@/components/Image";
 import { imageSize } from "@/lib/image-sizes";
 import { getOurWork } from "./actions";
 

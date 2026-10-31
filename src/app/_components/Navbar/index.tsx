@@ -1,12 +1,12 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "public/assets/logo-nav.png";
 import { useEffect, useState } from "react";
 import useViewport from "@/app/_hooks/useViewport";
+import Image from "@/components/Image";
 import { cn } from "@/lib/utils";
 import CloseButton from "../Buttons/CloseButton";
 
@@ -85,12 +85,11 @@ const Navbar = () => {
         <Link className="min-w-0 shrink" href="/">
           <Image
             alt="University of Calgary Solar Car Team"
-            className="h-9 w-auto max-w-[min(100%,220px)] drop-shadow-[2px_2px_4px_rgba(0,0,0,0.5)] sm:h-10"
-            height={40}
+            className="h-auto w-52 max-w-full drop-shadow-[2px_2px_4px_rgba(0,0,0,0.5)] sm:w-55"
             loading="eager"
             priority
+            sizes="(min-width: 640px) 220px, 208px"
             src={Logo}
-            width={180}
           />
         </Link>
 

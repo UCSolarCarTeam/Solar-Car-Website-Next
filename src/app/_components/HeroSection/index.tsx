@@ -3,11 +3,11 @@
 import { getGPUTier } from "detect-gpu";
 import { motion, useScroll, useTransform } from "framer-motion";
 import dynamic from "next/dynamic";
-import Image from "next/image";
 import backsplash from "public/assets/home/backsplash.jpeg";
 import { Suspense, useEffect, useRef, useState } from "react";
 import useReducedMotion from "@/app/_hooks/useReducedMotion";
 import useViewport from "@/app/_hooks/useViewport";
+import Image from "@/components/Image";
 import { fadeUp } from "@/lib/animation/variants";
 import { imageSize } from "@/lib/image-sizes";
 import { cn } from "@/lib/utils";
