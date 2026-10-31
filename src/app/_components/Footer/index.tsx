@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import Logo from "public/assets/logo-nav.png";
 import type { IconType } from "react-icons";
@@ -10,6 +9,7 @@ import {
   FaYoutube,
 } from "react-icons/fa6";
 import * as TEAM from "team.json";
+import Image from "@/components/Image";
 import FooterCTA from "./FooterCTA";
 
 type SocialData = {

@@ -1,6 +1,6 @@
-import Image from "next/image";
 import backsplash from "public/assets/home/backsplash.jpeg";
 import RecruitmentForms from "@/app/_components/Recruitment/RecruitmentForms";
+import Image from "@/components/Image";
 import { RECRUITMENT_CLOSE_DATE } from "@/constants";
 import ClosedRecruitment from "../_components/Recruitment/ClosedRecruitment";
 

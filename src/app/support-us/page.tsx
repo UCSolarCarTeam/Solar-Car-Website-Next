@@ -1,8 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 import backsplash from "public/assets/support-us/backsplash.jpeg";
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
+import Image from "@/components/Image";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { imageSize } from "@/lib/image-sizes";
 

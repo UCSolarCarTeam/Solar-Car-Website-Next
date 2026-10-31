@@ -1,9 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
 import { FaLinkedinIn } from "react-icons/fa6";
 import { formatDateOnly } from "@/app/_lib/utils";
 import type { PublicTeamMember } from "@/app/team/actions";
+import Image from "@/components/Image";
+import { imageSize } from "@/lib/image-sizes";
 import { cn } from "@/lib/utils";
 
 type TeamMemberProps = {
@@ -41,7 +42,8 @@ const TeamMember = ({ user }: TeamMemberProps) => {
           className="object-cover"
           fill
           loading="eager"
-          src={user.profilePictureUrl ?? defaultProfilePicture}
+          sizes={imageSize("teamHeadshot")}
+          src={user.profilePictureUrl?.trim() || defaultProfilePicture}
         />
       </div>
 
