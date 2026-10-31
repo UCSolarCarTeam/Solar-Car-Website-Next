@@ -98,7 +98,7 @@ export enum LeadRoles {
   EnergyStorageLead = "Energy Storage Lead",
   HighVoltageLead = "High Voltage Lead",
   LowVoltageLead = "Low Voltage Lead",
-  SuspensionAndSteeringLead = "Suspension & Steering Lead",
+  VehicleDynamicsLead = "Vehicle Dynamics Lead",
   BodyAndChassisLead = "Body & Chassis Lead",
   StructuresLead = "Structures Lead",
 }
@@ -131,7 +131,7 @@ export enum ElectricalTeam {
 }
 
 export enum MechanicalTeam {
-  SuspensionAndSteeringTeam = "Suspension & Steering Team",
+  VehicleDynamicsTeam = "Vehicle Dynamics Team",
   StructuresTeam = "Structures Team",
   ElectricalIntegrationTeam = "Electrical Integration Team",
   BodyAndChassisTeam = "Body & Chassis Team",
