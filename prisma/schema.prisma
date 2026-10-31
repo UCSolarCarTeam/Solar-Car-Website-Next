@@ -137,5 +137,6 @@ enum AllTeamRoles {
   BodyAndChassisTeam        @map("Body \\& Chassis Team")
 
   // multi team
-  MultiTeam @map("Multi Team")
+  MultiTeamLead @map("Multi Team Lead")
+  MultiTeam     @map("Multi Team")
 }
