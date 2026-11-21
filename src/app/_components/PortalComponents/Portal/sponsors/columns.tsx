@@ -2,10 +2,10 @@
 
 import { createColumnHelper } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import EditSponsorCell from "@/app/_components/PortalComponents/EditSponsorCell";
 import DeleteSponsor from "@/app/_components/PortalComponents/EditSponsorCell/DeleteSponsor";
+import Image from "@/components/Image";
 import { Button } from "@/components/ui/button";
 import type { Sponsor } from "@/generated/prisma/browser";
 

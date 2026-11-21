@@ -1,7 +1,6 @@
 "use client";
 
 import { UserButton } from "@clerk/nextjs";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import logo from "public/assets/logo-center-black.png";
@@ -9,6 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { FaChevronRight } from "react-icons/fa6";
 import useViewport from "@/app/_hooks/useViewport";
 import { portalNavItems } from "@/app/_types";
+import Image from "@/components/Image";
 import { cn } from "@/lib/utils";
 
 interface PortalPageHeaderProps {

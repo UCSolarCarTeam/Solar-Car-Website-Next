@@ -1,4 +1,3 @@
-import Image from "next/image";
 import backsplash from "public/assets/home/backsplash.jpeg";
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
@@ -8,6 +7,7 @@ import {
   getPublicTeamMembers,
   type PublicTeamMember,
 } from "@/app/team/actions";
+import Image from "@/components/Image";
 
 export const dynamic = "error";
 export const revalidate = 3600;

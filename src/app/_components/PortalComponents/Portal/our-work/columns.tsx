@@ -1,6 +1,6 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-import Image from "next/image";
+import Image from "@/components/Image";
 import { Button } from "@/components/ui/button";
 
 import EditOurWorkEntryCell from "../../EditOurWorkEntryCell";

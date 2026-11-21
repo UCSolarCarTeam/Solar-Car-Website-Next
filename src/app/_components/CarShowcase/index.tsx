@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import Image from "@/components/Image";
 import { cars } from "@/lib/cars";
 import { imageSize } from "@/lib/image-sizes";
 import CarCardHover from "./CarCardHover";

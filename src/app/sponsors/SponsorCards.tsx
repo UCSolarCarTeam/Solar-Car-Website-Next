@@ -1,6 +1,6 @@
 import * as motion from "framer-motion/client";
-import Image from "next/image";
 import Link from "next/link";
+import Image from "@/components/Image";
 import { imageSize } from "@/lib/image-sizes";
 import { cn } from "@/lib/utils";
 
