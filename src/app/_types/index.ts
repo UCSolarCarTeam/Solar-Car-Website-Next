@@ -101,6 +101,7 @@ export enum LeadRoles {
   SuspensionAndSteeringLead = "Suspension & Steering Lead",
   BodyAndChassisLead = "Body & Chassis Lead",
   StructuresLead = "Structures Lead",
+  MultiTeamLead = "Multi Team Lead",
 }
 
 export enum AccountingTeam {
