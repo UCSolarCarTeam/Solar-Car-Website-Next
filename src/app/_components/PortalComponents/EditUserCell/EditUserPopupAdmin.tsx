@@ -53,7 +53,15 @@ const EditUserPopupAdmin = ({
 
   const rowDataToRender = Object.entries(newRowData)
     .filter(
-      ([key]) => !["id", "clerkUserId", "profilePictureUrl"].includes(key),
+      ([key]) =>
+        ![
+          "id",
+          "clerkUserId",
+          "profilePictureUrl",
+          "deletedAt",
+          "modifiedBy",
+          "updatedAt",
+        ].includes(key),
     )
     .reduce(
       (acc, [key, value]) => {
