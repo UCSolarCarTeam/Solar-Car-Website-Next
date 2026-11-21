@@ -1,5 +1,5 @@
 import defaultProfilePicture from "public/assets/DefaultProfilePicture.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 import CloseButton from "@/app/_components/Buttons/CloseButton";
@@ -20,6 +20,9 @@ import {
 } from "@/app/_types";
 import { runPortalAction } from "@/app/portal/_lib/runAction";
 import { updateDBUser } from "@/app/portal/actions";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 import BasicButton from "../../Buttons/BasicButton";
 import DropZone from "../DropZone";
@@ -38,9 +41,15 @@ const EditUserPopupAdmin = ({
   const [touched, setTouched] = useState(false);
   const [newRowData, setNewRowData] = useState(currentRow);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [validationErrors, setValidationErrors] = useState<UserFormErrors>({});
   const [saving, setSaving] = useState(false);
-  const MAX_DESCRIPTION_LENGTH = 250;
+  const [validationErrors, setValidationErrors] = useState<UserFormErrors>({});
+
+  useEffect(() => {
+    const previewUrl = newRowData.profilePictureUrl;
+    return () => {
+      if (previewUrl?.startsWith("blob:")) URL.revokeObjectURL(previewUrl);
+    };
+  }, [newRowData.profilePictureUrl]);
 
   const rowDataToRender = Object.entries(newRowData)
     .filter(
@@ -92,11 +101,10 @@ const EditUserPopupAdmin = ({
 
   const onFieldChange = (id: string, value: string) => {
     setTouched(true);
-
     setValidationErrors((prev) => {
-      const newErrors = { ...prev };
-      delete newErrors[id as keyof UserFormData];
-      return newErrors;
+      const errors = { ...prev };
+      delete errors[id as keyof UserFormData];
+      return errors;
     });
 
     if (id === "ucid") {
@@ -104,11 +112,6 @@ const EditUserPopupAdmin = ({
         ...prev,
         ucid: value ? value.trim() : null,
       }));
-      return;
-    }
-    if (id === "description") {
-      const truncated = value.slice(0, MAX_DESCRIPTION_LENGTH);
-      setNewRowData((prev) => ({ ...prev, [id]: truncated }));
       return;
     }
     setNewRowData((prev) => ({ ...prev, [id]: value }));
@@ -125,6 +128,8 @@ const EditUserPopupAdmin = ({
         updateDBUser({
           ...newRowData,
           profilePictureUrl: profilePictureUrl ?? newRowData.profilePictureUrl,
+          schoolEmail: newRowData.schoolEmail || null,
+          teamRole: newRowData.teamRole || null,
           yearJoined: parseDateOnly(newRowData.yearJoined),
           yearRetired: parseDateOnly(newRowData.yearRetired),
         }),
@@ -146,23 +151,10 @@ const EditUserPopupAdmin = ({
       togglePopup();
       return;
     }
-    const sanitizedData = Object.fromEntries(
-      Object.entries(newRowData).map(([key, value]) => [
-        key,
-        userRowMetadata[key as keyof typeof userRowMetadata] === "date"
-          ? formatDateOnly(value as Date | string | null | undefined)
-          : value == null
-            ? ""
-            : String(value),
-      ]),
-    ) as Partial<UserFormData>;
-    const errors = validateUserForm(sanitizedData);
-
+    const errors = validateUserForm(newRowData);
+    setValidationErrors(errors);
     if (Object.keys(errors).length > 0) {
-      setValidationErrors(errors);
-      toast.error(
-        "There are errors in the form. Please fix them and try again.",
-      );
+      toast.error("Please fix the validation errors before saving.");
       return;
     }
 
@@ -191,9 +183,14 @@ const EditUserPopupAdmin = ({
     }
   };
 
-  const currentProfileImage = imageFile
-    ? URL.createObjectURL(imageFile)
-    : (newRowData.profilePictureUrl ?? defaultProfilePicture);
+  const handleRemovePhoto = () => {
+    setTouched(true);
+    setImageFile(null);
+    setNewRowData((prev) => ({ ...prev, profilePictureUrl: null }));
+  };
+
+  const currentProfileImage =
+    newRowData.profilePictureUrl ?? defaultProfilePicture;
 
   const isPending = uploadProfilePicMutation.isPending || saving;
 
@@ -211,6 +208,19 @@ const EditUserPopupAdmin = ({
                 handleFileUpload={handleFileUpload}
               />
             </div>
+            {newRowData.profilePictureUrl && (
+              <div className={styles.buttonContainer}>
+                <Button
+                  disabled={isPending}
+                  onClick={handleRemovePhoto}
+                  size="sm"
+                  type="button"
+                  variant="destructive"
+                >
+                  Remove photo
+                </Button>
+              </div>
+            )}
           </div>
           {newRowData && (
             <div className={styles.popupForm}>
@@ -220,26 +230,20 @@ const EditUserPopupAdmin = ({
                     {row.label}
                   </label>
                   {row.id === "description" ? (
-                    <>
-                      <textarea
-                        className={`${styles.textFieldInput} ${
-                          validationErrors[row.id as keyof UserFormData]
-                            ? styles.inputError
-                            : ""
-                        }`}
-                        id={row.id}
-                        maxLength={MAX_DESCRIPTION_LENGTH}
-                        name={row.label}
-                        onChange={onInputChange}
-                        rows={5}
-                        value={row.value ?? ""}
-                      />
-                      <div className={styles.charCounter}>
-                        <span>{(row.value as string)?.length ?? 0}</span>
-                        <span>/</span>
-                        <span>{MAX_DESCRIPTION_LENGTH}</span>
-                      </div>
-                    </>
+                    <Textarea
+                      aria-describedby={
+                        validationErrors.description
+                          ? `${row.id}-error`
+                          : undefined
+                      }
+                      aria-invalid={!!validationErrors.description}
+                      className={`${styles.textFieldInput} ${validationErrors.description ? styles.inputError : ""}`}
+                      id={row.id}
+                      name={row.label}
+                      onChange={onInputChange}
+                      rows={5}
+                      value={row.value ?? ""}
+                    />
                   ) : row.id === "teamRole" ? (
                     <TeamRoleSelect
                       error={validationErrors.teamRole}
@@ -258,12 +262,16 @@ const EditUserPopupAdmin = ({
                       value={newRowData.teamRole}
                     />
                   ) : (
-                    <input
-                      className={`${styles.textFieldInput} ${
+                    <Input
+                      aria-describedby={
                         validationErrors[row.id as keyof UserFormData]
-                          ? styles.inputError
-                          : ""
-                      }`}
+                          ? `${row.id}-error`
+                          : undefined
+                      }
+                      aria-invalid={
+                        !!validationErrors[row.id as keyof UserFormData]
+                      }
+                      className={`${styles.textFieldInput} ${validationErrors[row.id as keyof UserFormData] ? styles.inputError : ""}`}
                       id={row.id}
                       name={row.label}
                       onChange={onInputChange}
