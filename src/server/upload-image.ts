@@ -1,5 +1,6 @@
 import "server-only";
 
+import { randomUUID } from "node:crypto";
 import sharp from "sharp";
 
 import { supabase } from "@/server/supabase";
@@ -52,5 +53,7 @@ export async function uploadImageAsWebp({
   const { data: url } = supabase.storage
     .from(bucket)
     .getPublicUrl(fileUpload.path);
-  return url.publicUrl;
+  const freshUrl = new URL(url.publicUrl);
+  freshUrl.searchParams.set("cacheNonce", randomUUID());
+  return freshUrl.toString();
 }
