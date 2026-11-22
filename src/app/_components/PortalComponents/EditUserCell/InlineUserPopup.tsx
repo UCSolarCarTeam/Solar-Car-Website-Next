@@ -166,6 +166,7 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
               fileContent,
               fileName: imageFile.name,
               fileType: imageFile.type,
+              profileId: String(user.id),
             }),
             headers: {
               "Content-Type": "application/json",

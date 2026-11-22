@@ -167,6 +167,7 @@ const EditAlumniPopupAdmin = ({
     setSaving(true);
 
     if (imageFile) {
+      const profileId = currentRow?.id.toString() ?? crypto.randomUUID();
       const reader = new FileReader();
 
       reader.onload = async (e) => {
@@ -184,6 +185,7 @@ const EditAlumniPopupAdmin = ({
               fileContent,
               fileName: imageFile.name,
               fileType: imageFile.type,
+              profileId,
             }),
             headers: {
               "Content-Type": "application/json",
