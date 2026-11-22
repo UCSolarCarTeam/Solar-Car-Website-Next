@@ -35,7 +35,16 @@ export const useUploadProfilePic = () => {
                 "Content-Type": "application/json",
               },
               method: "POST",
-            }).then((res) => res.json() as Promise<UploadProfilePicResponse>),
+            }).then(async (res) => {
+              const response =
+                (await res.json()) as UploadProfilePicResponse & {
+                  error?: string;
+                };
+              if (!res.ok) {
+                throw new Error(response.error ?? "Failed to upload image");
+              }
+              return response;
+            }),
           );
 
           if (error) {
