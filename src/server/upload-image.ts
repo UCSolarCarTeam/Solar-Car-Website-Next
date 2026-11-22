@@ -13,8 +13,17 @@ interface UploadImageParams {
 }
 
 function webpFileName(fileName: string): string {
-  const extensionlessName = fileName.replace(/\.[^/.]+$/, "");
-  return `${extensionlessName || fileName}.webp`;
+  if (typeof fileName !== "string" || fileName.length === 0) {
+    throw new Error("Invalid image file name.");
+  }
+
+  const baseName = fileName.split(/[\\/]/).pop();
+  if (!baseName || baseName === "." || baseName === "..") {
+    throw new Error("Invalid image file name.");
+  }
+
+  const extensionlessName = baseName.replace(/\.[^/.]+$/, "");
+  return `${extensionlessName || baseName}.webp`;
 }
 
 export async function uploadImageAsWebp({
