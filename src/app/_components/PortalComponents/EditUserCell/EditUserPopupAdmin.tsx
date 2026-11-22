@@ -168,7 +168,11 @@ const EditUserPopupAdmin = ({
 
     if (imageFile) {
       uploadProfilePicMutation.mutate(
-        { file: imageFile, fileName: imageFile.name },
+        {
+          file: imageFile,
+          fileName: imageFile.name,
+          profileId: String(currentRow.id),
+        },
         {
           onSuccess: (profilePictureUrl) => {
             void saveUser(profilePictureUrl);

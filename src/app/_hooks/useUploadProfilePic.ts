@@ -8,6 +8,7 @@ import { tryCatch } from "@/app/_lib/utils";
 interface UploadProfilePicParams {
   file: File;
   fileName: string;
+  profileId: string;
 }
 
 interface UploadProfilePicResponse {
@@ -16,7 +17,11 @@ interface UploadProfilePicResponse {
 
 export const useUploadProfilePic = () => {
   return useMutation({
-    mutationFn: async ({ file, fileName }: UploadProfilePicParams) => {
+    mutationFn: async ({
+      file,
+      fileName,
+      profileId,
+    }: UploadProfilePicParams) => {
       const compressedFile = await compress(file);
 
       return new Promise<string>((resolve, reject) => {
@@ -29,6 +34,7 @@ export const useUploadProfilePic = () => {
               body: JSON.stringify({
                 fileContent,
                 fileName,
+                profileId,
                 fileType: file.type,
               }),
               headers: {
