@@ -172,9 +172,14 @@ const InlineUserPopup = ({ clerkUser, user }: InlineUserPopupProps) => {
             },
             method: "POST",
           });
-          const { publicUrl } = (await response.json()) as {
-            publicUrl: string;
+          const result = (await response.json()) as {
+            publicUrl?: string;
+            error?: string;
           };
+          if (!response.ok || !result.publicUrl) {
+            throw new Error(result.error ?? "Failed to upload image");
+          }
+          const { publicUrl } = result;
           await saveUser(publicUrl);
         } catch (error) {
           setSaving(false);
